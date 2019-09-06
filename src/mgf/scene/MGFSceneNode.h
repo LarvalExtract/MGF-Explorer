@@ -1,6 +1,7 @@
 #pragma once
 
 #include <glm/mat4x4.hpp>
+#include <vector>
 
 enum class NodeType
 {
@@ -8,7 +9,8 @@ enum class NodeType
 	Object,
 	Light,
 	Children,
-	Skinned
+	Skinned,
+	Unspecified
 };
 
 class MGFSceneNode

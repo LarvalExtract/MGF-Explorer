@@ -1,6 +1,7 @@
-#include "MGFTexture.h"
-
+#include "MATexture.h"
 #include "MGFArchive.h"
+
+#include <libmorton/morton.h>
 
 enum TifHeaderOffset : unsigned char
 {
@@ -23,7 +24,8 @@ enum MGFTextureFormat : unsigned int
 	BGRA5551 = 7
 };
 
-MGFTexture::MGFTexture(const MGFTreeNode& treeNode) :
+MATexture::MATexture(const MGFTreeNode& treeNode) :
+	Texture2D(),
 	depth(0),
 	mips(0),
 	frames(0),
@@ -51,17 +53,23 @@ MGFTexture::MGFTexture(const MGFTreeNode& treeNode) :
 	delete[] pixels;
 }
 
-MGFTexture::~MGFTexture()
+MATexture::~MATexture()
 {
 
 }
 
-void MGFTexture::InitTexture(unsigned char* pixels)
+void MATexture::InitTexture(unsigned char* pixels)
 {
-	this->Bind();
+	Bind();
 
 	char format		= (flags >> 0) & 0x0F;
 	char compressed = (flags >> 8) & 0x0F;
+	bool morton = format & 0xF0;
+
+	if (morton == true)
+	{
+
+	}
 
 	glPixelStorei(GL_UNPACK_ROW_LENGTH, width + CalculateStride());
 
@@ -70,9 +78,9 @@ void MGFTexture::InitTexture(unsigned char* pixels)
 	{
 		switch (compressed)
 		{
-		case 1:	this->UploadCompressedPixelData(CompressedTextureFormat::DXT1a, width, height, (width * height) / 2, pixels);	break;
-		case 3: this->UploadCompressedPixelData(CompressedTextureFormat::DXT3, width, height, width * height, pixels);			break;
-		case 5: this->UploadCompressedPixelData(CompressedTextureFormat::DXT5, width, height, width * height, pixels);			break;
+		case 1:	UploadCompressedPixelData(CompressedTextureFormat::DXT1a, width, height, (width * height) / 2, pixels);	break;
+		case 3: UploadCompressedPixelData(CompressedTextureFormat::DXT3, width, height, width * height, pixels);			break;
+		case 5: UploadCompressedPixelData(CompressedTextureFormat::DXT5, width, height, width * height, pixels);			break;
 		}
 	}
 
@@ -80,16 +88,16 @@ void MGFTexture::InitTexture(unsigned char* pixels)
 	{
 		switch (format)
 		{
-		case MGFTextureFormat::BGRA8888:	this->UploadPixelData(PixelFormat::RGBA, width, height, PixelFormat::BGRA, pixels, GL_UNSIGNED_BYTE);		break;
-		case MGFTextureFormat::RGB565:		this->UploadPixelData(PixelFormat::RGB, width, height, PixelFormat::RGB, pixels, GL_UNSIGNED_SHORT_5_6_5);			break;
-		case MGFTextureFormat::BGRA4444:	this->UploadPixelData(PixelFormat::RGBA, width, height, PixelFormat::BGRA, pixels, GL_UNSIGNED_SHORT_4_4_4_4_REV);	break;
-		case MGFTextureFormat::R8:			this->UploadPixelData(PixelFormat::Red, width, height, PixelFormat::Red, pixels, GL_UNSIGNED_BYTE);					break;
-		case MGFTextureFormat::BGRA5551:	this->UploadPixelData(PixelFormat::RGBA, width, height, PixelFormat::BGRA, pixels, GL_UNSIGNED_SHORT_5_5_5_1);		break;
+		case MGFTextureFormat::BGRA8888:	UploadPixelData(PixelFormat::RGBA, width, height, PixelFormat::BGRA, pixels, GL_UNSIGNED_BYTE);		break;
+		case MGFTextureFormat::RGB565:		UploadPixelData(PixelFormat::RGB, width, height, PixelFormat::RGB, pixels, GL_UNSIGNED_SHORT_5_6_5);			break;
+		case MGFTextureFormat::BGRA4444:	UploadPixelData(PixelFormat::RGBA, width, height, PixelFormat::BGRA, pixels, GL_UNSIGNED_SHORT_4_4_4_4_REV);	break;
+		case MGFTextureFormat::R8:			UploadPixelData(PixelFormat::Red, width, height, PixelFormat::Red, pixels, GL_UNSIGNED_BYTE);					break;
+		case MGFTextureFormat::BGRA5551:	UploadPixelData(PixelFormat::RGBA, width, height, PixelFormat::BGRA, pixels, GL_UNSIGNED_SHORT_5_5_5_1);		break;
 		}
 	}
 }
 
-unsigned int MGFTexture::CalculateStride()
+unsigned int MATexture::CalculateStride()
 {
 	unsigned int actualRowLength = size / height;
 	actualRowLength /= frames;

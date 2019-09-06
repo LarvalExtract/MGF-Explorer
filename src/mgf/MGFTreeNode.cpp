@@ -2,6 +2,7 @@
 
 #include <string>
 #include <stack>
+#include <sstream>
 
 MGFTreeNode::MGFTreeNode(MGFTreeNode* parent, const wxString& name,	unsigned int ID, unsigned int fileOffset, unsigned int fileLength, int timestamp, bool isFile, MGFArchive& archive) :
 	parent(parent),
@@ -14,12 +15,57 @@ MGFTreeNode::MGFTreeNode(MGFTreeNode* parent, const wxString& name,	unsigned int
 	isFile(isFile),
 	archive(archive)
 {
-	InitFileType();
+	if (isFile)
+		InitFileType();
 }
 
 MGFTreeNode::~MGFTreeNode()
 {
 	children.clear();
+}
+
+static void to_lower(std::string& str)
+{
+	for (std::size_t i = 0; i < str.size(); i++)
+		if (str[i] >= 'A' && str[i] <= 'Z')
+			str[i] += 32;
+}
+
+MGFTreeNode* MGFTreeNode::GetRelativeNode(const std::string& relativePath) const
+{
+	std::stringstream ss(relativePath);
+	std::string item;
+
+	MGFTreeNode* l_parent = this->parent;
+	MGFTreeNode* destination = nullptr;
+	while (std::getline(ss, item, '\\'))
+	{
+		to_lower(item);
+
+		if (item == "")
+			continue;
+
+		if (l_parent == nullptr)
+			return nullptr;
+
+		else if (item == "..")
+		{
+			l_parent = l_parent->GetParent();
+		}
+		else
+		{
+			destination = l_parent->GetNamedChild(item);
+			l_parent = destination;
+		}
+	}
+
+	return destination;
+}
+
+void MGFTreeNode::AddChild(MGFTreeNode* child)
+{
+	children.push_back(child);
+	mapChildren.insert(std::make_pair(child->Name().Lower().ToStdString(), children.back()));
 }
 
 std::string MGFTreeNode::GetFullPath() const
@@ -40,7 +86,7 @@ std::string MGFTreeNode::GetFullPath() const
 
 	while (nodeTree.size() > 0)
 	{
-		dir.append('/' + nodeTree.top()->Name().ToStdString());
+		dir.append('\\' + nodeTree.top()->Name().ToStdString());
 		nodeTree.pop();
 	}
 
@@ -49,10 +95,15 @@ std::string MGFTreeNode::GetFullPath() const
 
 void MGFTreeNode::InitFileType()
 {
-	int pos = name.Last('.') + 1;
-	wxString extension = name.SubString(pos, name.Length() - pos).Lower();
+	if (name == "atlas.mgmodel")
+	{
+		int a = 4;
+	}
 
-	if		(std::strcmp(extension, "mgtext") == 0)		fileType = MGFFileType::Strings;
-	else if (std::strcmp(extension, "tif") == 0)		fileType = MGFFileType::Texture;
-	else if (std::strcmp(extension, "mgmodel") == 0)	fileType = MGFFileType::Model;
+	int pos = name.Last('.') + 1;
+	wxString extension = name.SubString(pos, name.Length()).Lower();
+
+	if		(std::strcmp(extension.c_str(), "mgtext") == 0)		fileType = MGFFileType::Strings;
+	else if (std::strcmp(extension.c_str(), "tif") == 0)		fileType = MGFFileType::Texture;
+	else if (std::strcmp(extension.c_str(), "mgmodel") == 0)	fileType = MGFFileType::Model;
 }

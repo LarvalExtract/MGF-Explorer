@@ -5,11 +5,11 @@
 
 #include <fstream>
 
-class MGFTexture : public Texture2D
+class MATexture : public Texture2D
 {
 public:
-	MGFTexture(const MGFTreeNode& treeNode);
-	~MGFTexture();
+	MATexture(const MGFTreeNode& treeNode);
+	~MATexture();
 
 public:
 	unsigned int depth;
@@ -24,3 +24,7 @@ private:
 	unsigned int CalculateStride();
 };
 
+class MGFTextureArray : public Texture2DArray
+{
+
+};

@@ -1,8 +1,6 @@
 #pragma once
 
-#include <glad/glad.h>
-
-#include "mgf/MGFTexture.h"
+#include "mgf/MATexture.h"
 
 #include <wx/panel.h>
 #include <wx/dataview.h>
@@ -10,15 +8,16 @@
 #include <wx/glcanvas.h>
 
 #include "renderer/Shader.h"
+#include "renderer/VertexArray.h"
 
 class TextureViewerPanel : public wxPanel
 {
 public:
-	TextureViewerPanel(wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize(851, 615), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString);
+	TextureViewerPanel(wxWindow* parent);
 	~TextureViewerPanel();
 
-	void SetCurrentContext(const wxGLContext& oglContext);
-	void DrawMGFTexture(const MGFTexture& texture);
+	void DrawMGFTexture(const MATexture& texture);
+	void SetGLContextCurrent();
 
 private:
 	wxDataViewListCtrl* textureDetailsTable;
@@ -34,5 +33,9 @@ private:
 
 private:
 	void InitGLCanvas();
+
+	std::shared_ptr<ShaderProgram> textureview_shader;
+	static VertexArray* vao;
+	static int count;
 };
 

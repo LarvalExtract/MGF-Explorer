@@ -1,7 +1,10 @@
 #include "MGFArchive.h"
 
+#include <wx/datetime.h>
+
 #include <Windows.h>
 #include <stdint.h>
+#include <sstream>
 
 HINSTANCE hShellDLL = LoadLibraryA("shell32.dll");
 HICON hFileIcon = static_cast<HICON>(LoadImageA(hShellDLL, MAKEINTRESOURCEA(1), IMAGE_ICON, 16, 16, LR_SHARED));
@@ -85,22 +88,54 @@ wxString MGFArchive::GetColumnType(unsigned int col) const
 
 unsigned int MGFArchive::GetColumnCount() const
 {
-	return 1;
+	return 4;
 }
 
 void MGFArchive::GetValue(wxVariant& variant, const wxDataViewItem& item, unsigned int col) const
 {
 	MGFTreeNode* node = static_cast<MGFTreeNode*>(item.GetID());
+	wxDataViewIconText data(node->Name(), node->IsFile() ? fileIcon : folderIcon);
+	wxDateTime date(static_cast<std::time_t>(node->LastModifiedDate()));
 
-	if (col != 0)
+	if (!node->IsFile())
 	{
-		variant = wxEmptyString;
+		if (col == 0)
+			variant << wxDataViewIconText(node->Name(), folderIcon);
+		else
+			variant = wxEmptyString;
+
 		return;
 	}
 
-	wxDataViewIconText data(node->Name(), node->IsFile() ? fileIcon : folderIcon);
+	switch (col)
+	{
+		// Provide the tree item name and a file/folder icon to the treeview
+	case 0:
+		variant << wxDataViewIconText(node->Name(), fileIcon);
+		break;
 
-	variant << data;
+		// Provide the time stamp
+	case 1:
+		variant = date.Format("%D %T");
+		break;
+
+		// Provide the file's type
+	case 2:
+		switch (node->FileType())
+		{
+		case MGFFileType::Texture:	variant = "Texture"; break;
+		case MGFFileType::Model:	variant = "Model"; break;
+		case MGFFileType::Strings:	variant = "Strings"; break;
+		case MGFFileType::None:		variant = wxEmptyString; break;
+		}
+		break;
+
+		// Provide the file size
+	case 3:
+		unsigned int bytes = node->FileLength();
+		variant = bytes > 1024 ? wxString::Format("%i", bytes / 1024) + " KB" : wxString::Format("%i", bytes) + " bytes";
+		break;
+	}
 }
 
 bool MGFArchive::SetValue(const wxVariant& variant, const wxDataViewItem& item, unsigned int col)
@@ -241,6 +276,5 @@ void MGFArchive::InitTreeModel()
 		}
 
 		treeNodes[parentIndex].AddChild(&treeNodes[i]);
-		mapTreeNodes.insert(std::make_pair<std::string, MGFTreeNode*>(treeNodes[i].GetFullPath(), &treeNodes[i]));
 	}
 }

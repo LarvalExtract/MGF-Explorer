@@ -3,6 +3,7 @@
 #include <wx/string.h>
 
 #include <vector>
+#include <unordered_map>
 
 class MGFArchive;
 
@@ -29,8 +30,12 @@ public:
 
 	inline MGFTreeNode* GetParent() const { return parent; }
 	inline MGFTreeNode* GetNthChild(int index) const { return children[index]; }
+	inline MGFTreeNode* GetNamedChild(const std::string& name) const { return (mapChildren.find(name) != mapChildren.end()) ? mapChildren.at(name) : nullptr; }
+	inline MGFTreeNode* GetNamedSibling(const std::string& name) const { return parent->GetNamedChild(name); }
 
-	inline void AddChild(MGFTreeNode* child) { children.push_back(child); }
+	MGFTreeNode* GetRelativeNode(const std::string& relativePath) const;
+
+	void AddChild(MGFTreeNode* child);
 	inline unsigned int GetChildCount() const { return children.size(); }
 
 	inline const wxString& Name() const { return name; }
@@ -40,6 +45,7 @@ public:
 	inline const MGFFileType FileType() const { return fileType; }
 	inline const bool IsFile() const { return isFile; }
 
+	inline const wxString& FileExtension() const { return name.SubString(name.rfind('.') + 1, name.Length()); }
 	std::string GetFullPath() const;
 
 private:
@@ -53,6 +59,7 @@ private:
 
 	MGFTreeNode* parent;
 	std::vector<MGFTreeNode*> children;
+	std::unordered_map<std::string, MGFTreeNode*> mapChildren;
 
 private:
 	void InitFileType();

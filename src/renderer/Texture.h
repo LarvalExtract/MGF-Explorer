@@ -77,7 +77,6 @@ public:
 	Texture2D() : TextureBase(GL_TEXTURE_2D), width(0), height(0) {}
 	
 	void UploadPixelData(PixelFormat storageFormat, int width, int height, PixelFormat imageFormat, void* pixels, GLenum pixelDataDype);
-
 	void UploadCompressedPixelData(CompressedTextureFormat format, int width, int height, int size, void* pixels);
 
 	inline unsigned int Width() const { return width; }
@@ -86,4 +85,14 @@ public:
 protected:
 	unsigned int width;
 	unsigned int height;
+};
+
+class Texture2DArray : public TextureBase
+{
+public:
+	Texture2DArray() : TextureBase(GL_TEXTURE_2D_ARRAY) {}
+
+private:
+	void UploadPixelData(PixelFormat storageFormat, int width, int height, int depth, PixelFormat imageFormat, void* pixels, GLenum pixelDataDype);
+	void UploadCompressedPixelData(CompressedTextureFormat format, int width, int height, int depth, int size, void* pixels);
 };

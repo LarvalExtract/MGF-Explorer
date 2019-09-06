@@ -37,7 +37,7 @@ enum class GLSLType
 	Vec4u,
 };
 
-enum class PrimitiveType
+enum class PrimitiveType : std::int16_t
 {
 	Points = GL_POINTS,
 	Lines = GL_LINES,
@@ -50,8 +50,9 @@ enum class PrimitiveType
 
 struct BufferElement
 {
-	BufferElement(GLSLType type, const std::string& name, bool normalised = false) :
+	BufferElement(GLSLType type, const std::string& name = "", int location = -1, bool normalised = false) :
 		attributeName(name),
+		location(location),
 		offset(0),
 		size(0),
 		type(0),
@@ -91,6 +92,7 @@ struct BufferElement
 	}
 
 	std::string attributeName;
+	int location;
 	unsigned short offset;
 	unsigned short size;
 	unsigned char components;
@@ -132,6 +134,7 @@ public:
 
 protected:
 	GLBufferObject(unsigned int target);
+	GLBufferObject(const GLBufferObject& other) { *this = other; }
 
 	unsigned int bufferTarget;
 	unsigned int bufferID;
@@ -144,6 +147,8 @@ public:
 	VertexBuffer() : GLBufferObject(GL_ARRAY_BUFFER) {}
 	VertexBuffer(const void* data, unsigned int size, const BufferLayout& layout);
 
+	//void operator=(const VertexBuffer& other);
+
 	BufferLayout layout;
 };
 
@@ -154,4 +159,18 @@ public:
 	IndexBuffer(unsigned char* data, unsigned int count, PrimitiveType type);
 	IndexBuffer(unsigned short* data, unsigned int count, PrimitiveType type);
 	IndexBuffer(unsigned int* data, unsigned int count, PrimitiveType type);
+
+	unsigned int GetIndexCount() const { return count; }
+	PrimitiveType GetType() const { return type; }
+
+private:
+	unsigned int count;
+	PrimitiveType type;
+};
+
+class UniformBuffer : public GLBufferObject
+{
+public:
+	UniformBuffer() : GLBufferObject(GL_UNIFORM_BUFFER) {}
+
 };

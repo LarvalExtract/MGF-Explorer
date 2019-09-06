@@ -25,7 +25,6 @@ public:
 	inline unsigned int FileCount() const { return fileEntryCount; }
 
 	inline const MGFTreeNode* RootNode() const { return &treeNodes[0]; }
-	inline const MGFTreeNode* GetNodeFromPath(const std::string& path) { return mapTreeNodes[path]; }
 
 public:
 	virtual wxString GetColumnType(unsigned int col) const override;
@@ -53,7 +52,6 @@ private:
 	unsigned int stringsOffset;
 
 	std::vector<MGFTreeNode> treeNodes;
-	std::unordered_map<std::string, MGFTreeNode*> mapTreeNodes;
 
 private:
 	bool Validate();

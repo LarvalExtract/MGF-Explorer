@@ -20,6 +20,7 @@
 #include <wx/menu.h>
 #include <wx/stattext.h>
 #include <wx/frame.h>
+#include <wx/textctrl.h>
 
 #include <vector>
 #include <unordered_map>
@@ -36,12 +37,15 @@ public:
 	MainWindow();
 	~MainWindow();
 
+	wxTextCtrl& TextOutput() { return *textOutput; }
+
 private:
 	wxPanel* panel_mainWindow;
 	MyNotebook* mgfNotebook;
 	wxMenuBar* menuBar;
 	wxPanel* statusBarPanel;
 	wxStaticText* statusBarLabel;
+	wxTextCtrl* textOutput;
 
 	wxString defaultMgfLocation;
 

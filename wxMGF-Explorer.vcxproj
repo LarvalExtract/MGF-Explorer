@@ -20,41 +20,49 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dependencies\include\pugixml-1.9\src\pugixml.hpp" />
+    <ClInclude Include="src\mgf\MAStrings.h" />
+    <ClInclude Include="src\mgf\MGFMaterial.h" />
     <ClInclude Include="src\mgf\MGFMesh.h" />
     <ClInclude Include="src\mgf\MGFModel.h" />
-    <ClInclude Include="src\mgf\MGFResourceManager.h" />
     <ClInclude Include="src\mgf\scene\MGFSceneNode.h" />
+    <ClInclude Include="src\ModelViewerPanel.h" />
     <ClInclude Include="src\MyNotebook.h" />
     <ClInclude Include="src\renderer\Buffers.h" />
     <ClInclude Include="dependencies\include\glad\glad.h" />
+    <ClInclude Include="src\renderer\Shapes.h" />
     <ClInclude Include="src\renderer\Shader.h" />
-    <ClInclude Include="src\mgf\MGFTexture.h" />
+    <ClInclude Include="src\mgf\MATexture.h" />
     <ClInclude Include="src\NotebookPage.h" />
     <ClInclude Include="src\mgf\MGFTreeNode.h" />
     <ClInclude Include="src\mgf\MGFArchive.h" />
     <ClInclude Include="src\application.h" />
     <ClInclude Include="src\mainwindow.h" />
     <ClInclude Include="src\renderer\VertexArray.h" />
+    <ClInclude Include="src\StringsViewerPanel.h" />
     <ClInclude Include="src\TextureViewerPanel.h" />
     <ClInclude Include="src\renderer\Texture.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dependencies\include\pugixml-1.9\src\pugixml.cpp" />
+    <ClCompile Include="src\mgf\MAStrings.cpp" />
+    <ClCompile Include="src\mgf\MGFMaterial.cpp" />
     <ClCompile Include="src\mgf\MGFMesh.cpp" />
     <ClCompile Include="src\mgf\MGFModel.cpp" />
-    <ClCompile Include="src\mgf\MGFResourceManager.cpp" />
     <ClCompile Include="src\mgf\scene\MGFSceneNode.cpp" />
+    <ClCompile Include="src\ModelViewerPanel.cpp" />
     <ClCompile Include="src\MyNotebook.cpp" />
     <ClCompile Include="src\renderer\Buffers.cpp" />
     <ClCompile Include="dependencies\include\glad.c" />
     <ClCompile Include="src\renderer\Shader.cpp" />
-    <ClCompile Include="src\mgf\MGFTexture.cpp" />
+    <ClCompile Include="src\mgf\MATexture.cpp" />
     <ClCompile Include="src\NotebookPage.cpp" />
     <ClCompile Include="src\mgf\MGFTreeNode.cpp" />
     <ClCompile Include="src\mgf\MGFArchive.cpp" />
     <ClCompile Include="src\application.cpp" />
     <ClCompile Include="src\mainwindow.cpp" />
+    <ClCompile Include="src\renderer\Shapes.cpp" />
     <ClCompile Include="src\renderer\VeretxArray.cpp" />
+    <ClCompile Include="src\StringsViewerPanel.cpp" />
     <ClCompile Include="src\TextureViewerPanel.cpp" />
     <ClCompile Include="src\renderer\Texture.cpp" />
   </ItemGroup>

@@ -7,6 +7,8 @@ VertexArray::VertexArray()
 }
 
 VertexArray::VertexArray(const VertexBuffer& vb, const IndexBuffer& ib)
+	//vertexBuffer(vb),
+	//indexBuffer(ib)
 {
 	glGenVertexArrays(1, &vertexArrayID);
 	glBindVertexArray(vertexArrayID);
@@ -26,14 +28,16 @@ void VertexArray::SetVertexBuffer(const VertexBuffer& vb)
 	vertexBuffer = vb;
 
 	Bind();
-	vertexBuffer.Bind();
+	glBindVertexBuffer(0, vertexBuffer.BufferID(), 0, vertexBuffer.layout.stride);
 
-	int i = 0;
 	for (auto& element : vb.layout.elements)
 	{
-		glEnableVertexAttribArray(i);
-		glVertexAttribPointer(i, element.components, element.type, element.bNormalised, vb.layout.stride, reinterpret_cast<const void*>(element.offset));
-		i++;
+		if (element.location != -1)
+		{
+			glEnableVertexAttribArray(element.location);
+			glVertexAttribFormat(element.location, element.components, element.type, GL_FALSE, element.offset);
+			glVertexAttribBinding(element.location, 0);
+		}
 	}
 }
 
@@ -51,4 +55,20 @@ void VertexArray::Bind() const
 void VertexArray::Unbind() const
 {
 	glBindVertexArray(0);
+}
+
+void VertexArray::operator=(const VertexArray& other)
+{
+	// Destroy current vertex array
+	glBindVertexArray(0);
+	glDeleteVertexArrays(1, &vertexArrayID);
+
+	// Generate a new one
+	glGenVertexArrays(1, &vertexArrayID);
+	glBindVertexArray(vertexArrayID);
+
+	
+
+	SetVertexBuffer(other.vertexBuffer);
+	SetIndexBuffer(other.indexBuffer);
 }

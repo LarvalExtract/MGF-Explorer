@@ -37,6 +37,7 @@ void GLBufferObject::operator=(const GLBufferObject& other)
 	glBindBuffer(GL_COPY_READ_BUFFER, 0);
 
 	glBindBuffer(bufferTarget, this->bufferID);
+	this->bufferSize = other.Size();
 }
 
 
@@ -48,23 +49,34 @@ VertexBuffer::VertexBuffer(const void* data, unsigned int size, const BufferLayo
 	glBufferData(bufferTarget, bufferSize, data, GL_STATIC_DRAW);
 }
 
+//void VertexBuffer::operator=(const VertexBuffer& other)
+//{
+//	*static_cast<GLBufferObject*>(this) = other;
+//	this->layout = other.layout;
+//}
 
 IndexBuffer::IndexBuffer(unsigned char* data, unsigned int count, PrimitiveType type) :
-	GLBufferObject(GL_ELEMENT_ARRAY_BUFFER)
+	GLBufferObject(GL_ELEMENT_ARRAY_BUFFER),
+	count(count),
+	type(type)
 {
 	bufferSize = sizeof(unsigned char) * count;
 	glBufferData(bufferTarget, bufferSize, data, GL_STATIC_DRAW);
 }
 
 IndexBuffer::IndexBuffer(unsigned short* data, unsigned int count, PrimitiveType type) :
-	GLBufferObject(GL_ELEMENT_ARRAY_BUFFER)
+	GLBufferObject(GL_ELEMENT_ARRAY_BUFFER),
+	count(count),
+	type(type)
 {
 	bufferSize = sizeof(unsigned short) * count;
 	glBufferData(bufferTarget, bufferSize, data, GL_STATIC_DRAW);
 }
 
 IndexBuffer::IndexBuffer(unsigned int* data, unsigned int count, PrimitiveType type) :
-	GLBufferObject(GL_ELEMENT_ARRAY_BUFFER)
+	GLBufferObject(GL_ELEMENT_ARRAY_BUFFER),
+	count(count),
+	type(type)
 {
 	bufferSize = sizeof(unsigned int) * count;
 	glBufferData(bufferTarget, bufferSize, data, GL_STATIC_DRAW);

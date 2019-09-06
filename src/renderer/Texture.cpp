@@ -20,8 +20,8 @@ TextureBase::~TextureBase()
 
 void TextureBase::Bind(unsigned int slot) const
 {
-	glBindTexture(target, textureID);
 	glActiveTexture(GL_TEXTURE0 + slot);
+	glBindTexture(target, textureID);
 }
 
 void TextureBase::SetWrapMode(WrapMode mode)
@@ -48,4 +48,14 @@ void Texture2D::UploadPixelData(PixelFormat storageFormat, int width, int height
 void Texture2D::UploadCompressedPixelData(CompressedTextureFormat format, int width, int height, int size, void* pixels)
 {
 	glCompressedTexImage2D(target, 0, static_cast<GLenum>(format), width, height, 0, size, pixels);
+}
+
+void Texture2DArray::UploadPixelData(PixelFormat storageFormat, int width, int height, int depth, PixelFormat imageFormat, void* pixels, GLenum pixelDataDype)
+{
+	glTexImage3D(target, 0, static_cast<GLint>(storageFormat), width, height, depth, 0, static_cast<GLint>(imageFormat), pixelDataDype, pixels);
+}
+
+void Texture2DArray::UploadCompressedPixelData(CompressedTextureFormat format, int width, int height, int depth, int size, void* pixels)
+{
+	glCompressedTexImage3D(target, 0, static_cast<GLenum>(format), width, height, depth, 0, size, pixels);
 }

@@ -2,6 +2,8 @@
 
 #include "mgf/MGFArchive.h"
 #include "TextureViewerPanel.h"
+#include "ModelViewerPanel.h"
+#include "StringsViewerPanel.h"
 
 #include "renderer/VertexArray.h"
 #include "renderer/Shader.h"
@@ -17,7 +19,7 @@ class MyNotebook;
 class NotebookPage : public wxPanel
 {
 public:
-	NotebookPage(MyNotebook* notebook, MGFArchive* mgfFile);
+	NotebookPage(wxWindow* parent, MGFArchive* mgfFile);
 	~NotebookPage();
 
 	inline const MGFArchive& GetMGFFile() const { return mgfArchive; }
@@ -25,14 +27,16 @@ public:
 	void OnItemSelected(wxDataViewEvent& event);
 
 private:
-	void RenderTexture(const MGFTexture& texture, const MyNotebook& parent);
+	void ShowPanel(wxWindow* newPanel);
 
 private:
 	wxBoxSizer* sizer;
 	wxDataViewCtrl* treeView;
-	wxPanel* dataView;
 
 	TextureViewerPanel* textureViewer;
+	ModelViewerPanel* modelViewer;
+	StringsViewerPanel* stringsViewer;
+	wxPanel* placeholderPanel;
 
 	MGFArchive& mgfArchive;
 

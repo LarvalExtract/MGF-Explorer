@@ -23,7 +23,7 @@ wxBEGIN_EVENT_TABLE(MainWindow, wxFrame)
 wxEND_EVENT_TABLE();
 
 MainWindow::MainWindow() :
-	wxFrame(nullptr, wxID_ANY, "MechAssault MGF Explorer", wxDefaultPosition, wxSize(1280, 720), wxDEFAULT_FRAME_STYLE | wxTAB_TRAVERSAL),
+	wxFrame(nullptr, wxID_ANY, "MechAssault MGF Explorer", wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE | wxTAB_TRAVERSAL | wxMAXIMIZE),
 	panel_mainWindow(nullptr),
 	mgfNotebook(nullptr),
 	menuBar(nullptr)
@@ -31,25 +31,27 @@ MainWindow::MainWindow() :
 	SetSizeHints( wxDefaultSize, wxDefaultSize );
 	SetMinSize(wxSize(640, 480));
 
-	wxBoxSizer* sizer_mainWindow;
-	sizer_mainWindow = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* sizer_mainWindow = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* sizer_notebook = new wxBoxSizer( wxVERTICAL );
 
 	panel_mainWindow = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	wxBoxSizer* sizer_notebook;
-	sizer_notebook = new wxBoxSizer( wxVERTICAL );
+	panel_mainWindow->SetSizer(sizer_notebook);
 
 	mgfNotebook = new MyNotebook(panel_mainWindow, 10500, wxDefaultPosition, wxDefaultSize);
 	mgfNotebook->Hide();
 
 	sizer_notebook->Add( mgfNotebook, 1, wxEXPAND | wxALL, 0 );
 
-	panel_mainWindow->SetSizer(sizer_notebook);
 	panel_mainWindow->Layout();
 
 	InitStatusBar();
 
+	textOutput = new wxTextCtrl(this, 10004, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY | wxTE_LEFT | wxTE_MULTILINE);
+	textOutput->SetMaxSize({ -1, 130 });
+
 	sizer_notebook->Fit(panel_mainWindow);
 	sizer_mainWindow->Add(panel_mainWindow, 1, wxEXPAND | wxALL, 0);
+	sizer_mainWindow->Add(textOutput, 1, wxEXPAND | wxALL, 0);
 	sizer_mainWindow->Add(statusBarPanel, 1, wxEXPAND | wxALL, 0);
 
 	InitMenuBar();
@@ -58,6 +60,7 @@ MainWindow::MainWindow() :
 	Layout();
 
 	Centre( wxBOTH );
+	Maximize();
 }
 
 MainWindow::~MainWindow()

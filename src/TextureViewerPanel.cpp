@@ -1,10 +1,15 @@
 #include "TextureViewerPanel.h"
 
+#include "application.h"
+
 #include <string>
 #include <wx/msgdlg.h>
 
-TextureViewerPanel::TextureViewerPanel(wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name) : 
-	wxPanel(parent, id, pos, size, style, name)
+int TextureViewerPanel::count = 0;
+VertexArray* TextureViewerPanel::vao = nullptr;
+
+TextureViewerPanel::TextureViewerPanel(wxWindow* parent) : 
+	wxPanel(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL | wxBORDER_THEME)
 {
 	wxBoxSizer* textureViewerSizer;
 	textureViewerSizer = new wxBoxSizer(wxVERTICAL);
@@ -28,20 +33,23 @@ TextureViewerPanel::TextureViewerPanel(wxWindow* parent, wxWindowID id, const wx
 
 	textureViewerSizer->Add(textureDetailsTable, 0, wxALL, 5);
 
-	this->SetSizer(textureViewerSizer);
-	this->Layout();
+	SetSizer(textureViewerSizer);
+	Layout();
+
+	count++;
 }
 
 TextureViewerPanel::~TextureViewerPanel()
 {
+	count--;
+
+	if (count <= 0)
+	{
+		delete vao;
+	}
 }
 
-void TextureViewerPanel::SetCurrentContext(const wxGLContext& oglContext)
-{
-	this->textureViewport->SetCurrent(oglContext);
-}
-
-void TextureViewerPanel::DrawMGFTexture(const MGFTexture& texture)
+void TextureViewerPanel::DrawMGFTexture(const MATexture& texture)
 {
 	textureDetailsTable->SetTextValue(wxString::Format("%i", texture.Width()), 0, 0);
 	textureDetailsTable->SetTextValue(wxString::Format("%i", texture.Height()), 0, 1);
@@ -53,20 +61,54 @@ void TextureViewerPanel::DrawMGFTexture(const MGFTexture& texture)
 
 	textureViewport->SetSize(wxSize(texture.Width(), texture.Height()));
 
-	texture.Bind();
+	vao->Bind();
+	textureview_shader->Use();
+	texture.Bind(0);
 
 	glViewport(0, 0, texture.Width(), texture.Height());
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, NULL);
 
 	textureViewport->SwapBuffers();
 }
 
+void TextureViewerPanel::SetGLContextCurrent()
+{
+	textureViewport->SetCurrent(Application::GetGLContext());
+}
+
 void TextureViewerPanel::InitGLCanvas()
 {
 	wxGLAttributes attribs;
-	attribs.PlatformDefaults().RGBA().DoubleBuffer().Depth(16).EndList();
+	attribs.PlatformDefaults().MinRGBA(8, 8, 8, 8).DoubleBuffer().EndList();
 
 	textureViewport = new wxGLCanvas(this, attribs, 15000, wxPoint(5, 60), wxSize(200, 200));
+	textureViewport->SetCurrent(Application::GetGLContext());
+
+	textureview_shader = Application::textureview_shader;
+
+	if (count <= 0)
+	{
+		float textureViewBuffer[] = {
+			 1.0f, -1.0f, 0.0f, 1.0f, 1.0f,
+			-1.0f, -1.0f, 0.0f, 0.0f, 1.0f,
+			-1.0f,  1.0f, 0.0f, 0.0f, 0.0f,
+			 1.0f,  1.0f, 0.0f, 1.0f, 0.0f
+		};
+
+		unsigned char textureViewIndices[] = {
+			0, 1, 2, 0, 2, 3
+		};
+
+		BufferLayout layout = {
+			{ GLSLType::Vec3f, "in_position", 0 },
+			{ GLSLType::Vec2f, "in_texCoord", 1 }
+		};
+
+		VertexBuffer textureViewVB(textureViewBuffer, sizeof(float) * 20, layout);
+		IndexBuffer textureViewIB(textureViewIndices, 6, PrimitiveType::Triangles);
+
+		vao = new VertexArray(textureViewVB, textureViewIB);
+	}
 }
