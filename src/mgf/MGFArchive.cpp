@@ -4,7 +4,6 @@
 
 #include <Windows.h>
 #include <stdint.h>
-#include <sstream>
 
 HINSTANCE hShellDLL = LoadLibraryA("shell32.dll");
 HICON hFileIcon = static_cast<HICON>(LoadImageA(hShellDLL, MAKEINTRESOURCEA(1), IMAGE_ICON, 16, 16, LR_SHARED));
@@ -44,36 +43,35 @@ struct MGFIndexEntry
 	std::int32_t isFile;
 };
 
-#define GetValueFromFile(var) fileStream.read(reinterpret_cast<char*>(&var), sizeof(var))
+const std::uint32_t mgfSignature = 0x2066676D;
 
-MGFArchive::MGFArchive(const std::filesystem::path& filepath)
+MGFArchive::MGFArchive(const std::filesystem::path& filepath) :
+	fileStream(filepath, std::ios::binary),
+	filename(filepath.filename().c_str())
 {
-	fileStream.open(filepath, std::ios::binary);
+	std::uint32_t header[16];
+	fileStream.read(reinterpret_cast<char*>(&header[0]), 64);
 
-	//TODO: Validate archive
-	if (!Validate())
+	// Check the first 4 bytes are "mgf "
+	if (header[0] != mgfSignature)
 		throw;
 
-	filename = filepath.filename().c_str();
-
-	fileStream.seekg(0, std::ios::end);
-	size = fileStream.tellg();
-
-	fileStream.seekg(MGFArchiveHeaderOffset::FileEntryCount, std::ios::beg);
-
-	GetValueFromFile(fileEntryCount);
-	GetValueFromFile(fileEntryLength);
-	GetValueFromFile(fileEntryOffset);
-	GetValueFromFile(indexEntryCount);
-	GetValueFromFile(indexEntryLength);
-	GetValueFromFile(indexEntryOffset);
-	GetValueFromFile(stringsLength);
-	GetValueFromFile(stringsOffset);
+	fileEntryCount = header[3];
+	fileEntryLength = header[4];
+	fileEntryOffset = header[5];
+	indexEntryCount = header[6];
+	indexEntryLength = header[7];
+	indexEntryOffset = header[8];
+	stringsLength = header[9];
+	stringsOffset = header[10];
 
 	InitTreeModel();
 
 	fileIcon.CreateFromHICON(hFileIcon);
 	folderIcon.CreateFromHICON(hFolderIcon);
+
+	fileStream.seekg(0, std::ios::end);
+	size = fileStream.tellg();
 }
 
 MGFArchive::~MGFArchive()
@@ -189,26 +187,10 @@ unsigned int MGFArchive::GetChildren(const wxDataViewItem& item, wxDataViewItemA
 	}
 }
 
-bool MGFArchive::Validate()
-{
-	char signature[4];
-	fileStream.read(signature, 4);
-
-	if (signature[0] == 'm' &&
-		signature[1] == 'g' &&
-		signature[2] == 'f' &&
-		signature[3] == ' ')
-	{
-		return true;
-	}
-
-	return false;
-}
-
 void MGFArchive::InitTreeModel()
 {
 	// Copy file entry data
-	const auto fileEntries = [&]()
+	const auto fileEntries = [this]()
 	{
 		std::vector<MGFFileEntry> result(fileEntryCount);
 		fileStream.seekg(fileEntryOffset, std::ios::beg);
@@ -218,7 +200,7 @@ void MGFArchive::InitTreeModel()
 	}();
 
 	// Copy file index data
-	const auto indexEntries = [&]()
+	const auto indexEntries = [this]()
 	{
 		std::vector<MGFIndexEntry> result(indexEntryCount);
 		fileStream.seekg(this->indexEntryOffset, std::ios::beg);
@@ -228,7 +210,7 @@ void MGFArchive::InitTreeModel()
 	}();
 
 	// Copy file and folder strings
-	const auto stringBuffer = [&]()
+	const auto stringBuffer = [this]()
 	{
 		std::vector<char> result(stringsLength);
 		fileStream.seekg(stringsOffset, std::ios::beg);
@@ -240,17 +222,14 @@ void MGFArchive::InitTreeModel()
 	treeNodes.reserve(indexEntryCount);
 	treeNodes.emplace_back(nullptr, &stringBuffer[indexEntries[0].stringOffset], 0, 0, 0, 0, false, *this);
 
-	for (unsigned int i = 1, j = 0; i < indexEntries.size(); i++)
+	for (std::size_t i = 1, j = 0; i < indexEntries.size(); i++)
 	{
-		const int parentIndex = indexEntries[i].parentIndex;
-		const int stringOffset = indexEntries[i].stringOffset;
-
 		// index entry is a folder
 		if (indexEntries[i].isFile == -1)
 		{
 			treeNodes.emplace_back(
-				&treeNodes[parentIndex],
-				&stringBuffer[stringOffset],
+				&treeNodes[indexEntries[i].parentIndex],
+				&stringBuffer[indexEntries[i].stringOffset],
 				0,
 				0,
 				0,
@@ -263,8 +242,8 @@ void MGFArchive::InitTreeModel()
 		else
 		{
 			treeNodes.emplace_back(
-				&treeNodes[parentIndex],
-				&stringBuffer[stringOffset],
+				&treeNodes[indexEntries[i].parentIndex],
+				&stringBuffer[indexEntries[i].stringOffset],
 				fileEntries[j].ID,
 				fileEntries[j].offset,
 				fileEntries[j].length,
@@ -275,6 +254,6 @@ void MGFArchive::InitTreeModel()
 			j++;
 		}
 
-		treeNodes[parentIndex].AddChild(&treeNodes[i]);
+		treeNodes[indexEntries[i].parentIndex].AddChild(&treeNodes[i]);
 	}
 }

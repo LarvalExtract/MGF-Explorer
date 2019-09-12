@@ -9,7 +9,6 @@ class MATexture : public Texture2D
 {
 public:
 	MATexture(const MGFTreeNode& treeNode);
-	~MATexture();
 
 public:
 	unsigned int depth;

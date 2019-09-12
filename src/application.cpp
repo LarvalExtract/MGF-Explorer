@@ -25,7 +25,7 @@ Application::~Application()
 
 }
 
-static void to_lower(std::string& str)
+void to_lower(std::string& str)
 {
 	for (std::size_t i = 0; i < str.size(); i++)
 		if (str[i] >= 'A' && str[i] <= 'Z')

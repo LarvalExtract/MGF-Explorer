@@ -1,6 +1,6 @@
 #pragma once
 
-#include "mgf/MGFModel.h"
+#include "../mgf/MGFModel.h"
 
 #include <wx/panel.h>
 #include <wx/dataview.h>
@@ -9,14 +9,13 @@
 #include <wx/notebook.h>
 #include <wx/timer.h>
 
-#include "renderer/Shader.h"
-#include "renderer/VertexArray.h"
+#include "../renderer/Shader.h"
+#include "../renderer/VertexArray.h"
 
 class ModelViewport : public wxGLCanvas
 {
 public:
 	ModelViewport(wxWindow* parent, const wxGLAttributes& attribs);
-	~ModelViewport() {};
 
 	void UploadMeshes(const MGFModel& model);
 
@@ -57,7 +56,6 @@ class ModelViewerPanel : public wxPanel
 {
 public:
 	ModelViewerPanel(wxWindow* parent);
-	~ModelViewerPanel();
 
 	void SetCurrentGLContext();
 	void SetMGModel(MGFModel* model);

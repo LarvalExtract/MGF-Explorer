@@ -1,14 +1,14 @@
 #pragma once
 
-#include "mgf/MATexture.h"
+#include "../mgf/MATexture.h"
 
 #include <wx/panel.h>
 #include <wx/dataview.h>
 #include <wx/sizer.h>
 #include <wx/glcanvas.h>
 
-#include "renderer/Shader.h"
-#include "renderer/VertexArray.h"
+#include "../renderer/Shader.h"
+#include "../renderer/VertexArray.h"
 
 class TextureViewerPanel : public wxPanel
 {

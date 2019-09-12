@@ -9,7 +9,6 @@ class MAStrings : public wxDataViewVirtualListModel
 {
 public:
 	MAStrings(const MGFTreeNode& mgText);
-	~MAStrings();
 
 	virtual unsigned int GetColumnCount() const;
 	virtual wxString GetColumnType(unsigned int col) const;

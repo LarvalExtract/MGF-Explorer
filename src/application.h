@@ -9,7 +9,7 @@
 #include <memory>
 
 #include "renderer/Shader.h"
-#include "mainwindow.h"
+#include "frames/mainwindow.h"
 #include "mgf/MGFArchive.h"
 #include "mgf/MGFTreeNode.h"
 #include "mgf/MATexture.h"

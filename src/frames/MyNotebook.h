@@ -1,16 +1,13 @@
 #pragma once
 
-#include <glad/glad.h>
-
 #include "NotebookPage.h"
 
-#include "mgf/MGFArchive.h"
+#include "../mgf/MGFArchive.h"
 
-#include "renderer/Shader.h"
-#include "renderer/VertexArray.h"
+#include "../renderer/Shader.h"
+#include "../renderer/VertexArray.h"
 
 #include <wx/notebook.h>
-#include <wx/glcanvas.h>
 
 #include <string>
 #include <vector>

@@ -27,11 +27,6 @@ MGFMesh::MGFMesh(const MGFTreeNode& vbNode, const MGFTreeNode& ibNode, const pug
 
 }
 
-MGFMesh::~MGFMesh()
-{
-	
-}
-
 VertexBuffer MGFMesh::LoadVertexBuffer(const MGFTreeNode& vbNode)
 {
 	std::vector<char> buffer(vbNode.FileLength());

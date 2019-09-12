@@ -1,6 +1,6 @@
 #include "ModelViewerPanel.h"
 
-#include "application.h"
+#include "../application.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -68,11 +68,6 @@ ModelViewerPanel::ModelViewerPanel(wxWindow* parent) :
 
 	SetSizerAndFit(sizer);
 	Layout();
-}
-
-ModelViewerPanel::~ModelViewerPanel()
-{
-
 }
 
 void ModelViewerPanel::SetCurrentGLContext()

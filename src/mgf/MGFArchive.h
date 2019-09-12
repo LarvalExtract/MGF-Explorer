@@ -9,7 +9,6 @@
 #include <vector>
 #include <fstream>
 #include <filesystem>
-#include <unordered_map>
 
 class MGFArchive : public wxDataViewModel
 {
@@ -21,7 +20,6 @@ public:
 	inline const wxString& ArchiveName() const { return filename.Mid(0, filename.Last('.')); }
 	inline unsigned int Size() const { return size; }
 	inline std::ifstream& FileStream() { return fileStream; }
-
 	inline unsigned int FileCount() const { return fileEntryCount; }
 
 	inline const MGFTreeNode* RootNode() const { return &treeNodes[0]; }
@@ -54,7 +52,6 @@ private:
 	std::vector<MGFTreeNode> treeNodes;
 
 private:
-	bool Validate();
 	void InitTreeModel();
 
 	wxIcon fileIcon;

@@ -27,7 +27,6 @@ class MGFMaterial
 {
 public:
 	MGFMaterial(MaterialType type = MaterialType::Unknown);
-	virtual ~MGFMaterial() {};
 
 	virtual void Apply(const glm::mat4& mvpMatrix) const;
 

@@ -53,11 +53,6 @@ MATexture::MATexture(const MGFTreeNode& treeNode) :
 	delete[] pixels;
 }
 
-MATexture::~MATexture()
-{
-
-}
-
 void MATexture::InitTexture(unsigned char* pixels)
 {
 	Bind();

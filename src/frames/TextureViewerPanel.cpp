@@ -1,9 +1,6 @@
 #include "TextureViewerPanel.h"
 
-#include "application.h"
-
-#include <string>
-#include <wx/msgdlg.h>
+#include "../application.h"
 
 int TextureViewerPanel::count = 0;
 VertexArray* TextureViewerPanel::vao = nullptr;

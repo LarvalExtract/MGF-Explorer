@@ -16,11 +16,6 @@ StringsViewerPanel::StringsViewerPanel(wxWindow* parent) :
 	Layout();
 }
 
-StringsViewerPanel::~StringsViewerPanel()
-{
-
-}
-
 void StringsViewerPanel::SetStrings(MAStrings* strings)
 {
 	stringTable->AssociateModel(strings);

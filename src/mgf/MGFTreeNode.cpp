@@ -19,17 +19,7 @@ MGFTreeNode::MGFTreeNode(MGFTreeNode* parent, const wxString& name,	unsigned int
 		InitFileType();
 }
 
-MGFTreeNode::~MGFTreeNode()
-{
-	children.clear();
-}
-
-static void to_lower(std::string& str)
-{
-	for (std::size_t i = 0; i < str.size(); i++)
-		if (str[i] >= 'A' && str[i] <= 'Z')
-			str[i] += 32;
-}
+extern void to_lower(std::string& str);
 
 MGFTreeNode* MGFTreeNode::GetRelativeNode(const std::string& relativePath) const
 {
@@ -95,11 +85,6 @@ std::string MGFTreeNode::GetFullPath() const
 
 void MGFTreeNode::InitFileType()
 {
-	if (name == "atlas.mgmodel")
-	{
-		int a = 4;
-	}
-
 	int pos = name.Last('.') + 1;
 	wxString extension = name.SubString(pos, name.Length()).Lower();
 

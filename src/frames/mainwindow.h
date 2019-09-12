@@ -7,8 +7,6 @@
 
 #pragma once
 
-#include <glad/glad.h>
-
 #include "MyNotebook.h"
 #include "NotebookPage.h"
 

@@ -26,7 +26,6 @@ public:
 		int timestamp,
 		bool isFile,
 		MGFArchive& archive);
-	~MGFTreeNode();
 
 	inline MGFTreeNode* GetParent() const { return parent; }
 	inline MGFTreeNode* GetNthChild(int index) const { return children[index]; }

@@ -1,10 +1,17 @@
 #include "NotebookPage.h"
-#include "application.h"
+#include "../application.h"
+
+extern void InitPopupMenus();
+
+extern wxMenu popupMenuFile;
+extern wxMenu popupMenuFolder;
+extern wxMenu popupMenuTexture;
 
 static const int treeViewWidth = 620;
 
 wxBEGIN_EVENT_TABLE(NotebookPage, wxPanel)
 	EVT_DATAVIEW_SELECTION_CHANGED(9000, OnItemSelected)
+	
 wxEND_EVENT_TABLE();
 
 NotebookPage::NotebookPage(wxWindow* parent, MGFArchive* mgfFile) :
@@ -41,11 +48,6 @@ NotebookPage::NotebookPage(wxWindow* parent, MGFArchive* mgfFile) :
 	treeView->AppendColumn(new wxDataViewColumn("Size", new wxDataViewTextRenderer(), 3, 90, wxALIGN_LEFT));
 	treeView->AssociateModel(mgfFile);
 	//mgfArchive.IncRef();
-}
-
-NotebookPage::~NotebookPage()
-{
-
 }
 
 void NotebookPage::OnItemSelected(wxDataViewEvent& event)

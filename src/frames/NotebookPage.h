@@ -1,12 +1,13 @@
 #pragma once
 
-#include "mgf/MGFArchive.h"
+#include "../mgf/MGFArchive.h"
+
 #include "TextureViewerPanel.h"
 #include "ModelViewerPanel.h"
 #include "StringsViewerPanel.h"
 
-#include "renderer/VertexArray.h"
-#include "renderer/Shader.h"
+#include "../renderer/VertexArray.h"
+#include "../renderer/Shader.h"
 
 #include <wx/panel.h>
 #include <wx/sizer.h>
@@ -20,7 +21,6 @@ class NotebookPage : public wxPanel
 {
 public:
 	NotebookPage(wxWindow* parent, MGFArchive* mgfFile);
-	~NotebookPage();
 
 	inline const MGFArchive& GetMGFFile() const { return mgfArchive; }
 

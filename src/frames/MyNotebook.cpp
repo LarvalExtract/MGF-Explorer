@@ -1,7 +1,5 @@
 #include "MyNotebook.h"
 
-#include <wx/msgdlg.h>
-
 MyNotebook::MyNotebook(wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size) :
 	wxNotebook(parent, id, pos, size)
 {

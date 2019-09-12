@@ -34,11 +34,6 @@ MAStrings::MAStrings(const MGFTreeNode& mgText)
 	}
 }
 
-MAStrings::~MAStrings()
-{
-
-}
-
 unsigned int MAStrings::GetColumnCount() const
 {
 	return 3;

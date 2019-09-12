@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\mainwindow.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\application.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -25,12 +22,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\mgf\MGFTreeNode.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\NotebookPage.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\TextureViewerPanel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="dependencies\include\glad\glad.h">
@@ -48,9 +39,6 @@
     <ClInclude Include="src\renderer\VertexArray.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\MyNotebook.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\mgf\scene\MGFSceneNode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -66,13 +54,7 @@
     <ClInclude Include="src\mgf\MGFMaterial.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ModelViewerPanel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\renderer\Shapes.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\StringsViewerPanel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\mgf\MAStrings.h">
@@ -81,24 +63,33 @@
     <ClInclude Include="src\mgf\MATexture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\frames\mainwindow.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\frames\ModelViewerPanel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\frames\MyNotebook.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\frames\NotebookPage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\frames\StringsViewerPanel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\frames\TextureViewerPanel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\application.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\mainwindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\mgf\MGFArchive.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\mgf\MGFTreeNode.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\NotebookPage.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TextureViewerPanel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="dependencies\include\glad.c">
@@ -116,9 +107,6 @@
     <ClCompile Include="src\renderer\VeretxArray.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\MyNotebook.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\mgf\scene\MGFSceneNode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -134,19 +122,34 @@
     <ClCompile Include="src\mgf\MGFMaterial.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\ModelViewerPanel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\renderer\Shapes.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\StringsViewerPanel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\mgf\MAStrings.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\mgf\MATexture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ContextMenus.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\frames\mainwindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\frames\ModelViewerPanel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\frames\MyNotebook.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\frames\NotebookPage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\frames\StringsViewerPanel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\frames\TextureViewerPanel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

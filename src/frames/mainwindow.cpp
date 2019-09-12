@@ -7,11 +7,7 @@
 
 #include "mainwindow.h"
 
-#include "renderer/Buffers.h"
-
 #include <wx/filedlg.h>
-#include <wx/msgdlg.h>
-#include <wx/msgdlg.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -157,8 +153,8 @@ wxString MainWindow::ToFileSizeStr(unsigned int bytes)
 {
 	wxString result;
 
-	constexpr float megabyte = 1024 * 1024;
-	constexpr float kilobyte = 1024;
+	static constexpr float megabyte = 1024 * 1024;
+	static constexpr float kilobyte = 1024;
 
 	if (bytes > megabyte)
 	{

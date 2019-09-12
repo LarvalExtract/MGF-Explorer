@@ -10,7 +10,6 @@ class StringsViewerPanel : public wxPanel
 {
 public:
 	StringsViewerPanel(wxWindow* parent);
-	~StringsViewerPanel();
 
 	void SetStrings(MAStrings* strings);
 

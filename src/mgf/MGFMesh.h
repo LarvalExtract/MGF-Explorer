@@ -13,7 +13,6 @@ class MGFMesh
 {
 public:
 	MGFMesh(const MGFTreeNode& vbNode, const MGFTreeNode& ibNode, const pugi::xml_node& meshxml, const MGFMaterial* mat);
-	~MGFMesh();
 
 	glm::mat4x4 transform;
 	VertexArray vao;

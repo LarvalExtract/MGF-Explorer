@@ -3,8 +3,6 @@
 
 #include "../application.h"
 
-#include <sstream>
-
 MGFMaterial::MGFMaterial(MaterialType type) :
 	type(type)
 {
