@@ -113,7 +113,13 @@ void MainWindow::OnPageSelectionChanged(wxBookCtrlEvent& event)
 
 	menuBar->GetMenu(0)->GetMenuItems()[1]->SetItemLabel("Close " + page->GetMGFFile().FileName());
 
-	statusBarLabel->SetLabelText(archive.FileName() + " | " + ToFileSizeStr(archive.Size()) + " | " + std::to_string(archive.FileCount()) + " files in archive");
+	wxString game;
+	switch (archive.Version())
+	{
+	case MGFArchiveVersion::MechAssault1: game = "MechAssault"; break;
+	case MGFArchiveVersion::MechAssault2LW: game = "MechAssault 2: Lone Wolf"; break;
+	}
+	statusBarLabel->SetLabelText(game + " | " + archive.FileName() + " | " + ToFileSizeStr(archive.Size()) + " | " + std::to_string(archive.FileCount()) + " files in archive");
 }
 
 void MainWindow::InitMenuBar()

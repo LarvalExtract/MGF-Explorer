@@ -3,16 +3,26 @@
 
 #include <libmorton/morton.h>
 
-enum TifHeaderOffset : unsigned char
+enum MA1PICOffsets
 {
-	Flags = 33,
-	Width = 45,
-	Height = 57,
-	Mips = 69,
-	Size = 81,
-	Frames = 93,
-	Depth = 105,
-	Data = 117
+	MA1_PIC_Flags = 33,
+	MA1_PIC_Width = 45,
+	MA1_PIC_Height = 57,
+	MA1_PIC_Mips = 69,
+	MA1_PIC_Size = 81,
+	MA1_PIC_Data = 93
+};
+
+enum MA2PICOffsets
+{
+	MA2_PIC_Flags = 33,
+	MA2_PIC_Width = 45,
+	MA2_PIC_Height = 57,
+	MA2_PIC_Mips = 69,
+	MA2_PIC_Size = 81,
+	MA2_PIC_Frames = 93,
+	MA2_PIC_Depth = 105,
+	MA2_PIC_Data = 117
 };
 
 enum MGFTextureFormat : unsigned int
@@ -26,9 +36,9 @@ enum MGFTextureFormat : unsigned int
 
 MATexture::MATexture(const MGFTreeNode& treeNode) :
 	Texture2D(),
-	depth(0),
-	mips(0),
-	frames(0),
+	depth(1),
+	mips(1),
+	frames(1),
 	format(0),
 	flags(0)
 {
@@ -36,16 +46,31 @@ MATexture::MATexture(const MGFTreeNode& treeNode) :
 	treeNode.archive.FileStream().seekg(treeNode.FileOffset() + 32, std::ios::beg);
 	treeNode.archive.FileStream().read(header, 117);
 
-	this->flags = *reinterpret_cast<unsigned int*>(&header[TifHeaderOffset::Flags]);
-	this->width = *reinterpret_cast<unsigned int*>(&header[TifHeaderOffset::Width]);
-	this->height = *reinterpret_cast<unsigned int*>(&header[TifHeaderOffset::Height]);
-	this->mips = *reinterpret_cast<unsigned int*>(&header[TifHeaderOffset::Mips]);
-	this->size = *reinterpret_cast<unsigned int*>(&header[TifHeaderOffset::Size]);
-	this->frames = *reinterpret_cast<unsigned int*>(&header[TifHeaderOffset::Frames]);
-	this->depth = *reinterpret_cast<unsigned int*>(&header[TifHeaderOffset::Depth]);
+	switch (treeNode.archive.Version())
+	{
+	case MGFArchiveVersion::MechAssault1:
+		this->flags =  *reinterpret_cast<unsigned int*>(&header[MA1_PIC_Flags]);
+		this->width =  *reinterpret_cast<unsigned int*>(&header[MA1_PIC_Width]);
+		this->height = *reinterpret_cast<unsigned int*>(&header[MA1_PIC_Height]);
+		this->mips =   *reinterpret_cast<unsigned int*>(&header[MA1_PIC_Mips]);
+		this->size =   *reinterpret_cast<unsigned int*>(&header[MA1_PIC_Size]);
+		break;
+
+	case MGFArchiveVersion::MechAssault2LW:
+		this->flags =  *reinterpret_cast<unsigned int*>(&header[MA2_PIC_Flags]);
+		this->width =  *reinterpret_cast<unsigned int*>(&header[MA2_PIC_Width]);
+		this->height = *reinterpret_cast<unsigned int*>(&header[MA2_PIC_Height]);
+		this->mips =   *reinterpret_cast<unsigned int*>(&header[MA2_PIC_Mips]);
+		this->size =   *reinterpret_cast<unsigned int*>(&header[MA2_PIC_Size]);
+		this->frames = *reinterpret_cast<unsigned int*>(&header[MA2_PIC_Frames]);
+		this->depth =  *reinterpret_cast<unsigned int*>(&header[MA2_PIC_Depth]);
+		break;
+	}
+
+	std::size_t pixelOffset = (treeNode.archive.Version() == MechAssault1) ? MA1_PIC_Data : MA2_PIC_Data;
 
 	unsigned char* pixels = new unsigned char[size];
-	treeNode.archive.FileStream().seekg(treeNode.FileOffset() + 32 + TifHeaderOffset::Data);
+	treeNode.archive.FileStream().seekg(treeNode.FileOffset() + 32 + pixelOffset);
 	treeNode.archive.FileStream().read(reinterpret_cast<char*>(pixels), size);
 
 	InitTexture(pixels);

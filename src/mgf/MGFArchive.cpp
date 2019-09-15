@@ -21,7 +21,18 @@ enum MGFArchiveHeaderOffset : int
 	StringsOffset = 40
 };
 
-struct MGFFileEntry
+struct MA1FileEntry
+{
+	std::int32_t	unknown1;
+	std::int32_t	ID;
+	std::int32_t	timestamp;
+	std::uint32_t	length2;
+	std::int32_t	unknown2;
+	std::uint32_t	length;
+	std::uint32_t	offset;
+};
+
+struct MA2FileEntry
 {
 	std::int32_t	ID;
 	std::int32_t	unknown1;
@@ -56,6 +67,7 @@ MGFArchive::MGFArchive(const std::filesystem::path& filepath) :
 	if (header[0] != mgfSignature)
 		throw;
 
+	version = static_cast<MGFArchiveVersion>(header[1]);
 	fileEntryCount = header[3];
 	fileEntryLength = header[4];
 	fileEntryOffset = header[5];
@@ -190,14 +202,16 @@ unsigned int MGFArchive::GetChildren(const wxDataViewItem& item, wxDataViewItemA
 void MGFArchive::InitTreeModel()
 {
 	// Copy file entry data
-	const auto fileEntries = [this]()
+	const auto fileEntryBuffer = [this]()
 	{
-		std::vector<MGFFileEntry> result(fileEntryCount);
+		std::vector<char> result(fileEntryLength);
 		fileStream.seekg(fileEntryOffset, std::ios::beg);
-		fileStream.read(reinterpret_cast<char*>(result.data()), fileEntryLength);
+		fileStream.read(result.data(), fileEntryLength);
 
 		return result;
 	}();
+
+
 
 	// Copy file index data
 	const auto indexEntries = [this]()
@@ -241,16 +255,33 @@ void MGFArchive::InitTreeModel()
 		// index entry is a file
 		else
 		{
-			treeNodes.emplace_back(
-				&treeNodes[indexEntries[i].parentIndex],
-				&stringBuffer[indexEntries[i].stringOffset],
-				fileEntries[j].ID,
-				fileEntries[j].offset,
-				fileEntries[j].length,
-				fileEntries[j].timestamp,
-				true,
-				*this);
+			switch (version)
+			{
+			case MGFArchiveVersion::MechAssault1:
+				treeNodes.emplace_back(
+					&treeNodes[indexEntries[i].parentIndex],
+					&stringBuffer[indexEntries[i].stringOffset],
+					reinterpret_cast<const MA1FileEntry*>(fileEntryBuffer.data())[j].ID,
+					reinterpret_cast<const MA1FileEntry*>(fileEntryBuffer.data())[j].offset,
+					reinterpret_cast<const MA1FileEntry*>(fileEntryBuffer.data())[j].length,
+					reinterpret_cast<const MA1FileEntry*>(fileEntryBuffer.data())[j].timestamp,
+					true,
+					*this);
+				break;
 
+			case MGFArchiveVersion::MechAssault2LW:
+				treeNodes.emplace_back(
+					&treeNodes[indexEntries[i].parentIndex],
+					&stringBuffer[indexEntries[i].stringOffset],
+					reinterpret_cast<const MA2FileEntry*>(fileEntryBuffer.data())[j].ID,
+					reinterpret_cast<const MA2FileEntry*>(fileEntryBuffer.data())[j].offset,
+					reinterpret_cast<const MA2FileEntry*>(fileEntryBuffer.data())[j].length,
+					reinterpret_cast<const MA2FileEntry*>(fileEntryBuffer.data())[j].timestamp,
+					true,
+					*this);
+				break;
+			}
+			
 			j++;
 		}
 

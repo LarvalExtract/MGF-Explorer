@@ -10,6 +10,12 @@
 #include <fstream>
 #include <filesystem>
 
+enum MGFArchiveVersion : uint8_t
+{
+	MechAssault1 = 2,
+	MechAssault2LW = 4
+};
+
 class MGFArchive : public wxDataViewModel
 {
 public:
@@ -18,6 +24,7 @@ public:
 
 	inline const wxString& FileName() const { return filename; }
 	inline const wxString& ArchiveName() const { return filename.Mid(0, filename.Last('.')); }
+	inline MGFArchiveVersion Version() const { return version; }
 	inline unsigned int Size() const { return size; }
 	inline std::ifstream& FileStream() { return fileStream; }
 	inline unsigned int FileCount() const { return fileEntryCount; }
@@ -40,6 +47,7 @@ private:
 	wxString filename;
 	unsigned int size;
 
+	MGFArchiveVersion version;
 	unsigned int fileEntryCount;
 	unsigned int fileEntryLength;
 	unsigned int fileEntryOffset;
