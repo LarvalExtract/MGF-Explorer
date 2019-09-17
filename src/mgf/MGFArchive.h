@@ -62,7 +62,9 @@ private:
 private:
 	void InitTreeModel();
 
-	wxIcon fileIcon;
+	wxIcon genericFileIcon;
+	wxIcon txtFileIcon;
+	wxIcon cfgIniFileIcon;
 	wxIcon folderIcon;
 };
 

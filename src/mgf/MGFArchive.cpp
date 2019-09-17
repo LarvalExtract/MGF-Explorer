@@ -5,9 +5,21 @@
 #include <Windows.h>
 #include <stdint.h>
 
+enum Shell32IconIndices : int
+{
+	GenericFile = 1,
+	Folder = 5,
+	TextFile = 152,
+	CfgIniFile = 151
+};
+
 HINSTANCE hShellDLL = LoadLibraryA("shell32.dll");
-HICON hFileIcon = static_cast<HICON>(LoadImageA(hShellDLL, MAKEINTRESOURCEA(1), IMAGE_ICON, 16, 16, LR_SHARED));
-HICON hFolderIcon = static_cast<HICON>(LoadImageA(hShellDLL, MAKEINTRESOURCEA(5), IMAGE_ICON, 16, 16, LR_SHARED));
+HICON hFileIcon = static_cast<HICON>(LoadImageA(hShellDLL, MAKEINTRESOURCEA(Shell32IconIndices::GenericFile), IMAGE_ICON, 16, 16, LR_SHARED));
+HICON hFolderIcon = static_cast<HICON>(LoadImageA(hShellDLL, MAKEINTRESOURCEA(Shell32IconIndices::Folder), IMAGE_ICON, 16, 16, LR_SHARED));
+HICON hTxtFileIcon = static_cast<HICON>(LoadImageA(hShellDLL, MAKEINTRESOURCEA(Shell32IconIndices::TextFile), IMAGE_ICON, 16, 16, LR_SHARED));
+HICON hCfgFileIcon = static_cast<HICON>(LoadImageA(hShellDLL, MAKEINTRESOURCEA(Shell32IconIndices::CfgIniFile), IMAGE_ICON, 16, 16, LR_SHARED));
+
+extern wxString ToFileSizeStr(unsigned int bytes);
 
 enum MGFArchiveHeaderOffset : int
 {
@@ -79,8 +91,10 @@ MGFArchive::MGFArchive(const std::filesystem::path& filepath) :
 
 	InitTreeModel();
 
-	fileIcon.CreateFromHICON(hFileIcon);
+	genericFileIcon.CreateFromHICON(hFileIcon);
 	folderIcon.CreateFromHICON(hFolderIcon);
+	txtFileIcon.CreateFromHICON(hTxtFileIcon);
+	cfgIniFileIcon.CreateFromHICON(hCfgFileIcon);
 
 	fileStream.seekg(0, std::ios::end);
 	size = fileStream.tellg();
@@ -103,48 +117,54 @@ unsigned int MGFArchive::GetColumnCount() const
 
 void MGFArchive::GetValue(wxVariant& variant, const wxDataViewItem& item, unsigned int col) const
 {
-	MGFTreeNode* node = static_cast<MGFTreeNode*>(item.GetID());
-	wxDataViewIconText data(node->Name(), node->IsFile() ? fileIcon : folderIcon);
-	wxDateTime date(static_cast<std::time_t>(node->LastModifiedDate()));
-
-	if (!node->IsFile())
+	if (MGFTreeNode* node = static_cast<MGFTreeNode*>(item.GetID()); node->IsFile())
 	{
-		if (col == 0)
-			variant << wxDataViewIconText(node->Name(), folderIcon);
-		else
-			variant = wxEmptyString;
+		wxDateTime date(static_cast<std::time_t>(node->LastModifiedDate()));
 
-		return;
+		switch (col)
+		{
+			// Provide the tree item name and a file/folder icon to the treeview
+		case 0:
+			switch (node->FileType())
+			{
+			case MGFFileType::PlainText_TXT: variant << wxDataViewIconText(node->Name(), txtFileIcon); break;
+			case MGFFileType::PlainText_CFG_INI: variant << wxDataViewIconText(node->Name(), cfgIniFileIcon); break;
+			default:	variant << wxDataViewIconText(node->Name(), genericFileIcon); break;
+			}
+			break;
+
+			// Provide the time stamp
+		case 1:
+			variant = date.Format("%D %T");
+			break;
+
+			// Provide the file's type
+		case 2:
+			switch (node->FileType())
+			{
+			case MGFFileType::Texture:				variant = "Texture"; break;
+			case MGFFileType::Model:				variant = "Model"; break;
+			case MGFFileType::Strings:				variant = "Strings"; break;
+			case MGFFileType::PlainText_TXT:		variant = "TXT"; break;
+			case MGFFileType::PlainText_CFG_INI:	variant = "TXT"; break;
+			case MGFFileType::None:					variant = wxEmptyString; break;
+			}
+			break;
+
+			// Provide the file size
+		case 3:
+			variant = ToFileSizeStr(node->FileLength());
+			break;
+		}
 	}
 
-	switch (col)
+	else
 	{
-		// Provide the tree item name and a file/folder icon to the treeview
-	case 0:
-		variant << wxDataViewIconText(node->Name(), fileIcon);
-		break;
-
-		// Provide the time stamp
-	case 1:
-		variant = date.Format("%D %T");
-		break;
-
-		// Provide the file's type
-	case 2:
-		switch (node->FileType())
+		switch (col)
 		{
-		case MGFFileType::Texture:	variant = "Texture"; break;
-		case MGFFileType::Model:	variant = "Model"; break;
-		case MGFFileType::Strings:	variant = "Strings"; break;
-		case MGFFileType::None:		variant = wxEmptyString; break;
+		case 0: variant << wxDataViewIconText(node->Name(), folderIcon); break;
+		default: variant = wxEmptyString; break;
 		}
-		break;
-
-		// Provide the file size
-	case 3:
-		unsigned int bytes = node->FileLength();
-		variant = bytes > 1024 ? wxString::Format("%i", bytes / 1024) + " KB" : wxString::Format("%i", bytes) + " bytes";
-		break;
 	}
 }
 

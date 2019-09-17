@@ -18,6 +18,8 @@ wxBEGIN_EVENT_TABLE(MainWindow, wxFrame)
 	EVT_NOTEBOOK_PAGE_CHANGED(10500, OnPageSelectionChanged)
 wxEND_EVENT_TABLE();
 
+wxString ToFileSizeStr(unsigned int bytes);
+
 MainWindow::MainWindow() :
 	wxFrame(nullptr, wxID_ANY, "MechAssault MGF Explorer", wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE | wxTAB_TRAVERSAL | wxMAXIMIZE),
 	panel_mainWindow(nullptr),
@@ -113,13 +115,14 @@ void MainWindow::OnPageSelectionChanged(wxBookCtrlEvent& event)
 
 	menuBar->GetMenu(0)->GetMenuItems()[1]->SetItemLabel("Close " + page->GetMGFFile().FileName());
 
-	wxString game;
-	switch (archive.Version())
-	{
-	case MGFArchiveVersion::MechAssault1: game = "MechAssault"; break;
-	case MGFArchiveVersion::MechAssault2LW: game = "MechAssault 2: Lone Wolf"; break;
-	}
-	statusBarLabel->SetLabelText(game + " | " + archive.FileName() + " | " + ToFileSizeStr(archive.Size()) + " | " + std::to_string(archive.FileCount()) + " files in archive");
+	static wxString ma1 = "MechAssault";
+	static wxString ma2 = "MechAssault 2: Lone Wolf";
+
+	statusBarLabel->SetLabelText(
+		(archive.Version() == MGFArchiveVersion::MechAssault2LW ? ma2 : ma1) + " | " + 
+		archive.FileName() + " | " + 
+		ToFileSizeStr(archive.Size()) + " | " + 
+		wxString::Format("%i", archive.FileCount()) + " files in archive");
 }
 
 void MainWindow::InitMenuBar()
@@ -155,7 +158,7 @@ void MainWindow::InitStatusBar()
 	statusBarSizer->Fit(statusBarPanel);
 }
 
-wxString MainWindow::ToFileSizeStr(unsigned int bytes)
+wxString ToFileSizeStr(unsigned int bytes)
 {
 	wxString result;
 
@@ -167,14 +170,14 @@ wxString MainWindow::ToFileSizeStr(unsigned int bytes)
 		float sizeInMB = (static_cast<float>(bytes) / megabyte);
 		unsigned int rounded = (sizeInMB * 100.0f) + 0.5f;
 		result << rounded << "MB";
-		result.insert(2, '.');
+		result.insert(result.length() - 4, '.');
 	}
 	else if (bytes > kilobyte)
 	{
 		float sizeInKB = (static_cast<float>(bytes) / kilobyte);
 		unsigned int rounded = (sizeInKB * 100.0f) + 0.5f;
 		result << rounded << "kB";
-		result.insert(2, '.');
+		result.insert(result.length() - 4, '.');
 	}
 	else
 	{

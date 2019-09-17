@@ -12,7 +12,9 @@ enum class MGFFileType : char
 	None,
 	Strings,
 	Texture,
-	Model
+	Model,
+	PlainText_TXT,
+	PlainText_CFG_INI,
 };
 
 class MGFTreeNode

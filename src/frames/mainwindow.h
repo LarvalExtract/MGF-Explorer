@@ -60,8 +60,6 @@ private:
 	void InitMenuBar();
 	void InitStatusBar();
 
-	wxString ToFileSizeStr(unsigned int bytes);
-
 	wxDECLARE_EVENT_TABLE();
 };
 

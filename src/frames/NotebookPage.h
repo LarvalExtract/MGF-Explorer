@@ -28,6 +28,7 @@ public:
 
 private:
 	void ShowPanel(wxWindow* newPanel);
+	void LoadTextFileData(const MGFTreeNode& txtFileNode);
 
 private:
 	wxBoxSizer* sizer;
@@ -36,6 +37,7 @@ private:
 	TextureViewerPanel* textureViewer;
 	ModelViewerPanel* modelViewer;
 	StringsViewerPanel* stringsViewer;
+	wxTextCtrl* txtFileViewer;
 	wxPanel* placeholderPanel;
 
 	MGFArchive& mgfArchive;

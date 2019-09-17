@@ -24,7 +24,6 @@
     <ClInclude Include="src\mgf\MGFMaterial.h" />
     <ClInclude Include="src\mgf\MGFMesh.h" />
     <ClInclude Include="src\mgf\MGFModel.h" />
-    <ClInclude Include="src\mgf\scene\MGFSceneNode.h" />
     <ClInclude Include="src\frames\ModelViewerPanel.h" />
     <ClInclude Include="src\frames\MyNotebook.h" />
     <ClInclude Include="src\renderer\Buffers.h" />
@@ -49,7 +48,6 @@
     <ClCompile Include="src\mgf\MGFMaterial.cpp" />
     <ClCompile Include="src\mgf\MGFMesh.cpp" />
     <ClCompile Include="src\mgf\MGFModel.cpp" />
-    <ClCompile Include="src\mgf\scene\MGFSceneNode.cpp" />
     <ClCompile Include="src\frames\ModelViewerPanel.cpp" />
     <ClCompile Include="src\frames\MyNotebook.cpp" />
     <ClCompile Include="src\renderer\Buffers.cpp" />

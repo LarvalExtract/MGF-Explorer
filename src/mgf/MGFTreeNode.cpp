@@ -88,7 +88,10 @@ void MGFTreeNode::InitFileType()
 	int pos = name.Last('.') + 1;
 	wxString extension = name.SubString(pos, name.Length()).Lower();
 
-	if		(std::strcmp(extension.c_str(), "mgtext") == 0)		fileType = MGFFileType::Strings;
+	if (std::strcmp(extension.c_str(), "mgtext") == 0)			fileType = MGFFileType::Strings;
 	else if (std::strcmp(extension.c_str(), "tif") == 0)		fileType = MGFFileType::Texture;
 	else if (std::strcmp(extension.c_str(), "mgmodel") == 0)	fileType = MGFFileType::Model;
+	else if (std::strcmp(extension.c_str(), "txt") == 0)		fileType = MGFFileType::PlainText_TXT;
+	else if (std::strcmp(extension.c_str(), "cfg") == 0)		fileType = MGFFileType::PlainText_CFG_INI;
+	else if (std::strcmp(extension.c_str(), "ini") == 0)		fileType = MGFFileType::PlainText_CFG_INI;
 }

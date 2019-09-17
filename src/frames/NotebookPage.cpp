@@ -33,6 +33,9 @@ NotebookPage::NotebookPage(wxWindow* parent, MGFArchive* mgfFile) :
 	stringsViewer->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DLIGHT));
 	stringsViewer->Hide();
 
+	txtFileViewer = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY | wxTE_LEFT | wxTE_MULTILINE);
+	txtFileViewer->Hide();
+
 	placeholderPanel = new wxPanel(this);
 
 	sizer = new wxBoxSizer(wxHORIZONTAL);
@@ -82,6 +85,16 @@ void NotebookPage::OnItemSelected(wxDataViewEvent& event)
 		stringsViewer->SetStrings(Application::GetStrings(selectedNode));
 		break;
 
+	case MGFFileType::PlainText_TXT:
+		ShowPanel(txtFileViewer);
+		LoadTextFileData(selectedNode);
+		break;
+
+	case MGFFileType::PlainText_CFG_INI:
+		ShowPanel(txtFileViewer);
+		LoadTextFileData(selectedNode);
+		break;
+
 	case MGFFileType::None:
 		ShowPanel(nullptr);
 		break;
@@ -122,4 +135,16 @@ void NotebookPage::ShowPanel(wxWindow* newPanel)
 
 		sizer->Layout();
 	}
+}
+
+void NotebookPage::LoadTextFileData(const MGFTreeNode& txtFileNode)
+{
+	std::string text;
+	text.resize(txtFileNode.FileLength());
+
+	txtFileNode.archive.FileStream().seekg(txtFileNode.FileOffset(), std::ios::beg);
+	txtFileNode.archive.FileStream().read(&text[0], txtFileNode.FileLength());
+
+	txtFileViewer->Clear();
+	*txtFileViewer << text;
 }
