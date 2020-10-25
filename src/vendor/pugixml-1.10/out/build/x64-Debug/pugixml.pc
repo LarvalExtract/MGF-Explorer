@@ -1,0 +1,11 @@
+prefix=D:/Documents/Repos/MGF-Explorer_Qt/src/pugixml-1.10/out/install/x64-Debug
+exec_prefix=${prefix}
+includedir=D:/Documents/Repos/MGF-Explorer_Qt/src/pugixml-1.10/out/install/x64-Debug/include
+libdir=D:/Documents/Repos/MGF-Explorer_Qt/src/pugixml-1.10/out/install/x64-Debug/lib
+
+Name: pugixml
+Description: Light-weight, simple and fast XML parser for C++ with XPath support.
+URL: https://pugixml.org/
+Version: 1.10
+Cflags: -I${includedir}
+Libs: -L${libdir} -lpugixml

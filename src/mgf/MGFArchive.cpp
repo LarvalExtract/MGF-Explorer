@@ -1,310 +1,157 @@
-#include "MGFArchive.h"
+#include "mgfarchive.h"
+#include "widgets/mgfworkspace.h"
 
-#include <wx/datetime.h>
-
-#include <Windows.h>
-#include <stdint.h>
-
-enum Shell32IconIndices : int
+struct MGFFileEntryStruct
 {
-	GenericFile = 1,
-	Folder = 5,
-	TextFile = 152,
-	CfgIniFile = 151
+    unsigned int offset_file_index;
+    unsigned int offset_file_guid;
+    unsigned int offset_file_length;
+    unsigned int offset_file_offset;
+    unsigned int offset_file_timestamp;
+    unsigned int size_struct;
 };
 
-HINSTANCE hShellDLL = LoadLibraryA("shell32.dll");
-HICON hFileIcon = static_cast<HICON>(LoadImageA(hShellDLL, MAKEINTRESOURCEA(Shell32IconIndices::GenericFile), IMAGE_ICON, 16, 16, LR_SHARED));
-HICON hFolderIcon = static_cast<HICON>(LoadImageA(hShellDLL, MAKEINTRESOURCEA(Shell32IconIndices::Folder), IMAGE_ICON, 16, 16, LR_SHARED));
-HICON hTxtFileIcon = static_cast<HICON>(LoadImageA(hShellDLL, MAKEINTRESOURCEA(Shell32IconIndices::TextFile), IMAGE_ICON, 16, 16, LR_SHARED));
-HICON hCfgFileIcon = static_cast<HICON>(LoadImageA(hShellDLL, MAKEINTRESOURCEA(Shell32IconIndices::CfgIniFile), IMAGE_ICON, 16, 16, LR_SHARED));
-
-extern wxString ToFileSizeStr(unsigned int bytes);
-
-enum MGFArchiveHeaderOffset : int
+MGFArchive::MGFArchive(const QString& mgfFilePath) :
+    m_FilePath(mgfFilePath),
+    m_FileTreeModel(m_TreeItems),
+    m_FileTableModel(m_TreeItems)
 {
-	FileEntryCount = 12,
-	FileEntryLength = 16,
-	FileEntryOffset = 20,
-	IndexEntryCount = 24,
-	IndexEntryLength = 28,
-	IndexEntryOffset = 32,
-	StringsLength = 36,
-	StringsOffset = 40
-};
+    int lastSeparator = m_FilePath.lastIndexOf('/') + 1;
+    int length = m_FilePath.size() - lastSeparator;
+    m_FileName = m_FilePath.mid(lastSeparator, length);
 
-struct MA1FileEntry
-{
-	std::int32_t	unknown1;
-	std::int32_t	ID;
-	std::int32_t	timestamp;
-	std::uint32_t	length2;
-	std::int32_t	unknown2;
-	std::uint32_t	length;
-	std::uint32_t	offset;
-};
+    m_FileStream.open(mgfFilePath.toStdString(), std::ios::binary);
 
-struct MA2FileEntry
-{
-	std::int32_t	ID;
-	std::int32_t	unknown1;
-	std::int32_t	unknown2;
-	std::uint32_t	length;
-	std::uint32_t	length2;
-	std::int32_t	timestamp;
-	std::uint32_t	offset;
-	std::uint32_t	padding;
-};
+    if (!m_FileStream.is_open())
+        throw std::runtime_error("Couldn't open " + mgfFilePath.toStdString());
+
+    // read header from MGF file (first 64 bytes)
+    constexpr int headerLength = 16;
+    uint32_t header[headerLength];
+    m_FileStream.read(reinterpret_cast<char*>(&header), 64);
+
+    constexpr uint32_t MGF_SIGNATURE = 0x2066676D; // "mgf "
+
+    // check for valid MGF file
+    if (header[0] != MGF_SIGNATURE)
+        throw std::runtime_error(mgfFilePath.toStdString() + " is either compressed or not a valid MechAssault 1 or MechAssault 2: Lone Wolf MGF file");
+
+    // copy header values
+    m_ArchiveVersion = static_cast<uint8_t>(header[1]);
+    m_FileEntryCount = header[3];
+    m_FileEntryLength = header[4];
+    m_FileEntryOffset = header[5];
+    m_IndexEntryCount = header[6];
+    m_IndexEntryLength = header[7];
+    m_IndexEntryOffset = header[8];
+    m_StringListLength = header[9];
+    m_StringListOffset = header[10];
+
+
+    MGFFileEntryStruct descriptor;
+
+    // game version determined by header value: 4 = MA2, 2 = MA1
+    // file entry data is different for each game
+    if (m_ArchiveVersion == 4)
+    {
+        descriptor.offset_file_index = 0;
+        descriptor.offset_file_guid = 4;
+        descriptor.offset_file_length = 12;
+        descriptor.offset_file_timestamp = 20;
+        descriptor.offset_file_offset = 24;
+        descriptor.size_struct = 32;
+    }
+    else if (m_ArchiveVersion == 2)
+    {
+        descriptor.offset_file_index = 4;
+        descriptor.offset_file_guid = 12;
+        descriptor.offset_file_length = 20;
+        descriptor.offset_file_timestamp = 8;
+        descriptor.offset_file_offset = 24;
+        descriptor.size_struct = 28;
+    }
+    else
+    {
+        throw std::runtime_error(mgfFilePath.toStdString() + " is not a supported version (version: " + std::to_string(m_ArchiveVersion));
+    }
+
+    LoadMechAssaultFileData(descriptor);
+
+    m_FileStream.seekg(0, std::ios::end);
+    m_FileSize = m_FileStream.tellg();
+}
 
 struct MGFIndexEntry
 {
-	std::int32_t unknown1;
-	std::int32_t parentIndex;
-	std::int32_t unknown2;
-	std::int32_t unknown3;
-	std::int32_t stringOffset;
-	std::int32_t isFile;
+    int32_t unknown1;       // 0 for files, non-zero for folders
+    int32_t parentIndex;    // identifies the folder this item belongs to
+    int32_t folderIndex;    // index if the item is a folder, -1 if item is a file (this fills the index gaps left in the file entry table)
+    int32_t unknown3;
+    int32_t stringOffset;
+    int32_t isFile;
 };
 
-const std::uint32_t mgfSignature = 0x2066676D;
-
-MGFArchive::MGFArchive(const std::filesystem::path& filepath) :
-	fileStream(filepath, std::ios::binary),
-	filename(filepath.filename().c_str())
+void MGFArchive::LoadMechAssaultFileData(const MGFFileEntryStruct& descriptor)
 {
-	std::uint32_t header[16];
-	fileStream.read(reinterpret_cast<char*>(&header[0]), 64);
+    // copy file entry bytes to buffer
+    std::vector<char> fileEntryBuffer(m_FileEntryLength);
+    m_FileStream.seekg(m_FileEntryOffset);
+    m_FileStream.read(fileEntryBuffer.data(), m_FileEntryLength);
 
-	// Check the first 4 bytes are "mgf "
-	if (header[0] != mgfSignature)
-		throw;
+    // copy index entry bytes to buffer
+    std::vector<MGFIndexEntry> indexEntries(m_IndexEntryCount);
+    m_FileStream.seekg(m_IndexEntryOffset);
+    m_FileStream.read(reinterpret_cast<char*>(indexEntries.data()), m_IndexEntryLength);
 
-	version = static_cast<MGFArchiveVersion>(header[1]);
-	fileEntryCount = header[3];
-	fileEntryLength = header[4];
-	fileEntryOffset = header[5];
-	indexEntryCount = header[6];
-	indexEntryLength = header[7];
-	indexEntryOffset = header[8];
-	stringsLength = header[9];
-	stringsOffset = header[10];
+    // copy file/folder string bytes to buffer
+    std::vector<char> stringBuffer(m_StringListLength);
+    m_FileStream.seekg(m_StringListOffset);
+    m_FileStream.read(stringBuffer.data(), m_StringListLength);
 
-	InitTreeModel();
+    m_TreeItems.reserve(m_IndexEntryCount);
+    m_TreeItems.emplace_back(nullptr, &stringBuffer[indexEntries[0].stringOffset], 0, 0, 0, 0, 0, false, *this);
 
-	genericFileIcon.CreateFromHICON(hFileIcon);
-	folderIcon.CreateFromHICON(hFolderIcon);
-	txtFileIcon.CreateFromHICON(hTxtFileIcon);
-	cfgIniFileIcon.CreateFromHICON(hCfgFileIcon);
+    for (size_t i = 1, j = 0; i < indexEntries.size(); i++)
+    {
+        // item is a file
+        if (indexEntries[i].isFile > -1)
+        {
+            int32_t index   =  *reinterpret_cast<int32_t*>(&fileEntryBuffer[descriptor.offset_file_index + j * descriptor.size_struct]);
+            uint64_t guid   = *reinterpret_cast<uint64_t*>(&fileEntryBuffer[descriptor.offset_file_guid + j * descriptor.size_struct]);
+            uint32_t offset = *reinterpret_cast<uint32_t*>(&fileEntryBuffer[descriptor.offset_file_offset + j * descriptor.size_struct]);
+            uint32_t length = *reinterpret_cast<uint32_t*>(&fileEntryBuffer[descriptor.offset_file_length + j * descriptor.size_struct]);
+            int32_t time    =  *reinterpret_cast<int32_t*>(&fileEntryBuffer[descriptor.offset_file_timestamp + j * descriptor.size_struct]);
 
-	fileStream.seekg(0, std::ios::end);
-	size = fileStream.tellg();
-}
+            m_TreeItems.emplace_back(
+                    &m_TreeItems[indexEntries[i].parentIndex],
+                    &stringBuffer[indexEntries[i].stringOffset],
+                    guid,
+                    index,
+                    offset,
+                    length,
+                    time,
+                    true,
+                    *this);
+            j++;
 
-MGFArchive::~MGFArchive()
-{
-	fileStream.close();
-}
+            // count number of textures
+            if (m_TreeItems.back().FileType() == MGFFileType::Texture)
+                m_NumTextures++;
+        }
 
-wxString MGFArchive::GetColumnType(unsigned int col) const
-{
-	return "string";
-}
-
-unsigned int MGFArchive::GetColumnCount() const
-{
-	return 4;
-}
-
-void MGFArchive::GetValue(wxVariant& variant, const wxDataViewItem& item, unsigned int col) const
-{
-	if (MGFTreeNode* node = static_cast<MGFTreeNode*>(item.GetID()); node->IsFile())
-	{
-		wxDateTime date(static_cast<std::time_t>(node->LastModifiedDate()));
-
-		switch (col)
-		{
-			// Provide the tree item name and a file/folder icon to the treeview
-		case 0:
-			switch (node->FileType())
-			{
-			case MGFFileType::PlainText_TXT: variant << wxDataViewIconText(node->Name(), txtFileIcon); break;
-			case MGFFileType::PlainText_CFG_INI: variant << wxDataViewIconText(node->Name(), cfgIniFileIcon); break;
-			default:	variant << wxDataViewIconText(node->Name(), genericFileIcon); break;
-			}
-			break;
-
-			// Provide the time stamp
-		case 1:
-			variant = date.Format("%D %T");
-			break;
-
-			// Provide the file's type
-		case 2:
-			switch (node->FileType())
-			{
-			case MGFFileType::Texture:				variant = "Texture"; break;
-			case MGFFileType::Model:				variant = "Model"; break;
-			case MGFFileType::Strings:				variant = "Strings"; break;
-			case MGFFileType::PlainText_TXT:		variant = "TXT"; break;
-			case MGFFileType::PlainText_CFG_INI:	variant = "TXT"; break;
-			case MGFFileType::None:					variant = wxEmptyString; break;
-			}
-			break;
-
-			// Provide the file size
-		case 3:
-			variant = ToFileSizeStr(node->FileLength());
-			break;
-		}
-	}
-
-	else
-	{
-		switch (col)
-		{
-		case 0: variant << wxDataViewIconText(node->Name(), folderIcon); break;
-		default: variant = wxEmptyString; break;
-		}
-	}
-}
-
-bool MGFArchive::SetValue(const wxVariant& variant, const wxDataViewItem& item, unsigned int col)
-{
-	return false;
-}
-
-bool MGFArchive::IsEnabled(const wxDataViewItem& WXUNUSED(item), unsigned int WXUNUSED(col)) const
-{
-	return true;
-}
-
-wxDataViewItem MGFArchive::GetParent(const wxDataViewItem& item) const
-{
-	MGFTreeNode* node = static_cast<MGFTreeNode*>(item.GetID());
-
-	if (node == &treeNodes[0])
-		return wxDataViewItem(nullptr);
-
-	return wxDataViewItem(node->GetParent());
-}
-
-bool MGFArchive::IsContainer(const wxDataViewItem& item) const
-{
-	MGFTreeNode* node = static_cast<MGFTreeNode*>(item.GetID());
-
-	if (node == nullptr)
-		return true;
-
-	return !node->IsFile();
-}
-
-unsigned int MGFArchive::GetChildren(const wxDataViewItem& item, wxDataViewItemArray& children) const
-{
-	if (MGFTreeNode* node = static_cast<MGFTreeNode*>(item.GetID()); node == nullptr)
-	{
-		children.reserve(treeNodes[0].GetChildCount());
-		for (unsigned int i = 0; i < treeNodes[0].GetChildCount(); i++)
-			children.Add(wxDataViewItem(treeNodes[0].GetNthChild(i)));
-
-		return treeNodes[0].GetChildCount();
-	}
-
-	else
-	{
-		children.reserve(node->GetChildCount());
-		for (unsigned int i = 0; i < node->GetChildCount(); i++)
-			children.Add(wxDataViewItem(node->GetNthChild(i)));
-
-		return node->GetChildCount();
-	}
-}
-
-void MGFArchive::InitTreeModel()
-{
-	// Copy file entry data
-	const auto fileEntryBuffer = [this]()
-	{
-		std::vector<char> result(fileEntryLength);
-		fileStream.seekg(fileEntryOffset, std::ios::beg);
-		fileStream.read(result.data(), fileEntryLength);
-
-		return result;
-	}();
-
-
-
-	// Copy file index data
-	const auto indexEntries = [this]()
-	{
-		std::vector<MGFIndexEntry> result(indexEntryCount);
-		fileStream.seekg(this->indexEntryOffset, std::ios::beg);
-		fileStream.read(reinterpret_cast<char*>(result.data()), indexEntryLength);
-
-		return result;
-	}();
-
-	// Copy file and folder strings
-	const auto stringBuffer = [this]()
-	{
-		std::vector<char> result(stringsLength);
-		fileStream.seekg(stringsOffset, std::ios::beg);
-		fileStream.read(result.data(), stringsLength);
-
-		return result;
-	}();
-
-	treeNodes.reserve(indexEntryCount);
-	treeNodes.emplace_back(nullptr, &stringBuffer[indexEntries[0].stringOffset], 0, 0, 0, 0, false, *this);
-
-	for (std::size_t i = 1, j = 0; i < indexEntries.size(); i++)
-	{
-		// index entry is a folder
-		if (indexEntries[i].isFile == -1)
-		{
-			treeNodes.emplace_back(
-				&treeNodes[indexEntries[i].parentIndex],
-				&stringBuffer[indexEntries[i].stringOffset],
-				0,
-				0,
-				0,
-				0,
-				false,
-				*this);
-		}
-
-		// index entry is a file
-		else
-		{
-			switch (version)
-			{
-			case MGFArchiveVersion::MechAssault1:
-				treeNodes.emplace_back(
-					&treeNodes[indexEntries[i].parentIndex],
-					&stringBuffer[indexEntries[i].stringOffset],
-					reinterpret_cast<const MA1FileEntry*>(fileEntryBuffer.data())[j].ID,
-					reinterpret_cast<const MA1FileEntry*>(fileEntryBuffer.data())[j].offset,
-					reinterpret_cast<const MA1FileEntry*>(fileEntryBuffer.data())[j].length,
-					reinterpret_cast<const MA1FileEntry*>(fileEntryBuffer.data())[j].timestamp,
-					true,
-					*this);
-				break;
-
-			case MGFArchiveVersion::MechAssault2LW:
-				treeNodes.emplace_back(
-					&treeNodes[indexEntries[i].parentIndex],
-					&stringBuffer[indexEntries[i].stringOffset],
-					reinterpret_cast<const MA2FileEntry*>(fileEntryBuffer.data())[j].ID,
-					reinterpret_cast<const MA2FileEntry*>(fileEntryBuffer.data())[j].offset,
-					reinterpret_cast<const MA2FileEntry*>(fileEntryBuffer.data())[j].length,
-					reinterpret_cast<const MA2FileEntry*>(fileEntryBuffer.data())[j].timestamp,
-					true,
-					*this);
-				break;
-			}
-			
-			j++;
-		}
-
-		treeNodes[indexEntries[i].parentIndex].AddChild(&treeNodes[i]);
-	}
+        // item is a folder
+        else
+        {
+            m_TreeItems.emplace_back(
+                    &m_TreeItems[indexEntries[i].parentIndex],
+                    &stringBuffer[indexEntries[i].stringOffset],
+                    0,
+                    0, // this should be an index
+                    0,
+                    0,
+                    0,
+                    false,
+                    *this);
+        }
+    }
 }

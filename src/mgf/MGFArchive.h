@@ -1,70 +1,62 @@
-#pragma once
+#ifndef MGFARCHIVE_H
+#define MGFARCHIVE_H
 
-#include "MGFTreeNode.h"
+#include "mgftreeitem.h"
+#include "models/mgffiletreemodel.h"
+#include "models/mgffiletablemodel.h"
 
-#include <wx/string.h>
-#include <wx/dataview.h>
+#include <QString>
 
-#include <string>
-#include <vector>
 #include <fstream>
-#include <filesystem>
+#include <exception>
+#include <string>
 
-enum MGFArchiveVersion : uint8_t
-{
-	MechAssault1 = 2,
-	MechAssault2LW = 4
-};
+struct MGFFileEntryStruct;
 
-class MGFArchive : public wxDataViewModel
+class MGFArchive
 {
 public:
-	MGFArchive(const std::filesystem::path& filepath);
-	~MGFArchive();
-
-	inline const wxString& FileName() const { return filename; }
-	inline const wxString& ArchiveName() const { return filename.Mid(0, filename.Last('.')); }
-	inline MGFArchiveVersion Version() const { return version; }
-	inline unsigned int Size() const { return size; }
-	inline std::ifstream& FileStream() { return fileStream; }
-	inline unsigned int FileCount() const { return fileEntryCount; }
-
-	inline const MGFTreeNode* RootNode() const { return &treeNodes[0]; }
+    MGFArchive(const QString& mgfFilePath);
 
 public:
-	virtual wxString GetColumnType(unsigned int col) const override;
-	virtual unsigned int GetColumnCount() const override;
-	virtual void GetValue(wxVariant& variant, const wxDataViewItem& item, unsigned int col) const override;
-	virtual bool SetValue(const wxVariant& variant, const wxDataViewItem& item, unsigned int col) override;
-	virtual bool IsEnabled(const wxDataViewItem& WXUNUSED(item), unsigned int WXUNUSED(col)) const override;
-	virtual wxDataViewItem GetParent(const wxDataViewItem& item) const override;
-	virtual bool IsContainer(const wxDataViewItem& item) const override;
-	virtual unsigned int GetChildren(const wxDataViewItem& item, wxDataViewItemArray& children) const override;
+    inline const QString& GetFileName() const { return m_FileName; }
+    inline const QString& GetFilePath() const { return m_FilePath; }
+    inline uint32_t GetFileSize() const { return m_FileSize; }
+    inline uint32_t GetFileCount() const { return m_FileEntryCount; }
+    inline uint8_t GetArchiveVersion() const { return m_ArchiveVersion; }
+    inline std::ifstream& FileStream() { return m_FileStream; }
+    inline uint32_t NumTextures() const { return m_NumTextures; }
+    inline MGFFileTreeModel* FileTreeModel() { return &m_FileTreeModel; }
+    inline MGFFileTableModel* FileTableModel() { return &m_FileTableModel; }
 
 private:
-	std::ifstream fileStream;
+    mutable std::ifstream m_FileStream;
 
-	wxString filename;
-	unsigned int size;
+    QString     m_FilePath;
+    QString     m_FileName;
 
-	MGFArchiveVersion version;
-	unsigned int fileEntryCount;
-	unsigned int fileEntryLength;
-	unsigned int fileEntryOffset;
-	unsigned int indexEntryCount;
-	unsigned int indexEntryOffset;
-	unsigned int indexEntryLength;
-	unsigned int stringsLength;
-	unsigned int stringsOffset;
+    uint32_t    m_FileSize = 0;
+    uint8_t     m_ArchiveVersion = 0;
+    uint32_t    m_FileEntryCount = 0;
+    uint32_t    m_FileEntryLength = 0;
+    uint32_t    m_FileEntryOffset = 0;
+    uint32_t    m_IndexEntryCount = 0;
+    uint32_t    m_IndexEntryLength = 0;
+    uint32_t    m_IndexEntryOffset = 0;
+    uint32_t    m_StringListLength = 0;
+    uint32_t    m_StringListOffset = 0;
 
-	std::vector<MGFTreeNode> treeNodes;
+    std::vector<MGFTreeItem> m_TreeItems;
+    MGFFileTreeModel m_FileTreeModel;
+    MGFFileTableModel m_FileTableModel;
+
+    uint32_t m_NumTextures = 0;
+private:
+    // helpers
+    void LoadMechAssaultFileData(const MGFFileEntryStruct& descriptor);
 
 private:
-	void InitTreeModel();
-
-	wxIcon genericFileIcon;
-	wxIcon txtFileIcon;
-	wxIcon cfgIniFileIcon;
-	wxIcon folderIcon;
+    friend class TextureListModel;
 };
 
+#endif // MGFARCHIVE_H

@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <ProjectGuid>{9A2655F8-3993-45BF-AA29-8F185DDE5813}</ProjectGuid>
+    <RootNamespace>MechAssaultMGFExplorer</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)obj\$(PlatformShortName)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)obj\$(PlatformShortName)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)src;$(ProjectDir)src\pugixml-1.10\src;$(ProjectDir)bin\$(PlatformShortName);D:\SDK\Qt\5.14.2\msvc2017_64\include;D:\SDK\Ogre3D-1.12.6\Binaries\include;D:\SDK\Ogre3D-1.12.6\Source\ogre-1.12.6\OgreMain\include;D:\SDK\Ogre3D-1.12.6\Source\ogre-1.12.6\RenderSystems\Direct3D9\include;D:\Documents\Repos\MGF-Explorer_Qt\src\pugixml-1.10\src;D:\Documents\Repos\MGF-Explorer_Qt\src;%(AdditionalIncludeDirectories);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <DisableSpecificWarnings>4996;</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>Qt5Cored.lib;Qt5Guid.lib;Qt5Widgetsd.lib;OgreMain_d.lib;RenderSystem_Direct3D9_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(QT_DIR)\5.14.2\msvc2017_64\lib;D:\SDK\Ogre3D-1.12.6\Binaries\lib\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)src\vendor;$(ProjectDir)src;$(ProjectDir)src\vendor\pugixml-1.10\src;$(ProjectDir)bin\$(PlatformShortName);$(QT_DIR)\5.14.2\msvc2017_64\include;$(QT_DIR)\5.14.2\msvc2017_64\include\QtCore;$(QT_DIR)\5.14.2\msvc2017_64\include\QtGui;$(QT_DIR)\5.14.2\msvc2017_64\include\QtWidgets;$(OGRE3D_DIR)\Binaries\include;$(OGRE3D_DIR)\Source\ogre-1.12.6\OgreMain\include;$(OGRE3D_DIR)\Source\ogre-1.12.6\RenderSystems\Direct3D9\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <DisableSpecificWarnings>4996;</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>Qt5Cored.lib;Qt5Guid.lib;Qt5Widgetsd.lib;OgreMain_d.lib;RenderSystem_Direct3D9_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(QT_DIR)\5.14.2\msvc2017_64\lib;$(OGRE3D_DIR)\Binaries\lib\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)src;$(ProjectDir)src\pugixml-1.10\src;$(ProjectDir)bin\$(PlatformShortName);D:\SDK\Qt\5.14.2\msvc2017_64\include;D:\SDK\Ogre3D-1.12.6\Binaries\include;D:\SDK\Ogre3D-1.12.6\Source\ogre-1.12.6\OgreMain\include;D:\SDK\Ogre3D-1.12.6\Source\ogre-1.12.6\RenderSystems\Direct3D9\include;D:\Documents\Repos\MGF-Explorer_Qt\src\pugixml-1.10\src;D:\Documents\Repos\MGF-Explorer_Qt\src;%(AdditionalIncludeDirectories);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <DisableSpecificWarnings>4996;</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(QT_DIR)\5.14.2\msvc2017_64\lib;D:\SDK\Ogre3D-1.12.6\Binaries\lib\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Qt5Core.lib;Qt5Gui.lib;Qt5Widgets.lib;OgreMain.lib;RenderSystem_Direct3D9.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)src;$(ProjectDir)src\pugixml-1.10\src;$(ProjectDir)bin\$(PlatformShortName);D:\SDK\Qt\5.14.2\msvc2017_64\include;D:\SDK\Qt\5.14.2\msvc2017_64\include\QtCore;D:\SDK\Qt\5.14.2\msvc2017_64\include\QtGui;D:\SDK\Qt\5.14.2\msvc2017_64\include\QtWidgets;D:\SDK\Ogre3D-1.12.6\Binaries\include;D:\SDK\Ogre3D-1.12.6\Source\ogre-1.12.6\OgreMain\include;D:\SDK\Ogre3D-1.12.6\Source\ogre-1.12.6\RenderSystems\Direct3D9\include;D:\Documents\Repos\MGF-Explorer_Qt\src\pugixml-1.10\src;D:\Documents\Repos\MGF-Explorer_Qt\src;%(AdditionalIncludeDirectories);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <DisableSpecificWarnings>4996;</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(QT_DIR)\5.14.2\msvc2017_64\lib;D:\SDK\Ogre3D-1.12.6\Binaries\lib\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Qt5Core.lib;Qt5Gui.lib;Qt5Widgets.lib;OgreMain.lib;RenderSystem_Direct3D9.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="src\utils\events\EventData.h" />
+    <ClInclude Include="src\utils\events\EventDispatcher.h" />
+    <ClInclude Include="src\utils\Contexts.h" />
+    <ClInclude Include="src\utils\Context.h" />
+    <ClInclude Include="src\models\FileExtractListModel.h" />
+    <ClInclude Include="src\models\MGFAnimationTableModel.h" />
+    <ClInclude Include="src\models\MGFMeshTableModel.h" />
+    <ClInclude Include="src\models\MGFMaterialTableModel.h" />
+    <ClInclude Include="src\models\MGFNodeTreeModel.h" />
+    <ClInclude Include="src\utils\configfile.h" />
+    <ClInclude Include="src\utils\events\EventSelectedItemChanged.h" />
+    <ClInclude Include="src\utils\events\IEventListener.h" />
+    <ClInclude Include="src\windows\fileextractdialog.h" />
+    <ClInclude Include="src\fileextractor.h" />
+    <ClInclude Include="src\windows\listviewtexture.h" />
+    <ClInclude Include="src\windows\mainwindow.h" />
+    <ClInclude Include="src\mgfresourcemanager.h" />
+    <ClInclude Include="src\widgets\mgfresourceviewer.h" />
+    <ClInclude Include="src\widgets\mgftextureviewerwidget.h" />
+    <ClInclude Include="src\widgets\mgftextviewwidget.h" />
+    <ClInclude Include="src\widgets\mgfworkspace.h" />
+    <ClInclude Include="src\mgf\mgfarchive.h" />
+    <ClInclude Include="src\models\mgffiletablemodel.h" />
+    <ClInclude Include="src\models\mgffiletreemodel.h" />
+    <ClInclude Include="src\mgf\mgftreeitem.h" />
+    <ClInclude Include="src\mgf\mgmaterialfactory.h" />
+    <ClInclude Include="src\mgf\mgmeshfactory.h" />
+    <ClInclude Include="src\mgf\mgnode.h" />
+    <ClInclude Include="src\mgf\mgtexture.h" />
+    <ClInclude Include="src\widgets\mgmodelviewerwidget.h" />
+    <ClInclude Include="src\windows\ogrewindow.h" />
+    <ClInclude Include="src\vendor\pugixml-1.10\src\pugixml.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="bin\x64\debug\moc_fileextractdialog.cpp" />
+    <ClCompile Include="bin\x64\debug\moc_listviewtexture.cpp" />
+    <ClCompile Include="bin\x64\debug\moc_mainwindow.cpp" />
+    <ClCompile Include="bin\x64\debug\moc_mgftextureviewerwidget.cpp" />
+    <ClCompile Include="bin\x64\debug\moc_mgftextviewwidget.cpp" />
+    <ClCompile Include="bin\x64\debug\moc_mgfworkspace.cpp" />
+    <ClCompile Include="bin\x64\debug\moc_mgmodelviewerwidget.cpp" />
+    <ClCompile Include="bin\x64\debug\moc_ogrewindow.cpp" />
+    <ClCompile Include="src\utils\events\EventDispatcher.cpp" />
+    <ClCompile Include="src\utils\Contexts.cpp" />
+    <ClCompile Include="src\utils\Context.cpp" />
+    <ClCompile Include="src\models\FileExtractListModel.cpp" />
+    <ClCompile Include="src\models\MGFAnimationTableModel.cpp" />
+    <ClCompile Include="src\models\MGFMeshTableModel.cpp" />
+    <ClCompile Include="src\models\MGFMaterialTableModel.cpp" />
+    <ClCompile Include="src\models\MGFNodeTreeModel.cpp" />
+    <ClCompile Include="src\utils\configfile.cpp" />
+    <ClCompile Include="src\widgets\mgfresourceviewer.cpp" />
+    <ClCompile Include="src\windows\fileextractdialog.cpp" />
+    <ClCompile Include="src\fileextractor.cpp" />
+    <ClCompile Include="src\windows\listviewtexture.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\windows\mainwindow.cpp" />
+    <ClCompile Include="src\mgfresourcemanager.cpp" />
+    <ClCompile Include="src\widgets\mgftextureviewerwidget.cpp" />
+    <ClCompile Include="src\widgets\mgftextviewwidget.cpp" />
+    <ClCompile Include="src\widgets\mgfworkspace.cpp" />
+    <ClCompile Include="src\mgf\mgfarchive.cpp" />
+    <ClCompile Include="src\models\mgffiletablemodel.cpp" />
+    <ClCompile Include="src\models\mgffiletreemodel.cpp" />
+    <ClCompile Include="src\mgf\mgftreeitem.cpp" />
+    <ClCompile Include="src\mgf\mgmaterialfactory.cpp" />
+    <ClCompile Include="src\mgf\mgmeshfactory.cpp" />
+    <ClCompile Include="src\mgf\mgnode.cpp" />
+    <ClCompile Include="src\mgf\mgtexture.cpp" />
+    <ClCompile Include="src\widgets\mgmodelviewerwidget.cpp" />
+    <ClCompile Include="src\windows\ogrewindow.cpp" />
+    <ClCompile Include="src\vendor\pugixml-1.10\src\pugixml.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
