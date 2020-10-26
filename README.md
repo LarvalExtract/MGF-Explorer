@@ -33,3 +33,4 @@ MGF Explorer can have multiple MGF files opened, separated by tabs. The tree vie
 # Credits
 * https://www.qt.io/
 * https://pugixml.org/
+* https://www.ogre3d.org/
