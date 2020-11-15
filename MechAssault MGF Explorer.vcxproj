@@ -109,7 +109,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)src\vendor;$(ProjectDir)src\uic;$(ProjectDir)src\moc;$(ProjectDir)src;$(ProjectDir)src\vendor\pugixml-1.10\src;$(ProjectDir)bin\$(PlatformShortName);$(QT_DIR)\5.14.2\msvc2017_64\include;$(QT_DIR)\5.14.2\msvc2017_64\include\QtCore;$(QT_DIR)\5.14.2\msvc2017_64\include\QtGui;$(QT_DIR)\5.14.2\msvc2017_64\include\QtWidgets;$(OGRE3D_DIR)\Binaries\include;$(OGRE3D_DIR)\Source\ogre-1.12.6\OgreMain\include;$(OGRE3D_DIR)\Source\ogre-1.12.6\RenderSystems\Direct3D9\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)src;$(ProjectDir)src\uic;$(ProjectDir)src\moc;$(ProjectDir)vendor;$(QT_DIR)\5.14.2\msvc2017_64\include;$(QT_DIR)\5.14.2\msvc2017_64\include\QtCore;$(QT_DIR)\5.14.2\msvc2017_64\include\QtGui;$(QT_DIR)\5.14.2\msvc2017_64\include\QtWidgets;$(OGRE3D_DIR)\Binaries\include;$(OGRE3D_DIR)\Source\ogre-1.12.6\OgreMain\include;$(OGRE3D_DIR)\Source\ogre-1.12.6\RenderSystems\Direct3D9\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <DisableSpecificWarnings>4996;</DisableSpecificWarnings>
     </ClCompile>
@@ -130,7 +130,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)src;$(ProjectDir)src\pugixml-1.10\src;$(ProjectDir)bin\$(PlatformShortName);D:\SDK\Qt\5.14.2\msvc2017_64\include;D:\SDK\Ogre3D-1.12.6\Binaries\include;D:\SDK\Ogre3D-1.12.6\Source\ogre-1.12.6\OgreMain\include;D:\SDK\Ogre3D-1.12.6\Source\ogre-1.12.6\RenderSystems\Direct3D9\include;D:\Documents\Repos\MGF-Explorer_Qt\src\pugixml-1.10\src;D:\Documents\Repos\MGF-Explorer_Qt\src;%(AdditionalIncludeDirectories);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)src;$(ProjectDir)src\uic;$(ProjectDir)src\moc;$(ProjectDir)vendor;$(QT_DIR)\5.14.2\msvc2017_64\include;$(QT_DIR)\5.14.2\msvc2017_64\include\QtCore;$(QT_DIR)\5.14.2\msvc2017_64\include\QtGui;$(QT_DIR)\5.14.2\msvc2017_64\include\QtWidgets;$(OGRE3D_DIR)\Binaries\include;$(OGRE3D_DIR)\Source\ogre-1.12.6\OgreMain\include;$(OGRE3D_DIR)\Source\ogre-1.12.6\RenderSystems\Direct3D9\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <DisableSpecificWarnings>4996;</DisableSpecificWarnings>
     </ClCompile>
@@ -152,7 +152,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)src;$(ProjectDir)src\vendor;$(ProjectDir)bin\$(PlatformShortName);$(QT_DIR)\5.14.2\msvc2017_64\include;$(QT_DIR)\5.14.2\msvc2017_64\include\QtCore;$(QT_DIR)\5.14.2\msvc2017_64\include\QtGui;$(QT_DIR)\5.14.2\msvc2017_64\include\QtWidgets;$(OGRE3D_DIR)\Binaries\include;$(OGRE3D_DIR)\Source\ogre-1.12.6\OgreMain\include;$(OGRE3D_DIR)\Source\ogre-1.12.6\RenderSystems\Direct3D9\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)src;$(ProjectDir)src\uic;$(ProjectDir)src\moc;$(ProjectDir)vendor;$(QT_DIR)\5.14.2\msvc2017_64\include;$(QT_DIR)\5.14.2\msvc2017_64\include\QtCore;$(QT_DIR)\5.14.2\msvc2017_64\include\QtGui;$(QT_DIR)\5.14.2\msvc2017_64\include\QtWidgets;$(OGRE3D_DIR)\Binaries\include;$(OGRE3D_DIR)\Source\ogre-1.12.6\OgreMain\include;$(OGRE3D_DIR)\Source\ogre-1.12.6\RenderSystems\Direct3D9\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <DisableSpecificWarnings>4996;</DisableSpecificWarnings>
     </ClCompile>
@@ -215,7 +215,7 @@
     <ClInclude Include="src\mgf\mgtexture.h" />
     <ClInclude Include="src\widgets\mgmodelviewerwidget.h" />
     <ClInclude Include="src\windows\ogrewindow.h" />
-    <ClInclude Include="src\vendor\pugixml-1.10\src\pugixml.hpp" />
+    <ClInclude Include="vendor\pugixml-1.10\src\pugixml.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FileExtractor\States\FileExtractorStateGroup.cpp" />
@@ -261,7 +261,7 @@
     <ClCompile Include="src\mgf\mgtexture.cpp" />
     <ClCompile Include="src\widgets\mgmodelviewerwidget.cpp" />
     <ClCompile Include="src\windows\ogrewindow.cpp" />
-    <ClCompile Include="src\vendor\pugixml-1.10\src\pugixml.cpp" />
+    <ClCompile Include="vendor\pugixml-1.10\src\pugixml.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\FileExtractor\FileExtractorDialog.ui">

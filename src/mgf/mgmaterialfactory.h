@@ -4,7 +4,7 @@
 #include "mgftreeitem.h"
 
 #include <OgreMaterial.h>
-#include <pugixml.hpp>
+#include <pugixml-1.10/src/pugixml.hpp>
 
 using Params = std::unordered_map<std::string, std::string>;
 using Filter = Ogre::TextureFilterOptions;

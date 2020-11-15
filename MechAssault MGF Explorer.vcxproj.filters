@@ -54,9 +54,6 @@
     <ClInclude Include="src\widgets\mgmodelviewerwidget.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\vendor\pugixml-1.10\src\pugixml.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\models\MGFNodeTreeModel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -165,6 +162,9 @@
     <ClInclude Include="src\uic\ui_windowfiletable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="vendor\pugixml-1.10\src\pugixml.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -204,9 +204,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\widgets\mgmodelviewerwidget.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\vendor\pugixml-1.10\src\pugixml.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\models\MGFNodeTreeModel.cpp">
@@ -297,6 +294,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\moc\moc_ogrewindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\pugixml-1.10\src\pugixml.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

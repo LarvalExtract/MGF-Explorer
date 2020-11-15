@@ -5,7 +5,7 @@
 
 #include <OgreMesh.h>
 #include <OgreRenderOperation.h>
-#include <pugixml.hpp>
+#include <pugixml-1.10/src/pugixml.hpp>
 
 struct MGMeshDef
 {
