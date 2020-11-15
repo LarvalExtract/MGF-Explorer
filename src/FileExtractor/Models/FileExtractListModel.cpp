@@ -15,6 +15,8 @@ static const QVariant STATUS[] = {
 	"Failed"
 };
 
+using namespace FileExtractor::Models;
+
 int FileExtractListModel::rowCount(const QModelIndex& parent) const
 {
 	return FileExtractQueue.size();

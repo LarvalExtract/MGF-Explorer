@@ -25,70 +25,94 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++17
 
 SOURCES += \
-        src/configfile.cpp \
-        src/fileextractor.cpp \
-		src/mgfresourcemanager.cpp \  
-        src/main.cpp \
-        src/mgf/mgfarchive.cpp \
-        src/mgf/mgftreeitem.cpp \
-        src/mgf/mgmaterialfactory.cpp \
-        src/mgf/mgmeshfactory.cpp \
-        src/mgf/mgnode.cpp \
-        src/mgf/mgtexture.cpp \
-        src/models/MGFAnimationTableModel.cpp \
-        src/models/mgffiletablemodel.cpp \
-        src/models/mgffiletreemodel.cpp \
-        src/models/MGFMaterialTableModel.cpp \
-        src/models/MGFMeshTableModel.cpp \
-        src/models/MGFNodeTreeModel.cpp \
-        src/models/FileExtractListModel.cpp \
-        src/widgets/mgmodelviewerwidget.cpp \
-        src/widgets/mgftextureviewerwidget.cpp \
-        src/widgets/mgftextviewwidget.cpp \
-        src/widgets/mgfworkspace.cpp \
-		src/windows/mainwindow.cpp \
-        src/windows/ogrewindow.cpp \
-		src/windows/fileextractdialog.cpp \
-		src/windows/listviewtexture.cpp \
-        src/vendor/pugixml-1.10/src/pugixml.cpp
+		src\FileExtractor\States\FileExtractorStateGroup.cpp \
+		src\FileExtractor\States\FinishedState.cpp \
+		src\FileExtractor\States\IdleState.cpp \
+		src\FileExtractor\States\ProgressState.cpp \
+		src\utils\events\EventDispatcher.cpp \
+		src\utils\Contexts.cpp \
+		src\utils\Context.cpp \
+		src\FileExtractor\Models\FileExtractListModel.cpp \
+		src\models\MGFAnimationTableModel.cpp \
+		src\models\MGFMeshTableModel.cpp \
+		src\models\MGFMaterialTableModel.cpp \
+		src\models\MGFNodeTreeModel.cpp \
+		src\utils\configfile.cpp \
+		src\utils\states\State.cpp \
+		src\utils\states\StateGroup.cpp \
+		src\widgets\mgfresourceviewer.cpp \
+		src\FileExtractor\FileExtractorDialog.cpp \
+		src\FileExtractor\Extractor.cpp \
+		src\windows\listviewtexture.cpp \
+		src\main.cpp \
+		src\windows\mainwindow.cpp \
+		src\mgfresourcemanager.cpp \
+		src\widgets\mgftextureviewerwidget.cpp \
+		src\widgets\mgftextviewwidget.cpp \
+		src\widgets\mgfworkspace.cpp \
+		src\mgf\mgfarchive.cpp \
+		src\models\mgffiletablemodel.cpp \
+		src\models\mgffiletreemodel.cpp \
+		src\mgf\mgftreeitem.cpp \
+		src\mgf\mgmaterialfactory.cpp \
+		src\mgf\mgmeshfactory.cpp \
+		src\mgf\mgnode.cpp \
+		src\mgf\mgtexture.cpp \
+		src\widgets\mgmodelviewerwidget.cpp \
+		src\windows\ogrewindow.cpp \
+		src\vendor\pugixml-1.10\src\pugixml.cpp \
+
 
 HEADERS += \
-        src/configfile.h \       
-        src/fileextractor.h \
-		src/mgfresourcemanager.h \
-        src/mgfresourceviewer.h \
-        src/mgf/mgfarchive.h \
-        src/mgf/mgftreeitem.h \
-        src/mgf/mgmaterialfactory.h \
-        src/mgf/mgmeshfactory.h \
-        src/mgf/mgnode.h \
-        src/mgf/mgtexture.h \
-        src/models/MGFAnimationTableModel.h \
-        src/models/mgffiletablemodel.h \
-        src/models/mgffiletreemodel.h \
-        src/models/MGFMaterialTableModel.h \
-        src/models/MGFMeshTableModel.h \
-        src/models/MGFNodeTreeModel.h \
-        src/models/FileExtractListModel.h \
-        src/widgets/mgmodelviewerwidget.h \
-        src/widgets/mgftextureviewerwidget.h \
-        src/widgets/mgftextviewwidget.h \
-		src/widgets/mgfworkspace.h \
-		src/windows/listviewtexture.h \
-        src/windows/mainwindow.h \
-		src/windows/ogrewindow.h \
-        src/windows/fileextractdialog.h \
-        src/vendor/pugixml-1.10/src/pugixml.hpp
+		src\FileExtractor\Models\FileExtractItem.h \
+		src\FileExtractor\States\FileExtractorStateBase.h \
+		src\FileExtractor\States\FileExtractorStateGroup.h \
+		src\FileExtractor\States\FinishedState.h \
+		src\FileExtractor\States\IdleState.h \
+		src\FileExtractor\States\ProgressState.h \
+		src\utils\events\EventData.h \
+		src\utils\events\EventDispatcher.h \
+		src\utils\Contexts.h \
+		src\utils\Context.h \
+		src\FileExtractor\Models\FileExtractListModel.h \
+		src\models\MGFAnimationTableModel.h \
+		src\models\MGFMeshTableModel.h \
+		src\models\MGFMaterialTableModel.h \
+		src\models\MGFNodeTreeModel.h \
+		src\utils\configfile.h \
+		src\utils\events\EventSelectedItemChanged.h \
+		src\utils\events\IEventListener.h \
+		src\utils\states\State.h \
+		src\utils\states\StateGroup.h \
+		src\FileExtractor\FileExtractorDialog.h \
+		src\FileExtractor\Extractor.h \
+		src\windows\listviewtexture.h \
+		src\windows\mainwindow.h \
+		src\mgfresourcemanager.h \
+		src\widgets\mgfresourceviewer.h \
+		src\widgets\mgftextureviewerwidget.h \
+		src\widgets\mgftextviewwidget.h \
+		src\widgets\mgfworkspace.h \
+		src\mgf\mgfarchive.h \
+		src\models\mgffiletablemodel.h \
+		src\models\mgffiletreemodel.h \
+		src\mgf\mgftreeitem.h \
+		src\mgf\mgmaterialfactory.h \
+		src\mgf\mgmeshfactory.h \
+		src\mgf\mgnode.h \
+		src\mgf\mgtexture.h \
+		src\widgets\mgmodelviewerwidget.h \
+		src\windows\ogrewindow.h \
+		src\vendor\pugixml-1.10\src\pugixml.hpp \
 
 FORMS += \
-        src/windows/fileextractdialog.ui \
-        src/windows/listviewtexture.ui \
-        src/windows/mainwindow.ui \
-        src/widgets/mgftextureviewerwidget.ui \
-        src/widgets/mgftextviewwidget.ui \
-        src/widgets/mgfworkspace.ui \
-        src/widgets/mgmodelviewerwidget.ui \
-        src/windowfiletable.ui
+		src\FileExtractor\FileExtractorDialog.ui \
+		src\widgets\mgftextureviewerwidget.ui \
+		src\widgets\mgftextviewwidget.ui \
+		src\widgets\mgfworkspace.ui \
+		src\widgets\mgmodelviewerwidget.ui \
+		src\windows\listviewtexture.ui \
+		src\windows\mainwindow.ui \
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -106,7 +130,15 @@ INCLUDEPATH += $$(OGRE3D_DIR)/Binaries/include \
                $$(OGRE3D_DIR)/Source/ogre-1.12.6/OgreMain/include \
                $$(OGRE3D_DIR)/Source/ogre-1.12.6/RenderSystems/Direct3D9/include \
                $$PWD/src/vendor/pugixml-1.10/src \
-               $$PWD/src
+               $$PWD/src \
+               $$PWD/src/uic \
+               $$PWD/src/moc
 
 DEPENDPATH += $$(OGRE3D_DIR)/Source/ogre-1.12.6/OgreMain/include \
               $$(OGRE3D_DIR)/Source/ogre-1.12.6/RenderSystems/Direct3D9/include \
+
+win32:UI_DIR = $$PWD/src/uic
+win32:MOC_DIR = $$PWD/src/moc
+
+win32:CONFIG(debug, debug|release):OBJECTS_DIR = $$PWD/obj/x64/Debug
+win32:CONFIG(release, debug|release):OBJECTS_DIR = $$PWD/obj/x64/Release

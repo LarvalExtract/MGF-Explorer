@@ -1,7 +1,7 @@
 #include "mgfworkspace.h"
 #include "ui_mgfworkspace.h"
 
-#include "windows/fileextractdialog.h"
+#include "FileExtractor/FileExtractorDialog.h"
 
 MGFWorkspace::MGFWorkspace(const QString& mgfFilePath, QWidget *parent) :
     QWidget(parent),
@@ -143,13 +143,17 @@ QWidget* MGFWorkspace::DisplayWidget(QWidget *widget)
 void MGFWorkspace::on_treeView_customContextMenuRequested(const QPoint &pos)
 {
     QModelIndex index(ui->treeView->indexAt(pos));
-    m_ContextMenu.popup(ui->treeView->viewport()->mapToGlobal(pos));
+    if (index.isValid())
+    {
+        m_ContextMenu.popup(ui->treeView->viewport()->mapToGlobal(pos));
+    }
 }
 
 void MGFWorkspace::on_customContextMenu_action_extract()
 {
 	const auto& selection = ui->treeView->selectionModel()->selection().indexes();
 
-    FileExtractDialog dialog(selection, m_MgfArchive, this);
+    FileExtractor::FileExtractorDialog dialog(this);
+    dialog.SetSelection(selection, m_MgfArchive);
     dialog.exec();
 }

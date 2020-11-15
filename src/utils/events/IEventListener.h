@@ -5,5 +5,5 @@
 class IEventListener
 {
 public:
-	virtual void OnNotify(EventData* data) = 0;
+	virtual void OnNotify(EventData* data) {}
 };

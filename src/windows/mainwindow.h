@@ -3,8 +3,6 @@
 
 #include "widgets/mgfworkspace.h"
 #include "mgfresourcemanager.h"
-#include "fileextractdialog.h"
-#include "fileextractor.h"
 #include "ui_windowfiletable.h"
 
 #include "utils/Contexts.h"

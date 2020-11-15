@@ -109,16 +109,17 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)src\vendor;$(ProjectDir)src;$(ProjectDir)src\vendor\pugixml-1.10\src;$(ProjectDir)bin\$(PlatformShortName);$(QT_DIR)\5.14.2\msvc2017_64\include;$(QT_DIR)\5.14.2\msvc2017_64\include\QtCore;$(QT_DIR)\5.14.2\msvc2017_64\include\QtGui;$(QT_DIR)\5.14.2\msvc2017_64\include\QtWidgets;$(OGRE3D_DIR)\Binaries\include;$(OGRE3D_DIR)\Source\ogre-1.12.6\OgreMain\include;$(OGRE3D_DIR)\Source\ogre-1.12.6\RenderSystems\Direct3D9\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)src\vendor;$(ProjectDir)src\uic;$(ProjectDir)src\moc;$(ProjectDir)src;$(ProjectDir)src\vendor\pugixml-1.10\src;$(ProjectDir)bin\$(PlatformShortName);$(QT_DIR)\5.14.2\msvc2017_64\include;$(QT_DIR)\5.14.2\msvc2017_64\include\QtCore;$(QT_DIR)\5.14.2\msvc2017_64\include\QtGui;$(QT_DIR)\5.14.2\msvc2017_64\include\QtWidgets;$(OGRE3D_DIR)\Binaries\include;$(OGRE3D_DIR)\Source\ogre-1.12.6\OgreMain\include;$(OGRE3D_DIR)\Source\ogre-1.12.6\RenderSystems\Direct3D9\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <DisableSpecificWarnings>4996;</DisableSpecificWarnings>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>Qt5Cored.lib;Qt5Guid.lib;Qt5Widgetsd.lib;OgreMain_d.lib;RenderSystem_Direct3D9_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(QT_DIR)\5.14.2\msvc2017_64\lib;$(OGRE3D_DIR)\Binaries\lib\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
+      <EntryPointSymbol>
+      </EntryPointSymbol>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -151,7 +152,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)src;$(ProjectDir)src\pugixml-1.10\src;$(ProjectDir)bin\$(PlatformShortName);D:\SDK\Qt\5.14.2\msvc2017_64\include;D:\SDK\Qt\5.14.2\msvc2017_64\include\QtCore;D:\SDK\Qt\5.14.2\msvc2017_64\include\QtGui;D:\SDK\Qt\5.14.2\msvc2017_64\include\QtWidgets;D:\SDK\Ogre3D-1.12.6\Binaries\include;D:\SDK\Ogre3D-1.12.6\Source\ogre-1.12.6\OgreMain\include;D:\SDK\Ogre3D-1.12.6\Source\ogre-1.12.6\RenderSystems\Direct3D9\include;D:\Documents\Repos\MGF-Explorer_Qt\src\pugixml-1.10\src;D:\Documents\Repos\MGF-Explorer_Qt\src;%(AdditionalIncludeDirectories);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)src;$(ProjectDir)src\vendor;$(ProjectDir)bin\$(PlatformShortName);$(QT_DIR)\5.14.2\msvc2017_64\include;$(QT_DIR)\5.14.2\msvc2017_64\include\QtCore;$(QT_DIR)\5.14.2\msvc2017_64\include\QtGui;$(QT_DIR)\5.14.2\msvc2017_64\include\QtWidgets;$(OGRE3D_DIR)\Binaries\include;$(OGRE3D_DIR)\Source\ogre-1.12.6\OgreMain\include;$(OGRE3D_DIR)\Source\ogre-1.12.6\RenderSystems\Direct3D9\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <DisableSpecificWarnings>4996;</DisableSpecificWarnings>
     </ClCompile>
@@ -160,17 +161,32 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(QT_DIR)\5.14.2\msvc2017_64\lib;D:\SDK\Ogre3D-1.12.6\Binaries\lib\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(QT_DIR)\5.14.2\msvc2017_64\lib;$(OGRE3D_DIR)\Binaries\lib\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>Qt5Core.lib;Qt5Gui.lib;Qt5Widgets.lib;OgreMain.lib;RenderSystem_Direct3D9.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\FileExtractor\Models\FileExtractItem.h" />
+    <ClInclude Include="src\FileExtractor\States\FileExtractorStateBase.h" />
+    <ClInclude Include="src\FileExtractor\States\FileExtractorStateGroup.h" />
+    <ClInclude Include="src\FileExtractor\States\FinishedState.h" />
+    <ClInclude Include="src\FileExtractor\States\IdleState.h" />
+    <ClInclude Include="src\FileExtractor\States\ProgressState.h" />
+    <ClInclude Include="src\moc\moc_predefs.h" />
+    <ClInclude Include="src\uic\ui_FileExtractorDialog.h" />
+    <ClInclude Include="src\uic\ui_listviewtexture.h" />
+    <ClInclude Include="src\uic\ui_mainwindow.h" />
+    <ClInclude Include="src\uic\ui_mgftextureviewerwidget.h" />
+    <ClInclude Include="src\uic\ui_mgftextviewwidget.h" />
+    <ClInclude Include="src\uic\ui_mgfworkspace.h" />
+    <ClInclude Include="src\uic\ui_mgmodelviewerwidget.h" />
+    <ClInclude Include="src\uic\ui_windowfiletable.h" />
     <ClInclude Include="src\utils\events\EventData.h" />
     <ClInclude Include="src\utils\events\EventDispatcher.h" />
     <ClInclude Include="src\utils\Contexts.h" />
     <ClInclude Include="src\utils\Context.h" />
-    <ClInclude Include="src\models\FileExtractListModel.h" />
+    <ClInclude Include="src\FileExtractor\Models\FileExtractListModel.h" />
     <ClInclude Include="src\models\MGFAnimationTableModel.h" />
     <ClInclude Include="src\models\MGFMeshTableModel.h" />
     <ClInclude Include="src\models\MGFMaterialTableModel.h" />
@@ -178,8 +194,10 @@
     <ClInclude Include="src\utils\configfile.h" />
     <ClInclude Include="src\utils\events\EventSelectedItemChanged.h" />
     <ClInclude Include="src\utils\events\IEventListener.h" />
-    <ClInclude Include="src\windows\fileextractdialog.h" />
-    <ClInclude Include="src\fileextractor.h" />
+    <ClInclude Include="src\utils\states\State.h" />
+    <ClInclude Include="src\utils\states\StateGroup.h" />
+    <ClInclude Include="src\FileExtractor\FileExtractorDialog.h" />
+    <ClInclude Include="src\FileExtractor\Extractor.h" />
     <ClInclude Include="src\windows\listviewtexture.h" />
     <ClInclude Include="src\windows\mainwindow.h" />
     <ClInclude Include="src\mgfresourcemanager.h" />
@@ -200,26 +218,32 @@
     <ClInclude Include="src\vendor\pugixml-1.10\src\pugixml.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="bin\x64\debug\moc_fileextractdialog.cpp" />
-    <ClCompile Include="bin\x64\debug\moc_listviewtexture.cpp" />
-    <ClCompile Include="bin\x64\debug\moc_mainwindow.cpp" />
-    <ClCompile Include="bin\x64\debug\moc_mgftextureviewerwidget.cpp" />
-    <ClCompile Include="bin\x64\debug\moc_mgftextviewwidget.cpp" />
-    <ClCompile Include="bin\x64\debug\moc_mgfworkspace.cpp" />
-    <ClCompile Include="bin\x64\debug\moc_mgmodelviewerwidget.cpp" />
-    <ClCompile Include="bin\x64\debug\moc_ogrewindow.cpp" />
+    <ClCompile Include="src\FileExtractor\States\FileExtractorStateGroup.cpp" />
+    <ClCompile Include="src\FileExtractor\States\FinishedState.cpp" />
+    <ClCompile Include="src\FileExtractor\States\IdleState.cpp" />
+    <ClCompile Include="src\FileExtractor\States\ProgressState.cpp" />
+    <ClCompile Include="src\moc\moc_FileExtractorDialog.cpp" />
+    <ClCompile Include="src\moc\moc_listviewtexture.cpp" />
+    <ClCompile Include="src\moc\moc_mainwindow.cpp" />
+    <ClCompile Include="src\moc\moc_mgftextureviewerwidget.cpp" />
+    <ClCompile Include="src\moc\moc_mgftextviewwidget.cpp" />
+    <ClCompile Include="src\moc\moc_mgfworkspace.cpp" />
+    <ClCompile Include="src\moc\moc_mgmodelviewerwidget.cpp" />
+    <ClCompile Include="src\moc\moc_ogrewindow.cpp" />
     <ClCompile Include="src\utils\events\EventDispatcher.cpp" />
     <ClCompile Include="src\utils\Contexts.cpp" />
     <ClCompile Include="src\utils\Context.cpp" />
-    <ClCompile Include="src\models\FileExtractListModel.cpp" />
+    <ClCompile Include="src\FileExtractor\Models\FileExtractListModel.cpp" />
     <ClCompile Include="src\models\MGFAnimationTableModel.cpp" />
     <ClCompile Include="src\models\MGFMeshTableModel.cpp" />
     <ClCompile Include="src\models\MGFMaterialTableModel.cpp" />
     <ClCompile Include="src\models\MGFNodeTreeModel.cpp" />
     <ClCompile Include="src\utils\configfile.cpp" />
+    <ClCompile Include="src\utils\states\State.cpp" />
+    <ClCompile Include="src\utils\states\StateGroup.cpp" />
     <ClCompile Include="src\widgets\mgfresourceviewer.cpp" />
-    <ClCompile Include="src\windows\fileextractdialog.cpp" />
-    <ClCompile Include="src\fileextractor.cpp" />
+    <ClCompile Include="src\FileExtractor\FileExtractorDialog.cpp" />
+    <ClCompile Include="src\FileExtractor\Extractor.cpp" />
     <ClCompile Include="src\windows\listviewtexture.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\windows\mainwindow.cpp" />
@@ -238,6 +262,17 @@
     <ClCompile Include="src\widgets\mgmodelviewerwidget.cpp" />
     <ClCompile Include="src\windows\ogrewindow.cpp" />
     <ClCompile Include="src\vendor\pugixml-1.10\src\pugixml.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\FileExtractor\FileExtractorDialog.ui">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="src\widgets\mgftextureviewerwidget.ui" />
+    <None Include="src\widgets\mgftextviewwidget.ui" />
+    <None Include="src\widgets\mgfworkspace.ui" />
+    <None Include="src\widgets\mgmodelviewerwidget.ui" />
+    <None Include="src\windows\listviewtexture.ui" />
+    <None Include="src\windows\mainwindow.ui" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
