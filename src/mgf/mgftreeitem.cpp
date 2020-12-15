@@ -134,16 +134,6 @@ const MGFTreeItem *MGFTreeItem::FindRelativeItem(const QString &relativePath) co
         }
     }
 
-    if (!result)
-    {
-        QString err("Couldn't find item: ");
-        err += relativePath;
-        err += " from item: ";
-        err += this->m_Name;
-
-        throw err;
-    }
-
     return result;
 }
 

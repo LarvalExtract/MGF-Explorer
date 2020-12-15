@@ -71,19 +71,23 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(ProjectDir)bin\$(PlatformShortName)\$(Configuration)</OutDir>
+    <IntDir>$(ProjectDir)obj\$(PlatformShortName)\$(Configuration)</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)obj\$(PlatformShortName)\$(Configuration)\</IntDir>
+    <OutDir>$(ProjectDir)bin\$(PlatformShortName)\$(Configuration)</OutDir>
+    <IntDir>$(ProjectDir)obj\$(PlatformShortName)\$(Configuration)</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(ProjectDir)bin\$(PlatformShortName)\$(Configuration)</OutDir>
+    <IntDir>$(ProjectDir)obj\$(PlatformShortName)\$(Configuration)</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)obj\$(PlatformShortName)\$(Configuration)\</IntDir>
+    <OutDir>$(ProjectDir)bin\$(PlatformShortName)\$(Configuration)</OutDir>
+    <IntDir>$(ProjectDir)obj\$(PlatformShortName)\$(Configuration)</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -155,6 +159,7 @@
       <AdditionalIncludeDirectories>$(ProjectDir)src;$(ProjectDir)src\uic;$(ProjectDir)src\moc;$(ProjectDir)vendor;$(QT_DIR)\5.14.2\msvc2017_64\include;$(QT_DIR)\5.14.2\msvc2017_64\include\QtCore;$(QT_DIR)\5.14.2\msvc2017_64\include\QtGui;$(QT_DIR)\5.14.2\msvc2017_64\include\QtWidgets;$(OGRE3D_DIR)\Binaries\include;$(OGRE3D_DIR)\Source\ogre-1.12.6\OgreMain\include;$(OGRE3D_DIR)\Source\ogre-1.12.6\RenderSystems\Direct3D9\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <DisableSpecificWarnings>4996;</DisableSpecificWarnings>
+      <DebugInformationFormat>None</DebugInformationFormat>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -173,7 +178,10 @@
     <ClInclude Include="src\FileExtractor\States\FinishedState.h" />
     <ClInclude Include="src\FileExtractor\States\IdleState.h" />
     <ClInclude Include="src\FileExtractor\States\ProgressState.h" />
+    <ClInclude Include="src\Interfaces\IFactory.h" />
     <ClInclude Include="src\moc\moc_predefs.h" />
+    <ClInclude Include="src\StringTableViewer\Factories\StringTableFactory.h" />
+    <ClInclude Include="src\StringTableViewer\Models\StringTableModel.h" />
     <ClInclude Include="src\uic\ui_FileExtractorDialog.h" />
     <ClInclude Include="src\uic\ui_listviewtexture.h" />
     <ClInclude Include="src\uic\ui_mainwindow.h" />
@@ -230,6 +238,8 @@
     <ClCompile Include="src\moc\moc_mgfworkspace.cpp" />
     <ClCompile Include="src\moc\moc_mgmodelviewerwidget.cpp" />
     <ClCompile Include="src\moc\moc_ogrewindow.cpp" />
+    <ClCompile Include="src\StringTableViewer\Factories\StringTableFactory.cpp" />
+    <ClCompile Include="src\StringTableViewer\Models\StringTableModel.cpp" />
     <ClCompile Include="src\utils\events\EventDispatcher.cpp" />
     <ClCompile Include="src\utils\Contexts.cpp" />
     <ClCompile Include="src\utils\Context.cpp" />

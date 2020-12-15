@@ -1,13 +1,18 @@
 import xml.etree.ElementTree as xmlt
 import argparse
 
-def to_lines(strings):
-    lines = ""
-    for string in strings:
-        lines += f"\t\t{string} \\\n"
-    return lines
 
-def create_qt_project_file(target, sources, headers, forms, libs):
+def create_qt_project_file(
+        target,
+        source_files,
+        header_files,
+        form_files,
+        debug_libs,
+        release_libs,
+        include_paths,
+        depend_paths,
+        uic_dir,
+        moc_dir):
     qt_project_template = f""" 
 QT += core gui
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -29,59 +34,86 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++17
 
 SOURCES += \\
-{to_lines(sources)}
+\t{f' {chr(92)}{chr(10)}{chr(9)}'.join(source_files)}
 
 HEADERS += \\
-{to_lines(headers)}
+\t{f' {chr(92)}{chr(10)}{chr(9)}'.join(header_files)}
 
 FORMS += \\
-{to_lines(forms)}
+\t{f' {chr(92)}{chr(10)}{chr(9)}'.join(form_files)}
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${{TARGET}}/bin
 else: unix:!android: target.path = /opt/$${{TARGET}}/bin
 !isEmpty(target.path): INSTALLS += target
 
-win32:CONFIG(release, debug|release): LIBS += 
+win32:CONFIG(release, debug|release): LIBS += \\
+\t{f' {chr(92)}{chr(10)}{chr(9)}'.join(release_libs)}
 
-else:win32:CONFIG(debug, debug|release): LIBS += 
+else:win32:CONFIG(debug, debug|release): LIBS += \\
+\t{f' {chr(92)}{chr(10)}{chr(9)}'.join(debug_libs)}
+
+INCLUDEPATH += \\
+\t{f' {chr(92)}{chr(10)}{chr(9)}'.join(include_paths)}
+
+DEPENDPATH += \\
+\t{f' {chr(92)}{chr(10)}{chr(9)}'.join(depend_paths)}
+
+win32:UI_DIR = $$PWD/{uic_dir}
+win32:MOC_DIR = $$PWD/{moc_dir}
+
+win32:CONFIG(debug, debug|release):OBJECTS_DIR = 
+win32:CONFIG(release, debug|release):OBJECTS_DIR = 
+
 """
     return qt_project_template
 
-def main():
+
+if __name__ == "__main__":
     args = argparse.ArgumentParser()
     args.add_argument('-v', '--vcproject', help="vcproject file to convert", action="store")
+    args.add_argument('-u', '--uic-dir', help="folder for Qt generated uic files, relative to vcproj", action="store")
+    args.add_argument('-m', '--moc-dir', help="folder for Qt generated moc files, relative to vcproj", action="store")
     args = args.parse_args()
     vcproj = xmlt.parse(args.vcproject).getroot()
     # strip namespaces from tags
     for n in vcproj.iter():
         n.tag = n.tag.split('}')[1]
 
-    headers = []
-    sources = []
-    forms = []
+    configurations = [c.attrib['Include'] for c in vcproj.findall('*/ProjectConfiguration')]
+    headers = [h.attrib['Include'].replace('\\', '/') for h in vcproj.findall('./ItemGroup/ClInclude')]
+    sources = [s.attrib['Include'].replace('\\', '/') for s in vcproj.findall('./ItemGroup/ClCompile')]
+    forms = [f.attrib['Include'].replace('\\', '/') for f in vcproj.findall('./ItemGroup/None')]
+
+    additional_include_directories = {}
+    additional_library_directories = {}
     libs = {}
-    include_dirs = {}
 
-    for child in vcproj:
-        if child.tag == 'ItemDefinitionGroup':
-            configuration = child.attrib['Condition'].split('==')[1].strip('\'')
-            additional_dependencies = child.find('Link').find('AdditionalDependencies').text.split(';')
-            additional_includes = child.find('ClCompile').find('AdditionalIncludeDirectories').text.split(';')
-            libs[configuration] = additional_dependencies
-            include_dirs[configuration] = additional_includes
-        elif child.tag == 'ItemGroup':
-            for item in child:
-                if item.tag == 'ClInclude':
-                    headers.append(item.attrib['Include'])
-                elif item.tag == 'ClCompile':
-                    sources.append(item.attrib['Include'])
-                elif item.tag == 'None':
-                    forms.append(item.attrib['Include'])
+    for node in vcproj.findall('./ItemDefinitionGroup'):
+        config = node.attrib['Condition'].split('==')[1].strip('\'')
+        additional_include_directories[config] = node.find('ClCompile').find('AdditionalIncludeDirectories').text.replace('\\', '/').split(';')
+        additional_library_directories[config] = node.find('Link').find('AdditionalLibraryDirectories').text.replace('\\', '/').split(';')
+        libs[config] = node.find('Link').find('AdditionalDependencies').text.replace('\\', '/').split(';')
+        additional_include_directories[config].remove('%(AdditionalIncludeDirectories)')
+        additional_library_directories[config].remove('%(AdditionalLibraryDirectories)')
 
-    contents = create_qt_project_file('MechAssault MGF Explorer', sources, headers, forms, libs)
-    print(1)
+    # replace VS project directory macros with Qt project macros
+    for paths in additional_include_directories.values():
+        for i in range(len(paths)):
+            paths[i] = paths[i].replace('$', '$$')
+            paths[i] = paths[i].replace('(ProjectDir)', 'PWD/')
 
+    contents = create_qt_project_file(
+        target=args.vcproject.split('.')[0],
+        source_files=sources,
+        header_files=headers,
+        form_files=forms,
+        debug_libs=libs['Debug|x64'],
+        release_libs=libs['Release|x64'],
+        include_paths=additional_include_directories['Debug|x64'],
+        depend_paths=additional_library_directories['Debug|x64'],
+        uic_dir=args.uic_dir,
+        moc_dir=args.moc_dir
+    )
 
-if __name__ == "__main__":
-    main()
+    print(contents)

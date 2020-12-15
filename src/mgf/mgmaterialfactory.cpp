@@ -154,11 +154,13 @@ void MGMaterialFactory::CreateBaseMaterial(Ogre::Material& mat, const MGMaterial
     const auto& textureParams = matParams.textures.at("basetexture");
     auto textureItem = mgmodelFile.FindRelativeItem(textureParams.filename.data());
 
-    auto technique = mat.getTechnique(0);
-    auto pass = technique->getPass(0); 
-    auto tu = pass->createTextureUnitState();  
-
-    tu->setTexture(UploadTexture(textureParams, textureItem, *tu));
+    if (textureItem != nullptr)
+    {
+        auto technique = mat.getTechnique(0);
+        auto pass = technique->getPass(0);
+        auto tu = pass->createTextureUnitState();
+        tu->setTexture(UploadTexture(textureParams, textureItem, *tu));
+    }
 }
 
 void MGMaterialFactory::CreateComplexMaterial(Ogre::Material& mat, const MGMaterialDef& material_complex_node, const MGFTreeItem& mgmodelFile)

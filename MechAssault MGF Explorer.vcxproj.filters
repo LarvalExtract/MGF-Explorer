@@ -165,6 +165,15 @@
     <ClInclude Include="vendor\pugixml-1.10\src\pugixml.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\StringTableViewer\Models\StringTableModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\StringTableViewer\Factories\StringTableFactory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Interfaces\IFactory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -297,6 +306,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="vendor\pugixml-1.10\src\pugixml.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\StringTableViewer\Models\StringTableModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\StringTableViewer\Factories\StringTableFactory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

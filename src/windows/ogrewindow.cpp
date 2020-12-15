@@ -22,6 +22,7 @@ void OgreWindow::initialize(const QString& windowTitle)
     //params["currentGLContext"] = Ogre::String("false");
     params["externalWindowHandle"] = Ogre::StringConverter::toString(static_cast<size_t>(this->winId()));
     params["border"] = Ogre::String("none");
+    params["VSync"] = "Yes";
 
     //mFSLayer = new Ogre::FileSystemLayer("test");
 

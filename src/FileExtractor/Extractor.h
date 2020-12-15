@@ -10,6 +10,13 @@
 
 namespace FileExtractor {
 
+	struct ExtractRequest
+	{
+		const MGFTreeItem& File;
+		const std::filesystem::path& Destination;
+
+	};
+
 	class Extractor
 	{
 		friend class FileExtractListModel;
