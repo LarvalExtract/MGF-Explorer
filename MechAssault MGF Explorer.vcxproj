@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -125,6 +124,12 @@
       <EntryPointSymbol>
       </EntryPointSymbol>
     </Link>
+    <PreBuildEvent>
+      <Command>python scripts/compile-moc.py -v "$(ProjectFileName)"</Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Message>Runs the Qt meta-object compiler and UI compiler.</Message>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -170,26 +175,26 @@
       <AdditionalDependencies>Qt5Core.lib;Qt5Gui.lib;Qt5Widgets.lib;OgreMain.lib;RenderSystem_Direct3D9.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
     </Link>
+    <PreBuildEvent>
+      <Command>python scripts/compile-moc.py -v "$(ProjectFileName)"</Command>
+      <Message>Runs the Qt meta-object compiler and UI compiler.</Message>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\AssetViewers\IAssetViewer.h" />
+    <ClInclude Include="src\AssetViewers\ModelViewer\Models\MeshTableModel.h" />
+    <ClInclude Include="src\Factories\AssetFactory.h" />
     <ClInclude Include="src\FileExtractor\Models\FileExtractItem.h" />
     <ClInclude Include="src\FileExtractor\States\FileExtractorStateBase.h" />
     <ClInclude Include="src\FileExtractor\States\FileExtractorStateGroup.h" />
     <ClInclude Include="src\FileExtractor\States\FinishedState.h" />
     <ClInclude Include="src\FileExtractor\States\IdleState.h" />
     <ClInclude Include="src\FileExtractor\States\ProgressState.h" />
-    <ClInclude Include="src\Interfaces\IFactory.h" />
-    <ClInclude Include="src\moc\moc_predefs.h" />
-    <ClInclude Include="src\StringTableViewer\Factories\StringTableFactory.h" />
-    <ClInclude Include="src\StringTableViewer\Models\StringTableModel.h" />
-    <ClInclude Include="src\uic\ui_FileExtractorDialog.h" />
-    <ClInclude Include="src\uic\ui_listviewtexture.h" />
-    <ClInclude Include="src\uic\ui_mainwindow.h" />
-    <ClInclude Include="src\uic\ui_mgftextureviewerwidget.h" />
-    <ClInclude Include="src\uic\ui_mgftextviewwidget.h" />
-    <ClInclude Include="src\uic\ui_mgfworkspace.h" />
-    <ClInclude Include="src\uic\ui_mgmodelviewerwidget.h" />
-    <ClInclude Include="src\uic\ui_windowfiletable.h" />
+    <ClInclude Include="src\mgf\AssetBase.h" />
+    <ClInclude Include="src\mgf\Assets\PlainText.h" />
+    <ClInclude Include="src\ResourceManager\ResourceManager.h" />
+    <ClInclude Include="src\AssetViewers\StringTableViewer\Models\StringTableModel.h" />
+    <ClInclude Include="src\AssetViewers\StringTableViewer\StringTableViewerWidget.h" />
     <ClInclude Include="src\utils\events\EventData.h" />
     <ClInclude Include="src\utils\events\EventDispatcher.h" />
     <ClInclude Include="src\utils\Contexts.h" />
@@ -206,40 +211,37 @@
     <ClInclude Include="src\utils\states\StateGroup.h" />
     <ClInclude Include="src\FileExtractor\FileExtractorDialog.h" />
     <ClInclude Include="src\FileExtractor\Extractor.h" />
-    <ClInclude Include="src\windows\listviewtexture.h" />
     <ClInclude Include="src\windows\mainwindow.h" />
     <ClInclude Include="src\mgfresourcemanager.h" />
     <ClInclude Include="src\widgets\mgfresourceviewer.h" />
     <ClInclude Include="src\widgets\mgftextureviewerwidget.h" />
     <ClInclude Include="src\widgets\mgftextviewwidget.h" />
     <ClInclude Include="src\widgets\mgfworkspace.h" />
-    <ClInclude Include="src\mgf\mgfarchive.h" />
+    <ClInclude Include="src\mgf\Archive.h" />
     <ClInclude Include="src\models\mgffiletablemodel.h" />
     <ClInclude Include="src\models\mgffiletreemodel.h" />
-    <ClInclude Include="src\mgf\mgftreeitem.h" />
+    <ClInclude Include="src\mgf\File.h" />
     <ClInclude Include="src\mgf\mgmaterialfactory.h" />
     <ClInclude Include="src\mgf\mgmeshfactory.h" />
     <ClInclude Include="src\mgf\mgnode.h" />
     <ClInclude Include="src\mgf\mgtexture.h" />
     <ClInclude Include="src\widgets\mgmodelviewerwidget.h" />
     <ClInclude Include="src\windows\ogrewindow.h" />
+    <ClInclude Include="src\mgf\Assets\StringTable.h" />
     <ClInclude Include="vendor\pugixml-1.10\src\pugixml.hpp" />
-  </ItemGroup>
+    <CustomBuild Include="src\FileExtractor\ui_FileExtractorDialog.h" /><CustomBuild Include="src\AssetViewers\StringTableViewer\ui_StringTableViewerWidget.h" /><CustomBuild Include="src\widgets\ui_mgftextureviewerwidget.h" /><CustomBuild Include="src\widgets\ui_mgftextviewwidget.h" /><CustomBuild Include="src\widgets\ui_mgfworkspace.h" /><CustomBuild Include="src\widgets\ui_mgmodelviewerwidget.h" /><CustomBuild Include="src\windows\ui_mainwindow.h" /><CustomBuild Include="src\ui_windowfiletable.h" /></ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\AssetViewers\IAssetViewer.cpp" />
+    <ClCompile Include="src\AssetViewers\ModelViewer\Models\MeshTableModel.cpp" />
+    <ClCompile Include="src\Factories\AssetFactory.cpp" />
     <ClCompile Include="src\FileExtractor\States\FileExtractorStateGroup.cpp" />
     <ClCompile Include="src\FileExtractor\States\FinishedState.cpp" />
     <ClCompile Include="src\FileExtractor\States\IdleState.cpp" />
     <ClCompile Include="src\FileExtractor\States\ProgressState.cpp" />
-    <ClCompile Include="src\moc\moc_FileExtractorDialog.cpp" />
-    <ClCompile Include="src\moc\moc_listviewtexture.cpp" />
-    <ClCompile Include="src\moc\moc_mainwindow.cpp" />
-    <ClCompile Include="src\moc\moc_mgftextureviewerwidget.cpp" />
-    <ClCompile Include="src\moc\moc_mgftextviewwidget.cpp" />
-    <ClCompile Include="src\moc\moc_mgfworkspace.cpp" />
-    <ClCompile Include="src\moc\moc_mgmodelviewerwidget.cpp" />
-    <ClCompile Include="src\moc\moc_ogrewindow.cpp" />
-    <ClCompile Include="src\StringTableViewer\Factories\StringTableFactory.cpp" />
-    <ClCompile Include="src\StringTableViewer\Models\StringTableModel.cpp" />
+    <ClCompile Include="src\mgf\Assets\PlainText.cpp" />
+    <ClCompile Include="src\ResourceManager\ResourceManager.cpp" />
+    <ClCompile Include="src\AssetViewers\StringTableViewer\Models\StringTableModel.cpp" />
+    <ClCompile Include="src\AssetViewers\StringTableViewer\StringTableViewerWidget.cpp" />
     <ClCompile Include="src\utils\events\EventDispatcher.cpp" />
     <ClCompile Include="src\utils\Contexts.cpp" />
     <ClCompile Include="src\utils\Context.cpp" />
@@ -254,35 +256,38 @@
     <ClCompile Include="src\widgets\mgfresourceviewer.cpp" />
     <ClCompile Include="src\FileExtractor\FileExtractorDialog.cpp" />
     <ClCompile Include="src\FileExtractor\Extractor.cpp" />
-    <ClCompile Include="src\windows\listviewtexture.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\windows\mainwindow.cpp" />
     <ClCompile Include="src\mgfresourcemanager.cpp" />
     <ClCompile Include="src\widgets\mgftextureviewerwidget.cpp" />
     <ClCompile Include="src\widgets\mgftextviewwidget.cpp" />
     <ClCompile Include="src\widgets\mgfworkspace.cpp" />
-    <ClCompile Include="src\mgf\mgfarchive.cpp" />
+    <ClCompile Include="src\mgf\Archive.cpp" />
     <ClCompile Include="src\models\mgffiletablemodel.cpp" />
     <ClCompile Include="src\models\mgffiletreemodel.cpp" />
-    <ClCompile Include="src\mgf\mgftreeitem.cpp" />
+    <ClCompile Include="src\mgf\File.cpp" />
     <ClCompile Include="src\mgf\mgmaterialfactory.cpp" />
     <ClCompile Include="src\mgf\mgmeshfactory.cpp" />
     <ClCompile Include="src\mgf\mgnode.cpp" />
     <ClCompile Include="src\mgf\mgtexture.cpp" />
     <ClCompile Include="src\widgets\mgmodelviewerwidget.cpp" />
     <ClCompile Include="src\windows\ogrewindow.cpp" />
+    <ClCompile Include="src\mgf\Assets\StringTable.cpp" />
     <ClCompile Include="vendor\pugixml-1.10\src\pugixml.cpp" />
+    <ClCompile Include="src\AssetViewers\StringTableViewer\moc_StringTableViewerWidget.cpp" /><ClCompile Include="src\FileExtractor\moc_FileExtractorDialog.cpp" /><ClCompile Include="src\windows\moc_mainwindow.cpp" /><ClCompile Include="src\widgets\moc_mgftextureviewerwidget.cpp" /><ClCompile Include="src\widgets\moc_mgftextviewwidget.cpp" /><ClCompile Include="src\widgets\moc_mgfworkspace.cpp" /><ClCompile Include="src\widgets\moc_mgmodelviewerwidget.cpp" /><ClCompile Include="src\windows\moc_ogrewindow.cpp" /></ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="src\FileExtractor\FileExtractorDialog.ui" />
+    <CustomBuild Include="src\AssetViewers\StringTableViewer\StringTableViewerWidget.ui" />
+    <CustomBuild Include="src\widgets\mgftextureviewerwidget.ui" />
+    <CustomBuild Include="src\widgets\mgftextviewwidget.ui" />
+    <CustomBuild Include="src\widgets\mgfworkspace.ui" />
+    <CustomBuild Include="src\widgets\mgmodelviewerwidget.ui" />
+    <CustomBuild Include="src\windows\mainwindow.ui" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\FileExtractor\FileExtractorDialog.ui">
+    <CustomBuild Include="src\windowfiletable.ui">
       <FileType>Document</FileType>
-    </None>
-    <None Include="src\widgets\mgftextureviewerwidget.ui" />
-    <None Include="src\widgets\mgftextviewwidget.ui" />
-    <None Include="src\widgets\mgfworkspace.ui" />
-    <None Include="src\widgets\mgmodelviewerwidget.ui" />
-    <None Include="src\windows\listviewtexture.ui" />
-    <None Include="src\windows\mainwindow.ui" />
+    </CustomBuild>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

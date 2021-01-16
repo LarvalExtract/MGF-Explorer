@@ -12,7 +12,7 @@
 #include <algorithm>
 
 using namespace std::placeholders;
-static std::unordered_map<std::string_view, std::function<void(Ogre::Material&, const MGMaterialDef&, const MGFTreeItem&)>> MapFunctors = {
+static std::unordered_map<std::string_view, std::function<void(Ogre::Material&, const MGMaterialDef&, const MGF::File&)>> MapFunctors = {
     { "base",           std::bind(MGMaterialFactory::CreateBaseMaterial,    _1, _2, _3) },
     { "complex",        std::bind(MGMaterialFactory::CreateBaseMaterial,    _1, _2, _3) },
     { "specular_mask",  std::bind(MGMaterialFactory::CreateBaseMaterial,    _1, _2, _3) },
@@ -36,7 +36,7 @@ static std::unordered_map<std::string_view, Ogre::CullingMode> CullModes = {
     { "false",      Ogre::CullingMode::CULL_CLOCKWISE }
 };
 
-Ogre::MaterialPtr MGMaterialFactory::Create(const MGMaterialDef &params, const MGFTreeItem &sourceFile)
+Ogre::MaterialPtr MGMaterialFactory::Create(const MGMaterialDef &params, const MGF::File &sourceFile)
 {
     auto& matMgr = Ogre::MaterialManager::getSingleton();
 
@@ -71,7 +71,7 @@ Ogre::MaterialPtr MGMaterialFactory::Create(const MGMaterialDef &params, const M
     return mat;
 }
 
-MGMaterialDef MGMaterialFactory::CreateMaterialDefinition(const MGFTreeItem &materialFile)
+MGMaterialDef MGMaterialFactory::CreateMaterialDefinition(const MGF::File &materialFile)
 {
     std::string buf;
     materialFile.LoadBuffer(buf);
@@ -149,7 +149,7 @@ MGMaterialDef MGMaterialFactory::CreateMaterialDefinition(const pugi::xml_node &
     return params;
 }
 
-void MGMaterialFactory::CreateBaseMaterial(Ogre::Material& mat, const MGMaterialDef& matParams, const MGFTreeItem& mgmodelFile)
+void MGMaterialFactory::CreateBaseMaterial(Ogre::Material& mat, const MGMaterialDef& matParams, const MGF::File& mgmodelFile)
 {
     const auto& textureParams = matParams.textures.at("basetexture");
     auto textureItem = mgmodelFile.FindRelativeItem(textureParams.filename.data());
@@ -163,17 +163,17 @@ void MGMaterialFactory::CreateBaseMaterial(Ogre::Material& mat, const MGMaterial
     }
 }
 
-void MGMaterialFactory::CreateComplexMaterial(Ogre::Material& mat, const MGMaterialDef& material_complex_node, const MGFTreeItem& mgmodelFile)
+void MGMaterialFactory::CreateComplexMaterial(Ogre::Material& mat, const MGMaterialDef& material_complex_node, const MGF::File& mgmodelFile)
 {
     //CreateBaseMaterial(mat, material_complex_node, mgmodelFile);
 }
 
-void MGMaterialFactory::CreateSpecMaskMaterial(Ogre::Material& mat, const MGMaterialDef &material_specular_mask, const MGFTreeItem &mgmodelFile)
+void MGMaterialFactory::CreateSpecMaskMaterial(Ogre::Material& mat, const MGMaterialDef &material_specular_mask, const MGF::File &mgmodelFile)
 {
     //CreateBaseMaterial(material_specular_mask, mgmodelFile);
 }
 
-void MGMaterialFactory::CreateAnimatedMaterial(Ogre::Material& mat, const MGMaterialDef &params, const MGFTreeItem &mgmodelFile)
+void MGMaterialFactory::CreateAnimatedMaterial(Ogre::Material& mat, const MGMaterialDef &params, const MGF::File &mgmodelFile)
 {
     const auto& matParams = params.specialParams;
     const auto& textureParams = params.textures.at("basetexture");
@@ -207,12 +207,12 @@ void MGMaterialFactory::CreateAnimatedMaterial(Ogre::Material& mat, const MGMate
     tu->setCurrentFrame(0);
 }
 
-void MGMaterialFactory::CreateSolidMaterial(Ogre::Material &mat, const MGMaterialDef &material_solid, const MGFTreeItem &mgmodelFile)
+void MGMaterialFactory::CreateSolidMaterial(Ogre::Material &mat, const MGMaterialDef &material_solid, const MGF::File &mgmodelFile)
 {
     mat.setLightingEnabled(false);
 }
 
-void MGMaterialFactory::CreateDistortMaterial(Ogre::Material &mat, const MGMaterialDef &material_distort, const MGFTreeItem &sourceFile)
+void MGMaterialFactory::CreateDistortMaterial(Ogre::Material &mat, const MGMaterialDef &material_distort, const MGF::File &sourceFile)
 {
     const auto& textureParams = material_distort.textures.at("distortiontexture");
     auto textureItem = sourceFile.FindRelativeItem(textureParams.filename.data());
@@ -224,7 +224,7 @@ void MGMaterialFactory::CreateDistortMaterial(Ogre::Material &mat, const MGMater
     tu->setTexture(UploadTexture(textureParams, textureItem, *tu));
 }
 
-Ogre::TexturePtr MGMaterialFactory::UploadTexture(const MGTextureParams& textureParams, const MGFTreeItem* textureFile, Ogre::TextureUnitState& tu)
+Ogre::TexturePtr MGMaterialFactory::UploadTexture(const MGTextureParams& textureParams, const MGF::File* textureFile, Ogre::TextureUnitState& tu)
 {
     auto& rm = *Contexts::Get<MGFResourceManager>();
 

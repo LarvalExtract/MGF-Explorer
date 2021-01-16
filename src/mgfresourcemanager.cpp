@@ -1,36 +1,36 @@
 #include "mgfresourcemanager.h"
-#include "mgf/mgfarchive.h"
+#include "mgf/Archive.h"
 
 #include <OgreTextureManager.h>
 #include <OgreMaterialManager.h>
 #include <OgreMeshManager.h>
 
-const QString &MGFResourceManager::GetTextData(const MGFTreeItem &item)
+const QString &MGFResourceManager::GetTextData(const MGF::File &item)
 {
     uint64_t key = item.GUID();
 
     if (m_MapTextData.find(key) == m_MapTextData.end())
-        LoadTextData(const_cast<MGFTreeItem&>(item));
+        LoadTextData(const_cast<MGF::File&>(item));
 
     return m_MapTextData[key];
 }
 
-MGTexture& MGFResourceManager::GetTexture(const MGFTreeItem &item)
+MGTexture& MGFResourceManager::GetTexture(const MGF::File &item)
 {
     auto key = item.GUID();
 
     if (m_MapTextures.find(key) == m_MapTextures.end())
-        LoadTexture(key, const_cast<MGFTreeItem&>(item));
+        LoadTexture(key, const_cast<MGF::File&>(item));
 
     return m_MapTextures.at(key);
 }
 
-MGNode& MGFResourceManager::GetModel(const MGFTreeItem &item, Ogre::SceneManager* sceneManager)
+MGNode& MGFResourceManager::GetModel(const MGF::File &item, Ogre::SceneManager* sceneManager)
 {
     auto key = item.GUID();
 
     if (m_MapModels.find(key) == m_MapModels.end())
-        LoadModel(key, const_cast<MGFTreeItem&>(item), sceneManager);
+        LoadModel(key, const_cast<MGF::File&>(item), sceneManager);
 
     return m_MapModels.at(key);
 }
@@ -46,7 +46,7 @@ void MGFResourceManager::Clear()
     Ogre::MeshManager::getSingleton().destroyAllResourcePools();
 }
 
-void MGFResourceManager::LoadTextData(MGFTreeItem &item)
+void MGFResourceManager::LoadTextData(MGF::File &item)
 {
     std::string buffer;
     item.LoadBuffer(buffer);
@@ -56,12 +56,12 @@ void MGFResourceManager::LoadTextData(MGFTreeItem &item)
     m_MapTextData.insert(item.GUID(), buffer.data());
 }
 
-void MGFResourceManager::LoadTexture(std::uint64_t key, MGFTreeItem &item)
+void MGFResourceManager::LoadTexture(std::uint64_t key, MGF::File &item)
 {
     m_MapTextures.emplace(key, MGTexture(item));
 }
 
-void MGFResourceManager::LoadModel(std::uint64_t key, MGFTreeItem &item, Ogre::SceneManager* sceneManager)
+void MGFResourceManager::LoadModel(std::uint64_t key, MGF::File &item, Ogre::SceneManager* sceneManager)
 {
     m_MapModels.try_emplace(key, item, sceneManager);
 }

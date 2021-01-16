@@ -19,7 +19,7 @@ public:
     explicit MGModelViewerWidget(QWidget *parent = nullptr);
     ~MGModelViewerWidget();
 
-    void LoadMGFItem(const MGFTreeItem *item) override;
+    void LoadMGFItem(const MGF::File *item) override;
 
 private:
     Ui::MGModelViewerWidget *ui;

@@ -1,7 +1,7 @@
 #ifndef MGFRESOURCEMANAGER_H
 #define MGFRESOURCEMANAGER_H
 
-#include "mgf/mgftreeitem.h"
+#include "mgf/File.h"
 #include "mgf/mgtexture.h"
 #include "mgf/mgnode.h"
 
@@ -11,9 +11,9 @@
 class MGFResourceManager
 {
 public:
-    const QString& GetTextData(const MGFTreeItem& item);
-    MGTexture& GetTexture(const MGFTreeItem& item);
-    MGNode& GetModel(const MGFTreeItem& item, Ogre::SceneManager* sceneManager);
+    const QString& GetTextData(const MGF::File& item);
+    MGTexture& GetTexture(const MGF::File& item);
+    MGNode& GetModel(const MGF::File& item, Ogre::SceneManager* sceneManager);
 
     void Clear();
 
@@ -23,9 +23,9 @@ private:
     std::unordered_map<std::uint64_t, MGNode> m_MapModels;
 
 private:
-    void LoadTextData(MGFTreeItem& item);
-    void LoadTexture(std::uint64_t key, MGFTreeItem& item);
-    void LoadModel(std::uint64_t key, MGFTreeItem& item, Ogre::SceneManager* sceneManager);
+    void LoadTextData(MGF::File& item);
+    void LoadTexture(std::uint64_t key, MGF::File& item);
+    void LoadModel(std::uint64_t key, MGF::File& item, Ogre::SceneManager* sceneManager);
 };
 
 #endif // MGFRESOURCEMANAGER_H

@@ -3,12 +3,14 @@
 
 #include <QAbstractTableModel>
 
-class MGFTreeItem;
+namespace MGF {
+    class File;
+}
 
 class MGFFileTableModel : public QAbstractTableModel
 {
 public:
-    MGFFileTableModel(const std::vector<MGFTreeItem>& mgfItems) : m_FileListReference(mgfItems) {}
+    MGFFileTableModel(const std::vector<MGF::File>& mgfItems) : m_FileListReference(mgfItems) {}
 
     // QAbstractItemModel interface
 public:
@@ -18,7 +20,7 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
 
 private:
-    const std::vector<MGFTreeItem>& m_FileListReference;
+    const std::vector<MGF::File>& m_FileListReference;
 };
 
 #endif // MGFFILETABLEMODEL_H

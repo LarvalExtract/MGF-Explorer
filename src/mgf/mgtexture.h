@@ -1,7 +1,7 @@
 #ifndef MGTEXTURE_H
 #define MGTEXTURE_H
 
-#include "mgftreeitem.h"
+#include "File.h"
 
 #include <stdint.h>
 #include <OgreTexture.h>
@@ -9,9 +9,9 @@
 class MGTexture
 {
 public:
-    MGTexture(MGFTreeItem& item, bool loadHeaderOnly = false);
+    MGTexture(MGF::File& item, bool loadHeaderOnly = false);
 
-    inline const MGFTreeItem& TreeItem() const { return m_TreeItem; }
+    inline const MGF::File& TreeItem() const { return m_TreeItem; }
     inline uint8_t Version() const { return m_Version; }
     inline uint32_t Width() const { return m_Width; }
     inline uint32_t Height() const { return m_Height; }
@@ -25,7 +25,7 @@ public:
     Ogre::TexturePtr m_Texture;
 
 private:
-    MGFTreeItem& m_TreeItem;
+    MGF::File& m_TreeItem;
 
     uint8_t m_Version;
     uint32_t m_Width;

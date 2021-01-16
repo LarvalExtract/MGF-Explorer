@@ -2,7 +2,7 @@
 #include "FileExtractorStateGroup.h"
 
 #include "FileExtractor/FileExtractorDialog.h"
-#include "ui_FileExtractorDialog.h"
+#include "FileExtractor/ui_FileExtractorDialog.h"
 
 #include <QObject>
 

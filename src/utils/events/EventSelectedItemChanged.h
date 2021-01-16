@@ -2,10 +2,10 @@
 
 #include "EventData.h"
 
-class MGFTreeItem;
+class MGF::File;
 
 class EventSelectedItemChanged : public EventData
 {
 public:
-	MGFTreeItem* MgfItem = nullptr;
+	MGF::File* MgfItem = nullptr;
 };

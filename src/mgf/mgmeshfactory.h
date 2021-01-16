@@ -1,7 +1,7 @@
 #ifndef MGMESHFACTORY_H
 #define MGMESHFACTORY_H
 
-#include "mgftreeitem.h"
+#include "File.h"
 
 #include <OgreMesh.h>
 #include <OgreRenderOperation.h>
@@ -32,9 +32,9 @@ public:
     MGMeshFactory& operator=(MGMeshFactory&&) = delete;
 
 public:
-    static Ogre::MeshPtr Create(const MGMeshDef& def, const MGFTreeItem& sourceFile);
+    static Ogre::MeshPtr Create(const MGMeshDef& def, const MGF::File& sourceFile);
 
-    static MGMeshDef CreateMeshDefinition(const MGFTreeItem& meshFile);
+    static MGMeshDef CreateMeshDefinition(const MGF::File& meshFile);
     static MGMeshDef CreateMeshDefinition(const pugi::xml_node& meshxml);
 
 private:
@@ -56,8 +56,8 @@ private:
         uint32_t data = 0;
     };
 
-    static Ogre::VertexData* LoadVertexBuffer(Ogre::Mesh& mesh, const MGFTreeItem& vertFile, const MGVertexBufferOffsets& def, MGMeshDef& meshDef);
-    static Ogre::IndexData* LoadIndexBuffer(const MGFTreeItem& indicesFile, const MGIndexBufferOffsets& def);
+    static Ogre::VertexData* LoadVertexBuffer(Ogre::Mesh& mesh, const MGF::File& vertFile, const MGVertexBufferOffsets& def, MGMeshDef& meshDef);
+    static Ogre::IndexData* LoadIndexBuffer(const MGF::File& indicesFile, const MGIndexBufferOffsets& def);
     static bool SetupVertexElements(Ogre::VertexDeclaration *decl, uint32_t flags);
 };
 

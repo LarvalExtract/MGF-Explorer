@@ -1,7 +1,7 @@
 #ifndef MGNODE_H
 #define MGNODE_H
 
-#include "mgftreeitem.h"
+#include "File.h"
 #include "models/MGFAnimationTableModel.h"
 #include "models/MGFMeshTableModel.h"
 #include "models/MGFMaterialTableModel.h"
@@ -19,7 +19,7 @@
 class MGNode
 {
 public:
-    MGNode(const MGFTreeItem& nodeFile, Ogre::SceneManager* sceneMgr);
+    MGNode(const MGF::File& nodeFile, Ogre::SceneManager* sceneMgr);
 
     Ogre::SceneNode* SceneNode() const { return m_Root; }
 
@@ -29,7 +29,7 @@ public:
     MGFNodeTreeModel* GetNodeTreeModel() { return &m_NodeTreeModel; }
 
 private:
-    const MGFTreeItem& m_SourceFile;
+    const MGF::File& m_SourceFile;
 
     Ogre::SceneNode* m_Root = nullptr;
 
@@ -40,8 +40,8 @@ private:
 
 private:
 
-    void LoadScene(const MGFTreeItem& mgnodeFile);
-    void LoadMGModel(const MGFTreeItem& mgmodelFile);
+    void LoadScene(const MGF::File& mgnodeFile);
+    void LoadMGModel(const MGF::File& mgmodelFile);
 
     void CreateSceneNode(Ogre::SceneNode* parent, const std::function<ConfigSection()>& func);
     void CreateSceneNode(Ogre::SceneNode* parent, const pugi::xml_node& xmlnode, const std::unordered_map<std::string, Ogre::MeshPtr> meshes);

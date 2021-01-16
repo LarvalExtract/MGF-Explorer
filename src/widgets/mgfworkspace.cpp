@@ -3,6 +3,8 @@
 
 #include "FileExtractor/FileExtractorDialog.h"
 
+#include "mgf/Assets/StringTable.h"
+
 MGFWorkspace::MGFWorkspace(const QString& mgfFilePath, QWidget *parent) :
     QWidget(parent),
     m_MgfArchive(mgfFilePath),
@@ -12,7 +14,7 @@ MGFWorkspace::MGFWorkspace(const QString& mgfFilePath, QWidget *parent) :
     ui->treeView->setModel(m_MgfArchive.FileTreeModel());
     ui->treeView->setColumnWidth(0, 300);
 
-    m_TextureListWindow.setWindowTitle(m_MgfArchive.GetFileName() + " textures");
+    ui->fileDetails->hide();
 
     connect(ui->treeView->selectionModel(), SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)),
             this, SLOT(on_treeView_selectionChanged(const QModelIndex&, const QModelIndex&)));
@@ -46,15 +48,6 @@ QModelIndexList MGFWorkspace::GetSelection() const
     return ui->treeView->selectionModel()->selectedRows();
 }
 
-void MGFWorkspace::ShowTextureListWindow()
-{
-    if (m_TextureListWindow.isHidden())
-    {
-        m_TextureListWindow.show();
-        m_TextureListWindow.SetArchive(m_MgfArchive);
-    }
-}
-
 void MGFWorkspace::ShowFileTableWindow()
 {
     if (m_FileTableWidget.isHidden())
@@ -69,7 +62,7 @@ void MGFWorkspace::on_treeView_selectionChanged(const QModelIndex &sel, const QM
     if (sel == desel)
         return;
 
-    m_SelectedItem = static_cast<MGFTreeItem*>(sel.internalPointer());
+    m_SelectedItem = static_cast<MGF::File*>(sel.internalPointer());
 
     switch (m_SelectedItem->FileType())
     {
@@ -93,10 +86,19 @@ void MGFWorkspace::on_treeView_selectionChanged(const QModelIndex &sel, const QM
         m_ModelWidget.LoadMGFItem(m_SelectedItem);
         break;
 
+    case MGFFileType::Strings:
+        m_CurrentWidget = DisplayWidget(&m_StringTableWidget);
+        {
+            MGF::Asset::StringTable strings(*m_SelectedItem);
+        }
+        break;
+
     default:
         m_CurrentWidget = DisplayWidget(nullptr);
         break;
     }
+
+    PrintSelectedFileDetails(*m_SelectedItem);
 }
 
 QWidget* MGFWorkspace::DisplayWidget(QWidget *widget)
@@ -138,6 +140,25 @@ QWidget* MGFWorkspace::DisplayWidget(QWidget *widget)
     }
 
     return widget;
+}
+
+void MGFWorkspace::PrintSelectedFileDetails(const MGF::File& selectedFile)
+{
+    if (!selectedFile.IsFile())
+    {
+        ui->fileDetails->hide();
+        return;
+    }
+
+    QString str = QString("%1 | %2 | %3 | %4 bytes").arg(
+        selectedFile.FilePath().c_str(),
+        QString::number(selectedFile.GUID()),
+        QString::number(selectedFile.FileOffset()),
+        QString::number(selectedFile.FileLength())
+    );
+
+    ui->fileDetails->setText(str);
+    ui->fileDetails->show();
 }
 
 void MGFWorkspace::on_treeView_customContextMenuRequested(const QPoint &pos)

@@ -1,5 +1,5 @@
 #include "mgffiletreemodel.h"
-#include "mgf/mgftreeitem.h"
+#include "mgf/File.h"
 
 #include <QFileIconProvider>
 #include <QLocale>
@@ -34,10 +34,10 @@ QModelIndex MGFFileTreeModel::index(int row, int column, const QModelIndex &pare
     if (!hasIndex(row, column, parent))
         return QModelIndex();
 
-    auto parentItem = (parent.isValid()) ? static_cast<MGFTreeItem*>(parent.internalPointer()) : &m_FileListReference[0];
+    auto parentItem = (parent.isValid()) ? static_cast<MGF::File*>(parent.internalPointer()) : &m_FileListReference[0];
     auto childItem = parentItem->GetNthChild(row);
 
-    return createIndex(row, column, const_cast<MGFTreeItem*>(childItem));
+    return createIndex(row, column, const_cast<MGF::File*>(childItem));
 }
 
 QModelIndex MGFFileTreeModel::parent(const QModelIndex &child) const
@@ -45,13 +45,13 @@ QModelIndex MGFFileTreeModel::parent(const QModelIndex &child) const
     if (!child.isValid())
         return QModelIndex();
 
-    auto childItem = static_cast<const MGFTreeItem*>(child.internalPointer());
+    auto childItem = static_cast<const MGF::File*>(child.internalPointer());
     auto parentItem = childItem->GetParent();
 
     if (parentItem == &m_FileListReference[0])
         return QModelIndex();
 
-    return createIndex(parentItem->Row(), 0, const_cast<MGFTreeItem*>(parentItem));
+    return createIndex(parentItem->Row(), 0, const_cast<MGF::File*>(parentItem));
 }
 
 int MGFFileTreeModel::rowCount(const QModelIndex &parent) const
@@ -59,7 +59,7 @@ int MGFFileTreeModel::rowCount(const QModelIndex &parent) const
     if (parent.column() > 0)
         return 0;
 
-    auto parentItem = (parent.isValid()) ? static_cast<const MGFTreeItem*>(parent.internalPointer()) : &m_FileListReference[0];
+    auto parentItem = (parent.isValid()) ? static_cast<const MGF::File*>(parent.internalPointer()) : &m_FileListReference[0];
 
     return parentItem->GetChildCount();
 }
@@ -81,13 +81,13 @@ QVariant MGFFileTreeModel::data(const QModelIndex &index, int role) const
     if (!index.isValid())
         return QVariant();
 
-    auto item = static_cast<const MGFTreeItem*>(index.internalPointer());
+    auto item = static_cast<const MGF::File*>(index.internalPointer());
     bool isFile = item->IsFile();
 
     if (role == Qt::DecorationRole && index.column() == 0)
         return Icons[isFile];
 
-    QVariant type[2] = {empty, MGFTreeItem::FileTypeString(item->FileType())};
+    QVariant type[2] = {empty, MGF::File::FileTypeString(item->FileType())};
     QVariant date[2] = {empty, item->FileDate().toString("dd/MM/yyyy hh:mm")};
     QVariant size[2] = {empty, QLocale::system().formattedDataSize(item->FileLength(), 1)};
 

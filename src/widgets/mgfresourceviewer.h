@@ -1,7 +1,7 @@
 #ifndef MGFRESOURCEVIEWER_H
 #define MGFRESOURCEVIEWER_H
 
-#include "mgf/mgftreeitem.h"
+#include "mgf/File.h"
 #include "mgfresourcemanager.h"
 
 #include <set>
@@ -10,7 +10,7 @@
 class AMGFResourceViewer
 {
 public:
-    virtual void LoadMGFItem(const MGFTreeItem* item)
+    virtual void LoadMGFItem(const MGF::File* item)
     {
         if (m_SupportedTypes.count(item->FileType()) == 0)
         {
@@ -34,7 +34,7 @@ protected:
     AMGFResourceViewer();
 
     std::set<MGFFileType> m_SupportedTypes;
-    const MGFTreeItem* m_ItemPtr = nullptr;
+    const MGF::File* m_ItemPtr = nullptr;
     MGFResourceManager& ResourceManager;
 };
 

@@ -2,7 +2,7 @@
 #include "FileExtractorStateGroup.h"
 
 #include "FileExtractor/FileExtractorDialog.h"
-#include "Ui_FileExtractorDialog.h"
+#include "FileExtractor/ui_FileExtractorDialog.h"
 
 #include "FileExtractor/Extractor.h"
 

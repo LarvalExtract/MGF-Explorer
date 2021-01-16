@@ -17,7 +17,7 @@ public:
     explicit MGFTextViewWidget(QWidget *parent = nullptr);
     ~MGFTextViewWidget();
 
-    void LoadMGFItem(const MGFTreeItem *item) override;
+    void LoadMGFItem(const MGF::File *item) override;
 
 private:
     Ui::MGFTextViewWidget *ui;

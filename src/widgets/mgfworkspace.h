@@ -1,12 +1,12 @@
 #ifndef MGFWORKSPACE_H
 #define MGFWORKSPACE_H
 
-#include "mgf/mgfarchive.h"
+#include "mgf/Archive.h"
 #include "widgets/mgftextviewwidget.h"
 #include "widgets/mgftextureviewerwidget.h"
 #include "widgets/mgmodelviewerwidget.h"
-#include "windows/listviewtexture.h"
 #include "utils/events/EventDispatcher.h"
+#include "AssetViewers/StringTableViewer/StringTableViewerWidget.h"
 #include "ui_windowfiletable.h"
 
 #include <QWidget>
@@ -27,11 +27,10 @@ public:
     explicit MGFWorkspace(const QString& mgfFilePath, QWidget *parent = nullptr);
     ~MGFWorkspace();
 
-    inline const MGFArchive& MGFFile() const { return m_MgfArchive; }
-    inline const MGFTreeItem* SelectedItem() const { return m_SelectedItem; }
+    inline const MGF::Archive& MGFFile() const { return m_MgfArchive; }
+    inline const MGF::File* SelectedItem() const { return m_SelectedItem; }
     QModelIndexList GetSelection() const;
 
-    void ShowTextureListWindow();
     void ShowFileTableWindow();
 
 private slots:
@@ -40,8 +39,8 @@ private slots:
     void on_customContextMenu_action_extract();
 
 private:
-    MGFArchive m_MgfArchive;
-    MGFTreeItem* m_SelectedItem = nullptr;
+    MGF::Archive m_MgfArchive;
+    MGF::File* m_SelectedItem = nullptr;
 
     Ui::MGFWorkspace *ui;
 
@@ -49,8 +48,8 @@ private:
     MGFTextViewWidget m_TextWidget;
     MGFTextureViewerWidget m_TextureWidget;
     MGModelViewerWidget m_ModelWidget;
+    StringTableViewer::StringTableViewerWidget m_StringTableWidget;
 
-    ListViewTexture m_TextureListWindow;
     QWidget m_FileTableWidget;
     Ui_MGFFileTableWindow m_FileTableWindowUi;
 
@@ -58,7 +57,7 @@ private:
 
 private:
     QWidget* DisplayWidget(QWidget *widget);
-
+    void PrintSelectedFileDetails(const MGF::File& selectedFile);
 };
 
 #endif // MGFWORKSPACE_H

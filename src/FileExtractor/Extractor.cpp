@@ -1,5 +1,5 @@
 #include "Extractor.h"
-#include "mgf/mgfarchive.h"
+#include "mgf/Archive.h"
 
 #include <fstream>
 
@@ -34,7 +34,7 @@ void Extractor::ExtractFiles(
 		while (remainingBytes > 0)
 		{
 			bytesToCopy = std::min<int>(bufSize, remainingBytes);
-			item.mgfItem.Read(buf, offset, remainingBytes);
+			item.mgfItem.Read(buf.data(), offset, bytesToCopy);
 			file.write(buf.data(), bytesToCopy);
 
 			remainingBytes -= bufSize;
@@ -45,8 +45,7 @@ void Extractor::ExtractFiles(
 		item.status = Models::FileExtractStatus::Done;
     };
 
-    std::vector<char> buffer;
-    buffer.reserve(FILE_BUFFER_SIZE);
+    std::vector<char> buffer(FILE_BUFFER_SIZE);
 
 	unsigned int extractedFileCount = 0;
 	if (bOverwriteExistingFiles)
@@ -73,7 +72,7 @@ void Extractor::ExtractFiles(
 	onAllFilesExtracted();
 }
 
-void TraverseTreeItem(std::vector<Models::FileExtractItem>& list, const MGFTreeItem* item)
+void TraverseTreeItem(std::vector<Models::FileExtractItem>& list, const MGF::File* item)
 {
 	if (item->IsFile())
 	{
@@ -96,7 +95,7 @@ std::vector<Models::FileExtractItem> Extractor::ToList(const QModelIndexList& se
 		if (item.column() != 0)
 			continue;
 
-		auto mgfitem = static_cast<MGFTreeItem*>(item.internalPointer());
+		auto mgfitem = static_cast<MGF::File*>(item.internalPointer());
 
 		TraverseTreeItem(result, mgfitem);
 	}

@@ -41,7 +41,7 @@ MGModelViewerWidget::~MGModelViewerWidget()
     delete ui;
 }
 
-void MGModelViewerWidget::LoadMGFItem(const MGFTreeItem *item)
+void MGModelViewerWidget::LoadMGFItem(const MGF::File *item)
 {
     AMGFResourceViewer::LoadMGFItem(item);
 

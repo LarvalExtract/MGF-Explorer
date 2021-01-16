@@ -23,7 +23,7 @@ public:
     explicit MGFTextureViewerWidget(QWidget *parent = nullptr);
     ~MGFTextureViewerWidget();
 
-    void LoadMGFItem(const MGFTreeItem *item);
+    void LoadMGFItem(const MGF::File *item);
 
 private:
     Ui::MGFTextureViewerWidget *ui;

@@ -70,7 +70,7 @@ MGFTextureViewerWidget::~MGFTextureViewerWidget()
     delete ui;
 }
 
-void MGFTextureViewerWidget::LoadMGFItem(const MGFTreeItem *item)
+void MGFTextureViewerWidget::LoadMGFItem(const MGF::File *item)
 {
     AMGFResourceViewer::LoadMGFItem(item);
 

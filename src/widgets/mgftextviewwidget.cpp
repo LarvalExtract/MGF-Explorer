@@ -1,7 +1,7 @@
 #include "mgftextviewwidget.h"
 #include "ui_mgftextviewwidget.h"
 
-#include "mgf/mgfarchive.h"
+#include "mgf/Archive.h"
 
 MGFTextViewWidget::MGFTextViewWidget(QWidget *parent) :
     QWidget(parent),
@@ -17,7 +17,7 @@ MGFTextViewWidget::~MGFTextViewWidget()
     delete ui;
 }
 
-void MGFTextViewWidget::LoadMGFItem(const MGFTreeItem *item)
+void MGFTextViewWidget::LoadMGFItem(const MGF::File *item)
 {
     AMGFResourceViewer::LoadMGFItem(item);
 

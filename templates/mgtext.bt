@@ -1,0 +1,46 @@
+//------------------------------------------------
+//--- 010 Editor v11.0.1 Binary Template
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+struct MGTEXT {
+    struct MGI {
+        uint32  unk1;
+        char    MGIc[4];
+        uint32  length;
+        uint32  unk2;
+        char    padding[16];
+    } mgChunkHeader;
+    
+    struct TEXT_HEADER {
+        char    TEXT[4];
+        char    padding[4];
+        uint32  length;
+        uint32  unk1;
+        char    version[4];
+        uint32  unk2;
+        float   unk3;
+        char    data[4];
+        uint32  stringChunkLength;
+        uint32  numStrings;
+        uint32  firstID;
+        uint32  lastID;
+        uint32  unk4;
+    } header;
+
+    struct STRING_ENTRY {
+        uint32  id;
+        uint32  stringOffset;
+    } stringEntries[header.numStrings];
+
+    struct STRING {
+        wchar_t str[];
+    } strings[header.numStrings] <optimize=false>;
+} file;

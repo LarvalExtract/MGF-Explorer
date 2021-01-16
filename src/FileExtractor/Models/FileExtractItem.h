@@ -1,6 +1,6 @@
 #pragma once
 
-#include "mgf/mgftreeitem.h"
+#include "mgf/File.h"
 
 namespace FileExtractor { namespace Models {
 	
@@ -14,7 +14,7 @@ namespace FileExtractor { namespace Models {
 
 	struct FileExtractItem
 	{
-		const MGFTreeItem& mgfItem;
+		const MGF::File& mgfItem;
 		FileExtractStatus status;
 	};
 

@@ -12,7 +12,7 @@
 #include <OgreTechnique.h>
 #include <OgrePass.h>
 
-MGNode::MGNode(const MGFTreeItem& nodeFile, Ogre::SceneManager* sceneMgr) :
+MGNode::MGNode(const MGF::File& nodeFile, Ogre::SceneManager* sceneMgr) :
     m_SourceFile(nodeFile),
     m_Root(sceneMgr->createSceneNode())
 {  
@@ -26,7 +26,7 @@ MGNode::MGNode(const MGFTreeItem& nodeFile, Ogre::SceneManager* sceneMgr) :
     m_NodeTreeModel.RootNode = m_Root;
 }
 
-void MGNode::LoadScene(const MGFTreeItem &mgnodeFile)
+void MGNode::LoadScene(const MGF::File &mgnodeFile)
 {
     std::string buf;
     mgnodeFile.LoadBuffer(buf);
@@ -48,7 +48,7 @@ void MGNode::LoadScene(const MGFTreeItem &mgnodeFile)
     CreateSceneNode(m_Root, ParseNodeSection);
 }
 
-void MGNode::LoadMGModel(const MGFTreeItem &mgmodelFile)
+void MGNode::LoadMGModel(const MGF::File &mgmodelFile)
 {
     std::string buf;
     mgmodelFile.LoadBuffer(buf);

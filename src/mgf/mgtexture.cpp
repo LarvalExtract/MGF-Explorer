@@ -1,9 +1,9 @@
 #include "mgtexture.h"
-#include "mgfarchive.h"
+#include "Archive.h"
 
 #include <OgreTextureManager.h>
 
-MGTexture::MGTexture(MGFTreeItem &item, bool loadHeaderOnly) :
+MGTexture::MGTexture(MGF::File &item, bool loadHeaderOnly) :
     m_TreeItem(item)
 {
     LoadHeader();
@@ -14,8 +14,8 @@ MGTexture::MGTexture(MGFTreeItem &item, bool loadHeaderOnly) :
 
 void MGTexture::LoadHeader()
 {
-    std::vector<char> header;
-    m_TreeItem.Read(header, 0, 149);
+    std::vector<char> header(149);
+    m_TreeItem.Read(header.data(), 0, header.size());
 
     const int version_offset = 56;
     const int flags_offset = 65;
@@ -104,8 +104,8 @@ void MGTexture::LoadTextureData()
         size_t actualWidth = (m_Width % 16 == 0) ? m_Width : m_Width + (16 - (m_Width % 16));
         auto size = Ogre::Image::calculateSize(m_Mips - 1, m_Frames, actualWidth, m_Height, m_Depth, pf);
 
-        std::vector<char> pixelData;
-        m_TreeItem.Read(pixelData, m_Version == 4 ? 149 : 125, size); // add 16??
+        std::vector<char> pixelData(size);
+        m_TreeItem.Read(pixelData.data(), m_Version == 4 ? 149 : 125, size); // add 16??
 
         Ogre::DataStreamPtr stream;
         stream.reset(new Ogre::MemoryDataStream(pixelData.data(), pixelData.size()));

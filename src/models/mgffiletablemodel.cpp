@@ -1,5 +1,5 @@
 #include "mgffiletablemodel.h"
-#include "mgf/mgftreeitem.h"
+#include "mgf/File.h"
 
 enum class MGFFileTableModelColumn
 {
@@ -40,7 +40,7 @@ QVariant MGFFileTableModel::data(const QModelIndex &index, int role) const
     if (role != Qt::DisplayRole)
         return QVariant();
 
-    const MGFTreeItem& item = m_FileListReference[index.row()];
+    const MGF::File& item = m_FileListReference[index.row()];
     switch(static_cast<MGFFileTableModelColumn>(index.column()))
     {
     case MGFFileTableModelColumn::Index:     return item.Index();

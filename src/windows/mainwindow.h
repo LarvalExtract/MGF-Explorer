@@ -58,7 +58,7 @@ private:
 private:
     void InitialiseOgre();   
     void LaunchFileExtractDialog();
-    void UpdateStatusBar(const MGFTreeItem* selectedItem);
+    void UpdateStatusBar(const MGF::File* selectedItem);
     void AllTabsClosed();
 };
 

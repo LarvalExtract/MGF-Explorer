@@ -1,7 +1,7 @@
 #include "FileExtractorDialog.h"
 #include "ui_FileExtractorDialog.h"
 
-#include "mgf/mgfarchive.h"
+#include "mgf/Archive.h"
 
 #include "Extractor.h"
 
@@ -37,7 +37,7 @@ FileExtractorDialog::~FileExtractorDialog()
 	delete ui;
 }
 
-void FileExtractorDialog::SetSelection(const QModelIndexList& selection, const MGFArchive& archive)
+void FileExtractorDialog::SetSelection(const QModelIndexList& selection, const MGF::Archive& archive)
 {
 	FileExtractList = std::move(Extractor::ToList(selection));
 

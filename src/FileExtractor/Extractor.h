@@ -12,7 +12,7 @@ namespace FileExtractor {
 
 	struct ExtractRequest
 	{
-		const MGFTreeItem& File;
+		const MGF::File& File;
 		const std::filesystem::path& Destination;
 
 	};

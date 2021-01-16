@@ -157,7 +157,7 @@ void MainWindow::InitialiseOgre()
     m_OgreRoot->initialise(false);
 }
 
-void MainWindow::UpdateStatusBar(const MGFTreeItem* selectedItem)
+void MainWindow::UpdateStatusBar(const MGF::File* selectedItem)
 {
     const auto& mgf = m_pCurrentWorkspace->MGFFile();
 

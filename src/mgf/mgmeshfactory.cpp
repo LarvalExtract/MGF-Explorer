@@ -19,7 +19,7 @@ static std::unordered_map<std::string_view, Ogre::RenderOperation::OperationType
     { "INDEXEDSTRIP",   Ogre::RenderOperation::OT_TRIANGLE_STRIP}
 };
 
-Ogre::MeshPtr MGMeshFactory::Create(const MGMeshDef &def, const MGFTreeItem& sourceFile)
+Ogre::MeshPtr MGMeshFactory::Create(const MGMeshDef &def, const MGF::File& sourceFile)
 {
     QString vbPath, ibPath;
     if (def.bUsesMGModel)
@@ -96,7 +96,7 @@ Ogre::MeshPtr MGMeshFactory::Create(const MGMeshDef &def, const MGFTreeItem& sou
     return mesh;
 }
 
-MGMeshDef MGMeshFactory::CreateMeshDefinition(const MGFTreeItem &meshFile)
+MGMeshDef MGMeshFactory::CreateMeshDefinition(const MGF::File &meshFile)
 {
     std::string buf;
     meshFile.LoadBuffer(buf);
@@ -128,7 +128,7 @@ MGMeshDef MGMeshFactory::CreateMeshDefinition(const pugi::xml_node &meshxml)
     return meshDef;
 }
 
-Ogre::VertexData *MGMeshFactory::LoadVertexBuffer(Ogre::Mesh& mesh, const MGFTreeItem &vertFile, const MGMeshFactory::MGVertexBufferOffsets &def, MGMeshDef& meshDef)
+Ogre::VertexData *MGMeshFactory::LoadVertexBuffer(Ogre::Mesh& mesh, const MGF::File &vertFile, const MGMeshFactory::MGVertexBufferOffsets &def, MGMeshDef& meshDef)
 {
     Ogre::VertexData* data = new Ogre::VertexData;
 
@@ -174,7 +174,7 @@ Ogre::VertexData *MGMeshFactory::LoadVertexBuffer(Ogre::Mesh& mesh, const MGFTre
     return data;
 }
 
-Ogre::IndexData *MGMeshFactory::LoadIndexBuffer(const MGFTreeItem &indicesFile, const MGMeshFactory::MGIndexBufferOffsets &def)
+Ogre::IndexData *MGMeshFactory::LoadIndexBuffer(const MGF::File &indicesFile, const MGMeshFactory::MGIndexBufferOffsets &def)
 {
     Ogre::IndexData* data = new Ogre::IndexData;
 
