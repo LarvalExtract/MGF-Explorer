@@ -1,11 +1,8 @@
 #ifndef STRINGTABLEVIEWERWIDGET_H
 #define STRINGTABLEVIEWERWIDGET_H
 
+#include "AssetViewers/AssetViewerWidgetBase.h"
 #include "Models/StringTableModel.h"
-
-#include "AssetViewers/IAssetViewer.h"
-
-#include <QWidget>
 
 namespace Ui {
 class StringTableViewerWidget;
@@ -13,7 +10,7 @@ class StringTableViewerWidget;
 
 namespace StringTableViewer {
 
-    class StringTableViewerWidget : public QWidget, public IAssetViewer
+    class StringTableViewerWidget : public AssetViewerWidgetBase
     {
         Q_OBJECT
 
@@ -21,7 +18,7 @@ namespace StringTableViewer {
         explicit StringTableViewerWidget(QWidget* parent = nullptr);
         ~StringTableViewerWidget();
 
-        void LoadAsset(MGF::AssetPtr) override;
+        void LoadAsset(MGF::Asset::AssetPtr asset) override;
 
     private:
         Ui::StringTableViewerWidget* ui;

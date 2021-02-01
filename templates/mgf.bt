@@ -33,8 +33,8 @@ struct MGF_FILE {
         uint64 guid;
         uint32 fileLength;
         uint32 fileLength2;
-        uint32 fileOffset;
         time_t timestamp;
+        uint32 fileOffset;
         char   padding[4];
     } records[header.fileRecordCount] <bgcolor=cBlue>;
 

@@ -3,9 +3,28 @@ import argparse
 import subprocess
 import glob
 import os.path
+import datetime
 
 MOC_PATH = os.path.join(os.path.expandvars('%QT_DIR%'), '5.14.2', 'msvc2017_64', 'bin', 'moc.exe')
 UIC_PATH = os.path.join(os.path.expandvars('%QT_DIR%'), '5.14.2', 'msvc2017_64', 'bin', 'uic.exe')
+
+
+def compile_uic(vcxproj):
+    # list UI files
+    ui_forms = [node.attrib['Include'] for node in vcxproj.findall('./ItemGroup/CustomBuild')]
+
+    ui_headers = {}
+    for node in vcxproj.findall('./ItemGroup/ClInclude'):
+        if node.attrib['Include'].find('ui_') != -1:
+            ui_headers[node.attrib['Include']] = node.attrib['ModifiedDate']
+
+    for form in ui_forms:
+        form_folder = os.path.dirname(form)
+        output_path = str(os.path.normpath(form_folder, f"ui_{form.split('.')[0]}.h"))
+        if output_path not in ui_headers:
+            continue
+        modified_time_disk = datetime.datetime(os.path.getmtime(output_path))
+        modified_time_xml = datetime.datetime(ui_headers[output_path])
 
 
 def main(vcxproject_path):
@@ -74,7 +93,7 @@ def main(vcxproject_path):
         headers_node.remove(header)
 
     # run uic on all .ui files and add resulting headers to project
-    ui_files = [n.attrib['Include'] for n in root.findall('./ItemGroup/CustomBuild')]
+    ui_files = [n.attrib['Include'] for n in root.findall('./ItemGroup/None')]
     for ui in ui_files:
         folder = os.path.dirname(ui)
         filename = os.path.basename(ui)
@@ -88,7 +107,7 @@ def main(vcxproject_path):
         if result.returncode != 0:
             print(result.stderr.decode('utf-8'))
             exit(1)
-        headers_node.append(xml.Element('CustomBuild', attrib={'Include': os.path.join(folder, ui_header_filename)}))
+        headers_node.append(xml.Element('ClInclude', attrib={'Include': os.path.join(folder, ui_header_filename)}))
         print(f"uic: successfully compiled {ui_header_path} ({' '.join(uic_args)})")
 
     # overwrite project file

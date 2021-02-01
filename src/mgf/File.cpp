@@ -4,19 +4,19 @@
 #include <sstream>
 #include <functional>
 
-const std::unordered_map<std::string, MGFFileType> MGF::File::MapExtensionFileType = {
-    { ".tif",        MGFFileType::Texture },
-    { ".mgmodel",    MGFFileType::Model },
-    { ".mgtext",     MGFFileType::Strings },
-    { ".txt",        MGFFileType::Text },
-    { ".ini",        MGFFileType::Text },
-    { ".cfg",        MGFFileType::Text },
-    { ".mesh",       MGFFileType::Text },    // temp
-    { ".road",       MGFFileType::Text },    // temp
-    { ".node",       MGFFileType::Node },    // temp
-    { ".mat",        MGFFileType::Text },    // temp
-    { ".mgv",        MGFFileType::Text },
-    { "",           MGFFileType::None }
+const std::unordered_map<std::string, MGF::FileType> MGF::File::MapExtensionFileType = {
+    { ".tif",        MGF::FileType::Tif },
+    { ".mgmodel",    MGF::FileType::MgModel },
+    { ".mgtext",     MGF::FileType::MgText },
+    { ".txt",        MGF::FileType::Text },
+    { ".ini",        MGF::FileType::Text },
+    { ".cfg",        MGF::FileType::Text },
+    { ".mesh",       MGF::FileType::Text },    // temp
+    { ".road",       MGF::FileType::Text },    // temp
+    { ".node",       MGF::FileType::Node },    // temp
+    { ".mat",        MGF::FileType::Text },    // temp
+    { ".mgv",        MGF::FileType::Text },
+    { "",            MGF::FileType::None }
 };
 
 using namespace MGF;

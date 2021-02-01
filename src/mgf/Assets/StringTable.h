@@ -1,6 +1,6 @@
 #pragma once
 
-#include "mgf/AssetBase.h"
+#include "AssetBase.h"
 
 #include <vector>
 

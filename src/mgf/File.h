@@ -1,6 +1,8 @@
 #ifndef MGFTREEITEM_H
 #define MGFTREEITEM_H
 
+#include "FileTypes.h"
+
 #include <QString>
 #include <QDateTime>
 #include <QHash>
@@ -8,16 +10,6 @@
 #include <vector>
 #include <filesystem>
 #include <unordered_map>
-
-enum class MGFFileType
-{
-    None,
-    Texture,
-    Model,
-    Node,
-    Strings,
-    Text
-};
 
 namespace MGF {
 
@@ -50,7 +42,7 @@ namespace MGF {
         inline const std::filesystem::path& FilePath() const { return m_FilePath; }
         inline uint64_t GUID() const { return m_GUID; }
         inline uint32_t Index() const { return m_Index; }
-        inline MGFFileType FileType() const { return m_FileType; }
+        inline FileType FileType() const { return m_FileType; }
         inline uint32_t FileOffset() const { return m_FileOffset; }
         inline uint32_t FileLength() const { return m_FileLength; }
         inline QDateTime FileDate() const { return m_FileDate; }
@@ -65,7 +57,7 @@ namespace MGF {
         // takes a relative file path and traverses the MGF file system to find the desired item
         const MGF::File* FindRelativeItem(const QString& relativePath) const;
 
-        static const char* FileTypeString(MGFFileType type);
+        static const char* FileTypeString(MGF::FileType type);
 
         void Read(char* buffer, ::uint32_t offset = 0, std::uint32_t length = INT_MAX) const;
 
@@ -75,20 +67,20 @@ namespace MGF {
         std::vector<const File*> m_ChildrenArray;
 
         std::filesystem::path m_FilePath;
-        QString     m_Name;
-        uint64_t    m_GUID;
-        uint32_t    m_Index;
-        MGFFileType m_FileType;
-        uint32_t    m_FileOffset;
-        uint32_t    m_FileLength;
-        QDateTime   m_FileDate;
-        bool        m_IsFile;
+        QString       m_Name;
+        uint64_t      m_GUID;
+        uint32_t      m_Index;
+        MGF::FileType m_FileType;
+        uint32_t      m_FileOffset;
+        uint32_t      m_FileLength;
+        QDateTime     m_FileDate;
+        bool          m_IsFile;
 
         MGF::Archive& m_MGFArchive;
         int m_TreeViewRow;
 
     private:
-        static const std::unordered_map<std::string, MGFFileType>  MapExtensionFileType;
+        static const std::unordered_map<std::string, MGF::FileType>  MapExtensionFileType;
     };
 
 }

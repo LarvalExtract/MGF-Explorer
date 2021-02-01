@@ -1,5 +1,7 @@
 #pragma once
 
+#include "MGF/Assets/StringTable.h"
+
 #include <QAbstractTableModel>
 #include <vector>
 
@@ -8,7 +10,7 @@ namespace StringTableViewer { namespace Models {
 	class StringTableModel : public QAbstractTableModel
 	{
 	public:
-		StringTableModel();
+		StringTableModel(const MGF::Asset::StringTable& stringTableAsset);
 
 		int rowCount(const QModelIndex& parent = QModelIndex()) const override;
 		int columnCount(const QModelIndex& parent = QModelIndex()) const override;
@@ -16,7 +18,7 @@ namespace StringTableViewer { namespace Models {
 		QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
 	private:
-		std::vector<std::pair<std::uint32_t, std::wstring>> Strings;
+		const MGF::Asset::StringTable& StringTableAsset;
 	};
 
 } }

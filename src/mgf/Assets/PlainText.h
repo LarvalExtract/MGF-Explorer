@@ -1,8 +1,8 @@
 #pragma once
 
-#include "mgf/AssetBase.h"
+#include "AssetBase.h"
 
-#include <string>
+#include <QString>
 
 namespace MGF {	namespace Asset {
 
@@ -11,8 +11,10 @@ namespace MGF {	namespace Asset {
 	public:
 		PlainText(const File&);
 
+		inline const QString& TextData() const { return Text; }
+
 	private:
-		std::string Text;
+		QString Text;
 	};
 
 } }

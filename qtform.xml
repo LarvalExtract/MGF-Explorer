@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ProjectSchemaDefinitions>
+    <ContentType Name="QtForm" DisplayName="Qt UI Form" ItemType="QtForm" />
+    <ItemType Name="QtForm" DisplayName="Qt UI Form" />
+    <FileExtension Name=".ui" ContentType="QtForm" />
+</ProjectSchemaDefinitions>

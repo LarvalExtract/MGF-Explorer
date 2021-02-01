@@ -1,7 +1,6 @@
 #pragma once
 
-#include "mgf/AssetBase.h"
-#include "Factories/AssetFactory.h"
+#include "MGF/Assets/AssetBase.h"
 
 #include <unordered_map>
 #include <memory>
@@ -17,5 +16,4 @@ public:
 
 private:
 	std::unordered_map<std::uint64_t, MGF::AssetPtr> Assets;
-	AssetFactory Factory;
 };

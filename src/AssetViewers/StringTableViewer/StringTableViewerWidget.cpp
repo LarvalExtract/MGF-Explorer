@@ -1,14 +1,16 @@
 #include "StringTableViewerWidget.h"
 #include "ui_StringTableViewerWidget.h"
+#include "AssetViewers/ui_AssetViewerWidgetBase.h"
 
 
 using namespace StringTableViewer;
 
 StringTableViewerWidget::StringTableViewerWidget(QWidget *parent) :
-    QWidget(parent),
+    AssetViewerWidgetBase(parent),
     ui(new Ui::StringTableViewerWidget)
 {
     ui->setupUi(this);
+    baseUi->assetViewerLayout->addWidget(this);
 }
 
 StringTableViewerWidget::~StringTableViewerWidget()
@@ -16,7 +18,7 @@ StringTableViewerWidget::~StringTableViewerWidget()
     delete ui;
 }
 
-void StringTableViewerWidget::LoadAsset(MGF::AssetPtr asset)
+void StringTableViewerWidget::LoadAsset(MGF::Asset::AssetPtr asset)
 {
-    IAssetViewer::LoadAsset(asset);
+    AssetViewerWidgetBase::LoadAsset(asset);
 }

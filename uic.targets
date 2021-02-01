@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <PropertPageSchema Include="$(MSBuildThisFileDirectory)qtform.xml" />
+    <AvailableItemName Include="QtForm">
+      <Targets>UIC</Targets>
+    </AvailableItemName>
+  </ItemGroup>
+  <Target Name="UIC" Condition="'@(QtForm)' != ''" BeforeTargets="ClCompile">
+    <Message Text="Compiling Qt forms..." />
+  </Target>
+</Project>

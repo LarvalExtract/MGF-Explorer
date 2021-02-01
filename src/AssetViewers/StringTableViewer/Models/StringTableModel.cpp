@@ -7,14 +7,15 @@ static const QVariant TABLE_HEADERS[] = {
 
 using namespace StringTableViewer::Models;
 
-StringTableModel::StringTableModel()
+StringTableModel::StringTableModel(const MGF::Asset::StringTable& stringTableAsset) :
+	StringTableAsset(stringTableAsset)
 {
 
 }
 
 int StringTableModel::rowCount(const QModelIndex& parent /*= QModelIndex()*/) const
 {
-	return Strings.size();
+	return StringTableAsset.Strings.size();
 }
 
 int StringTableModel::columnCount(const QModelIndex& parent /*= QModelIndex()*/) const

@@ -1,0 +1,53 @@
+//------------------------------------------------
+//--- 010 Editor v11.0.1 Binary Template
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+struct MGF_FILE {
+    struct MGF_HEADER {
+        char   MGF[4];
+        char   version;
+        char   unk1;
+        char   ZZ[2];
+        uint32 empty;
+        uint32 fileRecordCount;
+        uint32 fileRecordLength;
+        uint32 fileRecordOffset;
+        uint32 indexTableCount;
+        uint32 indexTableLength;
+        uint32 indexTableOffset;
+        uint32 stringsLength;
+        uint32 stringsOffset;
+        char   padding[20];
+    } header <bgcolor=cRed>;
+
+    struct MGF_FILE_RECORD {
+        uint32 unk;
+        uint32 index;
+        time_t timestamp;
+        uint64 guid;
+        uint32 length;
+        uint32 offset;
+    } records[header.fileRecordCount] <bgcolor=cBlue>;
+
+    struct MGF_DIRECTORY {
+        int32 unk1;
+        int32 parentIndex;
+        int32 folderIndex;
+        int32 unk2;
+        int32 stringOffset;
+        int32 fileIndex;
+    } directoryTable[header.indexTableCount] <bgcolor=cPurple>;
+
+    struct MGF_STRING {
+        char str[];
+    } strings[header.indexTableCount] <bgcolor=cYellow,optimize=false>;
+    
+} file;
