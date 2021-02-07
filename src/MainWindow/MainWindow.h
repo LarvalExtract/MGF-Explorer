@@ -5,7 +5,6 @@
 
 #include "utils/Contexts.h"
 #include "utils/configfile.h"
-#include "utils/events/IEventListener.h"
 
 #include "ResourceManager/ResourceManager.h"
 
@@ -22,7 +21,7 @@ namespace Ui {
 class MainWindow;
 }
 
-class MainWindow : public QMainWindow, public IEventListener
+class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
@@ -32,15 +31,11 @@ public:
 
     void OpenMGFWorkspace(const QString& mgfFilePath);
 
-    void OnNotify(EventData* data) override;
-
 private slots:
     void on_actionOpen_MGF_file_triggered();
     void on_actionClose_all_MGF_files_triggered();
     void on_tabWidget_tabCloseRequested(int index);
-    void on_tabWidget_currentChanged(int index);   
-    void on_actionFiles_triggered();
-    void on_actionTextures_triggered();
+    void on_tabWidget_currentChanged(int index);
     void on_actionAbout_triggered();
 
 private:

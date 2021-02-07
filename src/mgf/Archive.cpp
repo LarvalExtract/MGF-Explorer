@@ -22,7 +22,10 @@ MGF::Archive::Archive(const QString& mgfFilePath) :
     m_FileStream.read(reinterpret_cast<char*>(&mgfHeader), sizeof(mgfHeader));
 
     // check for valid MGF file
-    if (std::strcmp(mgfHeader.signature, "mgf ") != 0)
+    if (!(mgfHeader.signature[0] == 'm' &&
+		  mgfHeader.signature[1] == 'g' &&
+		  mgfHeader.signature[2] == 'f' &&
+		  mgfHeader.signature[3] == ' '))
     {
         throw std::runtime_error(mgfFilePath.toStdString() + " is either compressed or not a valid MechAssault 1 or MechAssault 2: Lone Wolf MGF file");
     }  
@@ -35,15 +38,17 @@ MGF::Archive::Archive(const QString& mgfFilePath) :
 
     if (ArchiveVersion == Version::MechAssault2LW)
     {
+		fileRecordsMa2.resize(mgfHeader.fileRecordCount);
         m_FileStream.read(reinterpret_cast<char*>(fileRecordsMa2.data()), mgfHeader.fileRecordLength);
     }
     else
     {
+		fileRecordsMa1.resize(mgfHeader.fileRecordCount);
         m_FileStream.read(reinterpret_cast<char*>(fileRecordsMa1.data()), mgfHeader.fileRecordLength);
     }
 
 	std::vector<MGF_DIRECTORY> directoryRows(mgfHeader.indexTableCount);
-	m_FileStream.read(reinterpret_cast<char*>(directoryRows.data(), mgfHeader.indexTableLength));
+	m_FileStream.read(reinterpret_cast<char*>(directoryRows.data()), mgfHeader.indexTableLength);
 
     std::vector<char> stringBuffer(mgfHeader.stringsLength);
     m_FileStream.read(stringBuffer.data(), mgfHeader.stringsLength);

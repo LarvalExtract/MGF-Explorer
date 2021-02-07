@@ -12,7 +12,7 @@ namespace ArchiveViewer { namespace Models {
 	class ArchiveFileTreeModel : public QAbstractItemModel
 	{
 	public:
-		ArchiveFileTreeModel(const std::vector<MGF::File>& mgfItems) : m_FileListReference(mgfItems) {}
+		ArchiveFileTreeModel(const std::vector<MGF::File>& mgfItems) : FileListReference(mgfItems) {}
 
 		QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
 		QModelIndex index(int row, int column, const QModelIndex& parent) const override;
@@ -22,7 +22,7 @@ namespace ArchiveViewer { namespace Models {
 		QVariant data(const QModelIndex& index, int role) const override;
 
 	private:
-		const std::vector<MGF::File>& m_FileListReference;
+		const std::vector<MGF::File>& FileListReference;
 	};
 
 } }

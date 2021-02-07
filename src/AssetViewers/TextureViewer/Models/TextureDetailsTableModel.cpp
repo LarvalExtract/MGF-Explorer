@@ -16,7 +16,7 @@ static const QVariant MA2_TABLE_HEADERS[] = {
 	"Size",
 	"Depth",
 	"Frames"
-}
+};
 
 using namespace TextureViewer::Models;
 
@@ -27,7 +27,7 @@ int TextureDetailsTable::rowCount(const QModelIndex& parent /*= QModelIndex()*/)
 
 int TextureDetailsTable::columnCount(const QModelIndex& parent /*= QModelIndex()*/) const
 {
-	if (TextureAsset.Version() == MGF::Version::MechAssault2LW)
+	if (TextureAsset->GetVersion() == MGF::Version::MechAssault2LW)
 	{
 		return sizeof(MA2_TABLE_HEADERS) / sizeof(QVariant);
 	}
@@ -51,13 +51,13 @@ QVariant TextureDetailsTable::data(const QModelIndex& index, int role /*= Qt::Di
 
 	switch (index.column())
 	{
-	case 0: return TextureAsset.Width;
-	case 1: return TextureAsset.Height;
-	case 2: return QString::number(TextureAsset.Flags, 16);
-	case 3: return TextureAsset.Mips;
-	case 4: return TextureAsset.Size;
-	case 5: return TextureAsset.Depth;
-	case 6: return TextureAsset.Frames;
+	case 0: return TextureAsset->GetWidth();
+	case 1: return TextureAsset->GetHeight();
+	case 2: return QString::number(TextureAsset->GetFlags(), 16);
+	case 3: return TextureAsset->GetMips();
+	case 4: return TextureAsset->GetSize();
+	case 5: return TextureAsset->GetDepth();
+	case 6: return TextureAsset->GetFrames();
 	}
 }
 
@@ -72,7 +72,7 @@ QVariant TextureDetailsTable::headerData(int section, Qt::Orientation orientatio
 		return QVariant();
 	}
 
-	if (TextureAsset.Version() == MGF::Version::MechAssault2LW)
+	if (TextureAsset->GetVersion() == MGF::Version::MechAssault2LW)
 	{
 		return MA2_TABLE_HEADERS[section];
 	}
@@ -80,5 +80,12 @@ QVariant TextureDetailsTable::headerData(int section, Qt::Orientation orientatio
 	{
 		return MA1_TABLE_HEADERS[section];
 	}
+}
+
+void TextureDetailsTable::SetTextureReference(const MGF::Asset::Texture* textureAsset)
+{
+	TextureAsset = textureAsset;
+
+	emit dataChanged(createIndex(0, 0), createIndex(0, sizeof(MA2_TABLE_HEADERS)));
 }
 

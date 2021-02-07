@@ -12,7 +12,7 @@ ArchiveViewerWidget::ArchiveViewerWidget(const QString& mgfFilePath, QWidget *pa
     QWidget(parent),
     ui(new Ui::ArchiveViewerWidget),
     MgfArchive(mgfFilePath),
-    FileTreeModel(MgfArchive)
+    FileTreeModel(MgfArchive.GetFileList())
 {
     ui->setupUi(this); 
 
@@ -76,14 +76,14 @@ void ArchiveViewerWidget::on_treeView_selectionChanged(const QModelIndex &sel, c
         case MGF::Asset::EAssetType::Model:
             pActiveAssetViewer = &ModelViewer;
             break;
-
-        default:
-            pActiveAssetViewer = nullptr;
-            break;
         }
 
         pActiveAssetViewer->LoadAsset(asset);
         DisplayWidget(pActiveAssetViewer);
+    }
+    else
+    {
+        DisplayWidget(nullptr);
     }
 }
 
@@ -136,7 +136,6 @@ void ArchiveViewerWidget::PrintSelectedFileDetails(const MGF::File& selectedFile
         return;
     }
 
-   
     ui->fileDetails->show();
 }
 

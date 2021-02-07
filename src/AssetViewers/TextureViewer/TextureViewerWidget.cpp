@@ -46,12 +46,12 @@ void TextureViewerWidget::LoadAsset(MGF::Asset::AssetPtr asset)
 {
     AssetViewerWidgetBase::LoadAsset(asset);
 
-    const auto textureAsset = static_cast<MGF::Asset::Texture&>(*asset.get());
+    const auto textureAsset = static_cast<MGF::Asset::Texture*>(asset.get());
 
-    TextureDetailsTableModel = Models::TextureDetailsTable(textureAsset);
+    TextureDetailsTableModel.SetTextureReference(textureAsset);
 
-	m_Container->resize(textureAsset.Width(), textureAsset.Height());
-	m_TextureUnit->setTexture(textureAsset.OgreTexture);
+	m_Container->resize(textureAsset->GetWidth(), textureAsset->GetHeight());
+	m_TextureUnit->setTexture(textureAsset->GetOgreTexture());
 	m_OgreWindow.render();
 	m_Container->update();
 }

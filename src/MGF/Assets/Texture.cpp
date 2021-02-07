@@ -9,7 +9,7 @@ using namespace MGF::Asset;
 Texture::Texture(const File& file) :
 	AssetBase(file, EAssetType::Texture)
 {
-	if (file.Archive().GetArchiveVersion() == MGF::Version::MechAssault2LW)
+	if (file.GetArchiveVersion() == MGF::Version::MechAssault2LW)
 	{
 		MA2_TIF_HEADER header;
 		file.Read(reinterpret_cast<char*>(&header), 0, sizeof(header));
@@ -44,7 +44,7 @@ Texture::Texture(const File& file) :
 	stream.reset(new Ogre::MemoryDataStream(pixels.data(), pixels.size()));
 
 	Ogre::Image image;
-	image.loadRawData(stream, Width, Height, Depth, DeterminePixelFormat(), Frames, Mips - 1);
+	image.loadRawData(stream, GetWidth(), Height, Depth, DeterminePixelFormat(), Frames, Mips - 1);
 
 	auto& textureManager = Ogre::TextureManager::getSingleton();
 	OgreTexture = textureManager.loadImage(std::to_string(file.GUID()), "General", image, DetermineTextureType());

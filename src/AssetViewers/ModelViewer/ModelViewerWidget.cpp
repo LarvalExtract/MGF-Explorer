@@ -2,7 +2,7 @@
 #include "ui_ModelViewerWidget.h"
 #include "AssetViewers/ui_AssetViewerWidgetBase.h"
 
-#include "MGF/Assets/Model.h"
+#include "MGF/Assets/ModelAsset.h"
 
 static int s_Count = 0;
 
@@ -47,21 +47,24 @@ void ModelViewerWidget::LoadAsset(MGF::Asset::AssetPtr asset)
     AssetViewerWidgetBase::LoadAsset(asset);
 
 	m_SceneManager->getRootSceneNode()->removeAllChildren();
-	auto& model = static_cast<MGF::Asset::Model&>(*(asset.get()));
-	m_SceneManager->getRootSceneNode()->addChild(model.SceneNode());
+	auto& model = static_cast<MGF::Asset::ModelAsset&>(*(asset.get()));
+	m_SceneManager->getRootSceneNode()->addChild(model.GetRootNode());
 
-	ui->animTableView->setModel(model.GetAnimationTableModel());
-	ui->meshTableView->setModel(model.GetMeshTableModel());
-	ui->materialTableView->setModel(model.GetMaterialTableModel());
-	ui->nodeTreeView->setModel(model.GetNodeTreeModel());
+    MeshTableModel.SetAssetReference(&model);
+    MaterialTableModel.SetAssetReference(&model);
 
-	UpdateTabs();
+	//ui->animTableView->setModel(model.GetAnimationTableModel());
+	ui->meshTableView->setModel(&MeshTableModel);
+	ui->materialTableView->setModel(&MaterialTableModel);
+	//ui->nodeTreeView->setModel(model.GetNodeTreeModel());
+
+	//UpdateTabs();
 
 	ui->nodeTreeView->setColumnWidth(0, 400);
 
 	// Reset camera position
-	model.SceneNode()->_update(true, true);
-	const auto& aabb = model.SceneNode()->_getWorldAABB();
+	model.GetRootNode()->_update(true, true);
+	const auto& aabb = model.GetRootNode()->_getWorldAABB();
 
 	ResetCamera(aabb);
 }

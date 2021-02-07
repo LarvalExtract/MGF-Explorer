@@ -10,7 +10,7 @@ namespace StringTableViewer { namespace Models {
 	class StringTableModel : public QAbstractTableModel
 	{
 	public:
-		StringTableModel(const MGF::Asset::StringTable& stringTableAsset);
+		void SetAssetReference(const MGF::Asset::StringTable* stringTableAsset);
 
 		int rowCount(const QModelIndex& parent = QModelIndex()) const override;
 		int columnCount(const QModelIndex& parent = QModelIndex()) const override;
@@ -18,7 +18,7 @@ namespace StringTableViewer { namespace Models {
 		QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
 	private:
-		const MGF::Asset::StringTable& StringTableAsset;
+		const MGF::Asset::StringTable* StringTableAsset;
 	};
 
 } }

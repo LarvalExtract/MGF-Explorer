@@ -4,19 +4,19 @@
 #include <sstream>
 #include <functional>
 
-const std::unordered_map<std::string, MGF::FileType> MGF::File::MapExtensionFileType = {
-    { ".tif",        MGF::FileType::Tif },
-    { ".mgmodel",    MGF::FileType::MgModel },
-    { ".mgtext",     MGF::FileType::MgText },
-    { ".txt",        MGF::FileType::Text },
-    { ".ini",        MGF::FileType::Text },
-    { ".cfg",        MGF::FileType::Text },
-    { ".mesh",       MGF::FileType::Text },    // temp
-    { ".road",       MGF::FileType::Text },    // temp
-    { ".node",       MGF::FileType::Node },    // temp
-    { ".mat",        MGF::FileType::Text },    // temp
-    { ".mgv",        MGF::FileType::Text },
-    { "",            MGF::FileType::None }
+const std::unordered_map<std::string, MGF::EFileType> MGF::File::MapExtensionFileType = {
+    { ".tif",        MGF::EFileType::Tif },
+    { ".mgmodel",    MGF::EFileType::MgModel },
+    { ".mgtext",     MGF::EFileType::MgText },
+    { ".txt",        MGF::EFileType::Text },
+    { ".ini",        MGF::EFileType::Text },
+    { ".cfg",        MGF::EFileType::Text },
+    { ".mesh",       MGF::EFileType::Text },    // temp
+    { ".road",       MGF::EFileType::Text },    // temp
+    { ".node",       MGF::EFileType::Node },    // temp
+    { ".mat",        MGF::EFileType::Text },    // temp
+    { ".mgv",        MGF::EFileType::Text },
+    { "",            MGF::EFileType::Unassigned }
 };
 
 using namespace MGF;
@@ -34,7 +34,7 @@ File::File(MGF::File* parent,
     m_Name(name),
     m_GUID(id),
     m_Index(index),
-    m_FileType(MGFFileType::None),
+    m_FileType(EFileType::Unassigned),
     m_FileOffset(offset),
     m_FileLength(length),
     //m_FileDate(timestamp),
@@ -91,6 +91,11 @@ const MGF::File *MGF::File::GetNamedSibling(const QString &name) const
     return m_Parent->GetNamedChild(name);
 }
 
+const MGF::Version File::GetArchiveVersion() const
+{
+    return m_MGFArchive.GetArchiveVersion();
+}
+
 void MGF::File::LoadBuffer(std::string &out, unsigned int offset, int length) const
 {
     if (length < 0)
@@ -137,22 +142,6 @@ const MGF::File *MGF::File::FindRelativeItem(const QString &relativePath) const
     }
 
     return result;
-}
-
-const char* MGF::File::FileTypeString(MGFFileType type)
-{
-    static const char* strings[6] = {
-        "",
-        "Texture",
-        "Model",
-        "Node",
-        "Strings",
-        "Text"
-    };
-
-    int index = static_cast<int>(type);
-
-    return strings[index];
 }
 
 void MGF::File::Read(char* buffer, std::uint32_t offset, std::uint32_t length) const

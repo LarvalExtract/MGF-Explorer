@@ -81,7 +81,7 @@ void MainWindow::on_actionClose_all_MGF_files_triggered()
 
 void MainWindow::on_tabWidget_tabCloseRequested(int index)
 {
-    auto ws = static_cast<ArchiveViewerWidget*>(ui->tabWidget->widget(index));
+    auto ws = static_cast<ArchiveViewer::ArchiveViewerWidget*>(ui->tabWidget->widget(index));
     auto str = ws->MGFFile().GetFilePath();
 
     ui->tabWidget->removeTab(index);
@@ -109,8 +109,6 @@ void MainWindow::OpenMGFWorkspace(const QString &mgfFilePath)
         auto ws = &(*ws_it.first).second;
         int newTabIndex = ui->tabWidget->addTab(ws,ws->MGFFile().GetFileName());
 
-        ws->AddListener(this);
-
         ui->tabWidget->setCurrentIndex(newTabIndex);
     }
 
@@ -129,16 +127,10 @@ void MainWindow::on_tabWidget_currentChanged(int index)
         return;
     }
 
-    m_pCurrentWorkspace = static_cast<ArchiveViewerWidget*>(ui->tabWidget->currentWidget());
+    m_pCurrentWorkspace = static_cast<ArchiveViewer::ArchiveViewerWidget*>(ui->tabWidget->currentWidget());
     UpdateStatusBar(m_pCurrentWorkspace->SelectedItem());
     
     ui->actionFiles->setText(m_pCurrentWorkspace->MGFFile().GetFileName() + " file table...");
-}
-
-void MainWindow::OnNotify(EventData* data)
-{
-    auto itemEvent = static_cast<EventSelectedItemChanged*>(data);
-    UpdateStatusBar(itemEvent->MgfItem);
 }
 
 void MainWindow::InitialiseOgre()
@@ -163,7 +155,7 @@ void MainWindow::UpdateStatusBar(const MGF::File* selectedItem)
 
     const QLocale& loc = this->locale();
 
-    QString labelText = mgf.GetArchiveVersion() == 4 ? "MechAssault 2: Lone Wolf | " : "MechAssault | ";
+    QString labelText = mgf.GetArchiveVersion() == MGF::Version::MechAssault2LW ? "MechAssault 2: Lone Wolf | " : "MechAssault | ";
     labelText += mgf.GetFileName() + " | ";
     labelText += loc.formattedDataSize(mgf.GetFileSize()) + " | ";
     labelText += QString::number(mgf.GetFileCount()) + " files";
@@ -200,18 +192,6 @@ void MainWindow::AllTabsClosed()
     ui->labelCurrentItem->clear();
     ui->actionTextures->setEnabled(false);
     ui->actionFiles->setEnabled(false);
-
-    m_ResourceManager.Clear();
-}
-
-void MainWindow::on_actionFiles_triggered()
-{
-    m_pCurrentWorkspace->ShowFileTableWindow();
-}
-
-void MainWindow::on_actionTextures_triggered()
-{
-    
 }
 
 void MainWindow::on_actionAbout_triggered()

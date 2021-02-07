@@ -71,9 +71,9 @@ void MGNode::LoadMGModel(const MGF::File &mgmodelFile)
 
         if (materials.find(matName) == materials.end())
         {
-            auto& matDef = m_MaterialTableModel.MaterialDefinitions.emplace_back(MGMaterialFactory::CreateMaterialDefinition(node));
+            auto& matDef = m_MaterialTableModel.MaterialDefinitions.emplace_back(MaterialFactory::CreateMaterialDefinition(node));
 
-            auto material = MGMaterialFactory::Create(matDef, mgmodelFile);
+            auto material = MaterialFactory::Create(matDef, mgmodelFile);
 
             materials.insert(std::make_pair(matName, material));
         }
@@ -86,9 +86,9 @@ void MGNode::LoadMGModel(const MGF::File &mgmodelFile)
 
         if (meshes.find(meshName) == meshes.end())
         {
-            auto& meshDef = m_MeshTableModel.MeshDefinitions.emplace_back(MGMeshFactory::CreateMeshDefinition(node));
+            auto& meshDef = m_MeshTableModel.MeshDefinitions.emplace_back(MeshFactory::CreateMeshDefinition(node));
 
-            auto mesh = MGMeshFactory::Create(meshDef, m_SourceFile);
+            auto mesh = MeshFactory::Create(meshDef, m_SourceFile);
 
             auto material = materials.at(node.attribute("material").as_string());
             mesh->getSubMesh(0)->setMaterial(material);
@@ -160,12 +160,12 @@ void MGNode::CreateSceneNode(Ogre::SceneNode *parent, const std::function<Config
     else if (type == "3DOBJECT" || type == "SKIN")
     {
         auto meshFile = m_SourceFile.FindRelativeItem(vars["mesh"].data());
-        auto& meshDef = m_MeshTableModel.MeshDefinitions.emplace_back(MGMeshFactory::CreateMeshDefinition(*meshFile));
-        auto mesh = MGMeshFactory::Create(meshDef, *meshFile);
+        auto& meshDef = m_MeshTableModel.MeshDefinitions.emplace_back(MeshFactory::CreateMeshDefinition(*meshFile));
+        auto mesh = MeshFactory::Create(meshDef, *meshFile);
 
         auto materialFile = meshFile->FindRelativeItem(meshDef.materialPath.data());
-        auto& materialDef = m_MaterialTableModel.MaterialDefinitions.emplace_back(MGMaterialFactory::CreateMaterialDefinition(*materialFile));
-        auto material = MGMaterialFactory::Create(materialDef, *materialFile);
+        auto& materialDef = m_MaterialTableModel.MaterialDefinitions.emplace_back(MaterialFactory::CreateMaterialDefinition(*materialFile));
+        auto material = MaterialFactory::Create(materialDef, *materialFile);
 
         mesh->getSubMesh(0)->setMaterial(material);
 

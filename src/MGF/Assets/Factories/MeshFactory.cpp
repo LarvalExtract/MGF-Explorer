@@ -1,5 +1,5 @@
-#include "mgmeshfactory.h"
-#include "mgmaterialfactory.h"
+#include "MeshFactory.h"
+#include "MaterialFactory.h"
 #include "utils/configfile.h"
 
 #include <sstream>
@@ -19,7 +19,9 @@ static std::unordered_map<std::string_view, Ogre::RenderOperation::OperationType
     { "INDEXEDSTRIP",   Ogre::RenderOperation::OT_TRIANGLE_STRIP}
 };
 
-Ogre::MeshPtr MGMeshFactory::Create(const MGMeshDef &def, const MGF::File& sourceFile)
+using namespace MGF::Factories;
+
+Ogre::MeshPtr MeshFactory::Create(const MGF::Asset::Model::Mesh&def, const MGF::File& sourceFile)
 {
     QString vbPath, ibPath;
     if (def.bUsesMGModel)
@@ -87,7 +89,7 @@ Ogre::MeshPtr MGMeshFactory::Create(const MGMeshDef &def, const MGF::File& sourc
 
         submesh->operationType = def.topology;
         submesh->useSharedVertices = false;
-        submesh->vertexData = LoadVertexBuffer(*mesh, vertices, vtxOffsets, const_cast<MGMeshDef&>(def));
+        submesh->vertexData = LoadVertexBuffer(*mesh, vertices, vtxOffsets, const_cast<MGF::Asset::Model::Mesh&>(def));
         submesh->indexData = LoadIndexBuffer(indices, idxOffsets);
 
         mesh->load();
@@ -96,7 +98,7 @@ Ogre::MeshPtr MGMeshFactory::Create(const MGMeshDef &def, const MGF::File& sourc
     return mesh;
 }
 
-MGMeshDef MGMeshFactory::CreateMeshDefinition(const MGF::File &meshFile)
+MGF::Asset::Model::Mesh MeshFactory::CreateMeshDefinition(const MGF::File &meshFile)
 {
     std::string buf;
     meshFile.LoadBuffer(buf);
@@ -104,7 +106,7 @@ MGMeshDef MGMeshFactory::CreateMeshDefinition(const MGF::File &meshFile)
     ConfigFile meshCfg(buf);
     auto& vars = meshCfg["mesh"];
 
-    MGMeshDef meshDef;
+    MGF::Asset::Model::Mesh meshDef;
     meshDef.name = vars["name"];
     meshDef.topology = MapTopologies[vars["type"]];
     meshDef.verticesFilename = vars["vertices"];
@@ -115,9 +117,9 @@ MGMeshDef MGMeshFactory::CreateMeshDefinition(const MGF::File &meshFile)
     return meshDef;
 }
 
-MGMeshDef MGMeshFactory::CreateMeshDefinition(const pugi::xml_node &meshxml)
+MGF::Asset::Model::Mesh MeshFactory::CreateMeshDefinition(const pugi::xml_node &meshxml)
 {
-    MGMeshDef meshDef;
+    MGF::Asset::Model::Mesh meshDef;
     meshDef.name = meshxml.attribute("name").as_string();
     meshDef.topology = MapTopologies[meshxml.attribute("type").as_string()];
     meshDef.verticesFilename = meshxml.attribute("vertices").as_string();
@@ -128,7 +130,7 @@ MGMeshDef MGMeshFactory::CreateMeshDefinition(const pugi::xml_node &meshxml)
     return meshDef;
 }
 
-Ogre::VertexData *MGMeshFactory::LoadVertexBuffer(Ogre::Mesh& mesh, const MGF::File &vertFile, const MGMeshFactory::MGVertexBufferOffsets &def, MGMeshDef& meshDef)
+Ogre::VertexData *MeshFactory::LoadVertexBuffer(Ogre::Mesh& mesh, const MGF::File &vertFile, const MeshFactory::MGVertexBufferOffsets &def, MGF::Asset::Model::Mesh& meshDef)
 {
     Ogre::VertexData* data = new Ogre::VertexData;
 
@@ -174,7 +176,7 @@ Ogre::VertexData *MGMeshFactory::LoadVertexBuffer(Ogre::Mesh& mesh, const MGF::F
     return data;
 }
 
-Ogre::IndexData *MGMeshFactory::LoadIndexBuffer(const MGF::File &indicesFile, const MGMeshFactory::MGIndexBufferOffsets &def)
+Ogre::IndexData *MeshFactory::LoadIndexBuffer(const MGF::File &indicesFile, const MeshFactory::MGIndexBufferOffsets &def)
 {
     Ogre::IndexData* data = new Ogre::IndexData;
 
@@ -193,7 +195,7 @@ Ogre::IndexData *MGMeshFactory::LoadIndexBuffer(const MGF::File &indicesFile, co
     return data;
 }
 
-bool MGMeshFactory::SetupVertexElements(Ogre::VertexDeclaration *decl, uint32_t flags)
+bool MeshFactory::SetupVertexElements(Ogre::VertexDeclaration *decl, uint32_t flags)
 {
     using namespace Ogre;
 

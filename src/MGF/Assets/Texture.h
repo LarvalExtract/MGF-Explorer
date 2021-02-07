@@ -1,7 +1,7 @@
 #pragma once
 
 #include "AssetBase.h"
-#include "mgf/VersionConstants.h"
+#include "MGF/VersionConstants.h"
 
 #include <OgreTexture.h>
 
@@ -12,7 +12,15 @@ namespace MGF {	namespace Asset {
 	public:
 		Texture(const File& file);
 
-		inline MGF::Version Version() const { return this->Version; }
+		inline MGF::Version GetVersion() const { return Version; }
+		inline std::uint32_t GetWidth() const { return Width; }
+		inline std::uint32_t GetHeight() const { return Height; }
+		inline std::uint32_t GetDepth() const { return Depth; }
+		inline std::uint32_t GetFrames() const { return Frames; }
+		inline std::uint32_t GetMips() const { return Mips; }
+		inline std::uint32_t GetSize() const { return Size; }
+		inline std::uint32_t GetFlags() const { return Flags; }
+		Ogre::TexturePtr GetOgreTexture() const { return OgreTexture; }
 
 	private:
 		MGF::Version Version;

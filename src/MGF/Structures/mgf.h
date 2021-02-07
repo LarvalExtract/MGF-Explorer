@@ -23,7 +23,7 @@ struct MGF_HEADER {
 struct MGF_FILE_RECORD_MA1 {
 	uint32_t unk1;
 	uint32_t index;
-	time_t   timestamp;
+	uint32_t timestamp;
 	uint64_t guid;
 	uint32_t fileLength;
 	uint32_t fileOffset;
@@ -34,7 +34,7 @@ struct MGF_FILE_RECORD_MA2 {
 	uint64_t guid;
 	uint32_t fileLength;
 	uint32_t fileLength2;
-	time_t   timestamp;
+	uint32_t timestamp;
 	uint32_t fileOffset;
 	char     padding[4];
 };

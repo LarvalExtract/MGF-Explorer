@@ -15,15 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\AssetViewers\ModelViewer\Models\MaterialTableModel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\AssetViewers\ModelViewer\Models\MeshTableModel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\AssetViewers\ModelViewer\Models\NodeTreeModel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\AssetViewers\PlainTextViewer\moc_PlainTextViewerWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -37,9 +28,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\AssetViewers\StringTableViewer\StringTableViewerWidget.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\AssetViewers\IAssetViewer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\FileExtractor\Models\FileExtractListModel.cpp">
@@ -78,33 +66,6 @@
     <ClCompile Include="src\mgf\File.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\mgf\mgmaterialfactory.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\mgf\mgmeshfactory.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\mgf\mgnode.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\mgf\mgtexture.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\models\MGFAnimationTableModel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\models\mgffiletablemodel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\models\MGFMaterialTableModel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\models\MGFMeshTableModel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\models\MGFNodeTreeModel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\ResourceManager\ResourceManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -135,12 +96,6 @@
     <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\mgfresourcemanager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\AssetViewers\ModelViewer\ModelViewerWidget.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\AssetViewers\TextureViewer\TextureViewerWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -159,13 +114,7 @@
     <ClCompile Include="src\ArchiveViewer\Models\ArchiveFileTreeModel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\MGF\Assets\Model.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\ArchiveViewer\moc_ArchiveViewerWidget.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\AssetViewers\ModelViewer\moc_ModelViewerWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\MainWindow\moc_mainwindow.cpp">
@@ -183,17 +132,35 @@
     <ClCompile Include="src\ResourceManager\AssetFactory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\mgf\Assets\Factories\MeshFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\mgf\Assets\Factories\MaterialFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MGF\Assets\ModelAsset.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AssetViewers\ModelViewer\Models\MaterialTableModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AssetViewers\ModelViewer\Models\MeshTableModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AssetViewers\ModelViewer\Models\NodeTreeModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AssetViewers\ModelViewer\moc_ModelViewerWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AssetViewers\ModelViewer\ModelViewerWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\pugixml-1.10\src\pugixml.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\AssetViewers\ModelViewer\Models\MaterialTableModel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\AssetViewers\ModelViewer\Models\MeshTableModel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\AssetViewers\ModelViewer\Models\NodeTreeModel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\AssetViewers\PlainTextViewer\PlainTextViewerWidget.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -207,9 +174,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\AssetViewers\StringTableViewer\ui_StringTableViewerWidget.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\AssetViewers\IAssetViewer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\FileExtractor\Models\FileExtractItem.h">
@@ -254,33 +218,6 @@
     <ClInclude Include="src\mgf\File.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\mgf\mgmaterialfactory.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\mgf\mgmeshfactory.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\mgf\mgnode.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\mgf\mgtexture.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\models\MGFAnimationTableModel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\models\mgffiletablemodel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\models\MGFMaterialTableModel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\models\MGFMeshTableModel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\models\MGFNodeTreeModel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\ResourceManager\ResourceManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -314,18 +251,6 @@
     <ClInclude Include="src\windows\ogrewindow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\mgfresourcemanager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ui_windowfiletable.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\AssetViewers\ModelViewer\ModelViewerWidget.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\AssetViewers\ModelViewer\ui_ModelViewerWidget.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\AssetViewers\TextureViewer\TextureViewerWidget.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -345,12 +270,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\ArchiveViewer\Models\ArchiveFileTreeModel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\MGF\FileTypes.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\MGF\Assets\Model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\MGF\Assets\EAssetTypes.h">
@@ -389,12 +308,55 @@
     <ClInclude Include="src\ResourceManager\AssetFactory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\mgf\Assets\Factories\MeshFactory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mgf\Assets\Factories\MaterialFactory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mgf\Assets\Model\Animation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mgf\Assets\Model\Material.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mgf\Assets\Model\Mesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mgf\Assets\Model\Node.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MGF\Assets\ModelAsset.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mgf\Assets\AssetMappings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MGF\EFileTypes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AssetViewers\ModelViewer\Models\MaterialTableModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AssetViewers\ModelViewer\Models\MeshTableModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AssetViewers\ModelViewer\Models\NodeTreeModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AssetViewers\ModelViewer\ModelViewerWidget.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AssetViewers\ModelViewer\ui_ModelViewerWidget.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\pugixml-1.10\src\pugixml.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\windowfiletable.ui" />
     <None Include="src\FileExtractor\FileExtractorDialog.ui" />
     <None Include="src\AssetViewers\TextureViewer\TextureViewerWidget.ui" />
-    <None Include="src\AssetViewers\ModelViewer\ModelViewerWidget.ui" />
     <None Include="src\AssetViewers\PlainTextViewer\PlainTextViewerWidget.ui" />
     <None Include="src\ArchiveViewer\ArchiveViewerWidget.ui" />
     <None Include="src\AssetViewers\StringTableViewer\StringTableViewerWidget.ui" />

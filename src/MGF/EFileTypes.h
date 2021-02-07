@@ -2,7 +2,7 @@
 
 namespace MGF {
 
-	enum class FileType
+	enum class EFileType
 	{
 		MgModel,
 		MgText,
@@ -10,7 +10,7 @@ namespace MGF {
 		Text,
 		Tif,
 
-		None
+		Unassigned
 	};
 
 }

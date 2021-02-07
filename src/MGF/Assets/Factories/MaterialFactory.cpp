@@ -1,7 +1,8 @@
-#include "mgmaterialfactory.h"
-#include "mgfresourcemanager.h"
+#include "MaterialFactory.h"
 #include "utils/configfile.h"
 #include "utils/Contexts.h"
+#include "ResourceManager/ResourceManager.h"
+#include "MGF/Assets/Texture.h"
 
 #include <Ogre.h>
 
@@ -11,18 +12,20 @@
 #include <cctype>
 #include <algorithm>
 
+using namespace MGF::Factories;
 using namespace std::placeholders;
-static std::unordered_map<std::string_view, std::function<void(Ogre::Material&, const MGMaterialDef&, const MGF::File&)>> MapFunctors = {
-    { "base",           std::bind(MGMaterialFactory::CreateBaseMaterial,    _1, _2, _3) },
-    { "complex",        std::bind(MGMaterialFactory::CreateBaseMaterial,    _1, _2, _3) },
-    { "specular_mask",  std::bind(MGMaterialFactory::CreateBaseMaterial,    _1, _2, _3) },
-    { "specular_alpha", std::bind(MGMaterialFactory::CreateBaseMaterial,    _1, _2, _3) },
-    { "detail",         std::bind(MGMaterialFactory::CreateBaseMaterial,    _1, _2, _3) },
-    { "color_shift",    std::bind(MGMaterialFactory::CreateBaseMaterial,    _1, _2, _3) },
-    { "env",            std::bind(MGMaterialFactory::CreateBaseMaterial,    _1, _2, _3) },
-    { "animated",       std::bind(MGMaterialFactory::CreateAnimatedMaterial,_1, _2, _3) },
-    { "distort",        std::bind(MGMaterialFactory::CreateDistortMaterial, _1, _2, _3) },
-    { "solid",          std::bind(MGMaterialFactory::CreateSolidMaterial,   _1, _2, _3) }
+
+static std::unordered_map<std::string_view, std::function<void(Ogre::Material&, const MGF::Asset::Model::Material&, const MGF::File&)>> MapFunctors = {
+    { "base",           std::bind(MaterialFactory::CreateBaseMaterial,    _1, _2, _3) },
+    { "complex",        std::bind(MaterialFactory::CreateBaseMaterial,    _1, _2, _3) },
+    { "specular_mask",  std::bind(MaterialFactory::CreateBaseMaterial,    _1, _2, _3) },
+    { "specular_alpha", std::bind(MaterialFactory::CreateBaseMaterial,    _1, _2, _3) },
+    { "detail",         std::bind(MaterialFactory::CreateBaseMaterial,    _1, _2, _3) },
+    { "color_shift",    std::bind(MaterialFactory::CreateBaseMaterial,    _1, _2, _3) },
+    { "env",            std::bind(MaterialFactory::CreateBaseMaterial,    _1, _2, _3) },
+    { "animated",       std::bind(MaterialFactory::CreateAnimatedMaterial,_1, _2, _3) },
+    { "distort",        std::bind(MaterialFactory::CreateDistortMaterial, _1, _2, _3) },
+    { "solid",          std::bind(MaterialFactory::CreateSolidMaterial,   _1, _2, _3) }
 };
 
 static std::unordered_map<std::string_view, Ogre::SceneBlendType> BlendTypes = {
@@ -36,7 +39,7 @@ static std::unordered_map<std::string_view, Ogre::CullingMode> CullModes = {
     { "false",      Ogre::CullingMode::CULL_CLOCKWISE }
 };
 
-Ogre::MaterialPtr MGMaterialFactory::Create(const MGMaterialDef &params, const MGF::File &sourceFile)
+Ogre::MaterialPtr MaterialFactory::Create(const MGF::Asset::Model::Material& params, const MGF::File &sourceFile)
 {
     auto& matMgr = Ogre::MaterialManager::getSingleton();
 
@@ -71,7 +74,7 @@ Ogre::MaterialPtr MGMaterialFactory::Create(const MGMaterialDef &params, const M
     return mat;
 }
 
-MGMaterialDef MGMaterialFactory::CreateMaterialDefinition(const MGF::File &materialFile)
+MGF::Asset::Model::Material MaterialFactory::CreateMaterialDefinition(const MGF::File &materialFile)
 {
     std::string buf;
     materialFile.LoadBuffer(buf);
@@ -83,7 +86,7 @@ MGMaterialDef MGMaterialFactory::CreateMaterialDefinition(const MGF::File &mater
     std::transform(vars["type"].begin(), vars["type"].end(), vars["type"].begin(), [](unsigned char c){ return std::tolower(c); });
 
     // Fetch common material parameters and remove them from the vars map
-    MGMaterialDef params;
+    MGF::Asset::Model::Material params;
     params.name         = vars["name"];                                                                 vars.erase("name");
     params.type         = vars["type"];                                                                 vars.erase("type");
     params.diffuse      = StrToColour(vars["diff_color"]);                                              vars.erase("diff_color");
@@ -103,10 +106,10 @@ MGMaterialDef MGMaterialFactory::CreateMaterialDefinition(const MGF::File &mater
 
     if (vars.find("base") != vars.end())
     {
-        MGTextureParams texture;
+        MGF::Asset::Model::TextureParams texture;
         texture.filename = vars.at("base");
         texture.tiling = vars.at("base_tiling");
-        texture.filter = Filter::TFO_BILINEAR;
+        texture.filter = Ogre::TextureFilterOptions::TFO_BILINEAR;
         texture.bMipmapping = true;
         texture.mipmap_bias = 0.5f;
 
@@ -116,9 +119,9 @@ MGMaterialDef MGMaterialFactory::CreateMaterialDefinition(const MGF::File &mater
     return params;
 }
 
-MGMaterialDef MGMaterialFactory::CreateMaterialDefinition(const pugi::xml_node &materialxml)
+MGF::Asset::Model::Material MaterialFactory::CreateMaterialDefinition(const pugi::xml_node &materialxml)
 {
-    MGMaterialDef params;
+    MGF::Asset::Model::Material params;
     params.name = materialxml.attribute("name").as_string();
     params.type = &materialxml.name()[9];
     params.diffuse = StrToColour(materialxml.attribute("diffuse").as_string());
@@ -136,12 +139,12 @@ MGMaterialDef MGMaterialFactory::CreateMaterialDefinition(const pugi::xml_node &
     // Load texture parameters from material node
     for (const auto& texture : materialxml.children())
     {
-        MGTextureParams texParams;
+        MGF::Asset::Model::TextureParams texParams;
         texParams.filename = texture.attribute("filename").as_string();
         texParams.tiling = texture.attribute("tiling").as_string();
         texParams.bMipmapping = texture.attribute("two_sided").as_bool();
         texParams.mipmap_bias = texture.attribute("mipmap_bias").as_float();
-        texParams.filter = Filter::TFO_BILINEAR;
+        texParams.filter = Ogre::TextureFilterOptions::TFO_BILINEAR;
 
         params.textures.insert(std::make_pair(texture.name(), texParams));
     }
@@ -149,9 +152,9 @@ MGMaterialDef MGMaterialFactory::CreateMaterialDefinition(const pugi::xml_node &
     return params;
 }
 
-void MGMaterialFactory::CreateBaseMaterial(Ogre::Material& mat, const MGMaterialDef& matParams, const MGF::File& mgmodelFile)
+void MaterialFactory::CreateBaseMaterial(Ogre::Material& mat, const MGF::Asset::Model::Material& material_base, const MGF::File& mgmodelFile)
 {
-    const auto& textureParams = matParams.textures.at("basetexture");
+    const auto& textureParams = material_base.textures.at("basetexture");
     auto textureItem = mgmodelFile.FindRelativeItem(textureParams.filename.data());
 
     if (textureItem != nullptr)
@@ -163,20 +166,20 @@ void MGMaterialFactory::CreateBaseMaterial(Ogre::Material& mat, const MGMaterial
     }
 }
 
-void MGMaterialFactory::CreateComplexMaterial(Ogre::Material& mat, const MGMaterialDef& material_complex_node, const MGF::File& mgmodelFile)
+void MaterialFactory::CreateComplexMaterial(Ogre::Material& mat, const MGF::Asset::Model::Material& material_complex, const MGF::File& mgmodelFile)
 {
     //CreateBaseMaterial(mat, material_complex_node, mgmodelFile);
 }
 
-void MGMaterialFactory::CreateSpecMaskMaterial(Ogre::Material& mat, const MGMaterialDef &material_specular_mask, const MGF::File &mgmodelFile)
+void MaterialFactory::CreateSpecMaskMaterial(Ogre::Material& mat, const MGF::Asset::Model::Material& material_specular_mask, const MGF::File& mgmodelFile)
 {
     //CreateBaseMaterial(material_specular_mask, mgmodelFile);
 }
 
-void MGMaterialFactory::CreateAnimatedMaterial(Ogre::Material& mat, const MGMaterialDef &params, const MGF::File &mgmodelFile)
+void MaterialFactory::CreateAnimatedMaterial(Ogre::Material& mat, const MGF::Asset::Model::Material& material_animated, const MGF::File& mgmodelFile)
 {
-    const auto& matParams = params.specialParams;
-    const auto& textureParams = params.textures.at("basetexture");
+    const auto& matParams = material_animated.specialParams;
+    const auto& textureParams = material_animated.textures.at("basetexture");
 
     auto technique = mat.getTechnique(0);
     auto pass = technique->getPass(0);
@@ -207,12 +210,12 @@ void MGMaterialFactory::CreateAnimatedMaterial(Ogre::Material& mat, const MGMate
     tu->setCurrentFrame(0);
 }
 
-void MGMaterialFactory::CreateSolidMaterial(Ogre::Material &mat, const MGMaterialDef &material_solid, const MGF::File &mgmodelFile)
+void MaterialFactory::CreateSolidMaterial(Ogre::Material& mat, const MGF::Asset::Model::Material& material_solid, const MGF::File& mgmodelFile)
 {
     mat.setLightingEnabled(false);
 }
 
-void MGMaterialFactory::CreateDistortMaterial(Ogre::Material &mat, const MGMaterialDef &material_distort, const MGF::File &sourceFile)
+void MaterialFactory::CreateDistortMaterial(Ogre::Material& mat, const MGF::Asset::Model::Material& material_distort, const MGF::File& sourceFile)
 {
     const auto& textureParams = material_distort.textures.at("distortiontexture");
     auto textureItem = sourceFile.FindRelativeItem(textureParams.filename.data());
@@ -224,11 +227,11 @@ void MGMaterialFactory::CreateDistortMaterial(Ogre::Material &mat, const MGMater
     tu->setTexture(UploadTexture(textureParams, textureItem, *tu));
 }
 
-Ogre::TexturePtr MGMaterialFactory::UploadTexture(const MGTextureParams& textureParams, const MGF::File* textureFile, Ogre::TextureUnitState& tu)
+Ogre::TexturePtr MaterialFactory::UploadTexture(const MGF::Asset::Model::TextureParams& textureParams, const MGF::File* textureFile, Ogre::TextureUnitState& tu)
 {
-    auto& rm = *Contexts::Get<MGFResourceManager>();
-
-    Ogre::TexturePtr texture = rm.GetTexture(*textureFile).m_Texture;
+    auto& rm = *Contexts::Get<ResourceManager>();
+ 
+    Ogre::TexturePtr texture = static_cast<MGF::Asset::Texture*>(rm.Get(*textureFile).get())->GetOgreTexture();
 
     tu.setTextureFiltering(textureParams.filter);
     tu.setTextureMipmapBias(textureParams.mipmap_bias);
@@ -237,7 +240,7 @@ Ogre::TexturePtr MGMaterialFactory::UploadTexture(const MGTextureParams& texture
     return texture;
 }
 
-Ogre::ColourValue MGMaterialFactory::StrToColour(std::string_view str)
+Ogre::ColourValue MaterialFactory::StrToColour(std::string_view str)
 {
     if (str.empty())
         return Ogre::ColourValue::White;

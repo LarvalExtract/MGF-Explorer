@@ -188,10 +188,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\AssetViewers\AssetViewerWidgetBase.cpp" />
-    <ClCompile Include="src\AssetViewers\IAssetViewer.cpp" />
     <ClCompile Include="src\AssetViewers\ModelViewer\Models\MaterialTableModel.cpp" />
     <ClCompile Include="src\AssetViewers\ModelViewer\Models\MeshTableModel.cpp" />
     <ClCompile Include="src\AssetViewers\ModelViewer\Models\NodeTreeModel.cpp" />
+    <ClCompile Include="src\AssetViewers\ModelViewer\ModelViewerWidget.cpp" />
     <ClCompile Include="src\AssetViewers\PlainTextViewer\PlainTextViewerWidget.cpp" />
     <ClCompile Include="src\AssetViewers\StringTableViewer\Models\StringTableModel.cpp" />
     <ClCompile Include="src\AssetViewers\StringTableViewer\StringTableViewerWidget.cpp" />
@@ -205,23 +205,15 @@
     <ClCompile Include="src\FileExtractor\States\IdleState.cpp" />
     <ClCompile Include="src\FileExtractor\States\ProgressState.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\mgfresourcemanager.cpp" />
     <ClCompile Include="src\mgf\Archive.cpp" />
-    <ClCompile Include="src\MGF\Assets\Model.cpp" />
+    <ClCompile Include="src\MGF\Assets\ModelAsset.cpp" />
     <ClCompile Include="src\mgf\Assets\PlainText.cpp" />
     <ClCompile Include="src\mgf\Assets\StringTable.cpp" />
     <ClCompile Include="src\mgf\Assets\Texture.cpp" />
     <ClCompile Include="src\mgf\File.cpp" />
-    <ClCompile Include="src\mgf\mgmaterialfactory.cpp" />
-    <ClCompile Include="src\mgf\mgmeshfactory.cpp" />
-    <ClCompile Include="src\mgf\mgnode.cpp" />
-    <ClCompile Include="src\mgf\mgtexture.cpp" />
-    <ClCompile Include="src\models\MGFAnimationTableModel.cpp" />
-    <ClCompile Include="src\models\mgffiletablemodel.cpp" />
+    <ClCompile Include="src\mgf\Assets\Factories\MaterialFactory.cpp" />
+    <ClCompile Include="src\mgf\Assets\Factories\MeshFactory.cpp" />
     <ClCompile Include="src\ArchiveViewer\Models\ArchiveFileTreeModel.cpp" />
-    <ClCompile Include="src\models\MGFMaterialTableModel.cpp" />
-    <ClCompile Include="src\models\MGFMeshTableModel.cpp" />
-    <ClCompile Include="src\models\MGFNodeTreeModel.cpp" />
     <ClCompile Include="src\ResourceManager\ResourceManager.cpp" />
     <ClCompile Include="src\utils\configfile.cpp" />
     <ClCompile Include="src\utils\Context.cpp" />
@@ -231,29 +223,25 @@
     <ClCompile Include="src\utils\states\StateGroup.cpp" />
     <ClCompile Include="src\AssetViewers\TextureViewer\TextureViewerWidget.cpp" />
     <ClCompile Include="src\ArchiveViewer\ArchiveViewerWidget.cpp" />
-    <ClCompile Include="src\AssetViewers\ModelViewer\ModelViewerWidget.cpp" />
     <ClCompile Include="src\MainWindow\MainWindow.cpp" />
     <ClCompile Include="src\windows\ogrewindow.cpp" />
-    <ClCompile Include="src\AssetViewers\moc_AssetViewerWidgetBase.cpp" />
-    <ClCompile Include="src\AssetViewers\PlainTextViewer\moc_PlainTextViewerWidget.cpp" />
-    <ClCompile Include="src\AssetViewers\StringTableViewer\moc_StringTableViewerWidget.cpp" />
-    <ClCompile Include="src\FileExtractor\moc_FileExtractorDialog.cpp" />
-    <ClCompile Include="src\AssetViewers\TextureViewer\moc_TextureViewerWidget.cpp" />
-    <ClCompile Include="src\ArchiveViewer\moc_ArchiveViewerWidget.cpp" />
-    <ClCompile Include="src\AssetViewers\ModelViewer\moc_ModelViewerWidget.cpp" />
-    <ClCompile Include="src\MainWindow\moc_MainWindow.cpp" />
-    <ClCompile Include="src\windows\moc_ogrewindow.cpp" />
-  </ItemGroup>
+    <ClCompile Include="vendor\pugixml-1.10\src\pugixml.cpp" />
+  <ClCompile Include="src\AssetViewers\moc_AssetViewerWidgetBase.cpp" /><ClCompile Include="src\AssetViewers\ModelViewer\moc_ModelViewerWidget.cpp" /><ClCompile Include="src\AssetViewers\PlainTextViewer\moc_PlainTextViewerWidget.cpp" /><ClCompile Include="src\AssetViewers\StringTableViewer\moc_StringTableViewerWidget.cpp" /><ClCompile Include="src\FileExtractor\moc_FileExtractorDialog.cpp" /><ClCompile Include="src\AssetViewers\TextureViewer\moc_TextureViewerWidget.cpp" /><ClCompile Include="src\ArchiveViewer\moc_ArchiveViewerWidget.cpp" /><ClCompile Include="src\MainWindow\moc_MainWindow.cpp" /><ClCompile Include="src\windows\moc_ogrewindow.cpp" /></ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\AssetViewers\AssetViewerWidgetBase.h" />
-    <ClInclude Include="src\AssetViewers\IAssetViewer.h" />
     <ClInclude Include="src\AssetViewers\ModelViewer\Models\MaterialTableModel.h" />
     <ClInclude Include="src\AssetViewers\ModelViewer\Models\MeshTableModel.h" />
     <ClInclude Include="src\AssetViewers\ModelViewer\Models\NodeTreeModel.h" />
+    <ClInclude Include="src\AssetViewers\ModelViewer\ModelViewerWidget.h" />
     <ClInclude Include="src\AssetViewers\PlainTextViewer\PlainTextViewerWidget.h" />
     <ClInclude Include="src\AssetViewers\StringTableViewer\Models\StringTableModel.h" />
     <ClInclude Include="src\AssetViewers\StringTableViewer\StringTableViewerWidget.h" />
     <ClInclude Include="src\AssetViewers\TextureViewer\Models\TextureDetailsTableModel.h" />
+    <ClInclude Include="src\mgf\Assets\AssetMappings.h" />
+    <ClInclude Include="src\mgf\Assets\Model\Animation.h" />
+    <ClInclude Include="src\mgf\Assets\Model\Material.h" />
+    <ClInclude Include="src\mgf\Assets\Model\Mesh.h" />
+    <ClInclude Include="src\mgf\Assets\Model\Node.h" />
     <ClInclude Include="src\ResourceManager\AssetFactory.h" />
     <ClInclude Include="src\FileExtractor\Extractor.h" />
     <ClInclude Include="src\FileExtractor\FileExtractorDialog.h" />
@@ -264,31 +252,23 @@
     <ClInclude Include="src\FileExtractor\States\FinishedState.h" />
     <ClInclude Include="src\FileExtractor\States\IdleState.h" />
     <ClInclude Include="src\FileExtractor\States\ProgressState.h" />
-    <ClInclude Include="src\mgfresourcemanager.h" />
     <ClInclude Include="src\mgf\Archive.h" />
     <ClInclude Include="src\mgf\Assets\AssetBase.h" />
     <ClInclude Include="src\MGF\Assets\EAssetTypes.h" />
-    <ClInclude Include="src\MGF\Assets\Model.h" />
+    <ClInclude Include="src\MGF\Assets\ModelAsset.h" />
     <ClInclude Include="src\mgf\Assets\PlainText.h" />
     <ClInclude Include="src\mgf\Assets\StringTable.h" />
     <ClInclude Include="src\mgf\Assets\Texture.h" />
     <ClInclude Include="src\mgf\File.h" />
-    <ClInclude Include="src\MGF\FileTypes.h" />
-    <ClInclude Include="src\mgf\mgmaterialfactory.h" />
-    <ClInclude Include="src\mgf\mgmeshfactory.h" />
-    <ClInclude Include="src\mgf\mgnode.h" />
-    <ClInclude Include="src\mgf\mgtexture.h" />
+    <ClInclude Include="src\MGF\EFileTypes.h" />
+    <ClInclude Include="src\mgf\Assets\Factories\MaterialFactory.h" />
+    <ClInclude Include="src\mgf\Assets\Factories\MeshFactory.h" />
     <ClInclude Include="src\MGF\Structures\Common.h" />
     <ClInclude Include="src\MGF\Structures\mgf.h" />
     <ClInclude Include="src\MGF\Structures\MgText.h" />
     <ClInclude Include="src\MGF\Structures\Tif.h" />
     <ClInclude Include="src\mgf\VersionConstants.h" />
-    <ClInclude Include="src\models\MGFAnimationTableModel.h" />
-    <ClInclude Include="src\models\mgffiletablemodel.h" />
     <ClInclude Include="src\ArchiveViewer\Models\ArchiveFileTreeModel.h" />
-    <ClInclude Include="src\models\MGFMaterialTableModel.h" />
-    <ClInclude Include="src\models\MGFMeshTableModel.h" />
-    <ClInclude Include="src\models\MGFNodeTreeModel.h" />
     <ClInclude Include="src\ResourceManager\ResourceManager.h" />
     <ClInclude Include="src\utils\configfile.h" />
     <ClInclude Include="src\utils\Context.h" />
@@ -301,28 +281,17 @@
     <ClInclude Include="src\utils\states\StateGroup.h" />
     <ClInclude Include="src\AssetViewers\TextureViewer\TextureViewerWidget.h" />
     <ClInclude Include="src\ArchiveViewer\ArchiveViewerWidget.h" />
-    <ClInclude Include="src\AssetViewers\ModelViewer\ModelViewerWidget.h" />
     <ClInclude Include="src\MainWindow\MainWindow.h" />
     <ClInclude Include="src\windows\ogrewindow.h" />
-    <ClInclude Include="src\ArchiveViewer\ui_ArchiveViewerWidget.h" />
-    <ClInclude Include="src\AssetViewers\ui_AssetViewerWidgetBase.h" />
-    <ClInclude Include="src\AssetViewers\ModelViewer\ui_ModelViewerWidget.h" />
-    <ClInclude Include="src\AssetViewers\PlainTextViewer\ui_PlainTextViewerWidget.h" />
-    <ClInclude Include="src\AssetViewers\TextureViewer\ui_TextureViewerWidget.h" />
-    <ClInclude Include="src\AssetViewers\StringTableViewer\ui_StringTableViewerWidget.h" />
-    <ClInclude Include="src\FileExtractor\ui_FileExtractorDialog.h" />
-    <ClInclude Include="src\ui_windowfiletable.h" />
-    <ClInclude Include="src\MainWindow\ui_MainWindow.h" />
-  </ItemGroup>
+    <ClInclude Include="vendor\pugixml-1.10\src\pugixml.hpp" />
+  <ClInclude Include="src\ArchiveViewer\ui_ArchiveViewerWidget.h" /><ClInclude Include="src\AssetViewers\ui_AssetViewerWidgetBase.h" /><ClInclude Include="src\AssetViewers\PlainTextViewer\ui_PlainTextViewerWidget.h" /><ClInclude Include="src\AssetViewers\TextureViewer\ui_TextureViewerWidget.h" /><ClInclude Include="src\AssetViewers\StringTableViewer\ui_StringTableViewerWidget.h" /><ClInclude Include="src\FileExtractor\ui_FileExtractorDialog.h" /><ClInclude Include="src\MainWindow\ui_MainWindow.h" /></ItemGroup>
   <ItemGroup>
     <None Include="src\ArchiveViewer\ArchiveViewerWidget.ui" />
     <None Include="src\AssetViewers\AssetViewerWidgetBase.ui" />
-    <None Include="src\AssetViewers\ModelViewer\ModelViewerWidget.ui" />
     <None Include="src\AssetViewers\PlainTextViewer\PlainTextViewerWidget.ui" />
     <None Include="src\AssetViewers\TextureViewer\TextureViewerWidget.ui" />
     <None Include="src\AssetViewers\StringTableViewer\StringTableViewerWidget.ui" />
     <None Include="src\FileExtractor\FileExtractorDialog.ui" />
-    <None Include="src\windowfiletable.ui" />
     <None Include="src\MainWindow\MainWindow.ui" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

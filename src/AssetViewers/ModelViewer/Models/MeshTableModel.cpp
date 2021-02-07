@@ -2,6 +2,11 @@
 
 using namespace ModelViewer::Models;
 
+void MeshTable::SetAssetReference(const MGF::Asset::ModelAsset* modelAsset)
+{
+	ModelAsset = modelAsset;
+}
+
 int MeshTable::rowCount(const QModelIndex& parent /*= QModelIndex()*/) const
 {
 	return 0;

@@ -1,7 +1,8 @@
 #ifndef MGFTREEITEM_H
 #define MGFTREEITEM_H
 
-#include "FileTypes.h"
+#include "EFileTypes.h"
+#include "VersionConstants.h"
 
 #include <QString>
 #include <QDateTime>
@@ -42,13 +43,14 @@ namespace MGF {
         inline const std::filesystem::path& FilePath() const { return m_FilePath; }
         inline uint64_t GUID() const { return m_GUID; }
         inline uint32_t Index() const { return m_Index; }
-        inline FileType FileType() const { return m_FileType; }
+        inline EFileType FileType() const { return m_FileType; }
         inline uint32_t FileOffset() const { return m_FileOffset; }
         inline uint32_t FileLength() const { return m_FileLength; }
         inline QDateTime FileDate() const { return m_FileDate; }
         inline bool IsFile() const { return m_IsFile; }
 
         inline const MGF::Archive& Archive() const { return m_MGFArchive; }
+        const MGF::Version GetArchiveVersion() const;
         void LoadBuffer(std::string& out, unsigned int offset = 0, int length = -1) const;
 
         void AddChildItem(const File* item);
@@ -56,8 +58,6 @@ namespace MGF {
 
         // takes a relative file path and traverses the MGF file system to find the desired item
         const MGF::File* FindRelativeItem(const QString& relativePath) const;
-
-        static const char* FileTypeString(MGF::FileType type);
 
         void Read(char* buffer, ::uint32_t offset = 0, std::uint32_t length = INT_MAX) const;
 
@@ -70,7 +70,7 @@ namespace MGF {
         QString       m_Name;
         uint64_t      m_GUID;
         uint32_t      m_Index;
-        MGF::FileType m_FileType;
+        MGF::EFileType m_FileType;
         uint32_t      m_FileOffset;
         uint32_t      m_FileLength;
         QDateTime     m_FileDate;
@@ -80,7 +80,7 @@ namespace MGF {
         int m_TreeViewRow;
 
     private:
-        static const std::unordered_map<std::string, MGF::FileType>  MapExtensionFileType;
+        static const std::unordered_map<std::string, MGF::EFileType>  MapExtensionFileType;
     };
 
 }

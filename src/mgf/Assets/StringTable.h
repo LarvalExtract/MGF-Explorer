@@ -11,6 +11,8 @@ namespace MGF {	namespace Asset {
 	public:
 		StringTable(const File& file);
 
+		const auto& GetStrings() const { return Strings; }
+
 	private:
 		struct KeyStringPair {
 			uint32_t key;
