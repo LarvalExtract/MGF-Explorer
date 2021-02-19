@@ -3,7 +3,7 @@
 
 #include "FileExtractor/FileExtractorDialog.h"
 
-#include "utils/Contexts.h"
+#include "utils/ContextProvider.h"
 #include "ResourceManager/ResourceManager.h"
 
 using namespace ArchiveViewer;
@@ -54,7 +54,7 @@ void ArchiveViewerWidget::on_treeView_selectionChanged(const QModelIndex &sel, c
 
     pSelectedItem = static_cast<MGF::File*>(sel.internalPointer());
 
-    auto rm = Contexts::Get<ResourceManager>();
+    auto rm = ContextProvider::Get<ResourceManager>();
     auto asset = rm->Get(*pSelectedItem);
 
     if (asset)

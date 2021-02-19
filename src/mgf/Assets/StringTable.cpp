@@ -21,7 +21,7 @@ StringTable::StringTable(const File& file) :
 		MGTEXT_STRING_ENTRY entry;
 		entry = *reinterpret_cast<MGTEXT_STRING_ENTRY*>(&buffer[i * sizeof(entry)]);
 		
-		uint32_t offset = entry.stringOffset + (sizeof(header) - 16);
+		uint32_t offset = entry.stringOffset - 16;
 		KeyStringPair pair;
 		pair.key = entry.id;
 		pair.str = QString::fromUtf16((char16_t*)&buffer[offset]);

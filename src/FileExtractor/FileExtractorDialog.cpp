@@ -6,7 +6,7 @@
 #include "Extractor.h"
 
 #include "utils/configfile.h"
-#include "utils/Contexts.h"
+#include "utils/ContextProvider.h"
 
 #include <QFileDialog>
 
@@ -23,7 +23,7 @@ FileExtractorDialog::FileExtractorDialog(QWidget* parent) :
 
 	ui->tableFileQueue->setModel(&Model);
 
-	const auto& path = (*Contexts::Get<ConfigFile>())["Folders"]["DefaultExtractFolder"];
+	const auto& path = (*ContextProvider::Get<ConfigFile>())["Folders"]["DefaultExtractFolder"];
 	Destination = path;
 	Destination.make_preferred();
 
@@ -52,7 +52,7 @@ void FileExtractorDialog::on_browseButton_clicked()
 	Destination = folder;
 	Destination.make_preferred();
 
-	const auto& path = (*Contexts::Get<ConfigFile>())["Folders"]["DefaultExtractFolder"] = folder;
+	const auto& path = (*ContextProvider::Get<ConfigFile>())["Folders"]["DefaultExtractFolder"] = folder;
 	ui->destinationFolderPath->setText(path.c_str());
 }
 

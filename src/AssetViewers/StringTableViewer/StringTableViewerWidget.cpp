@@ -10,15 +10,22 @@ StringTableViewerWidget::StringTableViewerWidget(QWidget *parent) :
     ui(new Ui::StringTableViewerWidget)
 {
     ui->setupUi(this);
-    baseUi->assetViewerLayout->addWidget(this);
+    baseUi->assetViewerLayout->addWidget(ui->tableView);
 }
 
 StringTableViewerWidget::~StringTableViewerWidget()
 {
+    baseUi->assetViewerLayout->removeWidget(this);
     delete ui;
 }
 
 void StringTableViewerWidget::LoadAsset(MGF::Asset::AssetPtr asset)
 {
     AssetViewerWidgetBase::LoadAsset(asset);
+
+    auto stringTableAsset = static_cast<MGF::Asset::StringTable*>(asset.get());
+
+    StringTableModel.SetAssetReference(stringTableAsset);
+
+    ui->tableView->setModel(&StringTableModel);
 }

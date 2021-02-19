@@ -2,14 +2,14 @@
 
 #include "Context.h"
 
-class Contexts
+class ContextProvider
 {
 public:
-	Contexts() = delete;
-	Contexts(const Contexts&) = delete;
-	Contexts(Contexts&&) = delete;
-	Contexts& operator=(const Contexts&) = delete;
-	Contexts& operator=(Contexts&&) = delete;
+	ContextProvider() = default;
+	ContextProvider(const ContextProvider&) = delete;
+	ContextProvider(ContextProvider&&) = delete;
+	ContextProvider& operator=(const ContextProvider&) = delete;
+	ContextProvider& operator=(ContextProvider&&) = delete;
 
 	static void Initialise();
 	static void Destroy();

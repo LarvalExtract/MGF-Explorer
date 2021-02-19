@@ -1,7 +1,7 @@
 #include "MainWindow.h"
 #include "ui_mainwindow.h"
 
-#include "utils/Contexts.h"
+#include "utils/ContextProvider.h"
 #include "utils/events/EventSelectedItemChanged.h"
 
 #include <QFileDialog>
@@ -34,16 +34,16 @@ MainWindow::MainWindow(QWidget *parent) :
                               msg);
     }
 
-    Contexts::Initialise();
-    Contexts::Set<ResourceManager>(&m_ResourceManager);
-    Contexts::Set<ConfigFile>(&m_AppConfig);
+    ContextProvider::Initialise();
+    ContextProvider::Set<ResourceManager>(&m_ResourceManager);
+    ContextProvider::Set<ConfigFile>(&m_AppConfig);
 }
 
 MainWindow::~MainWindow()
 {
     m_Workspaces.clear();
     m_AppConfig.WriteOut();
-    Contexts::Destroy();
+    ContextProvider::Destroy();
 
     delete ui;
 }

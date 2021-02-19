@@ -2,7 +2,7 @@
 #include "Factories/MeshFactory.h"
 #include "Factories/MaterialFactory.h"
 
-#include "utils/Contexts.h"
+#include "utils/ContextProvider.h"
 #include "ResourceManager/ResourceManager.h"
 
 #include <OgreSceneManager.h>
@@ -121,7 +121,7 @@ void ModelAsset::CreateSceneNode(Ogre::SceneNode* parent, const std::function<Co
 	const std::string& type = vars["type"];
 	if (type == "ANIMNODE")
 	{
-		auto& rm = *Contexts::Get<ResourceManager>();
+		auto& rm = *ContextProvider::Get<ResourceManager>();
 		auto childNodeFile = FileRef.FindRelativeItem(vars["child"].c_str());
 		auto childNodeAsset = rm.Get(*childNodeFile);
 

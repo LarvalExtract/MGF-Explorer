@@ -30,9 +30,15 @@ public:
         AssetViewerWidgetBase->resize(827, 670);
         assetViewerLayout = new QVBoxLayout(AssetViewerWidgetBase);
         assetViewerLayout->setObjectName(QString::fromUtf8("assetViewerLayout"));
+        assetViewerLayout->setSizeConstraint(QLayout::SetMaximumSize);
         assetViewerLayout->setContentsMargins(0, 0, 0, 0);
         assetFileDetails = new QLineEdit(AssetViewerWidgetBase);
         assetFileDetails->setObjectName(QString::fromUtf8("assetFileDetails"));
+        QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(assetFileDetails->sizePolicy().hasHeightForWidth());
+        assetFileDetails->setSizePolicy(sizePolicy);
         assetFileDetails->setReadOnly(true);
 
         assetViewerLayout->addWidget(assetFileDetails);

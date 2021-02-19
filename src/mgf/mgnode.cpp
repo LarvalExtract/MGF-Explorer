@@ -1,6 +1,6 @@
 #include "mgnode.h"
 #include "mgfresourcemanager.h"
-#include "utils/Contexts.h"
+#include "utils/ContextProvider.h"
 
 #include <filesystem>
 

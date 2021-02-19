@@ -9,6 +9,8 @@ using namespace MGF::Asset;
 Texture::Texture(const File& file) :
 	AssetBase(file, EAssetType::Texture)
 {
+	std::vector<uint8_t> pixels;
+
 	if (file.GetArchiveVersion() == MGF::Version::MechAssault2LW)
 	{
 		MA2_TIF_HEADER header;
@@ -18,10 +20,13 @@ Texture::Texture(const File& file) :
 		Width = header.cWidth.imageWidth;
 		Height = header.cHeight.imageHeight;
 		Flags = header.cFlags.flags;
-		Mips = header.cMips.numMips;
+		Mips = header.cMips.numMips - 1;
 		Size = header.cSize.imageSize;
 		Frames = header.cFrames.numFrames;
 		Depth = header.cDepth.imageDepth;
+
+		pixels.resize(header.cBits.length);
+		file.Read(reinterpret_cast<char*>(pixels.data()), sizeof(MA2_TIF_HEADER), header.cBits.length - 8);
 	}
 	else
 	{
@@ -32,19 +37,22 @@ Texture::Texture(const File& file) :
 		Width = header.cWidth.imageWidth;
 		Height = header.cHeight.imageHeight;
 		Flags = header.cFlags.flags;
-		Mips = header.cMips.numMips;
+		Mips = header.cMips.numMips - 1;
 		Size = header.cSize.imageSize;
 		Frames = 1;
 		Depth = 1;
+
+		pixels.resize(header.cBits.length);
+		file.Read(reinterpret_cast<char*>(pixels.data()), sizeof(MA2_TIF_HEADER), header.cBits.length - 8);
 	}
 
-	std::vector<uint8_t> pixels(Size);
+	size_t actualWidth = (Width % 16 == 0) ? Width : Width + (16 - (Width % 16));
 
 	Ogre::DataStreamPtr stream;
 	stream.reset(new Ogre::MemoryDataStream(pixels.data(), pixels.size()));
 
 	Ogre::Image image;
-	image.loadRawData(stream, GetWidth(), Height, Depth, DeterminePixelFormat(), Frames, Mips - 1);
+	image.loadRawData(stream, actualWidth, Height, Depth, DeterminePixelFormat(), Frames, Mips);
 
 	auto& textureManager = Ogre::TextureManager::getSingleton();
 	OgreTexture = textureManager.loadImage(std::to_string(file.GUID()), "General", image, DetermineTextureType());

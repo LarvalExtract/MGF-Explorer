@@ -13,7 +13,6 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QTableView>
-#include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -21,24 +20,23 @@ QT_BEGIN_NAMESPACE
 class Ui_StringTableViewerWidget
 {
 public:
-    QVBoxLayout *verticalLayout;
     QTableView *tableView;
 
     void setupUi(QWidget *StringTableViewerWidget)
     {
         if (StringTableViewerWidget->objectName().isEmpty())
             StringTableViewerWidget->setObjectName(QString::fromUtf8("StringTableViewerWidget"));
-        StringTableViewerWidget->resize(400, 300);
-        verticalLayout = new QVBoxLayout(StringTableViewerWidget);
-        verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
-        verticalLayout->setContentsMargins(-1, 0, 0, 0);
+        StringTableViewerWidget->resize(600, 500);
+        QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(StringTableViewerWidget->sizePolicy().hasHeightForWidth());
+        StringTableViewerWidget->setSizePolicy(sizePolicy);
         tableView = new QTableView(StringTableViewerWidget);
         tableView->setObjectName(QString::fromUtf8("tableView"));
+        tableView->setGeometry(QRect(0, 0, 600, 500));
         tableView->verticalHeader()->setVisible(false);
         tableView->verticalHeader()->setDefaultSectionSize(23);
-
-        verticalLayout->addWidget(tableView);
-
 
         retranslateUi(StringTableViewerWidget);
 

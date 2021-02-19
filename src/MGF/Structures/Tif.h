@@ -73,6 +73,7 @@ struct MA1_TIF_HEADER
 	TIF_HEIGHT  cHeight;
 	TIF_MIPS    cMips;
 	TIF_SIZE    cSize;
+	TIF_BITS    cBits;
 };
 
 struct MA2_TIF_HEADER
@@ -87,5 +88,6 @@ struct MA2_TIF_HEADER
 	TIF_SIZE    cSize;
 	TIF_FRAMES  cFrames;
 	TIF_DEPTH   cDepth;
+	TIF_BITS    cBits;
 };
 #pragma pack(pop)

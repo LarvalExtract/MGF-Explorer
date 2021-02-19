@@ -1,10 +1,8 @@
 #pragma once
 
-#include "utils/events/IEventListener.h"
-
 class StateGroup;
 
-class State : public IEventListener
+class State
 {
 public:
 	State(StateGroup* group) : States(group) {}

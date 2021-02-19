@@ -3,8 +3,8 @@
 
 #include "ArchiveViewer/ArchiveViewerWidget.h"
 
-#include "utils/Contexts.h"
-#include "utils/configfile.h"
+#include "Utilities/ContextProvider/ContextProvider.h"
+#include "Utilities/configfile.h"
 
 #include "ResourceManager/ResourceManager.h"
 

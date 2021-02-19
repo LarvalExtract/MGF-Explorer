@@ -22,6 +22,8 @@ namespace StringTableViewer {
 
     private:
         Ui::StringTableViewerWidget* ui;
+
+        Models::StringTableModel StringTableModel;
     };
 
 }

@@ -58,22 +58,21 @@ MGF::Archive::Archive(const QString& mgfFilePath) :
 
     if (ArchiveVersion == Version::MechAssault2LW)
     {
-		for (size_t i = 1, j = 0; i < directoryRows.size(); i++)
+		for (size_t i = 1; i < directoryRows.size(); i++)
 		{
 			// item is a file
-			if (directoryRows[i].fileIndex > -1)
+			if (directoryRows[i].fileIndex != -1)
 			{
 				m_TreeItems.emplace_back(
 					&m_TreeItems[directoryRows[i].parentIndex],
 					&stringBuffer[directoryRows[i].stringOffset],
-					fileRecordsMa2[j].guid,
-                    fileRecordsMa2[j].index,
-                    fileRecordsMa2[j].fileOffset,
-                    fileRecordsMa2[j].fileLength,
-                    fileRecordsMa2[j].timestamp,
+					fileRecordsMa2[directoryRows[i].fileIndex].guid,
+                    fileRecordsMa2[directoryRows[i].fileIndex].index,
+                    fileRecordsMa2[directoryRows[i].fileIndex].fileOffset,
+                    fileRecordsMa2[directoryRows[i].fileIndex].fileLength,
+                    fileRecordsMa2[directoryRows[i].fileIndex].timestamp,
 					true,
 					*this);
-				j++;
 			}
 
 			// item is a folder
@@ -94,22 +93,21 @@ MGF::Archive::Archive(const QString& mgfFilePath) :
     }
     else
     {
-		for (size_t i = 1, j = 0; i < directoryRows.size(); i++)
+		for (size_t i = 1; i < directoryRows.size(); i++)
 		{
 			// item is a file
-			if (directoryRows[i].fileIndex > -1)
+			if (directoryRows[i].fileIndex != -1)
 			{
 				m_TreeItems.emplace_back(
 					&m_TreeItems[directoryRows[i].parentIndex],
 					&stringBuffer[directoryRows[i].stringOffset],
-					fileRecordsMa1[j].guid,
-					fileRecordsMa1[j].index,
-					fileRecordsMa1[j].fileOffset,
-					fileRecordsMa1[j].fileLength,
-					fileRecordsMa1[j].timestamp,
+					fileRecordsMa1[directoryRows[i].fileIndex].guid,
+					fileRecordsMa1[directoryRows[i].fileIndex].index,
+					fileRecordsMa1[directoryRows[i].fileIndex].fileOffset,
+					fileRecordsMa1[directoryRows[i].fileIndex].fileLength,
+					fileRecordsMa1[directoryRows[i].fileIndex].timestamp,
 					true,
 					*this);
-				j++;
 			}
 
 			// item is a folder

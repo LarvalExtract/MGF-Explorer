@@ -215,18 +215,17 @@
     <ClCompile Include="src\mgf\Assets\Factories\MeshFactory.cpp" />
     <ClCompile Include="src\ArchiveViewer\Models\ArchiveFileTreeModel.cpp" />
     <ClCompile Include="src\ResourceManager\ResourceManager.cpp" />
-    <ClCompile Include="src\utils\configfile.cpp" />
-    <ClCompile Include="src\utils\Context.cpp" />
-    <ClCompile Include="src\utils\Contexts.cpp" />
-    <ClCompile Include="src\utils\events\EventDispatcher.cpp" />
-    <ClCompile Include="src\utils\states\State.cpp" />
-    <ClCompile Include="src\utils\states\StateGroup.cpp" />
+    <ClCompile Include="src\Utilities\configfile.cpp" />
+    <ClCompile Include="src\Utilities\ContextProvider\Context.cpp" />
+    <ClCompile Include="src\Utilities\ContextProvider\ContextProvider.cpp" />
+    <ClCompile Include="src\Utilities\StateMachine\State.cpp" />
+    <ClCompile Include="src\Utilities\StateMachine\StateGroup.cpp" />
     <ClCompile Include="src\AssetViewers\TextureViewer\TextureViewerWidget.cpp" />
     <ClCompile Include="src\ArchiveViewer\ArchiveViewerWidget.cpp" />
     <ClCompile Include="src\MainWindow\MainWindow.cpp" />
     <ClCompile Include="src\windows\ogrewindow.cpp" />
     <ClCompile Include="vendor\pugixml-1.10\src\pugixml.cpp" />
-  <ClCompile Include="src\AssetViewers\moc_AssetViewerWidgetBase.cpp" /><ClCompile Include="src\AssetViewers\ModelViewer\moc_ModelViewerWidget.cpp" /><ClCompile Include="src\AssetViewers\PlainTextViewer\moc_PlainTextViewerWidget.cpp" /><ClCompile Include="src\AssetViewers\StringTableViewer\moc_StringTableViewerWidget.cpp" /><ClCompile Include="src\FileExtractor\moc_FileExtractorDialog.cpp" /><ClCompile Include="src\AssetViewers\TextureViewer\moc_TextureViewerWidget.cpp" /><ClCompile Include="src\ArchiveViewer\moc_ArchiveViewerWidget.cpp" /><ClCompile Include="src\MainWindow\moc_MainWindow.cpp" /><ClCompile Include="src\windows\moc_ogrewindow.cpp" /></ItemGroup>
+    <ClCompile Include="src\AssetViewers\moc_AssetViewerWidgetBase.cpp" /><ClCompile Include="src\AssetViewers\ModelViewer\moc_ModelViewerWidget.cpp" /><ClCompile Include="src\AssetViewers\PlainTextViewer\moc_PlainTextViewerWidget.cpp" /><ClCompile Include="src\AssetViewers\StringTableViewer\moc_StringTableViewerWidget.cpp" /><ClCompile Include="src\FileExtractor\moc_FileExtractorDialog.cpp" /><ClCompile Include="src\AssetViewers\TextureViewer\moc_TextureViewerWidget.cpp" /><ClCompile Include="src\ArchiveViewer\moc_ArchiveViewerWidget.cpp" /><ClCompile Include="src\MainWindow\moc_MainWindow.cpp" /><ClCompile Include="src\windows\moc_ogrewindow.cpp" /></ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\AssetViewers\AssetViewerWidgetBase.h" />
     <ClInclude Include="src\AssetViewers\ModelViewer\Models\MaterialTableModel.h" />
@@ -270,21 +269,17 @@
     <ClInclude Include="src\mgf\VersionConstants.h" />
     <ClInclude Include="src\ArchiveViewer\Models\ArchiveFileTreeModel.h" />
     <ClInclude Include="src\ResourceManager\ResourceManager.h" />
-    <ClInclude Include="src\utils\configfile.h" />
-    <ClInclude Include="src\utils\Context.h" />
-    <ClInclude Include="src\utils\Contexts.h" />
-    <ClInclude Include="src\utils\events\EventData.h" />
-    <ClInclude Include="src\utils\events\EventDispatcher.h" />
-    <ClInclude Include="src\utils\events\EventSelectedItemChanged.h" />
-    <ClInclude Include="src\utils\events\IEventListener.h" />
-    <ClInclude Include="src\utils\states\State.h" />
-    <ClInclude Include="src\utils\states\StateGroup.h" />
+    <ClInclude Include="src\Utilities\configfile.h" />
+    <ClInclude Include="src\Utilities\ContextProvider\Context.h" />
+    <ClInclude Include="src\Utilities\ContextProvider\ContextProvider.h" />
+    <ClInclude Include="src\Utilities\StateMachine\State.h" />
+    <ClInclude Include="src\Utilities\StateMachine\StateGroup.h" />
     <ClInclude Include="src\AssetViewers\TextureViewer\TextureViewerWidget.h" />
     <ClInclude Include="src\ArchiveViewer\ArchiveViewerWidget.h" />
     <ClInclude Include="src\MainWindow\MainWindow.h" />
     <ClInclude Include="src\windows\ogrewindow.h" />
     <ClInclude Include="vendor\pugixml-1.10\src\pugixml.hpp" />
-  <ClInclude Include="src\ArchiveViewer\ui_ArchiveViewerWidget.h" /><ClInclude Include="src\AssetViewers\ui_AssetViewerWidgetBase.h" /><ClInclude Include="src\AssetViewers\PlainTextViewer\ui_PlainTextViewerWidget.h" /><ClInclude Include="src\AssetViewers\TextureViewer\ui_TextureViewerWidget.h" /><ClInclude Include="src\AssetViewers\StringTableViewer\ui_StringTableViewerWidget.h" /><ClInclude Include="src\FileExtractor\ui_FileExtractorDialog.h" /><ClInclude Include="src\MainWindow\ui_MainWindow.h" /></ItemGroup>
+    <ClInclude Include="src\ArchiveViewer\ui_ArchiveViewerWidget.h" /><ClInclude Include="src\AssetViewers\ui_AssetViewerWidgetBase.h" /><ClInclude Include="src\AssetViewers\PlainTextViewer\ui_PlainTextViewerWidget.h" /><ClInclude Include="src\AssetViewers\TextureViewer\ui_TextureViewerWidget.h" /><ClInclude Include="src\AssetViewers\StringTableViewer\ui_StringTableViewerWidget.h" /><ClInclude Include="src\FileExtractor\ui_FileExtractorDialog.h" /><ClInclude Include="src\MainWindow\ui_MainWindow.h" /></ItemGroup>
   <ItemGroup>
     <None Include="src\ArchiveViewer\ArchiveViewerWidget.ui" />
     <None Include="src\AssetViewers\AssetViewerWidgetBase.ui" />

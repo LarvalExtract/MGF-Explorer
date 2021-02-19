@@ -44,7 +44,7 @@ struct MGF_FILE {
         int32 folderIndex;
         int32 unk2;
         int32 stringOffset;
-        int32 unk3;
+        int32 fileIndex;
     } directoryTable[header.indexTableCount] <bgcolor=cPurple>;
 
     struct MGF_STRING {

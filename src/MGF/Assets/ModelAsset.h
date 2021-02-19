@@ -5,7 +5,7 @@
 #include "Model/Mesh.h"
 #include "Model/Material.h"
 #include "Model/Animation.h"
-#include "utils/configfile.h"
+#include "Utilities/configfile.h"
 
 #include <OgreSceneNode.h>
 

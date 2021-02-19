@@ -1,0 +1,76 @@
+//------------------------------------------------
+//--- 010 Editor v11.0.1 Binary Template
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+
+struct TIF {
+    struct MGI_HEADER {
+        uint32 unk1;
+        char MGIc[4];
+        uint32 fileLength;
+        uint32 one;
+        char padding[16];
+    } mgiHeader;
+    struct PIC {
+        char PIC[4];
+        uint32 pad1;
+        uint32 length;
+        uint32 unk1;
+        struct VERSION {
+            char ver[4];
+            uint32 chunkSize;
+            char version;
+        } cVersion;
+        struct FLAGS {
+            char flgs[4];
+            uint32 chunkSize;
+            uint32 imageFlags;
+        } cFlags;
+        struct WIDTH {
+            char wdth[4];
+            uint32 chunkSize;
+            uint32 imageWidth;
+        } cWidth;
+        struct HEIGHT {
+            char hgt[4];
+            uint32 chunkSize;
+            uint32 imageHeight;
+        } cHeight;
+        struct MIPS {
+            char mips[4];
+            uint32 chunkSize;
+            uint32 numMips;
+        } cMips;
+        struct SIZE {
+            char size[4];
+            uint32 chunkSize;
+            uint32 imageSize;
+        } cSize;
+        if (cVersion.version == 4)
+        {
+            struct FRAMES {
+                char frms[4];
+                uint32 chunkSize;
+                uint32 numFrames;
+            } cFrames;
+            struct DEPTH {
+                char dpth[4];
+                uint32 chunkSize;
+                uint32 imageDepth;
+            } cDepth;
+        }
+        struct BITS {
+            char bits[4];
+            uint32 imageDataLength;
+            char pixels[imageDataLength - 8];
+        } cBits;
+    } cPic;
+} tif <optimize=false>;
