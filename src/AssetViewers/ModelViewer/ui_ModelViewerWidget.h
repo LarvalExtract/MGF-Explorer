@@ -11,6 +11,7 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QFrame>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QTabWidget>
@@ -25,6 +26,8 @@ class Ui_ModelViewerWidget
 {
 public:
     QVBoxLayout *verticalLayout;
+    QFrame *frame;
+    QVBoxLayout *frameLayout;
     QTabWidget *tabWidget;
     QWidget *tabNodes;
     QHBoxLayout *horizontalLayout_5;
@@ -48,7 +51,14 @@ public:
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
         verticalLayout->setSizeConstraint(QLayout::SetMaximumSize);
         verticalLayout->setContentsMargins(0, 0, 0, 0);
-        tabWidget = new QTabWidget(ModelViewerWidget);
+        frame = new QFrame(ModelViewerWidget);
+        frame->setObjectName(QString::fromUtf8("frame"));
+        frame->setFrameShape(QFrame::StyledPanel);
+        frame->setFrameShadow(QFrame::Raised);
+        frameLayout = new QVBoxLayout(frame);
+        frameLayout->setObjectName(QString::fromUtf8("frameLayout"));
+        frameLayout->setContentsMargins(0, 0, 0, 0);
+        tabWidget = new QTabWidget(frame);
         tabWidget->setObjectName(QString::fromUtf8("tabWidget"));
         tabWidget->setMaximumSize(QSize(16777215, 250));
         tabNodes = new QWidget();
@@ -119,12 +129,15 @@ public:
 
         tabWidget->addTab(tabMaterials, QString());
 
-        verticalLayout->addWidget(tabWidget);
+        frameLayout->addWidget(tabWidget);
+
+
+        verticalLayout->addWidget(frame);
 
 
         retranslateUi(ModelViewerWidget);
 
-        tabWidget->setCurrentIndex(2);
+        tabWidget->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(ModelViewerWidget);

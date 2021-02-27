@@ -156,6 +156,9 @@
     <ClCompile Include="src\Utilities\ContextProvider\ContextProvider.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\AssetViewers\ModelViewer\Models\AnimationTableModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\AssetViewers\PlainTextViewer\PlainTextViewerWidget.h">
@@ -335,6 +338,12 @@
     <ClInclude Include="src\Utilities\ContextProvider\Context.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\AssetViewers\ModelViewer\Models\AnimationTableModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AssetViewers\ModelViewer\ui_ModelViewerWidget.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\FileExtractor\FileExtractorDialog.ui" />
@@ -344,5 +353,6 @@
     <None Include="src\AssetViewers\StringTableViewer\StringTableViewerWidget.ui" />
     <None Include="src\MainWindow\MainWindow.ui" />
     <None Include="src\AssetViewers\AssetViewerWidgetBase.ui" />
+    <None Include="src\AssetViewers\ModelViewer\ModelViewerWidget.ui" />
   </ItemGroup>
 </Project>

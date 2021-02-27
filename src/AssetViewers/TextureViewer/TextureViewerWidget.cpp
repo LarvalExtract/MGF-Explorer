@@ -13,7 +13,7 @@ TextureViewerWidget::TextureViewerWidget(QWidget *parent) :
     ui(new Ui::TextureViewerWidget)
 {
     ui->setupUi(this);
-    baseUi->assetViewerLayout->addWidget(this);
+    baseUi->assetViewerLayout->addWidget(ui->frame);
 
     s_Count++;
 
@@ -23,8 +23,8 @@ TextureViewerWidget::TextureViewerWidget(QWidget *parent) :
         title += QString::number(s_Count);
         m_OgreWindow.initialize(title);
 
-        m_Container = QWidget::createWindowContainer(&m_OgreWindow, this);
-        m_Container->setGeometry(ui->tableWidget->pos().x(), ui->tableWidget->height() + 9, 1, 1);
+        m_Container = QWidget::createWindowContainer(&m_OgreWindow, ui->frame);
+        m_Container->setGeometry(ui->textureDetailsTable->pos().x(), ui->textureDetailsTable->height() + 9, 1, 1);
 
         InitialiseScene();
     }
@@ -36,9 +36,7 @@ TextureViewerWidget::TextureViewerWidget(QWidget *parent) :
 
 TextureViewerWidget::~TextureViewerWidget()
 {
-    //m_SceneManager->clearScene();
-    //Ogre::Root::getSingleton().destroySceneManager(m_SceneManager);
-
+    baseUi->assetViewerLayout->removeWidget(ui->frame);
     delete ui;
 }
 
@@ -49,6 +47,7 @@ void TextureViewerWidget::LoadAsset(MGF::Asset::AssetPtr asset)
     const auto textureAsset = static_cast<MGF::Asset::Texture*>(asset.get());
 
     TextureDetailsTableModel.SetTextureReference(textureAsset);
+    ui->textureDetailsTable->setModel(&TextureDetailsTableModel);
 
 	m_Container->resize(textureAsset->GetWidth(), textureAsset->GetHeight());
 	m_TextureUnit->setTexture(textureAsset->GetOgreTexture());

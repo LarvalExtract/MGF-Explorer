@@ -1,8 +1,7 @@
 #include "MainWindow.h"
 #include "ui_mainwindow.h"
 
-#include "utils/ContextProvider.h"
-#include "utils/events/EventSelectedItemChanged.h"
+#include "Utilities/ContextProvider/ContextProvider.h"
 
 #include <QFileDialog>
 #include <QMessageBox>
@@ -37,6 +36,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ContextProvider::Initialise();
     ContextProvider::Set<ResourceManager>(&m_ResourceManager);
     ContextProvider::Set<ConfigFile>(&m_AppConfig);
+    ContextProvider::Set<Ogre::SceneManager>(m_OgreRoot->createSceneManager());
 }
 
 MainWindow::~MainWindow()

@@ -1,7 +1,8 @@
 #pragma once
 
 #include <string>
-#include <OgreVector3.h>
+#include <vector>
+#include <OgreSceneNode.h>
 
 namespace MGF {	namespace Asset { namespace Model {
 
@@ -9,8 +10,11 @@ namespace MGF {	namespace Asset { namespace Model {
 	{
 		std::string name;
 		std::string type;
-		Ogre::Vector3 position;
+		bool bVisible = true;
 
+		Ogre::SceneNode* sceneNode = nullptr;
+		std::vector<Node*> children;
+		int parentIndex;
 	};
 
 } } }

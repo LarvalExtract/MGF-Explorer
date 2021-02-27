@@ -27,10 +27,10 @@ private:
 template<class T>
 int Context<T>::ContextIndex = ContextBase::AllocContextIndex();
 
-class ContextProvider
+class ContextStore
 {
 public:
-	ContextProvider();
+	ContextStore();
 
 	template<class T>
 	T* GetContext() const

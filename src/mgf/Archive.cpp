@@ -39,18 +39,22 @@ MGF::Archive::Archive(const QString& mgfFilePath) :
     if (ArchiveVersion == Version::MechAssault2LW)
     {
 		fileRecordsMa2.resize(mgfHeader.fileRecordCount);
+		m_FileStream.seekg(mgfHeader.fileRecordOffset);
         m_FileStream.read(reinterpret_cast<char*>(fileRecordsMa2.data()), mgfHeader.fileRecordLength);
     }
     else
     {
 		fileRecordsMa1.resize(mgfHeader.fileRecordCount);
+		m_FileStream.seekg(mgfHeader.fileRecordOffset);
         m_FileStream.read(reinterpret_cast<char*>(fileRecordsMa1.data()), mgfHeader.fileRecordLength);
     }
 
 	std::vector<MGF_DIRECTORY> directoryRows(mgfHeader.indexTableCount);
+	m_FileStream.seekg(mgfHeader.indexTableOffset);
 	m_FileStream.read(reinterpret_cast<char*>(directoryRows.data()), mgfHeader.indexTableLength);
 
-    std::vector<char> stringBuffer(mgfHeader.stringsLength);
+	std::vector<char> stringBuffer(mgfHeader.stringsLength);
+	m_FileStream.seekg(mgfHeader.stringsOffset);
     m_FileStream.read(stringBuffer.data(), mgfHeader.stringsLength);
 
 	m_TreeItems.reserve(mgfHeader.indexTableCount);

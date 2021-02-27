@@ -1,6 +1,6 @@
 #include "MeshFactory.h"
 #include "MaterialFactory.h"
-#include "utils/configfile.h"
+#include "Utilities/configfile.h"
 
 #include <sstream>
 

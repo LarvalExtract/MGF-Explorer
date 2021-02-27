@@ -1,10 +1,10 @@
 #include "ContextProvider.h"
 
-ContextProvider* ContextProvider::pContextProvider = nullptr;
+ContextStore* ContextProvider::pContextProvider = nullptr;
 
 void ContextProvider::Initialise()
 {
-	pContextProvider = new ContextProvider();
+	pContextProvider = new ContextStore();
 }
 
 void ContextProvider::Destroy()

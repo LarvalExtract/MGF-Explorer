@@ -1,6 +1,6 @@
 #include "MaterialFactory.h"
-#include "utils/configfile.h"
-#include "utils/ContextProvider.h"
+#include "Utilities/configfile.h"
+#include "Utilities/ContextProvider/ContextProvider.h"
 #include "ResourceManager/ResourceManager.h"
 #include "MGF/Assets/Texture.h"
 

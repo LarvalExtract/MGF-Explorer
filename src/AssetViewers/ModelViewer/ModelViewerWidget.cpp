@@ -3,6 +3,7 @@
 #include "AssetViewers/ui_AssetViewerWidgetBase.h"
 
 #include "MGF/Assets/ModelAsset.h"
+#include "Utilities/ContextProvider/ContextProvider.h"
 
 static int s_Count = 0;
 
@@ -10,19 +11,21 @@ using namespace ModelViewer;
 
 ModelViewerWidget::ModelViewerWidget(QWidget *parent) :
     AssetViewerWidgetBase(parent),
-    ui(new Ui::ModelViewerWidget)
+    ui(new Ui::ModelViewerWidget),
+    m_SceneManager(ContextProvider::Get<Ogre::SceneManager>())
 {
     ui->setupUi(this);
-    baseUi->assetViewerLayout->addWidget(this);
+    baseUi->assetViewerLayout->addWidget(ui->frame);
 
     s_Count++;
 
     QString title("ModelViewerWindow");
     title += QString::number(s_Count);
     m_OgreWindow.initialize(title);
+    m_SceneRoot = m_SceneManager->createSceneNode(title.toStdString());
 
-    m_OgreWindowContainer = QWidget::createWindowContainer(&m_OgreWindow, this);
-    static_cast<QVBoxLayout*>(layout())->insertWidget(0, m_OgreWindowContainer);
+    m_OgreWindowContainer = QWidget::createWindowContainer(&m_OgreWindow, ui->frame);
+    ui->frameLayout->insertWidget(0, m_OgreWindowContainer);
 
     InitialiseScene();
 
@@ -30,15 +33,11 @@ ModelViewerWidget::ModelViewerWidget(QWidget *parent) :
     m_OgreWindowContainer->installEventFilter(this);
     m_OgreWindow.installEventFilter(this);
     m_OgreWindowContainer->startTimer(16);
-
-    ui->tabWidget->clear();   
 }
 
 ModelViewerWidget::~ModelViewerWidget()
 {
-    m_SceneManager->clearScene();
-    Ogre::Root::getSingleton().destroySceneManager(m_SceneManager);
-
+    //m_SceneManager->destroySceneNode(m_SceneRoot->getName());
     delete ui;
 }
 
@@ -46,17 +45,18 @@ void ModelViewerWidget::LoadAsset(MGF::Asset::AssetPtr asset)
 {
     AssetViewerWidgetBase::LoadAsset(asset);
 
-	m_SceneManager->getRootSceneNode()->removeAllChildren();
+    m_SceneRoot->removeAllChildren();
 	auto& model = static_cast<MGF::Asset::ModelAsset&>(*(asset.get()));
-	m_SceneManager->getRootSceneNode()->addChild(model.GetRootNode());
+    m_SceneRoot->addChild(model.GetRootNode());
 
-    MeshTableModel.SetAssetReference(&model);
-    MaterialTableModel.SetAssetReference(&model);
+    NodeTreeModel.SetAssetReference(&model.GetNodeDefinitions());
+    MeshTableModel.SetAssetReference(&model.GetMeshDefinitions());
+    MaterialTableModel.SetAssetReference(&model.GetMaterialDefinitions());
 
 	//ui->animTableView->setModel(model.GetAnimationTableModel());
 	ui->meshTableView->setModel(&MeshTableModel);
 	ui->materialTableView->setModel(&MaterialTableModel);
-	//ui->nodeTreeView->setModel(model.GetNodeTreeModel());
+	ui->nodeTreeView->setModel(&NodeTreeModel);
 
 	//UpdateTabs();
 

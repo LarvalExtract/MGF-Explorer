@@ -9,7 +9,7 @@ namespace ModelViewer {	namespace Models {
 	class MeshTable : public QAbstractTableModel
 	{
 	public:
-		void SetAssetReference(const MGF::Asset::ModelAsset* modelAsset);
+		void SetAssetReference(const std::vector<MGF::Asset::Model::Mesh>* pMeshes);
 
 		int rowCount(const QModelIndex& parent = QModelIndex()) const override;
 		int columnCount(const QModelIndex& parent = QModelIndex()) const override;
@@ -17,7 +17,7 @@ namespace ModelViewer {	namespace Models {
 		QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
 	private:
-		const MGF::Asset::ModelAsset* ModelAsset;
+		const std::vector<MGF::Asset::Model::Mesh>* pMeshes = nullptr;
 	};
 
 } }

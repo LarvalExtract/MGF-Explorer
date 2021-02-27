@@ -28,6 +28,6 @@ public:
 	}
 
 private:
-	static ContextProvider* pContextProvider;
+	static ContextStore* pContextProvider;
 };
 

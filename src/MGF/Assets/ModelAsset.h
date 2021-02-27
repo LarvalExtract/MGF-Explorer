@@ -18,14 +18,14 @@ namespace MGF { namespace Asset {
 	public:
 		ModelAsset(const MGF::File& file);
 
-		Ogre::SceneNode* GetRootNode() const { return RootNode; }
+		Ogre::SceneNode* GetRootNode() const { return RootNode.sceneNode; }
 		const auto& GetNodeDefinitions() const { return NodeDefinitions; }
 		const auto& GetMeshDefinitions() const { return MeshDefinitions; }
 		const auto& GetMaterialDefinitions() const { return MaterialDefinitions; }
 		const auto& GetAnimationDefinitions() const { return AnimationDefinitions; }
 
 	private:
-		Ogre::SceneNode* RootNode = nullptr;
+		Model::Node RootNode;
 		std::vector<Model::Node> NodeDefinitions;
 		std::vector<Model::Mesh> MeshDefinitions;
 		std::vector<Model::Material> MaterialDefinitions;
@@ -34,7 +34,7 @@ namespace MGF { namespace Asset {
 		void ParseMgmodelXml();
 		void ParseNodeTxt();
 
-		void CreateSceneNode(Ogre::SceneNode* parent, const pugi::xml_node& xmlnode, const std::unordered_map<std::string, Ogre::MeshPtr> meshes);
+		void CreateSceneNode(Model::Node* parent, int parentIndex, const pugi::xml_node& xmlnode, const std::unordered_map<std::string, Ogre::MeshPtr>& meshes);
 		void CreateSceneNode(Ogre::SceneNode* parent, const std::function<ConfigSection()>& func);
 	};
 

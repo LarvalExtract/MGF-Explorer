@@ -147,5 +147,5 @@ const MGF::File *MGF::File::FindRelativeItem(const QString &relativePath) const
 void MGF::File::Read(char* buffer, std::uint32_t offset, std::uint32_t length) const
 {
     m_MGFArchive.FileStream().seekg(offset + m_FileOffset, std::ios::beg);
-    m_MGFArchive.FileStream().read(buffer, length);
+    m_MGFArchive.FileStream().read(buffer, std::min(length, m_FileLength - offset));
 }

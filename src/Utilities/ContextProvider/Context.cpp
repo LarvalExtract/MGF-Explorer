@@ -2,7 +2,7 @@
 
 int ContextBase::NumContexts = 0;
 
-ContextProvider::ContextProvider()
+ContextStore::ContextStore()
 {
 	Contexts.resize(ContextBase::GetNumContexts(), nullptr);
 }

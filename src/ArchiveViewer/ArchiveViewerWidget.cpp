@@ -3,7 +3,7 @@
 
 #include "FileExtractor/FileExtractorDialog.h"
 
-#include "utils/ContextProvider.h"
+#include "Utilities/ContextProvider/ContextProvider.h"
 #include "ResourceManager/ResourceManager.h"
 
 using namespace ArchiveViewer;

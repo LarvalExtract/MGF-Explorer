@@ -1,29 +1,72 @@
 #include "MeshTableModel.h"
 
+static const QVariant HEADERS[] = {
+	"Name",
+	"Vertices",
+	"Flags",
+	"Stride",
+	"Topology"
+};
+
+constexpr size_t COLUMNS = sizeof(HEADERS) / sizeof(HEADERS[0]);
+
 using namespace ModelViewer::Models;
 
-void MeshTable::SetAssetReference(const MGF::Asset::ModelAsset* modelAsset)
+void MeshTable::SetAssetReference(const std::vector<MGF::Asset::Model::Mesh>* pMeshes)
 {
-	ModelAsset = modelAsset;
+	this->pMeshes = pMeshes;
+
+	emit dataChanged(createIndex(0, 0), createIndex(pMeshes->size(), COLUMNS));
 }
 
 int MeshTable::rowCount(const QModelIndex& parent /*= QModelIndex()*/) const
 {
-	return 0;
+	return pMeshes->size();
 }
 
 int MeshTable::columnCount(const QModelIndex& parent /*= QModelIndex()*/) const
 {
-	return 0;
+	return COLUMNS;
 }
 
 QVariant MeshTable::data(const QModelIndex& index, int role /*= Qt::DisplayRole*/) const
 {
+	if (!(index.isValid() && role == Qt::DisplayRole))
+	{
+		return QVariant();
+	}
+
+	const auto renderOperationTypeString = [](Ogre::RenderOperation::OperationType type)
+	{
+		using ot = Ogre::RenderOperation::OperationType;
+		switch (type)
+		{
+		case ot::OT_TRIANGLE_LIST: return "Triangle list";
+		case ot::OT_TRIANGLE_STRIP: return "Triangle strip";
+		default: return "UNKNOWN";
+		}
+	};
+
+	const auto& mesh = pMeshes->at(index.row());
+	switch (index.column())
+	{
+	case 0: return mesh.name.c_str();
+	case 1: return mesh.numVerts;
+	case 2: return QString::number(mesh.flags, 16);
+	case 3: return mesh.stride;
+	case 4: return renderOperationTypeString(mesh.topology);
+	}
+
 	return QVariant();
 }
 
 QVariant MeshTable::headerData(int section, Qt::Orientation orientation, int role /*= Qt::DisplayRole*/) const
 {
-	return QVariant();
+	if (!(orientation == Qt::Horizontal && role == Qt::DisplayRole))
+	{
+		return QVariant();
+	}
+
+	return HEADERS[section];
 }
 
