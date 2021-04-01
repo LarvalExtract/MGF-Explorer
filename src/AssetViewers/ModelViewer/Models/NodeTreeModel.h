@@ -1,15 +1,19 @@
 #pragma once
 
-#include "MGF/Assets/ModelAsset.h"
+#include "MGF/Assets/Model/Node.h"
 
 #include <QAbstractItemModel>
+
+namespace MGF { namespace Asset { class ModelAsset; } }
 
 namespace ModelViewer {	namespace Models {
 
 	class NodeTree : public QAbstractItemModel
 	{
+		friend class MGF::Asset::ModelAsset;
+
 	public:
-		void SetAssetReference(const std::vector<MGF::Asset::Model::Node>* pNodes);
+		~NodeTree() { delete RootNode; }
 
 		QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
 		QModelIndex parent(const QModelIndex& child) const override;
@@ -21,7 +25,7 @@ namespace ModelViewer {	namespace Models {
 		Qt::ItemFlags flags(const QModelIndex& index) const override;
 
 	private:
-		const std::vector<MGF::Asset::Model::Node>* pNodes = nullptr;
+		MGF::Asset::Model::Node* RootNode = nullptr;
 	};
 
 } }

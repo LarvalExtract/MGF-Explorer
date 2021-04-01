@@ -3,7 +3,7 @@
 
 #include "ArchiveViewer/ArchiveViewerWidget.h"
 
-#include "Utilities/ContextProvider/ContextProvider.h"
+#include "Utilities/ContextProvider/ServiceProvider.h"
 #include "Utilities/configfile.h"
 
 #include "ResourceManager/ResourceManager.h"
@@ -51,9 +51,8 @@ private:
     ConfigFile m_AppConfig;
    
 private:
-    void InitialiseOgre();   
-    void LaunchFileExtractDialog();
-    void UpdateStatusBar(const MGF::File* selectedItem);
+    void InitialiseOgre();
+    void UpdateStatusBar();
     void AllTabsClosed();
 };
 

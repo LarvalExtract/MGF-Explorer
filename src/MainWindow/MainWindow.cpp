@@ -1,7 +1,7 @@
 #include "MainWindow.h"
 #include "ui_mainwindow.h"
 
-#include "Utilities/ContextProvider/ContextProvider.h"
+#include "Utilities/ContextProvider/ServiceProvider.h"
 
 #include <QFileDialog>
 #include <QMessageBox>
@@ -33,17 +33,17 @@ MainWindow::MainWindow(QWidget *parent) :
                               msg);
     }
 
-    ContextProvider::Initialise();
-    ContextProvider::Set<ResourceManager>(&m_ResourceManager);
-    ContextProvider::Set<ConfigFile>(&m_AppConfig);
-    ContextProvider::Set<Ogre::SceneManager>(m_OgreRoot->createSceneManager());
+    ServiceProvider::Initialise();
+	ServiceProvider::Add<ResourceManager>(&m_ResourceManager);
+	ServiceProvider::Add<ConfigFile>(&m_AppConfig);
+	ServiceProvider::Add<Ogre::SceneManager>(m_OgreRoot->createSceneManager());
 }
 
 MainWindow::~MainWindow()
 {
     m_Workspaces.clear();
     m_AppConfig.WriteOut();
-    ContextProvider::Destroy();
+    ServiceProvider::Destroy();
 
     delete ui;
 }
@@ -57,19 +57,23 @@ void MainWindow::on_actionOpen_MGF_file_triggered()
 
     QStringList fileNames = QFileDialog::getOpenFileNames(this, "Open MGF file", QString(folder.c_str()), tr("MechAssault MGF files (*.mgf)"));
 
-    try
+    if (fileNames.size() > 0)
     {
-        for (const auto& fileName : fileNames)
-            OpenMGFWorkspace(fileName);
-    }
-    catch (const std::runtime_error& err)
-    {
-        QMessageBox::critical(this, "Error", err.what());
-    }
+		try
+		{
+            for (const auto& fileName : fileNames)
+            {
+                OpenMGFWorkspace(fileName);
+            }
 
-    std::filesystem::path parent(fileNames[0].toStdString());
-
-    m_AppConfig["Folders"]["DefaultMgfFolder"] = parent.parent_path().u8string();
+			std::filesystem::path parent(fileNames[0].toStdString());
+			m_AppConfig["Folders"]["DefaultMgfFolder"] = parent.parent_path().u8string();
+		}
+		catch (const std::runtime_error& err)
+		{
+			QMessageBox::critical(this, "Error", err.what());
+		}
+    }
 }
 
 void MainWindow::on_actionClose_all_MGF_files_triggered()
@@ -128,9 +132,10 @@ void MainWindow::on_tabWidget_currentChanged(int index)
     }
 
     m_pCurrentWorkspace = static_cast<ArchiveViewer::ArchiveViewerWidget*>(ui->tabWidget->currentWidget());
-    UpdateStatusBar(m_pCurrentWorkspace->SelectedItem());
     
     ui->actionFiles->setText(m_pCurrentWorkspace->MGFFile().GetFileName() + " file table...");
+
+    UpdateStatusBar();
 }
 
 void MainWindow::InitialiseOgre()
@@ -149,7 +154,7 @@ void MainWindow::InitialiseOgre()
     m_OgreRoot->initialise(false);
 }
 
-void MainWindow::UpdateStatusBar(const MGF::File* selectedItem)
+void MainWindow::UpdateStatusBar()
 {
     const auto& mgf = m_pCurrentWorkspace->MGFFile();
 
@@ -161,27 +166,6 @@ void MainWindow::UpdateStatusBar(const MGF::File* selectedItem)
     labelText += QString::number(mgf.GetFileCount()) + " files";
 
     ui->labelCurrentArchive->setText(labelText);
-
-    if (selectedItem)
-    {
-        if (selectedItem->IsFile())
-        {
-            QString text = selectedItem->FilePath().u8string().c_str();
-            text += " | ID: " + QString::number(selectedItem->GUID(), 16);
-            text += " | Index: " + QString::number(selectedItem->Index());
-            text += " | Offset: " + QString::number(selectedItem->FileOffset());
-            text += " | Length: " + QString::number(selectedItem->FileLength()) + " bytes";
-            ui->labelCurrentItem->setText(text);
-        }
-        else
-        {
-            ui->labelCurrentItem->clear();
-        }
-    }
-    else
-    {
-        ui->labelCurrentItem->clear();
-    }
 }
 
 void MainWindow::AllTabsClosed()

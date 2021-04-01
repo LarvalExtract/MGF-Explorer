@@ -22,8 +22,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_ArchiveViewer__ArchiveViewerWidget_t {
-    QByteArrayData data[9];
-    char stringdata0[166];
+    QByteArrayData data[8];
+    char stringdata0[130];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -39,14 +39,13 @@ QT_MOC_LITERAL(3, 65, 11), // "QModelIndex"
 QT_MOC_LITERAL(4, 77, 3), // "sel"
 QT_MOC_LITERAL(5, 81, 5), // "desel"
 QT_MOC_LITERAL(6, 87, 38), // "on_treeView_customContextMenu..."
-QT_MOC_LITERAL(7, 126, 3), // "pos"
-QT_MOC_LITERAL(8, 130, 35) // "on_customContextMenu_action_e..."
+QT_MOC_LITERAL(7, 126, 3) // "pos"
 
     },
     "ArchiveViewer::ArchiveViewerWidget\0"
     "on_treeView_selectionChanged\0\0QModelIndex\0"
     "sel\0desel\0on_treeView_customContextMenuRequested\0"
-    "pos\0on_customContextMenu_action_extract"
+    "pos"
 };
 #undef QT_MOC_LITERAL
 
@@ -56,7 +55,7 @@ static const uint qt_meta_data_ArchiveViewer__ArchiveViewerWidget[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-       3,   14, // methods
+       2,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -64,14 +63,12 @@ static const uint qt_meta_data_ArchiveViewer__ArchiveViewerWidget[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    2,   29,    2, 0x08 /* Private */,
-       6,    1,   34,    2, 0x08 /* Private */,
-       8,    0,   37,    2, 0x08 /* Private */,
+       1,    2,   24,    2, 0x08 /* Private */,
+       6,    1,   29,    2, 0x08 /* Private */,
 
  // slots: parameters
     QMetaType::Void, 0x80000000 | 3, 0x80000000 | 3,    4,    5,
     QMetaType::Void, QMetaType::QPoint,    7,
-    QMetaType::Void,
 
        0        // eod
 };
@@ -84,7 +81,6 @@ void ArchiveViewer::ArchiveViewerWidget::qt_static_metacall(QObject *_o, QMetaOb
         switch (_id) {
         case 0: _t->on_treeView_selectionChanged((*reinterpret_cast< const QModelIndex(*)>(_a[1])),(*reinterpret_cast< const QModelIndex(*)>(_a[2]))); break;
         case 1: _t->on_treeView_customContextMenuRequested((*reinterpret_cast< const QPoint(*)>(_a[1]))); break;
-        case 2: _t->on_customContextMenu_action_extract(); break;
         default: ;
         }
     }
@@ -119,13 +115,13 @@ int ArchiveViewer::ArchiveViewerWidget::qt_metacall(QMetaObject::Call _c, int _i
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 3)
+        if (_id < 2)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 3;
+        _id -= 2;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 3)
+        if (_id < 2)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 3;
+        _id -= 2;
     }
     return _id;
 }

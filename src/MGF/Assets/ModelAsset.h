@@ -1,10 +1,10 @@
 #pragma once
 
 #include "AssetBase.h"
-#include "Model/Node.h"
-#include "Model/Mesh.h"
-#include "Model/Material.h"
-#include "Model/Animation.h"
+#include "AssetViewers/ModelViewer/Models/NodeTreeModel.h"
+#include "AssetViewers/ModelViewer/Models/MeshTableModel.h"
+#include "AssetViewers/ModelViewer/Models/MaterialTableModel.h"
+#include "AssetViewers/ModelViewer/Models/AnimationTableModel.h"
 #include "Utilities/configfile.h"
 
 #include <OgreSceneNode.h>
@@ -18,24 +18,25 @@ namespace MGF { namespace Asset {
 	public:
 		ModelAsset(const MGF::File& file);
 
-		Ogre::SceneNode* GetRootNode() const { return RootNode.sceneNode; }
-		const auto& GetNodeDefinitions() const { return NodeDefinitions; }
-		const auto& GetMeshDefinitions() const { return MeshDefinitions; }
-		const auto& GetMaterialDefinitions() const { return MaterialDefinitions; }
-		const auto& GetAnimationDefinitions() const { return AnimationDefinitions; }
+		const auto GetRootNode() const { return Nodes.RootNode; }
+		const auto GetNodeTreeModel() { return &Nodes; }
+		const auto GetMeshTableModel() { return &Meshes; }
+		const auto GetMaterialTableModel() { return &Materials; }
+		const auto GetAnimationTableModel() { return &Animations; }
 
 	private:
-		Model::Node RootNode;
-		std::vector<Model::Node> NodeDefinitions;
-		std::vector<Model::Mesh> MeshDefinitions;
-		std::vector<Model::Material> MaterialDefinitions;
-		std::vector<Model::Animation> AnimationDefinitions;
+		ModelViewer::Models::NodeTree Nodes;
+		ModelViewer::Models::MeshTable Meshes;
+		ModelViewer::Models::MaterialTable Materials;
+		ModelViewer::Models::AnimationTableModel Animations;
 
 		void ParseMgmodelXml();
 		void ParseNodeTxt();
 
-		void CreateSceneNode(Model::Node* parent, int parentIndex, const pugi::xml_node& xmlnode, const std::unordered_map<std::string, Ogre::MeshPtr>& meshes);
-		void CreateSceneNode(Ogre::SceneNode* parent, const std::function<ConfigSection()>& func);
+		Model::Node* CreateSceneNode(Model::Node* parent, const pugi::xml_node& xmlnode, const std::unordered_map<std::string, Ogre::MeshPtr>& meshes);
+		Model::Node* CreateSceneNode(Model::Node* parent, const std::function<ConfigSection()>& func);
+
+		Ogre::SceneManager& SceneManager;
 	};
 
 } }

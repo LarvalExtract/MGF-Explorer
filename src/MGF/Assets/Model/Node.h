@@ -13,8 +13,14 @@ namespace MGF {	namespace Asset { namespace Model {
 		bool bVisible = true;
 
 		Ogre::SceneNode* sceneNode = nullptr;
+		Node* parent = nullptr;
 		std::vector<Node*> children;
-		int parentIndex;
+		int childIndex = 0;
+
+		~Node()
+		{
+			for (auto c : children) delete c;
+		}
 	};
 
 } } }

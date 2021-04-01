@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1600</width>
-    <height>868</height>
+    <height>869</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -123,7 +123,7 @@
      <x>0</x>
      <y>0</y>
      <width>1600</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -134,11 +134,13 @@
     <addaction name="actionClose_all_MGF_files"/>
    </widget>
    <widget class="QMenu" name="menuView">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="title">
      <string>View</string>
     </property>
     <addaction name="actionFiles"/>
-    <addaction name="actionTextures"/>
    </widget>
    <widget class="QMenu" name="menuAbout">
     <property name="title">

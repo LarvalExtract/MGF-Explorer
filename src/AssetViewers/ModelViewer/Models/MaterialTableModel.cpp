@@ -9,16 +9,9 @@ constexpr auto COLUMN_COUNT = sizeof(HEADERS) / sizeof(HEADERS[0]);
 
 using namespace ModelViewer::Models;
 
-void MaterialTable::SetAssetReference(const std::vector<MGF::Asset::Model::Material>* pMaterials)
-{
-	this->pMaterials = pMaterials;
-
-	emit dataChanged(createIndex(0, 0), createIndex(pMaterials->size(), sizeof(HEADERS)));
-}
-
 int MaterialTable::rowCount(const QModelIndex& parent /*= QModelIndex()*/) const
 {
-	return pMaterials->size();
+	return size();
 }
 
 int MaterialTable::columnCount(const QModelIndex& parent /*= QModelIndex()*/) const
@@ -33,7 +26,7 @@ QVariant MaterialTable::data(const QModelIndex& index, int role /*= Qt::DisplayR
 		return QVariant();
 	}
 
-	const auto& material = pMaterials->at(index.row());
+	const auto& material = this->at(index.row());
 	switch (index.column())
 	{
 	case 0: return material.name.c_str();

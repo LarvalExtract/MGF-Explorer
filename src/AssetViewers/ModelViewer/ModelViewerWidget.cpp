@@ -3,7 +3,7 @@
 #include "AssetViewers/ui_AssetViewerWidgetBase.h"
 
 #include "MGF/Assets/ModelAsset.h"
-#include "Utilities/ContextProvider/ContextProvider.h"
+#include "Utilities/ContextProvider/ServiceProvider.h"
 
 static int s_Count = 0;
 
@@ -12,7 +12,7 @@ using namespace ModelViewer;
 ModelViewerWidget::ModelViewerWidget(QWidget *parent) :
     AssetViewerWidgetBase(parent),
     ui(new Ui::ModelViewerWidget),
-    m_SceneManager(ContextProvider::Get<Ogre::SceneManager>())
+    m_SceneManager(ServiceProvider::Inject<Ogre::SceneManager>())
 {
     ui->setupUi(this);
     baseUi->assetViewerLayout->addWidget(ui->frame);
@@ -24,7 +24,7 @@ ModelViewerWidget::ModelViewerWidget(QWidget *parent) :
     m_OgreWindow.initialize(title);
     m_SceneRoot = m_SceneManager->createSceneNode(title.toStdString());
 
-    m_OgreWindowContainer = QWidget::createWindowContainer(&m_OgreWindow, ui->frame);
+    m_OgreWindowContainer = QWidget::createWindowContainer(&m_OgreWindow, this);
     ui->frameLayout->insertWidget(0, m_OgreWindowContainer);
 
     InitialiseScene();
@@ -37,7 +37,6 @@ ModelViewerWidget::ModelViewerWidget(QWidget *parent) :
 
 ModelViewerWidget::~ModelViewerWidget()
 {
-    //m_SceneManager->destroySceneNode(m_SceneRoot->getName());
     delete ui;
 }
 
@@ -47,24 +46,23 @@ void ModelViewerWidget::LoadAsset(MGF::Asset::AssetPtr asset)
 
     m_SceneRoot->removeAllChildren();
 	auto& model = static_cast<MGF::Asset::ModelAsset&>(*(asset.get()));
-    m_SceneRoot->addChild(model.GetRootNode());
+    m_SceneRoot->addChild(model.GetRootNode()->sceneNode);
 
-    NodeTreeModel.SetAssetReference(&model.GetNodeDefinitions());
-    MeshTableModel.SetAssetReference(&model.GetMeshDefinitions());
-    MaterialTableModel.SetAssetReference(&model.GetMaterialDefinitions());
 
-	//ui->animTableView->setModel(model.GetAnimationTableModel());
-	ui->meshTableView->setModel(&MeshTableModel);
-	ui->materialTableView->setModel(&MaterialTableModel);
-	ui->nodeTreeView->setModel(&NodeTreeModel);
-
-	//UpdateTabs();
-
+	ui->animTableView->setModel(model.GetAnimationTableModel());
+	ui->meshTableView->setModel(model.GetMeshTableModel());
+	ui->materialTableView->setModel(model.GetMaterialTableModel());
+	ui->nodeTreeView->setModel(model.GetNodeTreeModel());
 	ui->nodeTreeView->setColumnWidth(0, 400);
 
+    ui->animTableView->model()->rowCount() == 0 ? ui->tabAnimations->hide() : ui->tabAnimations->show();
+    ui->meshTableView->model()->rowCount() == 0 ? ui->tabMeshes->hide() : ui->tabMeshes->show();
+    ui->materialTableView->model()->rowCount() == 0 ? ui->tabMaterials->hide() : ui->tabMaterials->show();
+    ui->nodeTreeView->model()->rowCount() == 0 ? ui->tabNodes->hide() : ui->tabNodes->show();
+
 	// Reset camera position
-	model.GetRootNode()->_update(true, true);
-	const auto& aabb = model.GetRootNode()->_getWorldAABB();
+	model.GetRootNode()->sceneNode->_update(true, true);
+	const auto& aabb = model.GetRootNode()->sceneNode->_getWorldAABB();
 
 	ResetCamera(aabb);
 }

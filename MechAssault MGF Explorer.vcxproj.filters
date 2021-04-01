@@ -69,12 +69,6 @@
     <ClCompile Include="src\ResourceManager\ResourceManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\windows\moc_ogrewindow.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\windows\ogrewindow.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -153,10 +147,25 @@
     <ClCompile Include="src\Utilities\ContextProvider\Context.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Utilities\ContextProvider\ContextProvider.cpp">
+    <ClCompile Include="src\AssetViewers\ModelViewer\Models\AnimationTableModel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\AssetViewers\ModelViewer\Models\AnimationTableModel.cpp">
+    <ClCompile Include="src\Utilities\ContextProvider\ServiceProvider.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ArchiveViewer\ContextMenus\FileMenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\s3tc\s3tc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MGF\Factories\ImageFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OgreWindow\moc_ogrewindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OgreWindow\ogrewindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -219,9 +228,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\ResourceManager\ResourceManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\windows\ogrewindow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\AssetViewers\TextureViewer\TextureViewerWidget.h">
@@ -332,9 +338,6 @@
     <ClInclude Include="src\Utilities\StateMachine\StateGroup.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Utilities\ContextProvider\ContextProvider.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Utilities\ContextProvider\Context.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -342,6 +345,27 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\AssetViewers\ModelViewer\ui_ModelViewerWidget.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utilities\ContextProvider\ServiceProvider.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ArchiveViewer\ContextMenus\FileMenu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ArchiveViewer\ContextMenus\TextureFileMenu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\s3tc\s3tc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MGF\Factories\ImageFactory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\stb\stb_image_write.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OgreWindow\ogrewindow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

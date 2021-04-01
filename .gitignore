@@ -36,3 +36,5 @@ obj/
 bin/
 dependencies/
 tools/
+
+.idea/

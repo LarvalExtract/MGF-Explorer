@@ -6,9 +6,10 @@
 #include "Extractor.h"
 
 #include "Utilities/configfile.h"
-#include "Utilities/ContextProvider/ContextProvider.h"
+#include "Utilities/ContextProvider/ServiceProvider.h"
 
 #include <QFileDialog>
+#include <QMessageBox>
 
 using namespace FileExtractor;
 
@@ -23,7 +24,7 @@ FileExtractorDialog::FileExtractorDialog(QWidget* parent) :
 
 	ui->tableFileQueue->setModel(&Model);
 
-	const auto& path = (*ContextProvider::Get<ConfigFile>())["Folders"]["DefaultExtractFolder"];
+	const auto& path = (*ServiceProvider::Inject<ConfigFile>())["Folders"]["DefaultExtractFolder"];
 	Destination = path;
 	Destination.make_preferred();
 
@@ -37,11 +38,16 @@ FileExtractorDialog::~FileExtractorDialog()
 	delete ui;
 }
 
-void FileExtractorDialog::SetSelection(const QModelIndexList& selection, const MGF::Archive& archive)
+void FileExtractorDialog::QueueFiles(const std::vector<Models::FileExtractItem>& fileList)
 {
-	FileExtractList = std::move(Extractor::ToList(selection));
+	FileExtractList = std::move(fileList);
+	const auto& archive = FileExtractList[0].mgfItem->Archive(); 
 
-	QString label = QString("Extracting %1 of %2 files from %3").arg(QString::number(FileExtractList.size()), QString::number(archive.GetFileCount()), archive.GetFileName());
+	QString label = QString("Extracting %1 of %2 files from %3").arg(
+		QString::number(FileExtractList.size()), 
+		QString::number(archive.GetFileCount()), 
+		archive.GetFileName());
+
 	ui->labelTask->setText(label);
 }
 
@@ -52,12 +58,18 @@ void FileExtractorDialog::on_browseButton_clicked()
 	Destination = folder;
 	Destination.make_preferred();
 
-	const auto& path = (*ContextProvider::Get<ConfigFile>())["Folders"]["DefaultExtractFolder"] = folder;
+	const auto& path = (*ServiceProvider::Inject<ConfigFile>())["Folders"]["DefaultExtractFolder"] = folder;
 	ui->destinationFolderPath->setText(path.c_str());
 }
 
 void FileExtractorDialog::OnStarted()
 {
+	if (!std::filesystem::exists(Destination))
+	{
+		QMessageBox::critical(this, "Error", "Destination folder does not exist");
+		return;
+	}
+
 	StateMachine.ChangeState(States::EState::Progress);
 }
 

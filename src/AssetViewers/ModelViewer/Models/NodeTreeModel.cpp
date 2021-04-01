@@ -9,13 +9,6 @@ constexpr auto COLUMN_COUNT = sizeof(HEADERS) / sizeof(HEADERS[0]);
 
 using namespace ModelViewer::Models;
 
-void NodeTree::SetAssetReference(const std::vector<MGF::Asset::Model::Node>* pNodes)
-{
-	this->pNodes = pNodes;
-
-	emit dataChanged(createIndex(0, 0), createIndex(pNodes->size(), COLUMN_COUNT));
-}
-
 QModelIndex NodeTree::index(int row, int column, const QModelIndex& parent /*= QModelIndex()*/) const
 {
 	if (!hasIndex(row, column, parent))
@@ -23,16 +16,15 @@ QModelIndex NodeTree::index(int row, int column, const QModelIndex& parent /*= Q
 		return QModelIndex();
 	}
 
-	const MGF::Asset::Model::Node* parentNode = parent.isValid()
-		? static_cast<const MGF::Asset::Model::Node*>(parent.internalPointer())
-		: &pNodes->at(0);
-
-	if (row < 0 || row >= parentNode->children.size())
+	if (!parent.isValid())
 	{
-		return QModelIndex();
+		return createIndex(row, column, RootNode->children[row]);
 	}
 
-	return createIndex(row, column, parentNode->children[row]);
+	const auto parentNode = static_cast<MGF::Asset::Model::Node*>(parent.internalPointer());
+	const auto childNode = parentNode->children[row];
+
+	return createIndex(row, column, childNode);
 }
 
 QModelIndex NodeTree::parent(const QModelIndex& child) const
@@ -43,14 +35,18 @@ QModelIndex NodeTree::parent(const QModelIndex& child) const
 	}
 
 	const auto childNode = static_cast<const MGF::Asset::Model::Node*>(child.internalPointer());
-	if (childNode == &(*pNodes)[0])
+	const auto parentNode = childNode->parent;
+	if (!parentNode)
 	{
-		return createIndex(0, 0, (quintptr)childNode);
+		return QModelIndex();
 	}
-
-	const auto parentNode = (quintptr)&(*pNodes)[childNode->parentIndex];
 	
-	return parentNode ? createIndex(childNode->parentIndex, 0, parentNode) : QModelIndex();
+	if (parentNode == RootNode)
+	{
+		return createIndex(0, 0, RootNode);
+	}
+	
+	return createIndex(parentNode->childIndex, 0, parentNode);
 }
 
 int NodeTree::rowCount(const QModelIndex& parent /*= QModelIndex()*/) const
@@ -62,7 +58,7 @@ int NodeTree::rowCount(const QModelIndex& parent /*= QModelIndex()*/) const
 
 	const auto* parentNode = parent.isValid()
 		? static_cast<const MGF::Asset::Model::Node*>(parent.internalPointer())
-		: &pNodes->at(0);
+		: RootNode;
 
 	return parentNode->children.size();
 }
@@ -79,7 +75,7 @@ QVariant NodeTree::data(const QModelIndex& index, int role /*= Qt::DisplayRole*/
 		return QVariant();
 	}
 
-	auto& node = pNodes->at(index.row());
+	const auto& node = *static_cast<MGF::Asset::Model::Node*>(index.internalPointer());
 	if (role == Qt::DisplayRole)
 	{
 		switch (index.column())
@@ -107,16 +103,16 @@ QVariant NodeTree::headerData(int section, Qt::Orientation orientation, int role
 	return HEADERS[section];
 }
 
-int SetVisibility(MGF::Asset::Model::Node& node, bool visible)
+int SetVisibility(MGF::Asset::Model::Node* node, bool visible)
 {
 	int result = 1;
 
-	node.bVisible = visible;
-	node.sceneNode->setVisible(visible);
+	node->bVisible = visible;
+	node->sceneNode->setVisible(visible);
 
-	for (auto& child : node.children)
+	for (auto& child : node->children)
 	{
-		result += SetVisibility(*child, visible);
+		result += SetVisibility(child, visible);
 	}
 
 	return result;
@@ -129,7 +125,7 @@ bool NodeTree::setData(const QModelIndex& index, const QVariant& value, int role
 		return false;
 	}
 
-	auto node = *static_cast<MGF::Asset::Model::Node*>(index.internalPointer());
+	auto node = static_cast<MGF::Asset::Model::Node*>(index.internalPointer());
 	auto last = SetVisibility(node, value == Qt::Checked);
 
 	emit dataChanged(index, index.siblingAtRow(last));

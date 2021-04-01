@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 namespace MGF {	namespace Asset { namespace Model {
 
 	struct Animation

@@ -18,9 +18,6 @@ public:
 
     virtual void LoadAsset(MGF::Asset::AssetPtr asset);
 
-private slots:
-
-
 protected:
     Ui::AssetViewerWidgetBase* baseUi;
     MGF::Asset::AssetPtr Asset;

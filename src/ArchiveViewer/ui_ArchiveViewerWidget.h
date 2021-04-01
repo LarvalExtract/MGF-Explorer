@@ -43,7 +43,7 @@ public:
         treeView->setObjectName(QString::fromUtf8("treeView"));
         treeView->setMaximumSize(QSize(600, 16777215));
         treeView->setEditTriggers(QAbstractItemView::NoEditTriggers);
-        treeView->setSelectionMode(QAbstractItemView::ExtendedSelection);
+        treeView->setSelectionMode(QAbstractItemView::SingleSelection);
         treeView->setIconSize(QSize(16, 16));
         treeView->header()->setMinimumSectionSize(42);
 

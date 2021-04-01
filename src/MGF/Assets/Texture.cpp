@@ -1,6 +1,6 @@
 #include "Texture.h"
 
-#include "MGF/Structures/Tif.h"
+#include "MGF/Factories/ImageFactory.h"
 
 #include <OgreTextureManager.h>
 
@@ -9,54 +9,54 @@ using namespace MGF::Asset;
 Texture::Texture(const File& file) :
 	AssetBase(file, EAssetType::Texture)
 {
-	std::vector<uint8_t> pixels;
+	char* pixels = nullptr;
 
 	if (file.GetArchiveVersion() == MGF::Version::MechAssault2LW)
 	{
-		MA2_TIF_HEADER header;
-		file.Read(reinterpret_cast<char*>(&header), 0, sizeof(header));
+		MA2_TIF_FILE tif;
+		Factories::ImageFactory::Deserialize(file, tif);
 
 		Version = MGF::Version::MechAssault2LW;
-		Width = header.cWidth.imageWidth;
-		Height = header.cHeight.imageHeight;
-		Flags = header.cFlags.flags;
-		Mips = header.cMips.numMips;
-		Size = header.cSize.imageSize;
+		Width = tif.header.cWidth.imageWidth;
+		Height = tif.header.cHeight.imageHeight;
+		Flags = tif.header.cFlags.flags;
+		Mips = tif.header.cMips.numMips - 1;
+		Size = tif.header.cSize.imageSize;
 		Frames = 1;// header.cFrames.numFrames;
-		Depth = header.cDepth.imageDepth;
+		Depth = tif.header.cDepth.imageDepth;
 
-		pixels.resize(Size);
-		file.Read(reinterpret_cast<char*>(pixels.data()), sizeof(MA2_TIF_HEADER), header.cBits.length - 8);
+		pixels = tif.pixels;
 	}
 	else
 	{
-		MA1_TIF_HEADER header;
-		file.Read(reinterpret_cast<char*>(&header), 0, sizeof(header));
+		MA1_TIF_FILE tif;
+		Factories::ImageFactory::Deserialize(file, tif);
 
 		Version = MGF::Version::MechAssault;
-		Width = header.cWidth.imageWidth;
-		Height = header.cHeight.imageHeight;
-		Flags = header.cFlags.flags;
-		Mips = header.cMips.numMips;
-		Size = header.cSize.imageSize;
+		Width = tif.header.cWidth.imageWidth;
+		Height = tif.header.cHeight.imageHeight;
+		Flags = tif.header.cFlags.flags;
+		Mips = tif.header.cMips.numMips - 1;
+		Size = tif.header.cSize.imageSize;
 		Frames = 1;
 		Depth = 1;
 
-		pixels.resize(Size);
-		file.Read(reinterpret_cast<char*>(pixels.data()), sizeof(MA2_TIF_HEADER), header.cBits.length - 8);
+		pixels = tif.pixels;
 	}
 
 	size_t actualWidth = (Width % 16 == 0) ? Width : Width + (16 - (Width % 16));
 	size_t actualSize = Ogre::Image::calculateSize(Mips, Frames, actualWidth, Height, Depth, DeterminePixelFormat());
 
 	Ogre::DataStreamPtr stream;
-	stream.reset(new Ogre::MemoryDataStream(pixels.data(), actualSize));
+	stream.reset(new Ogre::MemoryDataStream(pixels, actualSize));
 
 	Ogre::Image image;
 	image.loadRawData(stream, actualWidth, Height, Depth, DeterminePixelFormat(), Frames, Mips);
 
 	auto& textureManager = Ogre::TextureManager::getSingleton();
 	OgreTexture = textureManager.loadImage(std::to_string(file.GUID()), "General", image, DetermineTextureType());
+
+	delete[] pixels;
 }
 
 Ogre::PixelFormat Texture::DeterminePixelFormat()

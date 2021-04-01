@@ -46,7 +46,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
-        MainWindow->resize(1600, 868);
+        MainWindow->resize(1600, 869);
         MainWindow->setTabShape(QTabWidget::Rounded);
         actionOpen_MGF_file = new QAction(MainWindow);
         actionOpen_MGF_file->setObjectName(QString::fromUtf8("actionOpen_MGF_file"));
@@ -103,11 +103,12 @@ public:
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 1600, 21));
+        menuBar->setGeometry(QRect(0, 0, 1600, 22));
         menuFile = new QMenu(menuBar);
         menuFile->setObjectName(QString::fromUtf8("menuFile"));
         menuView = new QMenu(menuBar);
         menuView->setObjectName(QString::fromUtf8("menuView"));
+        menuView->setEnabled(false);
         menuAbout = new QMenu(menuBar);
         menuAbout->setObjectName(QString::fromUtf8("menuAbout"));
         MainWindow->setMenuBar(menuBar);
@@ -118,7 +119,6 @@ public:
         menuFile->addAction(actionOpen_MGF_file);
         menuFile->addAction(actionClose_all_MGF_files);
         menuView->addAction(actionFiles);
-        menuView->addAction(actionTextures);
         menuAbout->addAction(actionAbout);
 
         retranslateUi(MainWindow);

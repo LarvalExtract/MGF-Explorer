@@ -63,31 +63,42 @@ struct TIF_BITS {
 	uint32_t length;
 };
 
-struct MA1_TIF_HEADER
+struct MA1_TIF_FILE
 {
-	MGI_HEADER  cMgi;
-	TIF_PIC		cPic;
-	TIF_VERSION cVersion;
-	TIF_FLAGS   cFlags;
-	TIF_WIDTH	cWidth;
-	TIF_HEIGHT  cHeight;
-	TIF_MIPS    cMips;
-	TIF_SIZE    cSize;
-	TIF_BITS    cBits;
+	struct HEADER
+	{
+		MGI_HEADER  cMgi;
+		TIF_PIC		cPic;
+		TIF_VERSION cVersion;
+		TIF_FLAGS   cFlags;
+		TIF_WIDTH	cWidth;
+		TIF_HEIGHT  cHeight;
+		TIF_MIPS    cMips;
+		TIF_SIZE    cSize;
+		TIF_BITS    cBits;
+	} header;
+	char* pixels;
 };
 
-struct MA2_TIF_HEADER
+struct MA2_TIF_FILE
 {
-	MGI_HEADER  cMgi;
-	TIF_PIC		cPic;
-	TIF_VERSION cVersion;
-	TIF_FLAGS   cFlags;
-	TIF_WIDTH	cWidth;
-	TIF_HEIGHT  cHeight;
-	TIF_MIPS    cMips;
-	TIF_SIZE    cSize;
-	TIF_FRAMES  cFrames;
-	TIF_DEPTH   cDepth;
-	TIF_BITS    cBits;
+	struct HEADER
+	{
+		MGI_HEADER  cMgi;
+		TIF_PIC		cPic;
+		TIF_VERSION cVersion;
+		TIF_FLAGS   cFlags;
+		TIF_WIDTH	cWidth;
+		TIF_HEIGHT  cHeight;
+		TIF_MIPS    cMips;
+		TIF_SIZE    cSize;
+		TIF_FRAMES  cFrames;
+		TIF_DEPTH   cDepth;
+		TIF_BITS    cBits;
+	} header;
+	char* pixels;
 };
+
+
 #pragma pack(pop)
+

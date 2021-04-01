@@ -11,7 +11,7 @@ PlainTextViewerWidget::PlainTextViewerWidget(QWidget *parent) :
     ui(new Ui::PlainTextViewerWidget)
 {
     ui->setupUi(this);
-    baseUi->assetViewerLayout->addWidget(this);
+    baseUi->assetViewerLayout->addWidget(ui->plainTextEdit);
 }
 
 PlainTextViewerWidget::~PlainTextViewerWidget()

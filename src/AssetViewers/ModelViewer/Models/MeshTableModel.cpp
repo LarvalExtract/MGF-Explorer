@@ -12,16 +12,9 @@ constexpr size_t COLUMNS = sizeof(HEADERS) / sizeof(HEADERS[0]);
 
 using namespace ModelViewer::Models;
 
-void MeshTable::SetAssetReference(const std::vector<MGF::Asset::Model::Mesh>* pMeshes)
-{
-	this->pMeshes = pMeshes;
-
-	emit dataChanged(createIndex(0, 0), createIndex(pMeshes->size(), COLUMNS));
-}
-
 int MeshTable::rowCount(const QModelIndex& parent /*= QModelIndex()*/) const
 {
-	return pMeshes->size();
+	return size();
 }
 
 int MeshTable::columnCount(const QModelIndex& parent /*= QModelIndex()*/) const
@@ -47,7 +40,7 @@ QVariant MeshTable::data(const QModelIndex& index, int role /*= Qt::DisplayRole*
 		}
 	};
 
-	const auto& mesh = pMeshes->at(index.row());
+	const auto& mesh = this->at(index.row());
 	switch (index.column())
 	{
 	case 0: return mesh.name.c_str();

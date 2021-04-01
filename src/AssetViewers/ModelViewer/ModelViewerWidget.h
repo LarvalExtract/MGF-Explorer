@@ -6,7 +6,7 @@
 #include "Models/MeshTableModel.h"
 #include "Models/MaterialTableModel.h"
 
-#include "windows/ogrewindow.h"
+#include "OgreWindow/ogrewindow.h"
 
 namespace Ui {
     class ModelViewerWidget;
@@ -26,10 +26,6 @@ namespace ModelViewer {
 
 	private:
 		Ui::ModelViewerWidget* ui;
-
-		Models::NodeTree NodeTreeModel;
-		Models::MeshTable MeshTableModel;
-		Models::MaterialTable MaterialTableModel;
 
 		OgreWindow m_OgreWindow;
 		QWidget* m_OgreWindowContainer = nullptr;

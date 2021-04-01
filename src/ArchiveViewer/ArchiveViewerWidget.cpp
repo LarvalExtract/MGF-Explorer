@@ -1,10 +1,9 @@
 #include "ArchiveViewerWidget.h"
 #include "ui_ArchiveViewerWidget.h"
 
-#include "FileExtractor/FileExtractorDialog.h"
+#include "Utilities/ContextProvider/ServiceProvider.h"
 
-#include "Utilities/ContextProvider/ContextProvider.h"
-#include "ResourceManager/ResourceManager.h"
+#include "MGF/Assets/AssetMappings.h"
 
 using namespace ArchiveViewer;
 
@@ -12,7 +11,8 @@ ArchiveViewerWidget::ArchiveViewerWidget(const QString& mgfFilePath, QWidget *pa
     QWidget(parent),
     ui(new Ui::ArchiveViewerWidget),
     MgfArchive(mgfFilePath),
-    FileTreeModel(MgfArchive.GetFileList())
+    FileTreeModel(MgfArchive.GetFileList()),
+    AssetManager(*ServiceProvider::Inject<ResourceManager>())
 {
     ui->setupUi(this); 
 
@@ -24,24 +24,15 @@ ArchiveViewerWidget::ArchiveViewerWidget(const QString& mgfFilePath, QWidget *pa
     connect(ui->treeView->selectionModel(), SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)),
             this, SLOT(on_treeView_selectionChanged(const QModelIndex&, const QModelIndex&)));
 
-
     ui->treeView->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(ui->treeView,
-            SIGNAL(customContextMenuRequested(QPoint)),
-            SLOT(on_treeView_customContextMenuRequested));
+    connect(ui->treeView, SIGNAL(customContextMenuRequested(QPoint)), SLOT(on_treeView_customContextMenuRequested));
 
-    auto action = m_ContextMenu.addAction("Extract...");
-    connect(action, &QAction::triggered, this, &ArchiveViewerWidget::on_customContextMenu_action_extract);
+    FileMenu.Initialise(ui->treeView);
 }
 
 ArchiveViewerWidget::~ArchiveViewerWidget()
 {
     delete ui;
-}
-
-QModelIndexList ArchiveViewerWidget::GetSelection() const
-{
-    return ui->treeView->selectionModel()->selectedRows();
 }
 
 void ArchiveViewerWidget::on_treeView_selectionChanged(const QModelIndex &sel, const QModelIndex &desel)
@@ -52,107 +43,78 @@ void ArchiveViewerWidget::on_treeView_selectionChanged(const QModelIndex &sel, c
     if (sel == desel)
         return;
 
-    pSelectedItem = static_cast<MGF::File*>(sel.internalPointer());
-
-    auto rm = ContextProvider::Get<ResourceManager>();
-    auto asset = rm->Get(*pSelectedItem);
+    const auto pSelectedItem = static_cast<MGF::File*>(sel.internalPointer());
+    const auto asset = AssetManager.Get(*pSelectedItem);
 
     if (asset)
     {
         switch (asset->GetAssetType())
         {
-        case MGF::Asset::EAssetType::PlainText:
-            pActiveAssetViewer = &PlainTextViewer;
-            break;
-
-        case MGF::Asset::EAssetType::StringTable:
-            pActiveAssetViewer = &StringTableViewer;
-            break;
-
-        case MGF::Asset::EAssetType::Texture:
-            pActiveAssetViewer = &TextureViewer;
-            break;
-
-        case MGF::Asset::EAssetType::Model:
-            pActiveAssetViewer = &ModelViewer;
-            break;
+        case MGF::Asset::EAssetType::PlainText:     pActiveAssetViewer = DisplayAssetViewer(&PlainTextViewer); break;
+        case MGF::Asset::EAssetType::StringTable:   pActiveAssetViewer = DisplayAssetViewer(&StringTableViewer); break;
+        case MGF::Asset::EAssetType::Texture:       pActiveAssetViewer = DisplayAssetViewer(&TextureViewer); break;
+        case MGF::Asset::EAssetType::Model:         pActiveAssetViewer = DisplayAssetViewer(&ModelViewer); break;
         }
 
         pActiveAssetViewer->LoadAsset(asset);
-        DisplayWidget(pActiveAssetViewer);
     }
     else
     {
-        DisplayWidget(nullptr);
+        pActiveAssetViewer = DisplayAssetViewer(nullptr);
     }
 }
 
-QWidget* ArchiveViewerWidget::DisplayWidget(QWidget *widget)
+AssetViewerWidgetBase* ArchiveViewerWidget::DisplayAssetViewer(AssetViewerWidgetBase* newAssetViewer)
 {
-    // do nothing
-    if (widget == pActiveAssetViewerWidget)
-        return widget;
-
-    auto frame = ui->assetViewFrame->layout();
-
-    if (pActiveAssetViewerWidget != nullptr)
-        pActiveAssetViewerWidget->hide();
-
-    if (frame->isEmpty())
+    if (pActiveAssetViewer == newAssetViewer)
     {
-        // add/remove widget
-        if (widget == nullptr)
-        {
-            return widget;
-        }
-        else
-        {
-            frame->addWidget(widget);
-            widget->show();
-        }
+        return pActiveAssetViewer;
+    }
+
+    if (pActiveAssetViewer)
+    {
+        pActiveAssetViewer->hide();
+    }
+
+    if (auto frame = ui->assetViewFrame->layout(); newAssetViewer == nullptr)
+    {
+        frame->removeWidget(pActiveAssetViewer);
     }
     else
     {
-        // change widget
-        if (widget == nullptr)
-        {
-            frame->removeWidget(pActiveAssetViewerWidget);
-        }
-        else
-        {
-            frame->replaceWidget(pActiveAssetViewerWidget, widget);
-            widget->show();
-        }
+        frame->isEmpty() ? frame->addWidget(newAssetViewer) : (void)frame->replaceWidget(pActiveAssetViewer, newAssetViewer);
     }
 
-    return widget;
-}
-
-void ArchiveViewerWidget::PrintSelectedFileDetails(const MGF::File& selectedFile)
-{
-    if (!selectedFile.IsFile())
+    if (newAssetViewer)
     {
-        ui->fileDetails->hide();
-        return;
+        newAssetViewer->show();
     }
 
-    ui->fileDetails->show();
+    return newAssetViewer;
 }
 
 void ArchiveViewerWidget::on_treeView_customContextMenuRequested(const QPoint &pos)
 {
-    QModelIndex index(ui->treeView->indexAt(pos));
-    if (index.isValid())
+    if (QModelIndex index(ui->treeView->indexAt(pos)); index.isValid())
     {
-        m_ContextMenu.popup(ui->treeView->viewport()->mapToGlobal(pos));
+        auto screenPos = ui->treeView->viewport()->mapToGlobal(pos);
+
+        if (const auto selectedItem = static_cast<MGF::File*>(index.internalPointer()); selectedItem->IsFile())
+        {
+			switch (MGF::Asset::sAssetMapping.at(selectedItem->FileType()))
+			{
+            case MGF::Asset::EAssetType::PlainText:
+            case MGF::Asset::EAssetType::StringTable:
+            case MGF::Asset::EAssetType::Texture:
+            case MGF::Asset::EAssetType::Model:
+
+            default: FileMenu.popup(screenPos); break;
+			}
+            
+        }
+        else
+        {
+            FileMenu.popup(screenPos);
+        }
     }
-}
-
-void ArchiveViewerWidget::on_customContextMenu_action_extract()
-{
-	const auto& selection = ui->treeView->selectionModel()->selection().indexes();
-
-    FileExtractor::FileExtractorDialog dialog(this);
-    dialog.SetSelection(selection, MgfArchive);
-    dialog.exec();
 }

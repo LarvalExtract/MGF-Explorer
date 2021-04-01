@@ -12,10 +12,10 @@ void Extractor::ExtractFiles(
 	const std::function<void(int)>& onFileExtracted,
 	const std::function<void()>& onAllFilesExtracted)
 {
-    auto createFile = [destination](Models::FileExtractItem& item, std::vector<char>& buf) -> void
+    auto createFile = [&destination](Models::FileExtractItem& item, std::vector<char>& buf) -> void
     {
 		auto path = destination;
-		path += item.mgfItem.FilePath();
+		path += item.mgfItem->FilePath();
 
 		std::filesystem::create_directories(path.parent_path());
 		std::ofstream file(path, std::ios::binary);
@@ -27,14 +27,14 @@ void Extractor::ExtractFiles(
 		}
 
 		std::int32_t offset = 0;
-		std::int32_t remainingBytes = item.mgfItem.FileLength();
+		std::int32_t remainingBytes = item.mgfItem->FileLength();
 		std::size_t bufSize = buf.capacity();
 		std::int32_t bytesToCopy;
 
 		while (remainingBytes > 0)
 		{
 			bytesToCopy = std::min<int>(bufSize, remainingBytes);
-			item.mgfItem.Read(buf.data(), offset, bytesToCopy);
+			item.mgfItem->Read(buf.data(), offset, bytesToCopy);
 			file.write(buf.data(), bytesToCopy);
 
 			remainingBytes -= bufSize;
@@ -60,7 +60,7 @@ void Extractor::ExtractFiles(
 	{
 		for (auto& item : items)
 		{
-            if (!std::filesystem::exists(item.mgfItem.FilePath()))
+            if (!std::filesystem::exists(item.mgfItem->FilePath()))
                 createFile(item, buffer);
             else
                 item.status = Models::FileExtractStatus::Skipped;
@@ -76,7 +76,7 @@ void TraverseTreeItem(std::vector<Models::FileExtractItem>& list, const MGF::Fil
 {
 	if (item->IsFile())
 	{
-		list.push_back({ *item, Models::FileExtractStatus::Queued });
+		list.push_back({ item, Models::FileExtractStatus::Queued });
 	}
 	else
 	{
@@ -95,7 +95,7 @@ std::vector<Models::FileExtractItem> Extractor::ToList(const QModelIndexList& se
 		if (item.column() != 0)
 			continue;
 
-		auto mgfitem = static_cast<MGF::File*>(item.internalPointer());
+		const auto mgfitem = static_cast<MGF::File*>(item.internalPointer());
 
 		TraverseTreeItem(result, mgfitem);
 	}

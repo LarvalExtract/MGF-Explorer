@@ -21,7 +21,7 @@ namespace FileExtractor {
 		explicit FileExtractorDialog(QWidget* parent = nullptr);
 		~FileExtractorDialog();
 
-		void SetSelection(const QModelIndexList& selection, const MGF::Archive& archive);
+		void QueueFiles(const std::vector<Models::FileExtractItem>& fileList);
 
 		inline const std::filesystem::path& GetDestination() const { return Destination; }
 

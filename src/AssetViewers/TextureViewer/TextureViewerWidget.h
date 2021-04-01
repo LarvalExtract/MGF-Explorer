@@ -5,7 +5,7 @@
 
 #include "Models/TextureDetailsTableModel.h"
 
-#include "windows/ogrewindow.h"
+#include "OgreWindow/ogrewindow.h"
 
 #include <QWidget>
 #include <QTableWidgetItem>

@@ -67,11 +67,19 @@ QVariant ArchiveFileTreeModel::data(const QModelIndex &index, int role) const
     static const QFileIconProvider IconProvider;
     static const QIcon FileIcon = IconProvider.icon(QFileIconProvider::File);
     static const QIcon FolderIcon = IconProvider.icon(QFileIconProvider::Folder);
-    static const QVariant assetTypeStrings[] = {
-        "Text",
-        "String Table",
-        "Texture",
-        "Model"
+
+    auto AssetTypeString = [](MGF::EFileType type)
+    {
+		static const std::unordered_map<MGF::Asset::EAssetType, QVariant> assetTypeStrings = {
+            { MGF::Asset::EAssetType::PlainText,   "Text" },
+            { MGF::Asset::EAssetType::StringTable, "String Table" },
+            { MGF::Asset::EAssetType::Texture,     "Texture" },
+            { MGF::Asset::EAssetType::Model,       "Model" },
+            { MGF::Asset::EAssetType::None,        QVariant() }
+		};
+
+        auto assetType = MGF::Asset::sAssetMapping.at(type);
+        return assetTypeStrings.at(assetType);
     };
 
     if (!index.isValid())
@@ -93,7 +101,7 @@ QVariant ArchiveFileTreeModel::data(const QModelIndex &index, int role) const
         switch (index.column())
         {
 		case 0:  return item->Name();
-		case 1:  return assetTypeStrings[(int)MGF::Asset::sAssetMapping.at(item->FileType())];
+        case 1:  return AssetTypeString(item->FileType());
 		case 2:  return item->FileDate().toString("dd/MM/yyyy hh:mm");
 		case 3:  return QLocale::system().formattedDataSize(item->FileLength(), 1);
         }

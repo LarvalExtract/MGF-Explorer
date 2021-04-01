@@ -15,7 +15,6 @@ StringTableViewerWidget::StringTableViewerWidget(QWidget *parent) :
 
 StringTableViewerWidget::~StringTableViewerWidget()
 {
-    baseUi->assetViewerLayout->removeWidget(this);
     delete ui;
 }
 

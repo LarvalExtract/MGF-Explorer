@@ -8,9 +8,9 @@
 #include "AssetViewers/ModelViewer/ModelViewerWidget.h"
 #include "AssetViewers/StringTableViewer/StringTableViewerWidget.h"
 
-#include <QString>
-#include <QVector>
-#include <QMenu>
+#include "ContextMenus/FileMenu.h"
+
+#include "ResourceManager/ResourceManager.h"
 
 namespace Ui {
 class ArchiveViewerWidget;
@@ -27,34 +27,28 @@ namespace ArchiveViewer {
 		~ArchiveViewerWidget();
 
 		inline const MGF::Archive& MGFFile() const { return MgfArchive; }
-		inline const MGF::File* SelectedItem() const { return pSelectedItem; }
-		QModelIndexList GetSelection() const;
 
 	private slots:
 		void on_treeView_selectionChanged(const QModelIndex& sel, const QModelIndex& desel);
 		void on_treeView_customContextMenuRequested(const QPoint& pos);
-		void on_customContextMenu_action_extract();
 
 	private:
 		Ui::ArchiveViewerWidget* ui;
 
 		MGF::Archive MgfArchive;
-		MGF::File* pSelectedItem = nullptr;
-
 		Models::ArchiveFileTreeModel FileTreeModel;
 
 		AssetViewerWidgetBase* pActiveAssetViewer = nullptr;
-		QWidget* pActiveAssetViewerWidget = nullptr;
 		PlainTextViewer::PlainTextViewerWidget PlainTextViewer;
 		StringTableViewer::StringTableViewerWidget StringTableViewer;
 		TextureViewer::TextureViewerWidget TextureViewer;
 		ModelViewer::ModelViewerWidget ModelViewer;
 
-		QMenu m_ContextMenu;
+		ContextMenus::FileMenu FileMenu;
 
 	private:
-		QWidget* DisplayWidget(QWidget* widget);
-		void PrintSelectedFileDetails(const MGF::File& selectedFile);
+		AssetViewerWidgetBase* DisplayAssetViewer(AssetViewerWidgetBase* newAssetViewer);
+		ResourceManager& AssetManager;
 	};
 
 }

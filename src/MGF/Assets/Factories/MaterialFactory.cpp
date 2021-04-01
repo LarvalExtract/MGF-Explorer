@@ -1,6 +1,6 @@
 #include "MaterialFactory.h"
 #include "Utilities/configfile.h"
-#include "Utilities/ContextProvider/ContextProvider.h"
+#include "Utilities/ContextProvider/ServiceProvider.h"
 #include "ResourceManager/ResourceManager.h"
 #include "MGF/Assets/Texture.h"
 
@@ -229,7 +229,7 @@ void MaterialFactory::CreateDistortMaterial(Ogre::Material& mat, const MGF::Asse
 
 Ogre::TexturePtr MaterialFactory::UploadTexture(const MGF::Asset::Model::TextureParams& textureParams, const MGF::File* textureFile, Ogre::TextureUnitState& tu)
 {
-    auto& rm = *ContextProvider::Get<ResourceManager>();
+    auto& rm = *ServiceProvider::Inject<ResourceManager>();
  
     Ogre::TexturePtr texture = static_cast<MGF::Asset::Texture*>(rm.Get(*textureFile).get())->GetOgreTexture();
 
