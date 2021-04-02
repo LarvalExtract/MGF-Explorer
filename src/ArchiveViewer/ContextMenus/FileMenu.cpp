@@ -5,19 +5,13 @@
 
 using namespace ArchiveViewer::ContextMenus;
 
-FileMenu::FileMenu() :
-	FileExtractorService(*ServiceProvider::Inject<FileExtractor::Extractor>())
-{
-	
-}
-
 void FileMenu::Initialise(QTreeView* treeView)
 {
-	TreeView = treeView;
+	auto& FileExtractorService = *ServiceProvider::Inject<FileExtractor::Extractor>();
 
-	connect(addAction("Extract..."), &QAction::triggered, [this]()
+	connect(addAction("Extract..."), &QAction::triggered, [&]()
 		{
-			const auto& files = FileExtractorService.ToList(TreeView->selectionModel()->selection().indexes());
+			const auto& files = FileExtractorService.ToList(treeView->selectionModel()->selection().indexes());
 
 			FileExtractor::FileExtractorDialog dialog;
 			dialog.QueueFiles(files);

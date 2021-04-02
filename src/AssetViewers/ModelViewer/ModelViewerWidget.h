@@ -62,7 +62,6 @@ namespace ModelViewer {
 		void UpdateCamera();
 		void UpdateCameraAxes(float yaw, float pitch);
 		void UpdateKeyState(int key, bool state);
-		void UpdateTabs();
 
 	public:
 		bool eventFilter(QObject* watched, QEvent* event) override;

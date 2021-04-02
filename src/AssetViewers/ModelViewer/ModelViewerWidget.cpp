@@ -55,10 +55,40 @@ void ModelViewerWidget::LoadAsset(MGF::Asset::AssetPtr asset)
 	ui->nodeTreeView->setModel(model.GetNodeTreeModel());
 	ui->nodeTreeView->setColumnWidth(0, 400);
 
-    ui->animTableView->model()->rowCount() == 0 ? ui->tabAnimations->hide() : ui->tabAnimations->show();
-    ui->meshTableView->model()->rowCount() == 0 ? ui->tabMeshes->hide() : ui->tabMeshes->show();
-    ui->materialTableView->model()->rowCount() == 0 ? ui->tabMaterials->hide() : ui->tabMaterials->show();
-    ui->nodeTreeView->model()->rowCount() == 0 ? ui->tabNodes->hide() : ui->tabNodes->show();
+    const auto RemoveOrAddTab = [this](QAbstractItemModel* model, QWidget* tab, int index, const QString& label)
+    {
+        // tab exists
+        if (int tabIndex = ui->tabWidget->indexOf(tab); tabIndex > -1)
+        {
+            if (model->rowCount() == 0)
+            {
+                ui->tabWidget->removeTab(tabIndex);
+            }
+        }
+        // tab doesn't exist
+        else
+        {
+            if (model->rowCount() > 0)
+            {
+                ui->tabWidget->insertTab(index, tab, label);
+            }
+        }
+    };
+
+    constexpr int NodeTabIndex = 0;
+    constexpr int AnimationTabIndex = 1;
+    constexpr int MeshTabIndex = 2;
+    constexpr int MaterialTabIndex = 3;
+
+    static const QString NodeTabLabel = "Nodes";
+    static const QString AnimationTabLabel = "Animations";
+    static const QString MeshTabLabel = "Meshes";
+    static const QString MaterialTabLabel = "Materials";
+
+    RemoveOrAddTab(ui->nodeTreeView->model(),      ui->tabNodes,      NodeTabIndex,      NodeTabLabel);
+    RemoveOrAddTab(ui->animTableView->model(),     ui->tabAnimations, AnimationTabIndex, AnimationTabLabel);
+    RemoveOrAddTab(ui->meshTableView->model(),     ui->tabMeshes,     MeshTabIndex,      MeshTabLabel);
+    RemoveOrAddTab(ui->materialTableView->model(), ui->tabMaterials,  MaterialTabIndex,  MaterialTabLabel);
 
 	// Reset camera position
 	model.GetRootNode()->sceneNode->_update(true, true);
@@ -276,22 +306,5 @@ void ModelViewerWidget::UpdateKeyState(int key, bool state)
     case Qt::Key::Key_Space: m_bIsSpacePressed = state; break;
     case Qt::Key::Key_Control: m_bIsCtrlPressed = state; break;
     }
-}
-
-void ModelViewerWidget::UpdateTabs()
-{
-    const auto setTab = [this](QAbstractItemView* modelView, const QString& title)
-    {
-        if (modelView->model()->rowCount() == 0)
-            ui->tabWidget->removeTab(ui->tabWidget->indexOf(modelView));
-        else
-            ui->tabWidget->addTab(modelView, title);
-    };
-
-    // Add node tab
-    setTab(ui->nodeTreeView, "Nodes");
-    setTab(ui->animTableView, "Animations");
-    setTab(ui->meshTableView, "Meshes");
-    setTab(ui->materialTableView, "Materials");
 }
 

@@ -18,7 +18,11 @@ using namespace MGF::Factories;
 
 ModelAsset::ModelAsset(const MGF::File& file) :
 	AssetBase(file, MGF::Asset::EAssetType::Model),
-	SceneManager(*ServiceProvider::Inject<Ogre::SceneManager>())
+	SceneManager(*ServiceProvider::Inject<Ogre::SceneManager>()),
+	Nodes{std::make_shared<ModelViewer::Models::NodeTree>()},
+	Animations{std::make_shared<ModelViewer::Models::AnimationTableModel>()},
+	Meshes{std::make_shared<ModelViewer::Models::MeshTable>()},
+	Materials{std::make_shared<ModelViewer::Models::MaterialTable>()}
 {
 	if (file.FileType() == MGF::EFileType::MgModel)
 	{
@@ -51,7 +55,7 @@ void ModelAsset::ParseMgmodelXml()
 
 		if (materials.find(matName) == materials.end())
 		{
-			auto& matDef = Materials.emplace_back(MGF::Factories::MaterialFactory::CreateMaterialDefinition(node));
+			auto& matDef = Materials->emplace_back(MGF::Factories::MaterialFactory::CreateMaterialDefinition(node));
 			auto material = MGF::Factories::MaterialFactory::Create(matDef, FileRef);
 			materials.insert(std::make_pair(matName, material));
 		}
@@ -64,7 +68,7 @@ void ModelAsset::ParseMgmodelXml()
 
 		if (meshes.find(meshName) == meshes.end())
 		{
-			auto& meshDef = Meshes.emplace_back(MeshFactory::CreateMeshDefinition(node));
+			auto& meshDef = Meshes->emplace_back(MeshFactory::CreateMeshDefinition(node));
 
 			auto mesh = MeshFactory::Create(meshDef, FileRef);
 
@@ -83,7 +87,12 @@ void ModelAsset::ParseMgmodelXml()
 		}
 	}
 
-	Nodes.RootNode = CreateSceneNode(nullptr, node, meshes);
+	Nodes->RootNode = new Model::Node;
+	Nodes->RootNode->sceneNode = SceneManager.createSceneNode();
+	for (; name.find("node") != std::string::npos; node = node.next_sibling(), name = node.name())
+	{
+		Nodes->RootNode->children.push_back(CreateSceneNode(Nodes->RootNode, node, meshes));
+	}
 }
 
 void ModelAsset::ParseNodeTxt()
@@ -105,7 +114,10 @@ void ModelAsset::ParseNodeTxt()
 		return ConfigSection(chunk);
 	};
 
-	Nodes.RootNode = CreateSceneNode(nullptr, ParseNodeSection);
+	Nodes->RootNode = new Model::Node;
+	Nodes->RootNode->sceneNode = SceneManager.createSceneNode();
+
+	CreateSceneNode(Nodes->RootNode, ParseNodeSection);
 }
 
 Ogre::Vector3 StrToVector(const std::string_view);
@@ -122,7 +134,9 @@ Model::Node* ModelAsset::CreateSceneNode(Model::Node* parent, const std::functio
 		auto childNodeFile = FileRef.FindRelativeItem(vars["child"].c_str());
 		auto childNodeAsset = static_cast<ModelAsset*>(rm.Get(*childNodeFile).get());
 
-		node = childNodeAsset->GetRootNode();
+		Nodes = childNodeAsset->Nodes;
+		Meshes = childNodeAsset->Meshes;
+		Materials = childNodeAsset->Materials;
 
 		int num_animations = std::stoi(vars["num_animations"]);
 		for (int i = 0; i < num_animations; i++)
@@ -137,11 +151,11 @@ Model::Node* ModelAsset::CreateSceneNode(Model::Node* parent, const std::functio
 			//animDef.blend_out_duration = std::stof(anim["blend_out_duration"]);
 			animDef.primary = (anim["primary"][0] == 't');
 
-			Animations.push_back(std::move(animDef));
+			Animations->push_back(std::move(animDef));
 		}
 
 		// TODO: Parse animations
-		return node; // there won't be anymore nodes, exit the function
+		return Nodes->RootNode; // there won't be anymore nodes, exit the function
 	}
 	else if (nodeType == "3DOBJECT" || nodeType == "SKIN")
 	{
@@ -155,11 +169,11 @@ Model::Node* ModelAsset::CreateSceneNode(Model::Node* parent, const std::functio
 		node->sceneNode->setScale(StrToVector(vars["scale"]));
 
 		auto meshFile = FileRef.FindRelativeItem(vars["mesh"].data());
-		auto& meshDef = Meshes.emplace_back(MGF::Factories::MeshFactory::CreateMeshDefinition(*meshFile));
+		auto& meshDef = Meshes->emplace_back(MGF::Factories::MeshFactory::CreateMeshDefinition(*meshFile));
 		auto mesh = MGF::Factories::MeshFactory::Create(meshDef, *meshFile);
 
 		auto materialFile = meshFile->FindRelativeItem(meshDef.materialPath.data());
-		auto& materialDef = Materials.emplace_back(MGF::Factories::MaterialFactory::CreateMaterialDefinition(*materialFile));
+		auto& materialDef = Materials->emplace_back(MGF::Factories::MaterialFactory::CreateMaterialDefinition(*materialFile));
 		auto material = MGF::Factories::MaterialFactory::Create(materialDef, *materialFile);
 
 		mesh->getSubMesh(0)->setMaterial(material);

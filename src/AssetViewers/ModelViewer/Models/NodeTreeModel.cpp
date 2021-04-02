@@ -15,15 +15,13 @@ QModelIndex NodeTree::index(int row, int column, const QModelIndex& parent /*= Q
 	{
 		return QModelIndex();
 	}
+	
+	const auto parentNode = parent.isValid()
+		? static_cast<MGF::Asset::Model::Node*>(parent.internalPointer())
+		: RootNode;
 
-	if (!parent.isValid())
-	{
-		return createIndex(row, column, RootNode->children[row]);
-	}
-
-	const auto parentNode = static_cast<MGF::Asset::Model::Node*>(parent.internalPointer());
 	const auto childNode = parentNode->children[row];
-
+	
 	return createIndex(row, column, childNode);
 }
 
@@ -36,14 +34,10 @@ QModelIndex NodeTree::parent(const QModelIndex& child) const
 
 	const auto childNode = static_cast<const MGF::Asset::Model::Node*>(child.internalPointer());
 	const auto parentNode = childNode->parent;
-	if (!parentNode)
-	{
-		return QModelIndex();
-	}
-	
+
 	if (parentNode == RootNode)
 	{
-		return createIndex(0, 0, RootNode);
+		return QModelIndex();
 	}
 	
 	return createIndex(parentNode->childIndex, 0, parentNode);
@@ -56,8 +50,8 @@ int NodeTree::rowCount(const QModelIndex& parent /*= QModelIndex()*/) const
 		return 0;
 	}
 
-	const auto* parentNode = parent.isValid()
-		? static_cast<const MGF::Asset::Model::Node*>(parent.internalPointer())
+	const auto parentNode = parent.isValid()
+		? static_cast<MGF::Asset::Model::Node*>(parent.internalPointer())
 		: RootNode;
 
 	return parentNode->children.size();

@@ -11,13 +11,8 @@ namespace ArchiveViewer { namespace ContextMenus {
 	{
 		
 	public:
-		FileMenu();
-
 		void Initialise(QTreeView* treeView);
 
-	protected:
-		QTreeView* TreeView = nullptr;
-		FileExtractor::Extractor& FileExtractorService;
 	};
 
 } }
