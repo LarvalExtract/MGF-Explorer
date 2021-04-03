@@ -140,7 +140,7 @@ public:
         buttonBox = new QDialogButtonBox(FileExtractorDialog);
         buttonBox->setObjectName(QString::fromUtf8("buttonBox"));
         buttonBox->setOrientation(Qt::Horizontal);
-        buttonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
+        buttonBox->setStandardButtons(QDialogButtonBox::Discard|QDialogButtonBox::Ok);
         buttonBox->setCenterButtons(false);
 
         horizontalLayout_3->addWidget(buttonBox);
