@@ -1,0 +1,31 @@
+//------------------------------------------------
+//--- 010 Editor v11.0.1 Binary Template
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+
+struct GGF {
+    uint32 magic_number <hidden=true>;
+    uint32 entity_count <hidden=true>;
+    uint32 unk1 <hidden=true>;
+    uint32 unk2 <hidden=true>;
+    struct Entity {
+        uint32 magic_number <hidden=true>;
+        uint32 attribute_count <hidden=true>;
+        uint32 crc <name="CRC_Entity">;
+        struct Attribute {
+            uint32 magic_number <hidden=true>;
+            uint32 crc <name="CRC_Attribute">;
+            uint32 length <hidden=true>;
+            uint32 type <hidden=true>;
+            byte data[length] <hidden=true>;
+        } attributes[attribute_count] <optimize=false>;
+    } entities[entity_count] <optimize=false>;
+} ggf;

@@ -1,0 +1,59 @@
+//------------------------------------------------
+//--- 010 Editor v11.0.1 Binary Template
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+
+#include "get_string_from_crc.bt"
+
+struct Attribute {
+    uint32 a_magic_number   <format=hex,name="MagicNumber",hidden=true>;
+    uint32 a_data_type      <name="DataType",hidden=true>;
+    uint32 a_crc            <name="CRC_Attribute">;
+    uint32 a_data_length    <name="Length",hidden=true>;
+    switch (a_data_type)
+    {
+        case 3:  int32  data                <optimize=false,hidden=true>; break;
+        case 5:  int16  data                <optimize=false,hidden=true>; break;
+        case 6:  int32  data                <optimize=false,hidden=true>; break;
+        case 7:  float  data                <optimize=false,hidden=true>; break;
+        case 9:  string data                <optimize=false,hidden=true>; break;
+        case 11: float  data[3]             <optimize=false,hidden=true>; break;
+        case 12: byte   data[4]             <optimize=false,hidden=true>; break;
+        //case 13: TIF    data                <optimize=false>; break;
+        default: byte   data[a_data_length]   <optimize=false,hidden=true>; break;
+    }
+};
+
+struct Entity {
+    uint32 e_magic_number                   <format=hex,name="MagicNumber",hidden=true>;
+    uint32 e_attribute_count                <name="NumAttributes",hidden=true>;
+    uint32 e_crc                            <name="CRC_Entity">;
+    Attribute attributes[e_attribute_count] <open=false,optimize=false,name=getAttributeName>;
+};
+
+struct WDF {
+    uint32 magic_number         <hidden=true,name="MagicNumber",format=hex>;
+    uint32 version              <hidden=true,name="Version">;
+    uint32 entity_count         <name="EntityCount">;
+    uint32 highest_entity_uid   <hidden=true>;
+    uint32 root_entity_uid      <hidden=true>;
+    Entity entities[entity_count] <optimize=false,open=false,name=getEntityName>;
+} wdf;
+
+string getEntityName(Entity& entity)
+{
+    return getStringFromCrc(entity.e_crc);
+}
+
+string getAttributeName(Attribute& attrib)
+{
+    return getStringFromCrc(attrib.a_crc);
+}

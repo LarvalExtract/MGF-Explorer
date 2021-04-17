@@ -1,0 +1,14 @@
+string filename = GetFileName();
+string template = GetArg(0);
+string destination = GetArg(1);
+
+Printf("Executing %s on %s", template, filename);
+RunTemplate(template);
+ExpandAll();
+
+string csv = destination + FileNameGetBase(filename) + ".csv";
+Printf("Writing template results to %s\n", csv);
+ExportCSV(csv);
+
+FileClose();
+Terminate();

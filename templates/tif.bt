@@ -70,7 +70,7 @@ struct TIF {
         struct BITS {
             char bits[4];
             uint32 imageDataLength;
-            char pixels[imageDataLength - 8];
+            byte pixels[imageDataLength - 8];
         } cBits;
     } cPic;
-} tif <optimize=false>;
+};
