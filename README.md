@@ -2,8 +2,8 @@
 MGF Explorer is a C++/Qt GUI tool for opening and viewing assets contained within Meyer/Glass Interactive archive files used in MechAssault and MechAssault 2: Lone Wolf. This tool is heavily inspired by Adjutant, a similar tool for browsing .map files used in the Halo games. Please note that this application is early in development and a lot of features are not complete, especially the model viewer. MGF Explorer can open textures (.tif), models (.node and .mgmodel), and localised string tables (.mgtext) from both games. You can also extract files as they are - conversion to common formats isn't implemented yet.
 
 ## Screenshots
-![](screenshots/wxMGF-Explorer_IZH1aVM9om.png)
-![](screenshots/wxMGF-Explorer_ZGrCqDhIu0.png)
+![](screenshots/MechAssault_MGF_Explorer_FIErpp96KT.png)
+![](screenshots/MechAssault_MGF_Explorer_T1brOlKPml.png)
 
 # Instructions for use
 The MGF files that come with MechAssault and MechAssault 2 are initially compressed, and must be decompressed before MGF-Explorer can open them.
