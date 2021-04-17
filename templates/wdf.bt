@@ -11,7 +11,7 @@
 //   History: 
 //------------------------------------------------
 
-#include "get_string_from_crc.bt"
+#include "get_wdf_string.bt"
 
 struct Attribute {
     uint32 a_magic_number   <format=hex,name="MagicNumber",hidden=true>;

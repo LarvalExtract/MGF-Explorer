@@ -11,6 +11,8 @@
 //   History: 
 //------------------------------------------------
 
+#include "get_ggf_string.bt"
+
 struct GGF {
     uint32 magic_number <hidden=true>;
     uint32 entity_count <hidden=true>;
@@ -26,6 +28,16 @@ struct GGF {
             uint32 length <hidden=true>;
             uint32 type <hidden=true>;
             byte data[length] <hidden=true>;
-        } attributes[attribute_count] <optimize=false>;
-    } entities[entity_count] <optimize=false>;
+        } attributes[attribute_count] <optimize=false,name=getAttributeName>;
+    } entities[entity_count] <optimize=false,name=getEntityName>;
 } ggf;
+
+string getEntityName(Entity &e)
+{
+	return getStringFromCrc(e.crc);
+}
+
+string getAttributeName(Attribute &a)
+{
+	return getStringFromCrc(a.crc);
+}

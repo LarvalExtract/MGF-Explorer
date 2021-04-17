@@ -17,22 +17,26 @@ set GGF_TEMPLATE=%TEMPLATE_DIR%/ggf.bt
 
 
 REM Step 1: Export all strings from MechAssault's XBE using SysInternals' strings.exe
-REM echo Exporting strings from %MA_XBE%...
-REM %SYSINTERNALS_STRINGS% -a %MA_XBE% > %DATA_DIR%/ma2_strings.txt
+echo Exporting strings from %MA_XBE%...
+%SYSINTERNALS_STRINGS% -a %MA_XBE% > %DATA_DIR%/ma2_strings.txt
 
 REM Step 2: Calculate CRC32/JAM-CRC on exported strings using py script
-REM echo Calculating CRCs on strings...
-REM python generate_string_crc.py %DATA_DIR%/ma2_strings.txt %DATA_DIR%/ma2_crc_strings.csv
+echo Calculating CRCs on strings...
+python generate_string_crc.py %DATA_DIR%/ma2_strings.txt %DATA_DIR%/ma2_crc_strings.csv
 
 REM Step 3: Run 010editor binary templates on all wdf, mtb, and ggf files to export CRCs to CSV files
-REM call :RunTemplate wdf, "%WDF_TEMPLATE%", "%CSV_DIR%/"
-REM call :RunTemplate mtb, "%WDF_TEMPLATE%", "%CSV_DIR%/"
-REM call :RunTemplate ggf, "%GGF_TEMPLATE%", "%CSV_DIR%/"
+call :RunTemplate wdf, "%WDF_TEMPLATE%", "%CSV_DIR%/"
+call :RunTemplate mtb, "%WDF_TEMPLATE%", "%CSV_DIR%/"
+call :RunTemplate ggf, "%GGF_TEMPLATE%", "%CSV_DIR%/"
 
 REM Step 4: Use SQL to create tables of all exported CRCs and join them together to match CRCs to the source strings from the XBE
 %SQLITE% < map_strings.sql
 
-REM Step 6: Write matched strings/CRCs to 010editor script switch statement for binary templates
+REM Step 5: Write matched strings/CRCs to 010editor scripts
+echo Creating binary templates...
+python generate_template_crc.py ../data/wdf_names.csv ../templates/get_wdf_string.bt
+python generate_template_crc.py ../data/mtb_names.csv ../templates/get_mtb_string.bt
+python generate_template_crc.py ../data/ggf_names.csv ../templates/get_ggf_string.bt
 
 exit /B 0
 

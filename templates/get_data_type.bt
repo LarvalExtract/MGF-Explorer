@@ -1,0 +1,22 @@
+struct vec3
+{
+    float x;
+	float y;
+	float z;
+};
+
+void dataType(uint32 i, uint32 length)
+{
+    switch (i)
+	{
+		case 1: byte data; break;
+        case 3: int32 data <name="bool">; break;
+		case 5: int16 data; break;
+		case 6: int32 data; break;
+		case 7: float data; break;
+		case 9: string data; break;
+		case 11: vec3 data; break;
+		case 12: uint32 data; break;
+		default: byte data[length]; break;
+	}
+}
