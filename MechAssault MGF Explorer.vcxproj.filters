@@ -168,6 +168,9 @@
     <ClCompile Include="src\OgreWindow\ogrewindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\AssetViewers\EntityViewer\EntityViewerWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\AssetViewers\PlainTextViewer\PlainTextViewerWidget.h">
@@ -368,6 +371,9 @@
     <ClInclude Include="src\OgreWindow\ogrewindow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\AssetViewers\EntityViewer\EntityViewerWidget.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\FileExtractor\FileExtractorDialog.ui" />
@@ -378,5 +384,6 @@
     <None Include="src\MainWindow\MainWindow.ui" />
     <None Include="src\AssetViewers\AssetViewerWidgetBase.ui" />
     <None Include="src\AssetViewers\ModelViewer\ModelViewerWidget.ui" />
+    <None Include="src\AssetViewers\EntityViewer\EntityViewerWidget.ui" />
   </ItemGroup>
 </Project>

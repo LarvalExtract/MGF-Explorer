@@ -25,6 +25,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++17
 
 SOURCES += \
+    src/qtformclass.cpp \
 		src\FileExtractor\States\FileExtractorStateGroup.cpp \
 		src\FileExtractor\States\FinishedState.cpp \
 		src\FileExtractor\States\IdleState.cpp \
@@ -64,6 +65,7 @@ SOURCES += \
 
 
 HEADERS += \
+    src/qtformclass.h \
 		src\FileExtractor\Models\FileExtractItem.h \
 		src\FileExtractor\States\FileExtractorStateBase.h \
 		src\FileExtractor\States\FileExtractorStateGroup.h \
@@ -106,6 +108,7 @@ HEADERS += \
 		src\vendor\pugixml-1.10\src\pugixml.hpp \
 
 FORMS += \
+    src/qtformclass.ui \
 		src\FileExtractor\FileExtractorDialog.ui \
 		src\widgets\mgftextureviewerwidget.ui \
 		src\widgets\mgftextviewwidget.ui \
