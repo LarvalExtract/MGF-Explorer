@@ -114,10 +114,7 @@ void ModelAsset::ParseNodeTxt()
 		return ConfigSection(chunk);
 	};
 
-	Nodes->RootNode = new Model::Node;
-	Nodes->RootNode->sceneNode = SceneManager.createSceneNode();
-
-	CreateSceneNode(Nodes->RootNode, ParseNodeSection);
+	Nodes->RootNode = CreateSceneNode(nullptr, ParseNodeSection);
 }
 
 Ogre::Vector3 StrToVector(const std::string_view);
@@ -127,7 +124,6 @@ Model::Node* ModelAsset::CreateSceneNode(Model::Node* parent, const std::functio
 {
 	auto vars = func();
 
-	Model::Node* node = nullptr;
 	if (const auto& nodeType = vars["type"]; nodeType == "ANIMNODE")
 	{
 		auto& rm = *ServiceProvider::Inject<ResourceManager>();
@@ -157,10 +153,10 @@ Model::Node* ModelAsset::CreateSceneNode(Model::Node* parent, const std::functio
 		// TODO: Parse animations
 		return Nodes->RootNode; // there won't be anymore nodes, exit the function
 	}
-	else if (nodeType == "3DOBJECT" || nodeType == "SKIN")
+	else
 	{
-		node = new Model::Node;
-		node->name = vars["name"];
+		auto node = new Model::Node;
+		node->name = vars.Name();
 		node->type = nodeType;
 		node->parent = parent;
 		node->sceneNode = parent ? parent->sceneNode->createChildSceneNode() : SceneManager.createSceneNode();
@@ -168,39 +164,44 @@ Model::Node* ModelAsset::CreateSceneNode(Model::Node* parent, const std::functio
 		node->sceneNode->setOrientation(StrToQuat(vars["rot_axis"], vars["rot_angle"]));
 		node->sceneNode->setScale(StrToVector(vars["scale"]));
 
-		auto meshFile = FileRef.FindRelativeItem(vars["mesh"].data());
-		auto& meshDef = Meshes->emplace_back(MGF::Factories::MeshFactory::CreateMeshDefinition(*meshFile));
-		auto mesh = MGF::Factories::MeshFactory::Create(meshDef, *meshFile);
-
-		auto materialFile = meshFile->FindRelativeItem(meshDef.materialPath.data());
-		auto& materialDef = Materials->emplace_back(MGF::Factories::MaterialFactory::CreateMaterialDefinition(*materialFile));
-		auto material = MGF::Factories::MaterialFactory::Create(materialDef, *materialFile);
-
-		mesh->getSubMesh(0)->setMaterial(material);
-
-		auto technique = material->getTechnique(0);
-		auto pass = technique->getPass(0);
-		if (pass->getTextureUnitStates().size() > 0)
+		if (nodeType == "3DOBJECT" || nodeType == "SKIN")
 		{
-			pass->getTextureUnitState(0)->setTextureScale(meshDef.texCoordScale, meshDef.texCoordScale);
-			pass->getTextureUnitState(0)->setTextureScroll(meshDef.texCoordOffset, meshDef.texCoordOffset);
+			const auto meshFile = FileRef.FindRelativeItem(vars["mesh"].data());
+			const auto& meshDef = Meshes->emplace_back(MGF::Factories::MeshFactory::CreateMeshDefinition(*meshFile));
+			const auto mesh = MGF::Factories::MeshFactory::Create(meshDef, *meshFile);
+
+			const auto materialFile = meshFile->FindRelativeItem(meshDef.materialPath.data());
+			const auto& materialDef = Materials->emplace_back(MGF::Factories::MaterialFactory::CreateMaterialDefinition(*materialFile));
+			const auto material = MGF::Factories::MaterialFactory::Create(materialDef, *materialFile);
+
+			mesh->getSubMesh(0)->setMaterial(material);
+
+			const auto technique = material->getTechnique(0);
+			const auto pass = technique->getPass(0);
+			if (pass->getTextureUnitStates().size() > 0)
+			{
+				pass->getTextureUnitState(0)->setTextureScale(meshDef.texCoordScale, meshDef.texCoordScale);
+				pass->getTextureUnitState(0)->setTextureScroll(meshDef.texCoordOffset, meshDef.texCoordOffset);
+			}
+
+			const auto entity = node->sceneNode->getCreator()->createEntity(mesh);
+			node->sceneNode->attachObject(entity);
+
+			
 		}
 
-		auto entity = node->sceneNode->getCreator()->createEntity(mesh);
-		node->sceneNode->attachObject(entity);
-	}
-
-	for (int i = 0, num_children = std::stoi(vars["num_children"].data()); i < num_children; i++)
-	{
-		auto childNode = CreateSceneNode(node, func);
-		if (childNode)
+		for (int i = 0, num_children = std::stoi(vars["num_children"].data()); i < num_children; i++)
 		{
-			childNode->childIndex = node->children.size();
-			node->children.push_back(childNode);
+			const auto childNode = CreateSceneNode(node, func);
+			if (childNode)
+			{
+				childNode->childIndex = node->children.size();
+				node->children.push_back(childNode);
+			}
 		}
-	}
 
-	return node;
+		return node;
+	}
 }
 
 Model::Node* ModelAsset::CreateSceneNode(Model::Node* parent, const pugi::xml_node& xmlnode, const std::unordered_map<std::string, Ogre::MeshPtr>& meshes)

@@ -305,7 +305,4 @@
     <None Include="src\MainWindow\MainWindow.ui" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-  <ImportGroup Label="ExtensionTargets">
-    <Import Project="uic.targets" />
-  </ImportGroup>
 </Project>

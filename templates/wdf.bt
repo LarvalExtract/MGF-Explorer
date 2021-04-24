@@ -12,12 +12,13 @@
 //------------------------------------------------
 
 #include "get_wdf_string.bt"
+//#include "get_wdf_string.bt"
 
 struct Attribute {
     uint32 a_magic_number   <format=hex,name="MagicNumber",hidden=true>;
-    uint32 a_data_type      <name="DataType",hidden=true>;
-    uint32 a_crc            <name="CRC_Attribute">;
-    uint32 a_data_length    <name="Length",hidden=true>;
+    uint32 a_data_type      <name="DataType">;
+    uint32 a_crc            <name="CRC_Attribute",hidden=true>;
+    uint32 a_data_length    <name="Length">;
     switch (a_data_type)
     {
         case 3:  int32  data                <optimize=false,hidden=true>; break;
