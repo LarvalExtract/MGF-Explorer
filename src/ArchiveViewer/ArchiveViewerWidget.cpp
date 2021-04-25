@@ -15,17 +15,24 @@ ArchiveViewerWidget::ArchiveViewerWidget(const QString& mgfFilePath, QWidget *pa
     AssetManager(*ServiceProvider::Inject<ResourceManager>())
 {
     ui->setupUi(this); 
+    ui->Frame->hide();
 
     ui->treeView->setModel(&FileTreeModel);
     ui->treeView->setColumnWidth(0, 300);
-
-    ui->fileDetails->hide();
-
-    connect(ui->treeView->selectionModel(), SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)),
-            this, SLOT(on_treeView_selectionChanged(const QModelIndex&, const QModelIndex&)));
-
     ui->treeView->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(ui->treeView, SIGNAL(customContextMenuRequested(QPoint)), SLOT(on_treeView_customContextMenuRequested));
+
+    connect(
+        ui->treeView,
+        SIGNAL(customContextMenuRequested(QPoint)),
+        SLOT(on_treeView_customContextMenuRequested)
+    );
+
+	connect(
+		ui->treeView->selectionModel(),
+		SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)),
+		this,
+		SLOT(on_treeView_selectionChanged(const QModelIndex&, const QModelIndex&))
+	);
 
     FileMenu.Initialise(ui->treeView);
 }
@@ -43,62 +50,82 @@ void ArchiveViewerWidget::on_treeView_selectionChanged(const QModelIndex &sel, c
     if (sel == desel)
         return;
 
-    const auto pSelectedItem = static_cast<MGF::File*>(sel.internalPointer());
-    const auto asset = AssetManager.Get(*pSelectedItem);
-
-    if (asset)
+    if (const auto& selectedItem = *static_cast<MGF::File*>(sel.internalPointer()); selectedItem.IsFile())
     {
-        switch (asset->GetAssetType())
-        {
-        case MGF::Asset::EAssetType::PlainText:     pActiveAssetViewer = DisplayAssetViewer(&PlainTextViewer); break;
-        case MGF::Asset::EAssetType::StringTable:   pActiveAssetViewer = DisplayAssetViewer(&StringTableViewer); break;
-        case MGF::Asset::EAssetType::Texture:       pActiveAssetViewer = DisplayAssetViewer(&TextureViewer); break;
-        case MGF::Asset::EAssetType::Model:         pActiveAssetViewer = DisplayAssetViewer(&ModelViewer); break;
-        }
+        ui->Frame->show();
 
-        pActiveAssetViewer->LoadAsset(asset);
+		QString str = QString("%1 | %2 | %3 | %4 bytes").arg(
+            selectedItem.FilePath().c_str(),
+			QString::number(selectedItem.GUID(), 16),
+			QString::number(selectedItem.FileOffset()),
+			QString::number(selectedItem.FileLength())
+		);
+
+        ui->FileDetails->setText(str);
+
+		if (const auto asset = AssetManager.Get(selectedItem); asset != nullptr)
+		{
+			switch (asset->GetAssetType())
+			{
+			case MGF::Asset::EAssetType::PlainText:   DisplayAssetViewer(&PlainTextViewer);   PlainTextViewer.LoadAsset(asset);  break;
+            case MGF::Asset::EAssetType::StringTable: DisplayAssetViewer(&StringTableViewer); StringTableViewer.LoadAsset(asset); break;
+            case MGF::Asset::EAssetType::Texture:     DisplayAssetViewer(&TextureViewer);     TextureViewer.LoadAsset(asset);  break;
+            case MGF::Asset::EAssetType::Model:       DisplayAssetViewer(&ModelViewer);       ModelViewer.LoadAsset(asset); break;
+			}
+		}
+        else
+        {
+            DisplayAssetViewer(nullptr);
+        }
     }
     else
     {
-        pActiveAssetViewer = DisplayAssetViewer(nullptr);
+        ui->Frame->hide();
+
+
     }
 }
 
-AssetViewerWidgetBase* ArchiveViewerWidget::DisplayAssetViewer(AssetViewerWidgetBase* newAssetViewer)
+void ArchiveViewerWidget::DisplayAssetViewer(QWidget* newAssetViewer)
 {
-    if (pActiveAssetViewer == newAssetViewer)
+    if (newAssetViewer)
     {
-        return pActiveAssetViewer;
-    }
+        if (const auto item = ui->AssetViewLayout->itemAt(0); item)
+        {
+            const auto currentAssetViewer = item->widget();
 
-    if (pActiveAssetViewer)
-    {
-        pActiveAssetViewer->hide();
-    }
+            if (currentAssetViewer == newAssetViewer)
+            {
+                return;
+            }
 
-    if (auto frame = ui->assetViewFrame->layout(); newAssetViewer == nullptr)
-    {
-        frame->removeWidget(pActiveAssetViewer);
+            currentAssetViewer->hide();
+            ui->AssetViewLayout->replaceWidget(currentAssetViewer, newAssetViewer);
+            newAssetViewer->show();
+        }
+        else
+        {
+            ui->AssetViewLayout->addWidget(newAssetViewer);
+            newAssetViewer->show();
+        }
     }
     else
     {
-        frame->isEmpty() ? frame->addWidget(newAssetViewer) : (void)frame->replaceWidget(pActiveAssetViewer, newAssetViewer);
-    }
+        if (const auto item = ui->AssetViewLayout->itemAt(0); item)
+        {
+            const auto currentAssetViewer = item->widget();
 
-    if (newAssetViewer)
-    {
-        newAssetViewer->show();
+            currentAssetViewer->hide();
+            ui->AssetViewLayout->removeWidget(currentAssetViewer);
+        }
     }
-
-    return newAssetViewer;
 }
 
 void ArchiveViewerWidget::on_treeView_customContextMenuRequested(const QPoint &pos)
 {
+    auto screenPos = ui->treeView->viewport()->mapToGlobal(pos);
     if (QModelIndex index(ui->treeView->indexAt(pos)); index.isValid())
     {
-        auto screenPos = ui->treeView->viewport()->mapToGlobal(pos);
-
         if (const auto selectedItem = static_cast<MGF::File*>(index.internalPointer()); selectedItem->IsFile())
         {
 			switch (MGF::Asset::sAssetMapping.at(selectedItem->FileType()))
@@ -116,5 +143,9 @@ void ArchiveViewerWidget::on_treeView_customContextMenuRequested(const QPoint &p
         {
             FileMenu.popup(screenPos);
         }
+    }
+    else
+    {
+        FileMenu.popup(screenPos);
     }
 }

@@ -1,17 +1,16 @@
-#ifndef MGFTEXTVIEWWIDGET_H
-#define MGFTEXTVIEWWIDGET_H
+#pragma once
 
-#include "AssetViewers/AssetViewerWidgetBase.h"
+#include "AssetViewers/IAssetViewerWidget.h"
 
 #include <QWidget>
 
 namespace Ui {
-class PlainTextViewerWidget;
+	class PlainTextViewerWidget;
 }
 
 namespace PlainTextViewer {
 
-	class PlainTextViewerWidget : public AssetViewerWidgetBase
+	class PlainTextViewerWidget : public QWidget, public IAssetViewerWidget
 	{
 		Q_OBJECT
 
@@ -27,5 +26,3 @@ namespace PlainTextViewer {
 
 }
 
-
-#endif // MGFTEXTVIEWWIDGET_H

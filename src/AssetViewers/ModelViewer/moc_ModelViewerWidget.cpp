@@ -64,7 +64,7 @@ void ModelViewer::ModelViewerWidget::qt_static_metacall(QObject *_o, QMetaObject
 }
 
 QT_INIT_METAOBJECT const QMetaObject ModelViewer::ModelViewerWidget::staticMetaObject = { {
-    QMetaObject::SuperData::link<AssetViewerWidgetBase::staticMetaObject>(),
+    QMetaObject::SuperData::link<QWidget::staticMetaObject>(),
     qt_meta_stringdata_ModelViewer__ModelViewerWidget.data,
     qt_meta_data_ModelViewer__ModelViewerWidget,
     qt_static_metacall,
@@ -83,12 +83,14 @@ void *ModelViewer::ModelViewerWidget::qt_metacast(const char *_clname)
     if (!_clname) return nullptr;
     if (!strcmp(_clname, qt_meta_stringdata_ModelViewer__ModelViewerWidget.stringdata0))
         return static_cast<void*>(this);
-    return AssetViewerWidgetBase::qt_metacast(_clname);
+    if (!strcmp(_clname, "IAssetViewerWidget"))
+        return static_cast< IAssetViewerWidget*>(this);
+    return QWidget::qt_metacast(_clname);
 }
 
 int ModelViewer::ModelViewerWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
-    _id = AssetViewerWidgetBase::qt_metacall(_c, _id, _a);
+    _id = QWidget::qt_metacall(_c, _id, _a);
     return _id;
 }
 QT_WARNING_POP

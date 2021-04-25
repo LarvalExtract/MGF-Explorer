@@ -1,16 +1,17 @@
-#ifndef STRINGTABLEVIEWERWIDGET_H
-#define STRINGTABLEVIEWERWIDGET_H
+#pragma once
 
-#include "AssetViewers/AssetViewerWidgetBase.h"
+#include "AssetViewers/IAssetViewerWidget.h"
 #include "Models/StringTableModel.h"
 
+#include <QWidget>
+
 namespace Ui {
-class StringTableViewerWidget;
+    class StringTableViewerWidget;
 }
 
 namespace StringTableViewer {
 
-    class StringTableViewerWidget : public AssetViewerWidgetBase
+    class StringTableViewerWidget : public QWidget, public IAssetViewerWidget
     {
         Q_OBJECT
 
@@ -27,5 +28,3 @@ namespace StringTableViewer {
     };
 
 }
-
-#endif // STRINGTABLEVIEWERWIDGET_H

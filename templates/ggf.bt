@@ -28,8 +28,8 @@ struct GGF {
             uint32 length <hidden=true>;
             uint32 type <hidden=true>;
             byte data[length] <hidden=true>;
-        } attributes[attribute_count] <optimize=false,name=getAttributeName>;
-    } entities[entity_count] <optimize=false,name=getEntityName>;
+        } attributes[attribute_count] <optimize=false>;
+    } entities[entity_count] <optimize=false>;
 } ggf;
 
 string getEntityName(Entity &e)

@@ -1,12 +1,14 @@
 #pragma once
 
-#include "AssetViewers/AssetViewerWidgetBase.h"
+#include "AssetViewers/IAssetViewerWidget.h"
+
+#include <QWidget>
 
 namespace Ui {
     class EntityViewerWidget;
 }
 
-class EntityViewerWidget : public AssetViewerWidgetBase
+class EntityViewerWidget : public QWidget, public IAssetViewerWidget
 {
     Q_OBJECT
 

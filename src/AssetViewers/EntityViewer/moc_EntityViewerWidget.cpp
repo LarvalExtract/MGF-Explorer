@@ -81,7 +81,7 @@ void EntityViewerWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, i
 }
 
 QT_INIT_METAOBJECT const QMetaObject EntityViewerWidget::staticMetaObject = { {
-    QMetaObject::SuperData::link<AssetViewerWidgetBase::staticMetaObject>(),
+    QMetaObject::SuperData::link<QWidget::staticMetaObject>(),
     qt_meta_stringdata_EntityViewerWidget.data,
     qt_meta_data_EntityViewerWidget,
     qt_static_metacall,
@@ -100,12 +100,14 @@ void *EntityViewerWidget::qt_metacast(const char *_clname)
     if (!_clname) return nullptr;
     if (!strcmp(_clname, qt_meta_stringdata_EntityViewerWidget.stringdata0))
         return static_cast<void*>(this);
-    return AssetViewerWidgetBase::qt_metacast(_clname);
+    if (!strcmp(_clname, "IAssetViewerWidget"))
+        return static_cast< IAssetViewerWidget*>(this);
+    return QWidget::qt_metacast(_clname);
 }
 
 int EntityViewerWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
-    _id = AssetViewerWidgetBase::qt_metacall(_c, _id, _a);
+    _id = QWidget::qt_metacall(_c, _id, _a);
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {

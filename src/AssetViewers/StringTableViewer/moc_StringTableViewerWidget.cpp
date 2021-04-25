@@ -64,7 +64,7 @@ void StringTableViewer::StringTableViewerWidget::qt_static_metacall(QObject *_o,
 }
 
 QT_INIT_METAOBJECT const QMetaObject StringTableViewer::StringTableViewerWidget::staticMetaObject = { {
-    QMetaObject::SuperData::link<AssetViewerWidgetBase::staticMetaObject>(),
+    QMetaObject::SuperData::link<QWidget::staticMetaObject>(),
     qt_meta_stringdata_StringTableViewer__StringTableViewerWidget.data,
     qt_meta_data_StringTableViewer__StringTableViewerWidget,
     qt_static_metacall,
@@ -83,12 +83,14 @@ void *StringTableViewer::StringTableViewerWidget::qt_metacast(const char *_clnam
     if (!_clname) return nullptr;
     if (!strcmp(_clname, qt_meta_stringdata_StringTableViewer__StringTableViewerWidget.stringdata0))
         return static_cast<void*>(this);
-    return AssetViewerWidgetBase::qt_metacast(_clname);
+    if (!strcmp(_clname, "IAssetViewerWidget"))
+        return static_cast< IAssetViewerWidget*>(this);
+    return QWidget::qt_metacast(_clname);
 }
 
 int StringTableViewer::StringTableViewerWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
-    _id = AssetViewerWidgetBase::qt_metacall(_c, _id, _a);
+    _id = QWidget::qt_metacall(_c, _id, _a);
     return _id;
 }
 QT_WARNING_POP

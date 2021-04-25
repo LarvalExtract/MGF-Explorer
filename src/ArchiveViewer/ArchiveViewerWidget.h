@@ -38,7 +38,6 @@ namespace ArchiveViewer {
 		MGF::Archive MgfArchive;
 		Models::ArchiveFileTreeModel FileTreeModel;
 
-		AssetViewerWidgetBase* pActiveAssetViewer = nullptr;
 		PlainTextViewer::PlainTextViewerWidget PlainTextViewer;
 		StringTableViewer::StringTableViewerWidget StringTableViewer;
 		TextureViewer::TextureViewerWidget TextureViewer;
@@ -47,7 +46,7 @@ namespace ArchiveViewer {
 		ContextMenus::FileMenu FileMenu;
 
 	private:
-		AssetViewerWidgetBase* DisplayAssetViewer(AssetViewerWidgetBase* newAssetViewer);
+		void DisplayAssetViewer(QWidget* newAssetViewer);
 		ResourceManager& AssetManager;
 	};
 

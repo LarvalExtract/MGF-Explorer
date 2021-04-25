@@ -1,9 +1,10 @@
 .echo on
 .mode csv
-.import ../data/ma2_crc_strings.csv strings
+.import ../data/ma_crc_strings.csv strings
 .import ../data/csv/wdf.csv wdf
 .import ../data/csv/mtb.csv mtb
 .import ../data/csv/ggf.csv ggf
+.import ../data/csv/sdf.csv wdf
 
 CREATE TABLE wdf_crcs AS SELECT DISTINCT Value FROM wdf WHERE Name='CRC_Entity' OR Name='CRC_Attribute';
 CREATE TABLE wdf_names AS SELECT wdf_crcs.Value, strings.String FROM wdf_crcs INNER JOIN strings ON wdf_crcs.Value=strings.CRC;

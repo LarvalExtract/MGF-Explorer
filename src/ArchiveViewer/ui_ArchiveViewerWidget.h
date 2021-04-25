@@ -15,6 +15,7 @@
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLineEdit>
+#include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QTreeView>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
@@ -26,10 +27,11 @@ class Ui_ArchiveViewerWidget
 public:
     QHBoxLayout *horizontalLayout;
     QTreeView *treeView;
-    QVBoxLayout *assetViewerLayout;
-    QLineEdit *fileDetails;
-    QFrame *assetViewFrame;
+    QFrame *Frame;
     QVBoxLayout *verticalLayout;
+    QLineEdit *FileDetails;
+    QHBoxLayout *AssetViewLayout;
+    QSpacerItem *verticalSpacer;
 
     void setupUi(QWidget *ArchiveViewerWidget)
     {
@@ -49,30 +51,31 @@ public:
 
         horizontalLayout->addWidget(treeView);
 
-        assetViewerLayout = new QVBoxLayout();
-        assetViewerLayout->setObjectName(QString::fromUtf8("assetViewerLayout"));
-        assetViewerLayout->setSizeConstraint(QLayout::SetMinimumSize);
-        fileDetails = new QLineEdit(ArchiveViewerWidget);
-        fileDetails->setObjectName(QString::fromUtf8("fileDetails"));
-        fileDetails->setReadOnly(true);
-
-        assetViewerLayout->addWidget(fileDetails);
-
-        assetViewFrame = new QFrame(ArchiveViewerWidget);
-        assetViewFrame->setObjectName(QString::fromUtf8("assetViewFrame"));
-        assetViewFrame->setMaximumSize(QSize(16777215, 16777215));
-        assetViewFrame->setFrameShape(QFrame::NoFrame);
-        assetViewFrame->setFrameShadow(QFrame::Raised);
-        verticalLayout = new QVBoxLayout(assetViewFrame);
-        verticalLayout->setSpacing(0);
+        Frame = new QFrame(ArchiveViewerWidget);
+        Frame->setObjectName(QString::fromUtf8("Frame"));
+        Frame->setFrameShape(QFrame::StyledPanel);
+        Frame->setFrameShadow(QFrame::Raised);
+        verticalLayout = new QVBoxLayout(Frame);
+        verticalLayout->setSpacing(3);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
-        verticalLayout->setSizeConstraint(QLayout::SetMaximumSize);
         verticalLayout->setContentsMargins(0, 0, 0, 0);
+        FileDetails = new QLineEdit(Frame);
+        FileDetails->setObjectName(QString::fromUtf8("FileDetails"));
 
-        assetViewerLayout->addWidget(assetViewFrame);
+        verticalLayout->addWidget(FileDetails);
+
+        AssetViewLayout = new QHBoxLayout();
+        AssetViewLayout->setObjectName(QString::fromUtf8("AssetViewLayout"));
+        AssetViewLayout->setSizeConstraint(QLayout::SetFixedSize);
+
+        verticalLayout->addLayout(AssetViewLayout);
+
+        verticalSpacer = new QSpacerItem(20, 0, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding);
+
+        verticalLayout->addItem(verticalSpacer);
 
 
-        horizontalLayout->addLayout(assetViewerLayout);
+        horizontalLayout->addWidget(Frame);
 
 
         retranslateUi(ArchiveViewerWidget);
