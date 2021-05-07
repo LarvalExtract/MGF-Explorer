@@ -2,7 +2,7 @@
 #include "MGF/Assets/EntityAsset.h"
 
 static const QVariant HEADERS[] = {
-	"Name", "Class"
+	"Name", "Class", "ID"
 };
 
 using namespace EntityViewer::Models;
@@ -60,25 +60,16 @@ int EntityTree::columnCount(const QModelIndex& parent /*= QModelIndex()*/) const
 
 QVariant EntityTree::data(const QModelIndex& index, int role /*= Qt::DisplayRole*/) const
 {
-	if (!index.isValid())
+	return (index.isValid() && role == Qt::DisplayRole) ?
+	[&index]() -> QVariant
 	{
-		return QVariant();
-	}
-
-	if (role != Qt::DisplayRole)
-	{
-		return QVariant();
-	}
-
-	const auto entity = static_cast<MGF::Asset::Entity*>(index.internalPointer());
-
-	switch (index.column())
-	{
-	case 0: return entity->Description;
-	case 1: return entity->Class;
-	}
-	
-	return QVariant();
+		switch (const auto entity = static_cast<MGF::Asset::Entity*>(index.internalPointer()); index.column())
+		{
+		case 0: return entity->Description;
+		case 1: return entity->Class;
+		case 2: return entity->UID;
+		}
+	}()	: QVariant();
 }
 
 QVariant EntityTree::headerData(int section, Qt::Orientation orientation, int role /*= Qt::DisplayRole*/) const

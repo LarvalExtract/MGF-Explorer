@@ -21,7 +21,7 @@ namespace MGF { namespace Asset {
 		uint32_t ChildID;
 		uint32_t SiblingID;
 
-		EntityViewer::Models::AttributeTable Attributes;
+		EntityViewer::Models::AttributeTableModel Attributes;
 
 		Entity* ParentEntity = nullptr;
 		QVector<Entity*> Children;

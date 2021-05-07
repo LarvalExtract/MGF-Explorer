@@ -26,10 +26,11 @@ class Ui_ArchiveViewerWidget
 public:
     QHBoxLayout *horizontalLayout;
     QVBoxLayout *FileTreeLayout;
-    QLineEdit *FileDetails;
     QTreeView *FileTreeView;
     QFrame *Frame;
     QVBoxLayout *AssetViewerLayout;
+    QLineEdit *FileDetails;
+    QWidget *EmptyWidget;
 
     void setupUi(QWidget *ArchiveViewerWidget)
     {
@@ -44,25 +45,14 @@ public:
         FileTreeLayout->setSpacing(5);
         FileTreeLayout->setObjectName(QString::fromUtf8("FileTreeLayout"));
         FileTreeLayout->setSizeConstraint(QLayout::SetMinimumSize);
-        FileDetails = new QLineEdit(ArchiveViewerWidget);
-        FileDetails->setObjectName(QString::fromUtf8("FileDetails"));
-        QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
-        sizePolicy.setHorizontalStretch(0);
-        sizePolicy.setVerticalStretch(0);
-        sizePolicy.setHeightForWidth(FileDetails->sizePolicy().hasHeightForWidth());
-        FileDetails->setSizePolicy(sizePolicy);
-        FileDetails->setMaximumSize(QSize(600, 16777215));
-
-        FileTreeLayout->addWidget(FileDetails);
-
         FileTreeView = new QTreeView(ArchiveViewerWidget);
         FileTreeView->setObjectName(QString::fromUtf8("FileTreeView"));
-        QSizePolicy sizePolicy1(QSizePolicy::Preferred, QSizePolicy::Expanding);
-        sizePolicy1.setHorizontalStretch(0);
-        sizePolicy1.setVerticalStretch(0);
-        sizePolicy1.setHeightForWidth(FileTreeView->sizePolicy().hasHeightForWidth());
-        FileTreeView->setSizePolicy(sizePolicy1);
-        FileTreeView->setMinimumSize(QSize(550, 0));
+        QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(FileTreeView->sizePolicy().hasHeightForWidth());
+        FileTreeView->setSizePolicy(sizePolicy);
+        FileTreeView->setMinimumSize(QSize(600, 0));
         FileTreeView->setMaximumSize(QSize(600, 16777215));
         FileTreeView->setEditTriggers(QAbstractItemView::NoEditTriggers);
         FileTreeView->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -76,17 +66,33 @@ public:
 
         Frame = new QFrame(ArchiveViewerWidget);
         Frame->setObjectName(QString::fromUtf8("Frame"));
-        QSizePolicy sizePolicy2(QSizePolicy::Expanding, QSizePolicy::Preferred);
-        sizePolicy2.setHorizontalStretch(0);
-        sizePolicy2.setVerticalStretch(0);
-        sizePolicy2.setHeightForWidth(Frame->sizePolicy().hasHeightForWidth());
-        Frame->setSizePolicy(sizePolicy2);
+        QSizePolicy sizePolicy1(QSizePolicy::Expanding, QSizePolicy::Preferred);
+        sizePolicy1.setHorizontalStretch(0);
+        sizePolicy1.setVerticalStretch(0);
+        sizePolicy1.setHeightForWidth(Frame->sizePolicy().hasHeightForWidth());
+        Frame->setSizePolicy(sizePolicy1);
         Frame->setFrameShape(QFrame::StyledPanel);
         Frame->setFrameShadow(QFrame::Raised);
         AssetViewerLayout = new QVBoxLayout(Frame);
         AssetViewerLayout->setSpacing(3);
         AssetViewerLayout->setObjectName(QString::fromUtf8("AssetViewerLayout"));
         AssetViewerLayout->setContentsMargins(0, 0, 0, 0);
+        FileDetails = new QLineEdit(Frame);
+        FileDetails->setObjectName(QString::fromUtf8("FileDetails"));
+        QSizePolicy sizePolicy2(QSizePolicy::Preferred, QSizePolicy::Fixed);
+        sizePolicy2.setHorizontalStretch(0);
+        sizePolicy2.setVerticalStretch(0);
+        sizePolicy2.setHeightForWidth(FileDetails->sizePolicy().hasHeightForWidth());
+        FileDetails->setSizePolicy(sizePolicy2);
+        FileDetails->setMaximumSize(QSize(16777215, 16777215));
+
+        AssetViewerLayout->addWidget(FileDetails);
+
+        EmptyWidget = new QWidget(Frame);
+        EmptyWidget->setObjectName(QString::fromUtf8("EmptyWidget"));
+
+        AssetViewerLayout->addWidget(EmptyWidget);
+
 
         horizontalLayout->addWidget(Frame);
 

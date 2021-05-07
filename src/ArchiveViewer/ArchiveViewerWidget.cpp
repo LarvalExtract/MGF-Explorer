@@ -80,12 +80,12 @@ void ArchiveViewerWidget::on_treeView_selectionChanged(const QModelIndex &sel, c
 			}
 			else
 			{
-				DisplayAssetViewer(nullptr);
+				DisplayAssetViewer(ui->EmptyWidget);
 			}
         }
         catch (const std::exception& e)
         {
-            DisplayAssetViewer(nullptr);
+            DisplayAssetViewer(ui->EmptyWidget);
 
             QMessageBox::critical(this, QString("Failed to load asset for %1").arg(selectedItem.Name()), e.what());
         }
@@ -98,37 +98,17 @@ void ArchiveViewerWidget::on_treeView_selectionChanged(const QModelIndex &sel, c
 
 void ArchiveViewerWidget::DisplayAssetViewer(QWidget* newAssetViewer)
 {
-    if (newAssetViewer)
+	const auto item = ui->AssetViewerLayout->itemAt(1);
+	const auto currentAssetViewer = item->widget();
+    
+    if (currentAssetViewer == newAssetViewer)
     {
-        if (const auto item = ui->AssetViewerLayout->itemAt(0); item)
-        {
-            const auto currentAssetViewer = item->widget();
-
-            if (currentAssetViewer == newAssetViewer)
-            {
-                return;
-            }
-
-            currentAssetViewer->hide();
-            ui->AssetViewerLayout->replaceWidget(currentAssetViewer, newAssetViewer);
-            newAssetViewer->show();
-        }
-        else
-        {
-            ui->AssetViewerLayout->addWidget(newAssetViewer);
-            newAssetViewer->show();
-        }
+        return;
     }
-    else
-    {
-        if (const auto item = ui->AssetViewerLayout->itemAt(0); item)
-        {
-            const auto currentAssetViewer = item->widget();
 
-            currentAssetViewer->hide();
-            ui->AssetViewerLayout->removeWidget(currentAssetViewer);
-        }
-    }
+    currentAssetViewer->hide();
+    ui->AssetViewerLayout->replaceWidget(currentAssetViewer, newAssetViewer);
+    newAssetViewer->show();
 }
 
 void ArchiveViewerWidget::on_treeView_customContextMenuRequested(const QPoint &pos)

@@ -22,6 +22,12 @@ QVariant AttributeTableModel::data(const QModelIndex& index, int role /*= Qt::Di
 	{
 		return QVariant();
 	}
+
+	switch (const auto& [name, value] = this->at(index.row()); index.column())
+	{
+	case 0: return name;
+	case 1: return value;
+	}
 }
 
 QVariant AttributeTableModel::headerData(int section, Qt::Orientation orientation, int role /*= Qt::DisplayRole*/) const
