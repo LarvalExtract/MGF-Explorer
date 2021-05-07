@@ -21,32 +21,32 @@
 QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
-struct qt_meta_stringdata_EntityViewerWidget_t {
+struct qt_meta_stringdata_EntityViewer__EntityViewerWidget_t {
     QByteArrayData data[6];
-    char stringdata0[77];
+    char stringdata0[91];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
-    qptrdiff(offsetof(qt_meta_stringdata_EntityViewerWidget_t, stringdata0) + ofs \
+    qptrdiff(offsetof(qt_meta_stringdata_EntityViewer__EntityViewerWidget_t, stringdata0) + ofs \
         - idx * sizeof(QByteArrayData)) \
     )
-static const qt_meta_stringdata_EntityViewerWidget_t qt_meta_stringdata_EntityViewerWidget = {
+static const qt_meta_stringdata_EntityViewer__EntityViewerWidget_t qt_meta_stringdata_EntityViewer__EntityViewerWidget = {
     {
-QT_MOC_LITERAL(0, 0, 18), // "EntityViewerWidget"
-QT_MOC_LITERAL(1, 19, 34), // "on_EntityTreeView_selectionCh..."
-QT_MOC_LITERAL(2, 54, 0), // ""
-QT_MOC_LITERAL(3, 55, 11), // "QModelIndex"
-QT_MOC_LITERAL(4, 67, 3), // "sel"
-QT_MOC_LITERAL(5, 71, 5) // "desel"
+QT_MOC_LITERAL(0, 0, 32), // "EntityViewer::EntityViewerWidget"
+QT_MOC_LITERAL(1, 33, 34), // "on_EntityTreeView_selectionCh..."
+QT_MOC_LITERAL(2, 68, 0), // ""
+QT_MOC_LITERAL(3, 69, 11), // "QModelIndex"
+QT_MOC_LITERAL(4, 81, 3), // "sel"
+QT_MOC_LITERAL(5, 85, 5) // "desel"
 
     },
-    "EntityViewerWidget\0"
+    "EntityViewer::EntityViewerWidget\0"
     "on_EntityTreeView_selectionChanged\0\0"
     "QModelIndex\0sel\0desel"
 };
 #undef QT_MOC_LITERAL
 
-static const uint qt_meta_data_EntityViewerWidget[] = {
+static const uint qt_meta_data_EntityViewer__EntityViewerWidget[] = {
 
  // content:
        8,       // revision
@@ -68,7 +68,7 @@ static const uint qt_meta_data_EntityViewerWidget[] = {
        0        // eod
 };
 
-void EntityViewerWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+void EntityViewer::EntityViewerWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
     if (_c == QMetaObject::InvokeMetaMethod) {
         auto *_t = static_cast<EntityViewerWidget *>(_o);
@@ -80,32 +80,32 @@ void EntityViewerWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, i
     }
 }
 
-QT_INIT_METAOBJECT const QMetaObject EntityViewerWidget::staticMetaObject = { {
+QT_INIT_METAOBJECT const QMetaObject EntityViewer::EntityViewerWidget::staticMetaObject = { {
     QMetaObject::SuperData::link<QWidget::staticMetaObject>(),
-    qt_meta_stringdata_EntityViewerWidget.data,
-    qt_meta_data_EntityViewerWidget,
+    qt_meta_stringdata_EntityViewer__EntityViewerWidget.data,
+    qt_meta_data_EntityViewer__EntityViewerWidget,
     qt_static_metacall,
     nullptr,
     nullptr
 } };
 
 
-const QMetaObject *EntityViewerWidget::metaObject() const
+const QMetaObject *EntityViewer::EntityViewerWidget::metaObject() const
 {
     return QObject::d_ptr->metaObject ? QObject::d_ptr->dynamicMetaObject() : &staticMetaObject;
 }
 
-void *EntityViewerWidget::qt_metacast(const char *_clname)
+void *EntityViewer::EntityViewerWidget::qt_metacast(const char *_clname)
 {
     if (!_clname) return nullptr;
-    if (!strcmp(_clname, qt_meta_stringdata_EntityViewerWidget.stringdata0))
+    if (!strcmp(_clname, qt_meta_stringdata_EntityViewer__EntityViewerWidget.stringdata0))
         return static_cast<void*>(this);
     if (!strcmp(_clname, "IAssetViewerWidget"))
         return static_cast< IAssetViewerWidget*>(this);
     return QWidget::qt_metacast(_clname);
 }
 
-int EntityViewerWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+int EntityViewer::EntityViewerWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
     _id = QWidget::qt_metacall(_c, _id, _a);
     if (_id < 0)

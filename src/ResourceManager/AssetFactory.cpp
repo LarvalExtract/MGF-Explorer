@@ -4,6 +4,7 @@
 #include "MGF/Assets/Texture.h"
 #include "MGF/Assets/StringTable.h"
 #include "MGF/Assets/ModelAsset.h"
+#include "MGF/Assets/EntityAsset.h"
 
 std::shared_ptr<MGF::Asset::AssetBase> AssetFactory::Create(const MGF::File& file)
 {
@@ -18,6 +19,7 @@ std::shared_ptr<MGF::Asset::AssetBase> AssetFactory::Create(const MGF::File& fil
 	case MGF::Asset::EAssetType::StringTable: return std::make_shared<MGF::Asset::StringTable>(file);
 	case MGF::Asset::EAssetType::Texture:     return std::make_shared<MGF::Asset::Texture>(file);
 	case MGF::Asset::EAssetType::Model:       return std::make_shared<MGF::Asset::ModelAsset>(file);
+	case MGF::Asset::EAssetType::Entity:      return std::make_shared<MGF::Asset::EntityAsset>(file);
 	}
 
 	return nullptr;

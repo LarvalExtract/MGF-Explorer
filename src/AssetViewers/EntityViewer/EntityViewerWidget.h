@@ -1,6 +1,7 @@
 #pragma once
 
 #include "AssetViewers/IAssetViewerWidget.h"
+#include "Models/EntityTreeModel.h"
 
 #include <QWidget>
 
@@ -8,19 +9,25 @@ namespace Ui {
     class EntityViewerWidget;
 }
 
-class EntityViewerWidget : public QWidget, public IAssetViewerWidget
-{
-    Q_OBJECT
+namespace EntityViewer {
 
-public:
-    explicit EntityViewerWidget(QWidget *parent = nullptr);
-    ~EntityViewerWidget();
+    class EntityViewerWidget : public QWidget, public IAssetViewerWidget
+    {
+        Q_OBJECT
 
-    void LoadAsset(MGF::Asset::AssetPtr asset) override;
+    public:
+        explicit EntityViewerWidget(QWidget* parent = nullptr);
+        ~EntityViewerWidget();
 
-private slots:
-    void on_EntityTreeView_selectionChanged(const QModelIndex& sel, const QModelIndex& desel);
+        void LoadAsset(MGF::Asset::AssetPtr asset) override;
 
-private:
-    Ui::EntityViewerWidget*ui;
-};
+    private slots:
+        void on_EntityTreeView_selectionChanged(const QModelIndex& sel, const QModelIndex& desel);
+
+    private:
+        Ui::EntityViewerWidget* ui;
+
+        Models::EntityTree EntityTreeModel;
+    };
+
+}

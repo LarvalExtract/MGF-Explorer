@@ -8,6 +8,7 @@ namespace MGF { namespace Asset {
 		StringTable,
 		Texture,
 		Model,
+		Entity,
 
 		None
 	};

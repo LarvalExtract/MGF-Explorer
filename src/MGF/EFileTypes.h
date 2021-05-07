@@ -9,6 +9,9 @@ namespace MGF {
 		Node,
 		Text,
 		Tif,
+		Wdf,
+		Mtb,
+		Ggf,
 
 		Unassigned
 	};

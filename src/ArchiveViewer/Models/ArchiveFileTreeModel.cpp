@@ -75,6 +75,7 @@ QVariant ArchiveFileTreeModel::data(const QModelIndex &index, int role) const
             { MGF::Asset::EAssetType::StringTable, "String Table" },
             { MGF::Asset::EAssetType::Texture,     "Texture" },
             { MGF::Asset::EAssetType::Model,       "Model" },
+            { MGF::Asset::EAssetType::Entity,      "Map" },
             { MGF::Asset::EAssetType::None,        QVariant() }
 		};
 

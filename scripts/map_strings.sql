@@ -7,7 +7,7 @@
 .import ../data/csv/sdf.csv wdf
 
 CREATE TABLE wdf_crcs AS SELECT DISTINCT Value FROM wdf WHERE Name='CRC_Entity' OR Name='CRC_Attribute';
-CREATE TABLE wdf_names AS SELECT wdf_crcs.Value, strings.String FROM wdf_crcs INNER JOIN strings ON wdf_crcs.Value=strings.CRC;
+CREATE TABLE wdf_names AS SELECT DISTINCT wdf_crcs.Value, strings.String FROM wdf_crcs INNER JOIN strings ON wdf_crcs.Value=strings.CRC;
 SELECT COUNT (*) FROM wdf_crcs;
 SELECT COUNT (*) FROM wdf_names;
 
@@ -18,7 +18,7 @@ SELECT DISTINCT * FROM wdf_names;
 .echo on
 
 CREATE TABLE mtb_crcs AS SELECT DISTINCT Value FROM mtb WHERE Name='CRC_Entity' OR Name='CRC_Attribute';
-CREATE TABLE mtb_names AS SELECT mtb_crcs.Value, strings.String FROM mtb_crcs INNER JOIN strings ON mtb_crcs.Value=strings.CRC;
+CREATE TABLE mtb_names AS SELECT DISTINCT mtb_crcs.Value, strings.String FROM mtb_crcs INNER JOIN strings ON mtb_crcs.Value=strings.CRC;
 SELECT COUNT (*) FROM mtb_crcs;
 SELECT COUNT (*) FROM mtb_names;
 
@@ -29,7 +29,7 @@ SELECT DISTINCT * FROM mtb_names;
 .echo on
 
 CREATE TABLE ggf_crcs AS SELECT DISTINCT Value FROM ggf WHERE Name='CRC_Entity' OR Name='CRC_Attribute';
-CREATE TABLE ggf_names AS SELECT ggf_crcs.Value, strings.String FROM ggf_crcs INNER JOIN strings ON ggf_crcs.Value=strings.CRC;
+CREATE TABLE ggf_names AS SELECT DISTINCT ggf_crcs.Value, strings.String FROM ggf_crcs INNER JOIN strings ON ggf_crcs.Value=strings.CRC;
 SELECT COUNT (*) FROM ggf_crcs;
 SELECT COUNT (*) FROM ggf_names;
 

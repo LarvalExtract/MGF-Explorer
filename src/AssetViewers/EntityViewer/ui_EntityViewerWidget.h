@@ -35,6 +35,11 @@ public:
         if (EntityViewerWidget->objectName().isEmpty())
             EntityViewerWidget->setObjectName(QString::fromUtf8("EntityViewerWidget"));
         EntityViewerWidget->resize(1089, 825);
+        QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(EntityViewerWidget->sizePolicy().hasHeightForWidth());
+        EntityViewerWidget->setSizePolicy(sizePolicy);
         verticalLayout = new QVBoxLayout(EntityViewerWidget);
         verticalLayout->setSpacing(0);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));

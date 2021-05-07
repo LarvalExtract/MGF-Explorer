@@ -61,6 +61,14 @@ namespace MGF {
 
         void Read(char* buffer, ::uint32_t offset = 0, std::uint32_t length = INT_MAX) const;
 
+        template<typename T>
+        T Read(size_t offset) const
+        {
+            T result;
+            this->Read(reinterpret_cast<char*>(&result), offset, sizeof(result));
+            return result;
+        }
+
     private:
         File* m_Parent;
         QHash<QString, const File*> m_Children;
