@@ -1,7 +1,7 @@
 #ifndef FILEEXTRACTOR_H
 #define FILEEXTRACTOR_H
 
-#include "FileExtractor/Models/FileExtractItem.h"
+#include "FileExtractorWindow/Models/FileExtractItem.h"
 
 #include <QModelIndexList>
 

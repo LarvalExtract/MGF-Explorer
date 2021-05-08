@@ -1,7 +1,7 @@
 #include "FileExtractorStateGroup.h"
 
-#include "FileExtractor/FileExtractorDialog.h"
-#include "FileExtractor/Models/FileExtractListModel.h"
+#include "FileExtractorWindow/FileExtractorDialog.h"
+#include "FileExtractorWindow/Models/FileExtractListModel.h"
 
 #include "IdleState.h"
 #include "ProgressState.h"

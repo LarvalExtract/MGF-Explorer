@@ -1,10 +1,9 @@
 #include "ProgressState.h"
 #include "FileExtractorStateGroup.h"
 
-#include "FileExtractor/FileExtractorDialog.h"
-#include "FileExtractor/ui_FileExtractorDialog.h"
-
-#include "FileExtractor/Extractor.h"
+#include "FileExtractorWindow/FileExtractorDialog.h"
+#include "FileExtractorWindow/ui_FileExtractorDialog.h"
+#include "FileExtractorWindow/Extractor.h"
 
 #include <future>
 

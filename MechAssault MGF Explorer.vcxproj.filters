@@ -30,28 +30,28 @@
     <ClCompile Include="src\AssetViewers\StringTableViewer\StringTableViewerWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\FileExtractor\Models\FileExtractListModel.cpp">
+    <ClCompile Include="src\FileExtractorWindow\Models\FileExtractListModel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\FileExtractor\States\FileExtractorStateGroup.cpp">
+    <ClCompile Include="src\FileExtractorWindow\States\FileExtractorStateGroup.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\FileExtractor\States\FinishedState.cpp">
+    <ClCompile Include="src\FileExtractorWindow\States\FinishedState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\FileExtractor\States\IdleState.cpp">
+    <ClCompile Include="src\FileExtractorWindow\States\IdleState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\FileExtractor\States\ProgressState.cpp">
+    <ClCompile Include="src\FileExtractorWindow\States\ProgressState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\FileExtractor\Extractor.cpp">
+    <ClCompile Include="src\FileExtractorWindow\Extractor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\FileExtractor\FileExtractorDialog.cpp">
+    <ClCompile Include="src\FileExtractorWindow\FileExtractorDialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\FileExtractor\moc_FileExtractorDialog.cpp">
+    <ClCompile Include="src\FileExtractorWindow\moc_FileExtractorDialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\mgf\Assets\PlainText.cpp">
@@ -194,34 +194,34 @@
     <ClInclude Include="src\AssetViewers\StringTableViewer\ui_StringTableViewerWidget.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\FileExtractor\Models\FileExtractItem.h">
+    <ClInclude Include="src\FileExtractorWindow\Models\FileExtractItem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\FileExtractor\Models\FileExtractListModel.h">
+    <ClInclude Include="src\FileExtractorWindow\Models\FileExtractListModel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\FileExtractor\States\FileExtractorStateBase.h">
+    <ClInclude Include="src\FileExtractorWindow\States\FileExtractorStateBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\FileExtractor\States\FileExtractorStateGroup.h">
+    <ClInclude Include="src\FileExtractorWindow\States\FileExtractorStateGroup.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\FileExtractor\States\FinishedState.h">
+    <ClInclude Include="src\FileExtractorWindow\States\FinishedState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\FileExtractor\States\IdleState.h">
+    <ClInclude Include="src\FileExtractorWindow\States\IdleState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\FileExtractor\States\ProgressState.h">
+    <ClInclude Include="src\FileExtractorWindow\States\ProgressState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\FileExtractor\Extractor.h">
+    <ClInclude Include="src\FileExtractorWindow\Extractor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\FileExtractor\FileExtractorDialog.h">
+    <ClInclude Include="src\FileExtractorWindow\FileExtractorDialog.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\FileExtractor\ui_FileExtractorDialog.h">
+    <ClInclude Include="src\FileExtractorWindow\ui_FileExtractorDialog.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\mgf\Assets\PlainText.h">
@@ -400,7 +400,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\FileExtractor\FileExtractorDialog.ui" />
+    <None Include="src\FileExtractorWindow\FileExtractorDialog.ui" />
     <None Include="src\AssetViewers\TextureViewer\TextureViewerWidget.ui" />
     <None Include="src\AssetViewers\PlainTextViewer\PlainTextViewerWidget.ui" />
     <None Include="src\ArchiveViewer\ArchiveViewerWidget.ui" />

@@ -1,7 +1,5 @@
 #pragma once
 
-#include "FileExtractor/Extractor.h"
-
 #include <QMenu>
 #include <QTreeView>
 

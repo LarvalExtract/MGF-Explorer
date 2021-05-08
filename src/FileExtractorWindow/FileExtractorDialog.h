@@ -1,8 +1,8 @@
 #ifndef FILEEXTRACTORDIALOG_H
 #define FILEEXTRACTORDIALOG_H
 
-#include "FileExtractor/Models/FileExtractListModel.h"
-#include "FileExtractor/States/FileExtractorStateGroup.h"
+#include "FileExtractorWindow/Models/FileExtractListModel.h"
+#include "FileExtractorWindow/States/FileExtractorStateGroup.h"
 
 #include <QDialog>
 #include <filesystem>

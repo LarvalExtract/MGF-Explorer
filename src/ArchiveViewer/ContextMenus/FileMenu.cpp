@@ -1,6 +1,6 @@
 #include "FileMenu.h"
-#include "FileExtractor/Extractor.h"
-#include "FileExtractor/FileExtractorDialog.h"
+#include "FileExtractorWindow/Extractor.h"
+#include "FileExtractorWindow/FileExtractorDialog.h"
 
 using namespace ArchiveViewer::ContextMenus;
 

@@ -1,8 +1,8 @@
 #include "FinishedState.h"
 #include "FileExtractorStateGroup.h"
 
-#include "FileExtractor/FileExtractorDialog.h"
-#include "FileExtractor/ui_FileExtractorDialog.h"
+#include "FileExtractorWindow/FileExtractorDialog.h"
+#include "FileExtractorWindow/ui_FileExtractorDialog.h"
 
 using namespace FileExtractor::States;
 
