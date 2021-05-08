@@ -13,9 +13,11 @@ const std::unordered_map<std::string, MGF::EFileType> MGF::File::MapExtensionFil
     { ".cfg",        MGF::EFileType::Text },
     { ".mesh",       MGF::EFileType::Text },    // temp
     { ".road",       MGF::EFileType::Text },    // temp
-    { ".node",       MGF::EFileType::Node },    // temp
+    { ".node",       MGF::EFileType::Node },
     { ".mat",        MGF::EFileType::Text },    // temp
     { ".mgv",        MGF::EFileType::Text },
+    { ".wdf",        MGF::EFileType::Wdf  },
+    { ".mtb",        MGF::EFileType::Mtb  },
     { "",            MGF::EFileType::Unassigned }
 };
 

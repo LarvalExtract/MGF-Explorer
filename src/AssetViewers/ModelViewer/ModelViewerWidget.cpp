@@ -1,6 +1,5 @@
 #include "ModelViewerWidget.h"
 #include "ui_ModelViewerWidget.h"
-#include "AssetViewers/ui_AssetViewerWidgetBase.h"
 
 #include "MGF/Assets/ModelAsset.h"
 #include "Utilities/ContextProvider/ServiceProvider.h"
@@ -10,12 +9,10 @@ static int s_Count = 0;
 using namespace ModelViewer;
 
 ModelViewerWidget::ModelViewerWidget(QWidget *parent) :
-    AssetViewerWidgetBase(parent),
     ui(new Ui::ModelViewerWidget),
     m_SceneManager(ServiceProvider::Inject<Ogre::SceneManager>())
 {
     ui->setupUi(this);
-    baseUi->assetViewerLayout->addWidget(ui->frame);
 
     s_Count++;
 
@@ -42,10 +39,8 @@ ModelViewerWidget::~ModelViewerWidget()
 
 void ModelViewerWidget::LoadAsset(MGF::Asset::AssetPtr asset)
 {
-    AssetViewerWidgetBase::LoadAsset(asset);
-
     m_SceneRoot->removeAllChildren();
-	auto& model = static_cast<MGF::Asset::ModelAsset&>(*(asset.get()));
+	auto& model = *static_cast<MGF::Asset::ModelAsset*>(asset.get());
     m_SceneRoot->addChild(model.GetRootNode()->sceneNode);
 
 
@@ -91,7 +86,7 @@ void ModelViewerWidget::LoadAsset(MGF::Asset::AssetPtr asset)
     RemoveOrAddTab(ui->materialTableView->model(), ui->tabMaterials,  MaterialTabIndex,  MaterialTabLabel);
 
 	// Reset camera position
-	model.GetRootNode()->sceneNode->_update(true, true);
+    model.GetRootNode()->sceneNode->_update(true, true);
 	const auto& aabb = model.GetRootNode()->sceneNode->_getWorldAABB();
 
 	ResetCamera(aabb);

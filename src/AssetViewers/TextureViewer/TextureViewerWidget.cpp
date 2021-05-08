@@ -1,6 +1,5 @@
 #include "TextureViewerWidget.h"
 #include "ui_TextureViewerWidget.h"
-#include "AssetViewers/ui_AssetViewerWidgetBase.h"
 
 #include "MGF/Assets/Texture.h"
 
@@ -9,11 +8,9 @@ static int s_Count = 0;
 using namespace TextureViewer;
 
 TextureViewerWidget::TextureViewerWidget(QWidget *parent) :
-    AssetViewerWidgetBase(parent),
     ui(new Ui::TextureViewerWidget)
 {
     ui->setupUi(this);
-    baseUi->assetViewerLayout->addWidget(ui->frame);
 
     s_Count++;
 
@@ -36,14 +33,11 @@ TextureViewerWidget::TextureViewerWidget(QWidget *parent) :
 
 TextureViewerWidget::~TextureViewerWidget()
 {
-    baseUi->assetViewerLayout->removeWidget(ui->frame);
     delete ui;
 }
 
 void TextureViewerWidget::LoadAsset(MGF::Asset::AssetPtr asset)
 {
-    AssetViewerWidgetBase::LoadAsset(asset);
-
     const auto textureAsset = static_cast<MGF::Asset::Texture*>(asset.get());
 
     TextureDetailsTableModel.SetTextureReference(textureAsset);

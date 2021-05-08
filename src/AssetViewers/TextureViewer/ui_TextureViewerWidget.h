@@ -31,6 +31,11 @@ public:
         if (TextureViewerWidget->objectName().isEmpty())
             TextureViewerWidget->setObjectName(QString::fromUtf8("TextureViewerWidget"));
         TextureViewerWidget->resize(962, 610);
+        QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(TextureViewerWidget->sizePolicy().hasHeightForWidth());
+        TextureViewerWidget->setSizePolicy(sizePolicy);
         verticalLayout = new QVBoxLayout(TextureViewerWidget);
         verticalLayout->setSpacing(0);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
@@ -42,11 +47,11 @@ public:
         textureDetailsTable = new QTableView(frame);
         textureDetailsTable->setObjectName(QString::fromUtf8("textureDetailsTable"));
         textureDetailsTable->setGeometry(QRect(0, 0, 700, 54));
-        QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        sizePolicy.setHorizontalStretch(0);
-        sizePolicy.setVerticalStretch(0);
-        sizePolicy.setHeightForWidth(textureDetailsTable->sizePolicy().hasHeightForWidth());
-        textureDetailsTable->setSizePolicy(sizePolicy);
+        QSizePolicy sizePolicy1(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        sizePolicy1.setHorizontalStretch(0);
+        sizePolicy1.setVerticalStretch(0);
+        sizePolicy1.setHeightForWidth(textureDetailsTable->sizePolicy().hasHeightForWidth());
+        textureDetailsTable->setSizePolicy(sizePolicy1);
         textureDetailsTable->setMinimumSize(QSize(700, 0));
         textureDetailsTable->setMaximumSize(QSize(701, 80));
         textureDetailsTable->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);

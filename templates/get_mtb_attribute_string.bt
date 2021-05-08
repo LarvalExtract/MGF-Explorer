@@ -3,7 +3,6 @@ string getStringFromCrc(uint32 crc)
     string result = "UNKNOWN";
     switch (crc)
     {
-		case 272064274: result = "CSubObjectNode"; break;
 		case 3712789462: result = "child"; break;
 		case 2322818141: result = "SetCount"; break;
 		case 3262226352: result = "parent"; break;
@@ -16,7 +15,6 @@ string getStringFromCrc(uint32 crc)
 		case 842302313: result = "VisibleEntity"; break;
 		case 1669625396: result = "OverrideTemplate"; break;
 		case 3001441416: result = "SceneNode"; break;
-		case 751888405: result = "MAModSubObjectKillEntity"; break;
 		case 2161515881: result = "Duration"; break;
 		case 1122766931: result = "MinHeating"; break;
 		case 679224382: result = "SubObjectName"; break;
@@ -29,7 +27,6 @@ string getStringFromCrc(uint32 crc)
 		case 2786085795: result = "ResourceType"; break;
 		case 459937469: result = "KillBranchOnly"; break;
 		case 3997923379: result = "MaxDamagePercent"; break;
-		case 3152853426: result = "MAModSubObjectEffect"; break;
 		case 2351130442: result = "AliveTimeMax"; break;
 		case 189666548: result = "EffectFile"; break;
 		case 3360245680: result = "RainOnly"; break;
@@ -38,7 +35,6 @@ string getStringFromCrc(uint32 crc)
 		case 366955116: result = "DeadTimeMax"; break;
 		case 701658421: result = "DeadTimeMin"; break;
 		case 2955827219: result = "AliveTimeMin"; break;
-		case 40774440: result = "MAModSubObjectScale"; break;
 		case 1746349692: result = "PingPong"; break;
 		case 3515187556: result = "CurSign"; break;
 		case 2180770127: result = "UseRandomModifier"; break;
@@ -47,7 +43,6 @@ string getStringFromCrc(uint32 crc)
 		case 4012928299: result = "MinScale"; break;
 		case 2994088254: result = "ScaleDelta"; break;
 		case 156287690: result = "MaxScale"; break;
-		case 973437516: result = "MAModSubObjectRotate"; break;
 		case 1768035184: result = "ArcYEnd"; break;
 		case 4235410316: result = "ArcXStart"; break;
 		case 1554896243: result = "ArcYEnabled"; break;
@@ -58,7 +53,6 @@ string getStringFromCrc(uint32 crc)
 		case 925886505: result = "ArcYStart"; break;
 		case 3521016853: result = "ArcXEnd"; break;
 		case 2077736094: result = "ArcZEnd"; break;
-		case 382032685: result = "MAModSubObjectDecalStamp"; break;
 		case 450912721: result = "ColorTransition"; break;
 		case 2099953743: result = "BlendDelta"; break;
 		case 1947233049: result = "BlendStart"; break;
@@ -69,9 +63,7 @@ string getStringFromCrc(uint32 crc)
 		case 924720683: result = "Translate"; break;
 		case 2050484284: result = "Material"; break;
 		case 3175400626: result = "ColorFinal"; break;
-		case 453716261: result = "MAModSubObjectShow"; break;
 		case 200487675: result = "Enable"; break;
-		case 1654618934: result = "MAModSubObjectAlphaFalloff"; break;
 		case 3495525919: result = "Specular Power"; break;
 		case 3114618549: result = "OrigScalingFactor"; break;
 		case 3732325069: result = "CurrentScalingFactor"; break;
@@ -87,12 +79,9 @@ string getStringFromCrc(uint32 crc)
 		case 3494928111: result = "PosDPFactor"; break;
 		case 1082084855: result = "NegDPPower"; break;
 		case 3403559574: result = "NegDPFactor"; break;
-		case 3950646611: result = "MAModSubObjectTerrainHit"; break;
 		case 1907789423: result = "TriggerHeight"; break;
 		case 781847337: result = "EffectResetTime"; break;
-		case 1304157271: result = "MAModSubObjectState"; break;
 		case 4133140891: result = "SubObjState"; break;
-		case 749358125: result = "MAModSubObjRotRecoil"; break;
 		case 755231977: result = "SnapInstant2"; break;
 		case 3111012372: result = "SnapSpeed"; break;
 		case 3535072181: result = "SnapSpeed2"; break;
@@ -102,13 +91,11 @@ string getStringFromCrc(uint32 crc)
 		case 1339294048: result = "EnableX"; break;
 		case 2820635348: result = "BarrelBits"; break;
 		case 953364982: result = "EnableY"; break;
-		case 3692075889: result = "MAModSubObjectBlink"; break;
 		case 2318020920: result = "BlinkOnWhenDisabled"; break;
 		case 381127352: result = "Blink Offset"; break;
 		case 4011901688: result = "Blink Off Time"; break;
 		case 1819013532: result = "Blink On Time"; break;
 		case 1562786587: result = "Blink Rand Offset"; break;
-		case 3665867762: result = "MAModMechHeatSink"; break;
 		case 3268587019: result = "HeatScalingDelta"; break;
 		case 2676077801: result = "HeatScalingRate"; break;
 		case 2924508564: result = "MinimumHeatColorGreen"; break;
@@ -120,7 +107,6 @@ string getStringFromCrc(uint32 crc)
 		case 3172307775: result = "MaximumHeatColorGreen"; break;
 		case 3284488071: result = "MaximumHeatColorBlue"; break;
 		case 3900958032: result = "EnableTree"; break;
-		case 2095236566: result = "MAModSubObjectPhysics"; break;
 		case 3092335360: result = "Velocity"; break;
 		case 3374709845: result = "MinimumY"; break;
 		case 1285061018: result = "HeadingPercent"; break;
@@ -133,7 +119,6 @@ string getStringFromCrc(uint32 crc)
 		case 3263781271: result = "MaxPitch"; break;
 		case 971869815: result = "PitchPercent"; break;
 		case 887662579: result = "IsRunning"; break;
-		case 1169522564: result = "MAModSubObjectBlend"; break;
 		case 3769786016: result = "Additive"; break;
 		case 2092670640: result = "MaxAlphaLevel"; break;
 		case 712271565: result = "OrigAlpha"; break;
@@ -142,11 +127,9 @@ string getStringFromCrc(uint32 crc)
 		case 1810635783: result = "CurAlphaLevel"; break;
 		case 762508779: result = "GetOrigAlpha"; break;
 		case 1022682822: result = "MinAlphaLevel"; break;
-		case 2860256420: result = "MAModSubObjectMoeEFX"; break;
 		case 2463974485: result = "MAEffectID"; break;
 		case 3624579845: result = "OffsetDelta"; break;
 		case 1340323198: result = "Orientation"; break;
-		case 2542605247: result = "MAModSubObjectElevator"; break;
 		case 4121762832: result = "ElevatorYOffset"; break;
 		case 2123521959: result = "ElevatorFloorDelay"; break;
 		case 3355382315: result = "ElevatorMinSpeed"; break;
@@ -155,32 +138,22 @@ string getStringFromCrc(uint32 crc)
 		case 1743296590: result = "ElevatorNextStop"; break;
 		case 3103532033: result = "ElevatorAxis"; break;
 		case 805985172: result = "ElevatorCurOffset"; break;
-		case 3499995701: result = "MAModSubObjectMoveFX"; break;
-		case 567180208: result = "MASubObjRespondRotate"; break;
 		case 3818247410: result = "TranslateTime"; break;
 		case 890325109: result = "TranslateDelay"; break;
 		case 201898784: result = "TranslateRotation"; break;
-		case 2116469067: result = "MAModSubObjectSpawn"; break;
 		case 4243630976: result = "SubObjHeading"; break;
-		case 1267662652: result = "MAModSubObjectUVAnimate"; break;
 		case 1575926877: result = "Vspeed"; break;
 		case 3682258675: result = "Uspeed"; break;
 		case 2957877222: result = "Unlit"; break;
 		case 483806176: result = "ShaderType"; break;
-		case 2322067543: result = "MAModSubObjectLensFilter"; break;
 		case 370706680: result = "DeltaAlpha"; break;
 		case 3273652120: result = "StartAlpha"; break;
 		case 1682929560: result = "EndAlpha"; break;
 		case 309745581: result = "CurAlpha"; break;
 		case 1483249682: result = "Color"; break;
 		case 2988755729: result = "Texture"; break;
-		case 1427978035: result = "MAModSubObjectCamShake"; break;
 		case 1670710305: result = "MaxPositionOffset"; break;
-		case 320862888: result = "MAModSubObjectShield"; break;
-		case 3589011167: result = "MASubObjRespondTranslate"; break;
 		case 3426574826: result = "TranslateOffset"; break;
-		case 1579695785: result = "MoeEntity"; break;
-		case 175305796: result = "MAModSubObjectDiffuse"; break;
 		case 126689464: result = "PenEndColor"; break;
 		case 414559982: result = "DiffusePlaySwitchProbability"; break;
 		case 579746232: result = "PenStartColor"; break;
@@ -195,7 +168,6 @@ string getStringFromCrc(uint32 crc)
 		case 2321897372: result = "SubObjStateBodyArea"; break;
 		case 2339782430: result = "SubObjStateWeaponBay"; break;
 		case 3917964271: result = "SubObjStateFlags"; break;
-		case 1508703268: result = "MAModSubObjectParticleEffect"; break;
 		case 423525733: result = "Damage Level Max"; break;
 		case 437721757: result = "Ch1Source"; break;
 		case 559077201: result = "TerrainCondition"; break;
@@ -215,10 +187,8 @@ string getStringFromCrc(uint32 crc)
 		case 3672180334: result = "Toppling"; break;
 		case 4176437393: result = "Ch0Min"; break;
 		case 2405307808: result = "Version"; break;
-		case 2712439722: result = "MAModSubObjectFresnel"; break;
 		case 2511655259: result = "Power"; break;
 		case 3151929856: result = "IsSpeedScaled"; break;
-		case 3624310483: result = "MAModSubObjectPinch"; break;
 		case 51766208: result = "PinchOuterRadius1"; break;
 		case 509170607: result = "PinchDist0"; break;
 		case 645145624: result = "PinchInnerRadius0"; break;
@@ -233,14 +203,12 @@ string getStringFromCrc(uint32 crc)
 		case 1054973224: result = "RiderState"; break;
 		case 2463848456: result = "VTOLInRangeState"; break;
 		case 3093943181: result = "DefenseState"; break;
-		case 837295074: result = "MAModSubObjectDecalObject"; break;
 		case 3531142527: result = "Scale"; break;
 		case 3049762880: result = "ShowWhenCloaked"; break;
 		case 329305848: result = "EndFadeTime"; break;
 		case 395136857: result = "NewWorldSpace"; break;
 		case 1128794080: result = "StartFadeTime"; break;
 		case 2358084440: result = "CollisionCoeff"; break;
-		case 89061076: result = "MASubObjRespondShow"; break;
 		case 981901156: result = "FadeDelay"; break;
 		case 1958474171: result = "FadeTime"; break;
 		case 104381196: result = "FadeOutTime"; break;
@@ -250,7 +218,6 @@ string getStringFromCrc(uint32 crc)
 		case 4052866806: result = "AwayFromTorso"; break;
 		case 3689980126: result = "WorldSpace"; break;
 		case 2820821366: result = "ResetRequired"; break;
-		case 3396845990: result = "MACorporeal"; break;
 		case 16847726: result = "MechStepDestroy"; break;
 		case 46642940: result = "CorporalMass"; break;
 		case 49533645: result = "IsVTOLCargo"; break;
@@ -318,7 +285,6 @@ string getStringFromCrc(uint32 crc)
 		case 4094979832: result = "MechTopples"; break;
 		case 4150981205: result = "Flammable"; break;
 		case 4291521156: result = "ShadowCasterType"; break;
-		case 968949363: result = "MAModSubObjectCrash"; break;
 		case 398360816: result = "Persistent"; break;
 		case 3294897116: result = "DieDelay"; break;
 		case 3994344488: result = "ImpactDamage"; break;
@@ -334,32 +300,23 @@ string getStringFromCrc(uint32 crc)
 		case 4234962128: result = "m_flags2.bCueUseHeat"; break;
 		case 263864395: result = "IsCombustible"; break;
 		case 3399438054: result = "IsFlammable"; break;
-		case 3392650240: result = "MAEffect"; break;
 		case 2504058087: result = "EffectBlastDelay"; break;
 		case 2589875346: result = "EffectBlastDamage"; break;
 		case 2968151716: result = "EffectBlastRadius"; break;
 		case 3612763378: result = "EffectBlastDamageDone"; break;
-		case 1967836641: result = "MAModSubObjectSway"; break;
 		case 379839821: result = "Amplitude"; break;
 		case 1038869511: result = "Period"; break;
 		case 1128574191: result = "Direction"; break;
 		case 3670201915: result = "Axis"; break;
-		case 3335276580: result = "MAModSubObjectTwist"; break;
 		case 823668237: result = "Speed"; break;
-		case 118233936: result = "MAModSubObjectTint"; break;
-		case 994098801: result = "MASubObjRespondParticleEffect"; break;
-		case 1658504589: result = "MAModSubObjectOrient"; break;
 		case 284941510: result = "SetY"; break;
 		case 1744628816: result = "SetX"; break;
 		case 2314374524: result = "SetZ"; break;
-		case 3258522745: result = "MAModSubObjectPosition"; break;
 		case 1084586332: result = "Position"; break;
 		case 2493396477: result = "Played"; break;
 		case 2773634475: result = "OriginalPosition"; break;
 		case 3712815331: result = "RandMax"; break;
 		case 3779080122: result = "RandMin"; break;
-		case 3355138597: result = "MAModSubObjPosRecoil"; break;
-		case 3082042544: result = "MAModSubObjectSplash"; break;
 		case 3274675347: result = "Radius"; break;
     }
     return result;

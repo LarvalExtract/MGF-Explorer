@@ -1,0 +1,51 @@
+string getStringFromCrc(uint32 crc)
+{
+    string result = "UNKNOWN";
+    switch (crc)
+    {
+		case 272064274: result = "CSubObjectNode"; break;
+		case 751888405: result = "MAModSubObjectKillEntity"; break;
+		case 3152853426: result = "MAModSubObjectEffect"; break;
+		case 40774440: result = "MAModSubObjectScale"; break;
+		case 973437516: result = "MAModSubObjectRotate"; break;
+		case 382032685: result = "MAModSubObjectDecalStamp"; break;
+		case 453716261: result = "MAModSubObjectShow"; break;
+		case 1654618934: result = "MAModSubObjectAlphaFalloff"; break;
+		case 3950646611: result = "MAModSubObjectTerrainHit"; break;
+		case 1304157271: result = "MAModSubObjectState"; break;
+		case 749358125: result = "MAModSubObjRotRecoil"; break;
+		case 3692075889: result = "MAModSubObjectBlink"; break;
+		case 3665867762: result = "MAModMechHeatSink"; break;
+		case 2095236566: result = "MAModSubObjectPhysics"; break;
+		case 1169522564: result = "MAModSubObjectBlend"; break;
+		case 2860256420: result = "MAModSubObjectMoeEFX"; break;
+		case 2542605247: result = "MAModSubObjectElevator"; break;
+		case 3499995701: result = "MAModSubObjectMoveFX"; break;
+		case 567180208: result = "MASubObjRespondRotate"; break;
+		case 2116469067: result = "MAModSubObjectSpawn"; break;
+		case 1267662652: result = "MAModSubObjectUVAnimate"; break;
+		case 2322067543: result = "MAModSubObjectLensFilter"; break;
+		case 1427978035: result = "MAModSubObjectCamShake"; break;
+		case 320862888: result = "MAModSubObjectShield"; break;
+		case 3589011167: result = "MASubObjRespondTranslate"; break;
+		case 1579695785: result = "MoeEntity"; break;
+		case 175305796: result = "MAModSubObjectDiffuse"; break;
+		case 1508703268: result = "MAModSubObjectParticleEffect"; break;
+		case 2712439722: result = "MAModSubObjectFresnel"; break;
+		case 3624310483: result = "MAModSubObjectPinch"; break;
+		case 837295074: result = "MAModSubObjectDecalObject"; break;
+		case 89061076: result = "MASubObjRespondShow"; break;
+		case 3396845990: result = "MACorporeal"; break;
+		case 968949363: result = "MAModSubObjectCrash"; break;
+		case 3392650240: result = "MAEffect"; break;
+		case 1967836641: result = "MAModSubObjectSway"; break;
+		case 3335276580: result = "MAModSubObjectTwist"; break;
+		case 118233936: result = "MAModSubObjectTint"; break;
+		case 994098801: result = "MASubObjRespondParticleEffect"; break;
+		case 1658504589: result = "MAModSubObjectOrient"; break;
+		case 3258522745: result = "MAModSubObjectPosition"; break;
+		case 3355138597: result = "MAModSubObjPosRecoil"; break;
+		case 3082042544: result = "MAModSubObjectSplash"; break;
+    }
+    return result;
+}

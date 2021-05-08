@@ -46,7 +46,12 @@ public:
     {
         if (ModelViewerWidget->objectName().isEmpty())
             ModelViewerWidget->setObjectName(QString::fromUtf8("ModelViewerWidget"));
-        ModelViewerWidget->resize(1089, 670);
+        ModelViewerWidget->resize(1091, 670);
+        QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(ModelViewerWidget->sizePolicy().hasHeightForWidth());
+        ModelViewerWidget->setSizePolicy(sizePolicy);
         verticalLayout = new QVBoxLayout(ModelViewerWidget);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
         verticalLayout->setSizeConstraint(QLayout::SetMaximumSize);

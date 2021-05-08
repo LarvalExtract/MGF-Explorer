@@ -1,12 +1,11 @@
 #ifndef MGMODELVIEWERWIDGET_H
 #define MGMODELVIEWERWIDGET_H
 
-#include "AssetViewers/AssetViewerWidgetBase.h"
-#include "Models/NodeTreeModel.h"
-#include "Models/MeshTableModel.h"
-#include "Models/MaterialTableModel.h"
+#include "AssetViewers/IAssetViewerWidget.h"
 
 #include "OgreWindow/ogrewindow.h"
+
+#include <QWidget>
 
 namespace Ui {
     class ModelViewerWidget;
@@ -14,7 +13,7 @@ namespace Ui {
 
 namespace ModelViewer {
 
-	class ModelViewerWidget : public AssetViewerWidgetBase
+	class ModelViewerWidget : public QWidget, public IAssetViewerWidget
 	{
 		Q_OBJECT
 

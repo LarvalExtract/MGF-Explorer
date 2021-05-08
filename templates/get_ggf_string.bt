@@ -5,17 +5,22 @@ string getStringFromCrc(uint32 crc)
     {
 		case 2423207337: result = "GoGuiRootComponent"; break;
 		case 344403982: result = "Description"; break;
+		case 414843610: result = "FormY"; break;
 		case 858901072: result = "CompChild"; break;
 		case 975706672: result = "CompSibling"; break;
 		case 1088209394: result = "ViewportWidth"; break;
+		case 1262244937: result = "FormHeight"; break;
+		case 1874670156: result = "FormX"; break;
 		case 1928555740: result = "tab_id"; break;
 		case 2360727552: result = "ViewportY"; break;
 		case 2738860118: result = "IsFrozen"; break;
 		case 3117619978: result = "position"; break;
+		case 3221638019: result = "Demo Interrupt"; break;
 		case 3326395588: result = "CompParent"; break;
 		case 3729309270: result = "ref_id"; break;
 		case 3756089967: result = "ViewportHeight"; break;
 		case 3803412024: result = "activatecommand"; break;
+		case 4191249275: result = "FormWidth"; break;
 		case 4208702935: result = "SerializeObj::ID"; break;
 		case 4222806166: result = "ViewportX"; break;
 		case 4259789646: result = "IsButton"; break;
@@ -105,6 +110,7 @@ string getStringFromCrc(uint32 crc)
 		case 3347635575: result = "UpArrow"; break;
 		case 187027647: result = "FlipHorzontal"; break;
 		case 3905489587: result = "FlipVertical"; break;
+		case 3849315924: result = "TypingSoundEvent"; break;
 		case 2924713320: result = "MAComponentColorOverlay"; break;
 		case 681507239: result = "FrameAlpha"; break;
 		case 1752883737: result = "OverlayAlpha"; break;
@@ -113,6 +119,7 @@ string getStringFromCrc(uint32 crc)
 		case 2653456420: result = "FrameColor"; break;
 		case 3318432511: result = "OverlayBlending"; break;
 		case 3737949082: result = "OverlayColor"; break;
+		case 4022829822: result = "DisplayOnlyWhenZoomed"; break;
 		case 4164645440: result = "FrameThickNess"; break;
 		case 715189537: result = "MAComponentHealth"; break;
 		case 291789410: result = "DrawBorder"; break;
@@ -121,6 +128,7 @@ string getStringFromCrc(uint32 crc)
 		case 2101612069: result = "IndicatorVertical"; break;
 		case 2683904655: result = "FillAlpha"; break;
 		case 2889539823: result = "Indicator"; break;
+		case 1570624265: result = "SoundEvent"; break;
 		case 2445315316: result = "MAComponentList"; break;
 		case 491151905: result = "ListItemFontPath"; break;
 		case 777330003: result = "HeaderColor"; break;
@@ -128,6 +136,8 @@ string getStringFromCrc(uint32 crc)
 		case 2565041360: result = "HeaderAlpha"; break;
 		case 3550200678: result = "HeaderFontPath"; break;
 		case 4017476405: result = "HighlightBarAlpha"; break;
+		case 2162055705: result = "CycleSound"; break;
+		case 2363370070: result = "ActivateSound"; break;
 		case 2224726593: result = "MAComponentDistort"; break;
 		case 169135646: result = "MAComponentJackingFlashColorOverlay"; break;
 		case 11230487: result = "JSCTimeOff"; break;
@@ -186,6 +196,7 @@ string getStringFromCrc(uint32 crc)
 		case 2913274060: result = "EmptySlotDiffuse"; break;
 		case 3851810079: result = "LinkedBkgID"; break;
 		case 1384754363: result = "MAComponentVTOLInventoryArrow"; break;
+		case 3755176275: result = "MAComponentCycleMechs"; break;
 		case 1454846196: result = "MAComponentCycleSelectionMovie"; break;
 		case 3656846276: result = "MAComponentCycleSelectionText"; break;
 		case 2138049048: result = "MAComponentCycleMission"; break;

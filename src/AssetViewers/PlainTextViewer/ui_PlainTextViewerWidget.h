@@ -28,6 +28,11 @@ public:
         if (PlainTextViewerWidget->objectName().isEmpty())
             PlainTextViewerWidget->setObjectName(QString::fromUtf8("PlainTextViewerWidget"));
         PlainTextViewerWidget->resize(518, 518);
+        QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(PlainTextViewerWidget->sizePolicy().hasHeightForWidth());
+        PlainTextViewerWidget->setSizePolicy(sizePolicy);
         horizontalLayout = new QHBoxLayout(PlainTextViewerWidget);
         horizontalLayout->setSpacing(0);
         horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));

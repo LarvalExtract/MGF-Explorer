@@ -7,6 +7,7 @@
 #include "AssetViewers/TextureViewer/TextureViewerWidget.h"
 #include "AssetViewers/ModelViewer/ModelViewerWidget.h"
 #include "AssetViewers/StringTableViewer/StringTableViewerWidget.h"
+#include "AssetViewers/EntityViewer/EntityViewerWidget.h"
 
 #include "ContextMenus/FileMenu.h"
 
@@ -38,16 +39,16 @@ namespace ArchiveViewer {
 		MGF::Archive MgfArchive;
 		Models::ArchiveFileTreeModel FileTreeModel;
 
-		AssetViewerWidgetBase* pActiveAssetViewer = nullptr;
 		PlainTextViewer::PlainTextViewerWidget PlainTextViewer;
 		StringTableViewer::StringTableViewerWidget StringTableViewer;
 		TextureViewer::TextureViewerWidget TextureViewer;
 		ModelViewer::ModelViewerWidget ModelViewer;
+		EntityViewer::EntityViewerWidget EntityViewer;
 
 		ContextMenus::FileMenu FileMenu;
 
 	private:
-		AssetViewerWidgetBase* DisplayAssetViewer(AssetViewerWidgetBase* newAssetViewer);
+		void DisplayAssetViewer(QWidget* newAssetViewer);
 		ResourceManager& AssetManager;
 	};
 

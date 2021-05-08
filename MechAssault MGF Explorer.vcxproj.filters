@@ -99,12 +99,6 @@
     <ClCompile Include="src\MainWindow\MainWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\AssetViewers\AssetViewerWidgetBase.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\AssetViewers\moc_AssetViewerWidgetBase.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\ResourceManager\AssetFactory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -166,6 +160,21 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\OgreWindow\ogrewindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AssetViewers\EntityViewer\EntityViewerWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AssetViewers\EntityViewer\moc_EntityViewerWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MGF\Assets\EntityAsset.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AssetViewers\EntityViewer\Models\EntityTreeModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AssetViewers\EntityViewer\Models\AttributeTableModel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -278,12 +287,6 @@
     <ClInclude Include="src\MainWindow\MainWindow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\AssetViewers\AssetViewerWidgetBase.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\AssetViewers\ui_AssetViewerWidgetBase.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\ResourceManager\AssetFactory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -368,6 +371,33 @@
     <ClInclude Include="src\OgreWindow\ogrewindow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\AssetViewers\EntityViewer\EntityViewerWidget.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AssetViewers\EntityViewer\ui_EntityViewerWidget.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AssetViewers\IAssetViewerWidget.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MGF\Assets\EntityAsset.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MGF\Structures\wdf.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MGF\Assets\Factories\EntityNames.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AssetViewers\EntityViewer\Models\EntityTreeModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AssetViewers\EntityViewer\Models\AttributeTableModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MGF\Assets\Factories\AttributeNames.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\FileExtractor\FileExtractorDialog.ui" />
@@ -376,7 +406,7 @@
     <None Include="src\ArchiveViewer\ArchiveViewerWidget.ui" />
     <None Include="src\AssetViewers\StringTableViewer\StringTableViewerWidget.ui" />
     <None Include="src\MainWindow\MainWindow.ui" />
-    <None Include="src\AssetViewers\AssetViewerWidgetBase.ui" />
     <None Include="src\AssetViewers\ModelViewer\ModelViewerWidget.ui" />
+    <None Include="src\AssetViewers\EntityViewer\EntityViewerWidget.ui" />
   </ItemGroup>
 </Project>

@@ -13,6 +13,8 @@ namespace MGF { namespace Asset {
 		{ MGF::EFileType::Node,	      MGF::Asset::EAssetType::Model       },
 		{ MGF::EFileType::MgModel,    MGF::Asset::EAssetType::Model       },
 		{ MGF::EFileType::MgText,     MGF::Asset::EAssetType::StringTable },
+		{ MGF::EFileType::Wdf,        MGF::Asset::EAssetType::Entity      },
+		{ MGF::EFileType::Mtb,        MGF::Asset::EAssetType::Entity      },
 
 		{ MGF::EFileType::Unassigned, MGF::Asset::EAssetType::None        }
 	};
