@@ -177,6 +177,12 @@
     <ClCompile Include="src\AssetViewers\EntityViewer\Models\AttributeTableModel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\AssetExtractors\TextureExtractor\TextureExtractor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ArchiveViewer\ContextMenus\TextureFileMenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\AssetViewers\PlainTextViewer\PlainTextViewerWidget.h">
@@ -396,6 +402,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\MGF\Assets\Factories\AttributeNames.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AssetExtractors\IAssetExtractor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AssetExtractors\TextureExtractor\TextureExtractor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

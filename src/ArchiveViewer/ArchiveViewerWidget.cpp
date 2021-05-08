@@ -26,7 +26,8 @@ ArchiveViewerWidget::ArchiveViewerWidget(const QString& mgfFilePath, QWidget *pa
     connect(
         ui->FileTreeView,
         SIGNAL(customContextMenuRequested(QPoint)),
-        SLOT(on_treeView_customContextMenuRequested)
+        this,
+        SLOT(on_treeView_customContextMenuRequested(const QPoint&))
     );
 
 	connect(
@@ -37,6 +38,7 @@ ArchiveViewerWidget::ArchiveViewerWidget(const QString& mgfFilePath, QWidget *pa
 	);
 
     FileMenu.Initialise(ui->FileTreeView);
+    TextureFileMenu.Initialise(ui->FileTreeView);
 }
 
 ArchiveViewerWidget::~ArchiveViewerWidget()
@@ -122,7 +124,7 @@ void ArchiveViewerWidget::on_treeView_customContextMenuRequested(const QPoint &p
 			{
             case MGF::Asset::EAssetType::PlainText:
             case MGF::Asset::EAssetType::StringTable:
-            case MGF::Asset::EAssetType::Texture:
+            case MGF::Asset::EAssetType::Texture: TextureFileMenu.popup(screenPos); break;
             case MGF::Asset::EAssetType::Model:
 
             default: FileMenu.popup(screenPos); break;

@@ -192,6 +192,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\ArchiveViewer\ContextMenus\FileMenu.cpp" />
+    <ClCompile Include="src\ArchiveViewer\ContextMenus\TextureFileMenu.cpp" />
+    <ClCompile Include="src\AssetExtractors\TextureExtractor\TextureExtractor.cpp" />
     <ClCompile Include="src\AssetViewers\EntityViewer\EntityViewerWidget.cpp">
       <SubType>
       </SubType>
@@ -252,6 +254,8 @@
   <ItemGroup>
     <ClInclude Include="src\ArchiveViewer\ContextMenus\FileMenu.h" />
     <ClInclude Include="src\ArchiveViewer\ContextMenus\TextureFileMenu.h" />
+    <ClInclude Include="src\AssetExtractors\IAssetExtractor.h" />
+    <ClInclude Include="src\AssetExtractors\TextureExtractor\TextureExtractor.h" />
     <ClInclude Include="src\AssetViewers\EntityViewer\Models\AttributeTableModel.h" />
     <ClInclude Include="src\AssetViewers\EntityViewer\Models\EntityTreeModel.h" />
     <ClInclude Include="src\AssetViewers\IAssetViewerWidget.h" />

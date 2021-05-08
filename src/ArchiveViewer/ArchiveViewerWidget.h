@@ -9,7 +9,7 @@
 #include "AssetViewers/StringTableViewer/StringTableViewerWidget.h"
 #include "AssetViewers/EntityViewer/EntityViewerWidget.h"
 
-#include "ContextMenus/FileMenu.h"
+#include "ContextMenus/TextureFileMenu.h"
 
 #include "ResourceManager/ResourceManager.h"
 
@@ -46,6 +46,7 @@ namespace ArchiveViewer {
 		EntityViewer::EntityViewerWidget EntityViewer;
 
 		ContextMenus::FileMenu FileMenu;
+		ContextMenus::TextureFileMenu TextureFileMenu;
 
 	private:
 		void DisplayAssetViewer(QWidget* newAssetViewer);

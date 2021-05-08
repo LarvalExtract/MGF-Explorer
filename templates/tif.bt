@@ -73,4 +73,4 @@ struct TIF {
             byte pixels[imageDataLength - 8];
         } cBits;
     } cPic;
-};
+} tif;
