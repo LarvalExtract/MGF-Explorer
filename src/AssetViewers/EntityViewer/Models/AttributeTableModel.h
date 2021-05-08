@@ -4,7 +4,7 @@
 
 namespace EntityViewer { namespace Models {
 
-	using AttributeTable = std::vector<std::pair<QString, QVariant>>;
+	using AttributeTable = std::vector<std::tuple<QString, QVariant, uint32_t>>;
 
 	class AttributeTableModel : public AttributeTable, public QAbstractTableModel
 	{

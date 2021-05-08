@@ -6,25 +6,29 @@
 .import ../data/csv/ggf.csv ggf
 .import ../data/csv/sdf.csv wdf
 
-CREATE TABLE wdf_crcs AS SELECT DISTINCT Value FROM wdf WHERE Name='CRC_Entity' OR Name='CRC_Attribute';
-CREATE TABLE wdf_names AS SELECT DISTINCT wdf_crcs.Value, strings.String FROM wdf_crcs INNER JOIN strings ON wdf_crcs.Value=strings.CRC;
-SELECT COUNT (*) FROM wdf_crcs;
-SELECT COUNT (*) FROM wdf_names;
+CREATE TABLE wdf_entity_crcs AS SELECT DISTINCT Value FROM wdf WHERE Name='CRC_Entity';
+CREATE TABLE wdf_entity_names AS SELECT DISTINCT wdf_entity_crcs.Value, strings.String FROM wdf_entity_crcs INNER JOIN strings ON wdf_entity_crcs.Value=strings.CRC;
+CREATE TABLE wdf_attribute_crcs AS SELECT DISTINCT Value FROM wdf WHERE Name='CRC_Attribute';
+CREATE TABLE wdf_attribute_names AS SELECT DISTINCT wdf_attribute_crcs.Value, strings.String FROM wdf_attribute_crcs INNER JOIN strings ON wdf_attribute_crcs.Value=strings.CRC;
 
 .echo off
-.output ../data/wdf_names.csv
-SELECT DISTINCT * FROM wdf_names;
+.output ../data/wdf_entity_names.csv
+SELECT DISTINCT * FROM wdf_entity_names;
+.output ../data/wdf_attribute_names.csv
+SELECT DISTINCT * FROM wdf_attribute_names;
 .output stdout
 .echo on
 
-CREATE TABLE mtb_crcs AS SELECT DISTINCT Value FROM mtb WHERE Name='CRC_Entity' OR Name='CRC_Attribute';
-CREATE TABLE mtb_names AS SELECT DISTINCT mtb_crcs.Value, strings.String FROM mtb_crcs INNER JOIN strings ON mtb_crcs.Value=strings.CRC;
-SELECT COUNT (*) FROM mtb_crcs;
-SELECT COUNT (*) FROM mtb_names;
+CREATE TABLE mtb_class_crcs AS SELECT DISTINCT Value FROM mtb WHERE Name='CRC_Entity';
+CREATE TABLE mtb_class_names AS SELECT DISTINCT mtb_class_crcs.Value, strings.String FROM mtb_class_crcs INNER JOIN strings ON mtb_class_crcs.Value=strings.CRC;
+CREATE TABLE mtb_attribute_crcs AS SELECT DISTINCT Value FROM mtb WHERE Name='CRC_Attribute';
+CREATE TABLE mtb_attribute_names AS SELECT DISTINCT mtb_attribute_crcs.Value, strings.String FROM mtb_attribute_crcs INNER JOIN strings ON mtb_attribute_crcs.Value=strings.CRC;
 
 .echo off
-.output ../data/mtb_names.csv
-SELECT DISTINCT * FROM mtb_names;
+.output ../data/mtb_class_names.csv
+SELECT DISTINCT * FROM mtb_class_names;
+.output ../data/mtb_attribute_names.csv
+SELECT DISTINCT * FROM mtb_attribute_names;
 .output stdout
 .echo on
 

@@ -2,6 +2,7 @@
 
 #include "MGF/Structures/wdf.h"
 #include "Factories/EntityNames.h"
+#include "Factories/AttributeNames.h"
 
 #include <unordered_map>
 
@@ -23,7 +24,10 @@ MGF::Asset::EntityAsset::EntityAsset(const MGF::File& entityFile) :
 		offset += sizeof(entity);
 		
 		auto e = new Entity;
-		e->Class = getStringFromCrc(entity.crc);
+		e->Class = entityFile.FileType() == EFileType::Wdf
+			? GetEntityClassNameWdf(entity.crc)
+			: GetEntityClassNameMtb(entity.crc);
+
 		e->Attributes.reserve(entity.numAttributes);
 
 		for (size_t j = 0; j < entity.numAttributes; j++)
@@ -41,7 +45,6 @@ MGF::Asset::EntityAsset::EntityAsset(const MGF::File& entityFile) :
 			case 3: a = QString::number(entityFile.Read<int32_t>(offset)); break;
 			case 4: a = QString::number(entityFile.Read<uint8_t>(offset)); break;
 			case 5: a = QString::number(entityFile.Read<uint16_t>(offset)); break;
-			case 6: a = QString::number(entityFile.Read<uint32_t>(offset)); break;
 			case 7: a = QString::number(entityFile.Read<float>(offset)); break;
 			case 9:
 			{
@@ -66,6 +69,7 @@ MGF::Asset::EntityAsset::EntityAsset(const MGF::File& entityFile) :
 					QString::number(entityFile.Read<float>(offset + 8))
 				);
 			} break;
+			case 6: a = QString::number(entityFile.Read<uint32_t>(offset)); break;
 			case 12: 
 			{
 				a = QString("%1, %2, %3, %4").arg(
@@ -78,7 +82,9 @@ MGF::Asset::EntityAsset::EntityAsset(const MGF::File& entityFile) :
 			case 13: a = "TIF"; break;
 			}
 			
-			auto attributeString = getStringFromCrc(attribute.crc);
+			auto attributeString = entityFile.FileType() == EFileType::Wdf
+				? GetAttributeNameWdf(attribute.crc)
+				: GetAtrributeNameMtb(attribute.crc);
 
 			if (std::strcmp(attributeString, "Description") == 0)
 			{
@@ -101,7 +107,11 @@ MGF::Asset::EntityAsset::EntityAsset(const MGF::File& entityFile) :
 				e->SiblingID = a.toUInt();
 			}
 
-			e->Attributes.push_back(std::make_pair(attributeString, a));
+			e->Attributes.push_back(std::make_tuple(
+				attributeString,
+				a,
+				offset
+			));
 
 			offset += attribute.dataLength;
 		}
@@ -109,7 +119,10 @@ MGF::Asset::EntityAsset::EntityAsset(const MGF::File& entityFile) :
 		mapEntities.emplace(e->UID, e);
 	}
 
-	RootEntity = mapEntities[wdf.rootEntityUID];
+	RootEntity = new Entity;
+	RootEntity->Children.push_back(mapEntities[wdf.rootEntityUID]);
+	mapEntities.at(wdf.rootEntityUID)->ParentEntity = RootEntity;
+
 	for (auto [id, entity] : mapEntities)
 	{
 		auto parent = entity->ParentID ? mapEntities[entity->ParentID] : nullptr;

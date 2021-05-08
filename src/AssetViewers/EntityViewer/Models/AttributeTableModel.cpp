@@ -1,7 +1,7 @@
 #include "AttributeTableModel.h"
 
 static const QVariant HEADERS[] = {
-	"Name", "Value"
+	"Name", "Value", "Offset"
 };
 
 using namespace EntityViewer::Models;
@@ -23,10 +23,11 @@ QVariant AttributeTableModel::data(const QModelIndex& index, int role /*= Qt::Di
 		return QVariant();
 	}
 
-	switch (const auto& [name, value] = this->at(index.row()); index.column())
+	switch (const auto& [name, value, offset] = this->at(index.row()); index.column())
 	{
 	case 0: return name;
 	case 1: return value;
+	case 2: return offset;
 	}
 }
 
