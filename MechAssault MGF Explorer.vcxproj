@@ -252,6 +252,7 @@
     <ClCompile Include="src\OgreWindow\moc_ogrewindow.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="resource.h" />
     <ClInclude Include="src\ArchiveViewer\ContextMenus\FileMenu.h" />
     <ClInclude Include="src\ArchiveViewer\ContextMenus\TextureFileMenu.h" />
     <ClInclude Include="src\AssetExtractors\IAssetExtractor.h" />
@@ -343,6 +344,12 @@
     <None Include="src\AssetViewers\StringTableViewer\StringTableViewerWidget.ui" />
     <None Include="src\FileExtractorWindow\FileExtractorDialog.ui" />
     <None Include="src\MainWindow\MainWindow.ui" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="MechAssault MGF Explorer.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\madcat.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
 </Project>

@@ -65,7 +65,7 @@ void ArchiveViewerWidget::on_treeView_selectionChanged(const QModelIndex &sel, c
 			QString::number(selectedItem.FileLength())
 		);
 
-        ui->FileDetails->setText(str);
+        ui->label->setText(str);
 
         try
         {
@@ -100,7 +100,7 @@ void ArchiveViewerWidget::on_treeView_selectionChanged(const QModelIndex &sel, c
 
 void ArchiveViewerWidget::DisplayAssetViewer(QWidget* newAssetViewer)
 {
-	const auto item = ui->AssetViewerLayout->itemAt(1);
+	const auto item = ui->AssetViewerLayout->itemAt(2);
 	const auto currentAssetViewer = item->widget();
     
     if (currentAssetViewer == newAssetViewer)

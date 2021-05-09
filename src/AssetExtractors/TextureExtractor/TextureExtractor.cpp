@@ -62,7 +62,7 @@ bool TextureExtractor::Extract(const MGF::File& sourceFile, const std::filesyste
 		{
 			switch (uncompressed_format_bits)
 			{
-			case 0: return std::make_pair(QImage::Format::Format_ARGB32_Premultiplied, 4);
+			case 0: return std::make_pair(QImage::Format::Format_ARGB32, 4);
 			case 1: return std::make_pair(QImage::Format::Format_RGB16, 2);
 			case 3: return std::make_pair(QImage::Format::Format_ARGB4444_Premultiplied, 2);
 			case 5: return std::make_pair(QImage::Format::Format_Alpha8, 1);

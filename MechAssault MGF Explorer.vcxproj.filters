@@ -410,6 +410,9 @@
     <ClInclude Include="src\AssetExtractors\TextureExtractor\TextureExtractor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\FileExtractorWindow\FileExtractorDialog.ui" />
@@ -420,5 +423,15 @@
     <None Include="src\MainWindow\MainWindow.ui" />
     <None Include="src\AssetViewers\ModelViewer\ModelViewerWidget.ui" />
     <None Include="src\AssetViewers\EntityViewer\EntityViewerWidget.ui" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="MechAssault MGF Explorer.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\madcat.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

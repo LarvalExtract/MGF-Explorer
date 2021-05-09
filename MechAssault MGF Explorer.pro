@@ -2,7 +2,7 @@
 QT += core gui
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
     
-TARGET = MechAssault MGF Explorer
+TARGET = MechAssault-MGF-Explorer
 TEMPLATE = app
 
 # The following define makes your compiler emit warnings if you use
@@ -19,124 +19,144 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++17
 
 SOURCES += \
-	myclass.cpp \
-	src/Factories/AssetFactory.cpp \
-	src/FileExtractor/States/FileExtractorStateGroup.cpp \
-	src/FileExtractor/States/FinishedState.cpp \
-	src/FileExtractor/States/IdleState.cpp \
-	src/FileExtractor/States/ProgressState.cpp \
-	src/mgf/Assets/PlainText.cpp \
-	src/moc/moc_FileExtractorDialog.cpp \
-	src/moc/moc_listviewtexture.cpp \
-	src/moc/moc_mainwindow.cpp \
-	src/moc/moc_mgftextureviewerwidget.cpp \
-	src/moc/moc_mgftextviewwidget.cpp \
-	src/moc/moc_mgfworkspace.cpp \
-	src/moc/moc_mgmodelviewerwidget.cpp \
-	src/moc/moc_ogrewindow.cpp \
-	src/moc/moc_StringTableViewerWidget.cpp \
-	src/ResourceManager/ResourceManager.cpp \
-	src/StringTableViewer/Models/StringTableModel.cpp \
-	src/StringTableViewer/StringTableViewerWidget.cpp \
-	src/utils/events/EventDispatcher.cpp \
-	src/utils/Contexts.cpp \
-	src/utils/Context.cpp \
-	src/FileExtractor/Models/FileExtractListModel.cpp \
-	src/models/MGFAnimationTableModel.cpp \
-	src/models/MGFMeshTableModel.cpp \
-	src/models/MGFMaterialTableModel.cpp \
-	src/models/MGFNodeTreeModel.cpp \
-	src/utils/configfile.cpp \
-	src/utils/states/State.cpp \
-	src/utils/states/StateGroup.cpp \
-	src/widgets/mgfresourceviewer.cpp \
-	src/FileExtractor/FileExtractorDialog.cpp \
-	src/FileExtractor/Extractor.cpp \
-	src/main.cpp \
-	src/windows/mainwindow.cpp \
-	src/mgfresourcemanager.cpp \
-	src/widgets/mgftextureviewerwidget.cpp \
-	src/widgets/mgftextviewwidget.cpp \
-	src/widgets/mgfworkspace.cpp \
-	src/mgf/Archive.cpp \
-	src/models/mgffiletablemodel.cpp \
-	src/models/mgffiletreemodel.cpp \
-	src/mgf/File.cpp \
-	src/mgf/mgmaterialfactory.cpp \
-	src/mgf/mgmeshfactory.cpp \
-	src/mgf/mgnode.cpp \
-	src/mgf/mgtexture.cpp \
-	src/widgets/mgmodelviewerwidget.cpp \
-	src/windows/ogrewindow.cpp \
-	vendor/pugixml-1.10/src/pugixml.cpp
+        src/main.cpp \
+        src/ArchiveViewer/ArchiveViewerWidget.cpp \
+        src/ArchiveViewer/moc_ArchiveViewerWidget.cpp \
+        src/ArchiveViewer/ContextMenus/FileMenu.cpp \
+        src/ArchiveViewer/ContextMenus/TextureFileMenu.cpp \
+        src/ArchiveViewer/Models/ArchiveFileTreeModel.cpp \
+        src/AssetExtractors/TextureExtractor/TextureExtractor.cpp \
+        src/AssetViewers/EntityViewer/EntityViewerWidget.cpp \
+        src/AssetViewers/EntityViewer/moc_EntityViewerWidget.cpp \
+        src/AssetViewers/EntityViewer/Models/AttributeTableModel.cpp \
+        src/AssetViewers/EntityViewer/Models/EntityTreeModel.cpp \
+        src/AssetViewers/ModelViewer/moc_ModelViewerWidget.cpp \
+        src/AssetViewers/ModelViewer/ModelViewerWidget.cpp \
+        src/AssetViewers/ModelViewer/Models/AnimationTableModel.cpp \
+        src/AssetViewers/ModelViewer/Models/MaterialTableModel.cpp \
+        src/AssetViewers/ModelViewer/Models/MeshTableModel.cpp \
+        src/AssetViewers/ModelViewer/Models/NodeTreeModel.cpp \
+        src/AssetViewers/PlainTextViewer/moc_PlainTextViewerWidget.cpp \
+        src/AssetViewers/PlainTextViewer/PlainTextViewerWidget.cpp \
+        src/AssetViewers/StringTableViewer/moc_StringTableViewerWidget.cpp \
+        src/AssetViewers/StringTableViewer/StringTableViewerWidget.cpp \
+        src/AssetViewers/StringTableViewer/Models/StringTableModel.cpp \
+        src/AssetViewers/TextureViewer/moc_TextureViewerWidget.cpp \
+        src/AssetViewers/TextureViewer/TextureViewerWidget.cpp \
+        src/AssetViewers/TextureViewer/Models/TextureDetailsTableModel.cpp \
+        src/FileExtractorWindow/Extractor.cpp \
+        src/FileExtractorWindow/FileExtractorDialog.cpp \
+        src/FileExtractorWindow/moc_FileExtractorDialog.cpp \
+        src/FileExtractorWindow/Models/FileExtractListModel.cpp \
+        src/FileExtractorWindow/States/FileExtractorStateGroup.cpp \
+        src/FileExtractorWindow/States/FinishedState.cpp \
+        src/FileExtractorWindow/States/IdleState.cpp \
+        src/FileExtractorWindow/States/ProgressState.cpp \
+        src/MainWindow/MainWindow.cpp \
+        src/MainWindow/moc_MainWindow.cpp \
+        src/MGF/Archive.cpp \
+        src/MGF/File.cpp \
+        src/MGF/Assets/EntityAsset.cpp \
+        src/MGF/Assets/ModelAsset.cpp \
+        src/MGF/Assets/PlainText.cpp \
+        src/MGF/Assets/StringTable.cpp \
+        src/MGF/Assets/Texture.cpp \
+        src/MGF/Assets/Factories/MaterialFactory.cpp \
+        src/MGF/Assets/Factories/MeshFactory.cpp \
+        src/MGF/Factories/ImageFactory.cpp \
+        src/OgreWindow/moc_ogrewindow.cpp \
+        src/OgreWindow/ogrewindow.cpp \
+        src/ResourceManager/AssetFactory.cpp \
+        src/ResourceManager/ResourceManager.cpp \
+        src/Utilities/configfile.cpp \
+        src/Utilities/ContextProvider/Context.cpp \
+        src/Utilities/ContextProvider/ServiceProvider.cpp \
+        src/Utilities/StateMachine/State.cpp \
+        src/Utilities/StateMachine/StateGroup.cpp
 
 HEADERS += \
-	myclass.h \
-	src/Factories/AssetFactory.h \
-	src/FileExtractor/Models/FileExtractItem.h \
-	src/FileExtractor/States/FileExtractorStateBase.h \
-	src/FileExtractor/States/FileExtractorStateGroup.h \
-	src/FileExtractor/States/FinishedState.h \
-	src/FileExtractor/States/IdleState.h \
-	src/FileExtractor/States/ProgressState.h \
-	src/mgf/AssetBase.h \
-	src/mgf/Assets/PlainText.h \
-	src/moc/moc_predefs.h \
-	src/ResourceManager/ResourceManager.h \
-	src/StringTableViewer/Models/StringTableModel.h \
-	src/StringTableViewer/StringTableViewerWidget.h \
-	src/uic/ui_FileExtractorDialog.h \
-	src/uic/ui_listviewtexture.h \
-	src/uic/ui_mainwindow.h \
-	src/uic/ui_mgftextureviewerwidget.h \
-	src/uic/ui_mgftextviewwidget.h \
-	src/uic/ui_mgfworkspace.h \
-	src/uic/ui_mgmodelviewerwidget.h \
-	src/uic/ui_StringTableViewerWidget.h \
-	src/uic/ui_windowfiletable.h \
-	src/utils/events/EventData.h \
-	src/utils/events/EventDispatcher.h \
-	src/utils/Contexts.h \
-	src/utils/Context.h \
-	src/FileExtractor/Models/FileExtractListModel.h \
-	src/models/MGFAnimationTableModel.h \
-	src/models/MGFMeshTableModel.h \
-	src/models/MGFMaterialTableModel.h \
-	src/models/MGFNodeTreeModel.h \
-	src/utils/configfile.h \
-	src/utils/events/EventSelectedItemChanged.h \
-	src/utils/events/IEventListener.h \
-	src/utils/states/State.h \
-	src/utils/states/StateGroup.h \
-	src/FileExtractor/FileExtractorDialog.h \
-	src/FileExtractor/Extractor.h \
-	src/windows/mainwindow.h \
-	src/mgfresourcemanager.h \
-	src/widgets/mgfresourceviewer.h \
-	src/widgets/mgftextureviewerwidget.h \
-	src/widgets/mgftextviewwidget.h \
-	src/widgets/mgfworkspace.h \
-	src/mgf/Archive.h \
-	src/models/mgffiletablemodel.h \
-	src/models/mgffiletreemodel.h \
-	src/mgf/File.h \
-	src/mgf/mgmaterialfactory.h \
-	src/mgf/mgmeshfactory.h \
-	src/mgf/mgnode.h \
-	src/mgf/mgtexture.h \
-	src/widgets/mgmodelviewerwidget.h \
-	src/windows/ogrewindow.h \
-	vendor/pugixml-1.10/src/pugixml.hpp
+        src/ArchiveViewer/ArchiveViewerWidget.h \
+        src/ArchiveViewer/ui_ArchiveViewerWidget.h \
+        src/ArchiveViewer/ContextMenus/FileMenu.h \
+        src/ArchiveViewer/ContextMenus/TextureFileMenu.h \
+        src/ArchiveViewer/Models/ArchiveFileTreeModel.h \
+        src/AssetExtractors/IAssetExtractor.h \
+        src/AssetExtractors/TextureExtractor/TextureExtractor.h \
+        src/AssetViewers/IAssetViewerWidget.h \
+        src/AssetViewers/EntityViewer/EntityViewerWidget.h \
+        src/AssetViewers/EntityViewer/ui_EntityViewerWidget.h \
+        src/AssetViewers/EntityViewer/Models\AttributeTableModel.h \
+        src/AssetViewers/EntityViewer/Models\EntityTreeModel.h \
+        src/AssetViewers/ModelViewer/ModelViewerWidget.h \
+        src/AssetViewers/ModelViewer/ui_ModelViewerWidget.h \
+        src/AssetViewers/ModelViewer/Models/AnimationTableModel.h \
+        src/AssetViewers/ModelViewer/Models/MaterialTableModel.h \
+        src/AssetViewers/ModelViewer/Models/MeshTableModel.h \
+        src/AssetViewers/ModelViewer/Models/NodeTreeModel.h \
+        src/AssetViewers/PlainTextViewer/PlainTextViewerWidget.h \
+        src/AssetViewers/PlainTextViewer/ui_PlainTextViewerWidget.h \
+        src/AssetViewers/StringTableViewer/StringTableViewerWidget.h \
+        src/AssetViewers/StringTableViewer/ui_StringTableViewerWidget.h \
+        src/AssetViewers/StringTableViewer/Models/StringTableModel.h \
+        src/AssetViewers/TextureViewer/TextureViewerWidget.h \
+        src/AssetViewers/TextureViewer/ui_TextureViewerWidget.h \
+        src/AssetViewers/TextureViewer/Models/TextureDetailsTableModel.h \
+        src/FileExtractorWindow/Extractor.h \
+        src/FileExtractorWindow/FileExtractorDialog.h \
+        src/FileExtractorWindow/ui_FileExtractorDialog.h \
+        src/FileExtractorWindow/Models/FileExtractItem.h \
+        src/FileExtractorWindow/Models/FileExtractListModel.h \
+        src/FileExtractorWindow/States/FileExtractorStateBase.h \
+        src/FileExtractorWindow/States/FileExtractorStateGroup.h \
+        src/FileExtractorWindow/States/FinishedState.h \
+        src/FileExtractorWindow/States/IdleState.h \
+        src/FileExtractorWindow/States/ProgressState.h \
+        src/MainWindow/MainWindow.h \
+        src/MainWindow/ui_MainWindow.h \
+        src/MGF/Archive.h \
+        src/MGF/EFileTypes.h \
+        src/MGF/File.h \
+        src/MGF/VersionConstants.h \
+        src/MGF/Assets/AssetBase.h \
+        src/MGF/Assets/AssetMappings.h \
+        src/MGF/Assets/EAssetTypes.h \
+        src/MGF/Assets/EntityAsset.h \
+        src/MGF/Assets/ModelAsset.h \
+        src/MGF/Assets/PlainText.h \
+        src/MGF/Assets/StringTable.h \
+        src/MGF/Assets/Texture.h \
+        src/MGF/Assets/Factories/AttributeNames.h \
+        src/MGF/Assets/Factories/EntityNames.h \
+        src/MGF/Assets/Factories/MaterialFactory.h \
+        src/MGF/Assets/Factories/MeshFactory.h \
+        src/MGF/Assets/Model/Animation.h \
+        src/MGF/Assets/Model/Material.h \
+        src/MGF/Assets/Model/Mesh.h \
+        src/MGF/Assets/Model/Node.h \
+        src/MGF/Factories/ImageFactory.h \
+        src/MGF/Structures/Common.h \
+        src/MGF/Structures/mgf.h \
+        src/MGF/Structures/MgText.h \
+        src/MGF/Structures/Tif.h \
+        src/MGF/Structures/wdf.h \
+        src/OgreWindow/ogrewindow.h \
+        src/ResourceManager/AssetFactory.h \
+        src/ResourceManager/ResourceManager.h \
+        src/Utilities/configfile.h \
+        src/Utilities/ContextProvider/Context.h \
+        src/Utilities/ContextProvider/ServiceProvider.h \
+        src/Utilities/StateMachine/State.h \
+        src/Utilities/StateMachine/StateGroup.h
 
 FORMS += \
-	myclass.ui \
-	src/FileExtractor/FileExtractorDialog.ui \
-	src/StringTableViewer/StringTableViewerWidget.ui \
-	src/widgets/mgftextureviewerwidget.ui \
-	src/widgets/mgftextviewwidget.ui \
-	src/widgets/mgfworkspace.ui \
-	src/widgets/mgmodelviewerwidget.ui \
-	src/windows/mainwindow.ui
+        src/ArchiveViewer/ArchiveViewerWidget.ui \
+        src/AssetViewers/EntityViewer/EntityViewerWidget.ui \
+        src/AssetViewers/ModelViewer/ModelViewerWidget.ui \
+        src/AssetViewers/PlainTextViewer/PlainTextViewerWidget.ui \
+        src/AssetViewers/StringTableViewer/StringTableViewerWidget.ui \
+        src/AssetViewers/TextureViewer/TextureViewerWidget.ui \
+        src/FileExtractorWindow/FileExtractorDialog.ui \
+        src/MainWindow/MainWindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -158,9 +178,7 @@ else:win32:CONFIG(debug, debug|release): LIBS += \
 	-L$$(OGRE3D_DIR)/Binaries/lib/Debug/ -lRenderSystem_Direct3D9_d
 
 INCLUDEPATH += \
-	$$PWD/src \
-	$$PWD/src/uic \
-	$$PWD/src/moc \
+        $$PWD/src \
 	$$PWD/vendor \
 	$$(QT_DIR)/5.14.2/msvc2017_64/include \
 	$$(QT_DIR)/5.14.2/msvc2017_64/include/QtCore \
@@ -174,9 +192,7 @@ DEPENDPATH += \
 	$(QT_DIR)/5.14.2/msvc2017_64/lib \
 	$(OGRE3D_DIR)/Binaries/lib/Debug
 
-win32:UI_DIR = $$PWD/src/uic
-win32:MOC_DIR = $$PWD/src/moc
-
 win32:CONFIG(debug, debug|release):OBJECTS_DIR = $$PWD/obj/x64/Debug
 win32:CONFIG(release, debug|release):OBJECTS_DIR = $$PWD/obj/x64/Release
 
+win32:RC_ICONS += madcat.ico

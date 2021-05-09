@@ -11,8 +11,8 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QFrame>
 #include <QtWidgets/QHeaderView>
+#include <QtWidgets/QScrollArea>
 #include <QtWidgets/QTableView>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
@@ -23,8 +23,9 @@ class Ui_TextureViewerWidget
 {
 public:
     QVBoxLayout *verticalLayout;
-    QFrame *frame;
-    QTableView *textureDetailsTable;
+    QTableView *TextureDetailsTable;
+    QScrollArea *scrollArea;
+    QWidget *scrollAreaWidgetContents;
 
     void setupUi(QWidget *TextureViewerWidget)
     {
@@ -37,28 +38,33 @@ public:
         sizePolicy.setHeightForWidth(TextureViewerWidget->sizePolicy().hasHeightForWidth());
         TextureViewerWidget->setSizePolicy(sizePolicy);
         verticalLayout = new QVBoxLayout(TextureViewerWidget);
-        verticalLayout->setSpacing(0);
+        verticalLayout->setSpacing(6);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
         verticalLayout->setContentsMargins(0, 0, 0, 0);
-        frame = new QFrame(TextureViewerWidget);
-        frame->setObjectName(QString::fromUtf8("frame"));
-        frame->setFrameShape(QFrame::StyledPanel);
-        frame->setFrameShadow(QFrame::Raised);
-        textureDetailsTable = new QTableView(frame);
-        textureDetailsTable->setObjectName(QString::fromUtf8("textureDetailsTable"));
-        textureDetailsTable->setGeometry(QRect(0, 0, 700, 54));
+        TextureDetailsTable = new QTableView(TextureViewerWidget);
+        TextureDetailsTable->setObjectName(QString::fromUtf8("TextureDetailsTable"));
         QSizePolicy sizePolicy1(QSizePolicy::Fixed, QSizePolicy::Fixed);
         sizePolicy1.setHorizontalStretch(0);
         sizePolicy1.setVerticalStretch(0);
-        sizePolicy1.setHeightForWidth(textureDetailsTable->sizePolicy().hasHeightForWidth());
-        textureDetailsTable->setSizePolicy(sizePolicy1);
-        textureDetailsTable->setMinimumSize(QSize(700, 0));
-        textureDetailsTable->setMaximumSize(QSize(701, 80));
-        textureDetailsTable->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-        textureDetailsTable->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-        textureDetailsTable->verticalHeader()->setVisible(false);
+        sizePolicy1.setHeightForWidth(TextureDetailsTable->sizePolicy().hasHeightForWidth());
+        TextureDetailsTable->setSizePolicy(sizePolicy1);
+        TextureDetailsTable->setMaximumSize(QSize(700, 55));
+        TextureDetailsTable->verticalHeader()->setVisible(false);
 
-        verticalLayout->addWidget(frame);
+        verticalLayout->addWidget(TextureDetailsTable);
+
+        scrollArea = new QScrollArea(TextureViewerWidget);
+        scrollArea->setObjectName(QString::fromUtf8("scrollArea"));
+        scrollArea->setFrameShape(QFrame::NoFrame);
+        scrollArea->setFrameShadow(QFrame::Plain);
+        scrollArea->setLineWidth(0);
+        scrollArea->setWidgetResizable(false);
+        scrollAreaWidgetContents = new QWidget();
+        scrollAreaWidgetContents->setObjectName(QString::fromUtf8("scrollAreaWidgetContents"));
+        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 958, 546));
+        scrollArea->setWidget(scrollAreaWidgetContents);
+
+        verticalLayout->addWidget(scrollArea);
 
 
         retranslateUi(TextureViewerWidget);

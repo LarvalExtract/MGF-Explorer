@@ -14,7 +14,7 @@
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
-#include <QtWidgets/QLineEdit>
+#include <QtWidgets/QLabel>
 #include <QtWidgets/QTreeView>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
@@ -29,7 +29,8 @@ public:
     QTreeView *FileTreeView;
     QFrame *Frame;
     QVBoxLayout *AssetViewerLayout;
-    QLineEdit *FileDetails;
+    QLabel *label;
+    QFrame *line;
     QWidget *EmptyWidget;
 
     void setupUi(QWidget *ArchiveViewerWidget)
@@ -77,16 +78,23 @@ public:
         AssetViewerLayout->setSpacing(3);
         AssetViewerLayout->setObjectName(QString::fromUtf8("AssetViewerLayout"));
         AssetViewerLayout->setContentsMargins(0, 0, 0, 0);
-        FileDetails = new QLineEdit(Frame);
-        FileDetails->setObjectName(QString::fromUtf8("FileDetails"));
+        label = new QLabel(Frame);
+        label->setObjectName(QString::fromUtf8("label"));
         QSizePolicy sizePolicy2(QSizePolicy::Preferred, QSizePolicy::Fixed);
         sizePolicy2.setHorizontalStretch(0);
         sizePolicy2.setVerticalStretch(0);
-        sizePolicy2.setHeightForWidth(FileDetails->sizePolicy().hasHeightForWidth());
-        FileDetails->setSizePolicy(sizePolicy2);
-        FileDetails->setMaximumSize(QSize(16777215, 16777215));
+        sizePolicy2.setHeightForWidth(label->sizePolicy().hasHeightForWidth());
+        label->setSizePolicy(sizePolicy2);
+        label->setTextInteractionFlags(Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse);
 
-        AssetViewerLayout->addWidget(FileDetails);
+        AssetViewerLayout->addWidget(label);
+
+        line = new QFrame(Frame);
+        line->setObjectName(QString::fromUtf8("line"));
+        line->setFrameShape(QFrame::HLine);
+        line->setFrameShadow(QFrame::Sunken);
+
+        AssetViewerLayout->addWidget(line);
 
         EmptyWidget = new QWidget(Frame);
         EmptyWidget->setObjectName(QString::fromUtf8("EmptyWidget"));
@@ -105,6 +113,7 @@ public:
     void retranslateUi(QWidget *ArchiveViewerWidget)
     {
         ArchiveViewerWidget->setWindowTitle(QCoreApplication::translate("ArchiveViewerWidget", "Form", nullptr));
+        label->setText(QCoreApplication::translate("ArchiveViewerWidget", "TextLabel", nullptr));
     } // retranslateUi
 
 };

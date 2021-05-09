@@ -20,8 +20,9 @@ TextureViewerWidget::TextureViewerWidget(QWidget *parent) :
         title += QString::number(s_Count);
         m_OgreWindow.initialize(title);
 
-        m_Container = QWidget::createWindowContainer(&m_OgreWindow, ui->frame);
-        m_Container->setGeometry(ui->textureDetailsTable->pos().x(), ui->textureDetailsTable->height() + 9, 1, 1);
+        m_Container = QWidget::createWindowContainer(&m_OgreWindow, this);
+        ui->scrollArea->setWidget(m_Container);
+        ui->scrollArea->setBackgroundRole(QPalette::Dark);
 
         InitialiseScene();
     }
@@ -41,7 +42,7 @@ void TextureViewerWidget::LoadAsset(MGF::Asset::AssetPtr asset)
     const auto textureAsset = static_cast<MGF::Asset::Texture*>(asset.get());
 
     TextureDetailsTableModel.SetTextureReference(textureAsset);
-    ui->textureDetailsTable->setModel(&TextureDetailsTableModel);
+    ui->TextureDetailsTable->setModel(&TextureDetailsTableModel);
 
 	m_Container->resize(textureAsset->GetWidth(), textureAsset->GetHeight());
 	m_TextureUnit->setTexture(textureAsset->GetOgreTexture());
