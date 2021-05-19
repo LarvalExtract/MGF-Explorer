@@ -44,7 +44,7 @@ File::File(MGF::File* parent,
     m_MGFArchive(mgfFile),
     m_TreeViewRow(0)
 {
-    m_FileDate.setTime_t(timestamp);
+    m_FileDate.setOffsetFromUtc(timestamp);
 
     if (parent != nullptr)
     {

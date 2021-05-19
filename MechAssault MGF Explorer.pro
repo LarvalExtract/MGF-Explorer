@@ -196,3 +196,6 @@ win32:CONFIG(debug, debug|release):OBJECTS_DIR = $$PWD/obj/x64/Debug
 win32:CONFIG(release, debug|release):OBJECTS_DIR = $$PWD/obj/x64/Release
 
 win32:RC_ICONS += madcat.ico
+
+RESOURCES += \
+    res/icon.qrc

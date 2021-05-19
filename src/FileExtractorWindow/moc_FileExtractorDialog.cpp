@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'FileExtractorDialog.h'
 **
-** Created by: The Qt Meta Object Compiler version 67 (Qt 5.14.2)
+** Created by: The Qt Meta Object Compiler version 68 (Qt 6.0.3)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -12,8 +12,8 @@
 #include <QtCore/qmetatype.h>
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'FileExtractorDialog.h' doesn't include <QObject>."
-#elif Q_MOC_OUTPUT_REVISION != 67
-#error "This file was generated using the moc from 5.14.2. It"
+#elif Q_MOC_OUTPUT_REVISION != 68
+#error "This file was generated using the moc from 6.0.3. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
@@ -22,21 +22,18 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_FileExtractor__FileExtractorDialog_t {
-    QByteArrayData data[5];
+    const uint offsetsAndSize[10];
     char stringdata0[81];
 };
-#define QT_MOC_LITERAL(idx, ofs, len) \
-    Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
-    qptrdiff(offsetof(qt_meta_stringdata_FileExtractor__FileExtractorDialog_t, stringdata0) + ofs \
-        - idx * sizeof(QByteArrayData)) \
-    )
+#define QT_MOC_LITERAL(ofs, len) \
+    uint(offsetof(qt_meta_stringdata_FileExtractor__FileExtractorDialog_t, stringdata0) + ofs), len 
 static const qt_meta_stringdata_FileExtractor__FileExtractorDialog_t qt_meta_stringdata_FileExtractor__FileExtractorDialog = {
     {
-QT_MOC_LITERAL(0, 0, 34), // "FileExtractor::FileExtractorD..."
-QT_MOC_LITERAL(1, 35, 23), // "on_browseButton_clicked"
-QT_MOC_LITERAL(2, 59, 0), // ""
-QT_MOC_LITERAL(3, 60, 9), // "OnStarted"
-QT_MOC_LITERAL(4, 70, 10) // "OnFinished"
+QT_MOC_LITERAL(0, 34), // "FileExtractor::FileExtractorD..."
+QT_MOC_LITERAL(35, 23), // "on_browseButton_clicked"
+QT_MOC_LITERAL(59, 0), // ""
+QT_MOC_LITERAL(60, 9), // "OnStarted"
+QT_MOC_LITERAL(70, 10) // "OnFinished"
 
     },
     "FileExtractor::FileExtractorDialog\0"
@@ -48,7 +45,7 @@ QT_MOC_LITERAL(4, 70, 10) // "OnFinished"
 static const uint qt_meta_data_FileExtractor__FileExtractorDialog[] = {
 
  // content:
-       8,       // revision
+       9,       // revision
        0,       // classname
        0,    0, // classinfo
        3,   14, // methods
@@ -58,10 +55,10 @@ static const uint qt_meta_data_FileExtractor__FileExtractorDialog[] = {
        0,       // flags
        0,       // signalCount
 
- // slots: name, argc, parameters, tag, flags
-       1,    0,   29,    2, 0x08 /* Private */,
-       3,    0,   30,    2, 0x08 /* Private */,
-       4,    0,   31,    2, 0x08 /* Private */,
+ // slots: name, argc, parameters, tag, flags, initial metatype offsets
+       1,    0,   32,    2, 0x08,    0 /* Private */,
+       3,    0,   33,    2, 0x08,    1 /* Private */,
+       4,    0,   34,    2, 0x08,    2 /* Private */,
 
  // slots: parameters
     QMetaType::Void,
@@ -75,7 +72,7 @@ void FileExtractor::FileExtractorDialog::qt_static_metacall(QObject *_o, QMetaOb
 {
     if (_c == QMetaObject::InvokeMetaMethod) {
         auto *_t = static_cast<FileExtractorDialog *>(_o);
-        Q_UNUSED(_t)
+        (void)_t;
         switch (_id) {
         case 0: _t->on_browseButton_clicked(); break;
         case 1: _t->OnStarted(); break;
@@ -83,15 +80,21 @@ void FileExtractor::FileExtractorDialog::qt_static_metacall(QObject *_o, QMetaOb
         default: ;
         }
     }
-    Q_UNUSED(_a);
+    (void)_a;
 }
 
-QT_INIT_METAOBJECT const QMetaObject FileExtractor::FileExtractorDialog::staticMetaObject = { {
+const QMetaObject FileExtractor::FileExtractorDialog::staticMetaObject = { {
     QMetaObject::SuperData::link<QDialog::staticMetaObject>(),
-    qt_meta_stringdata_FileExtractor__FileExtractorDialog.data,
+    qt_meta_stringdata_FileExtractor__FileExtractorDialog.offsetsAndSize,
     qt_meta_data_FileExtractor__FileExtractorDialog,
     qt_static_metacall,
     nullptr,
+qt_incomplete_metaTypeArray<qt_meta_stringdata_FileExtractor__FileExtractorDialog_t
+
+, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>
+
+
+>,
     nullptr
 } };
 
@@ -120,7 +123,7 @@ int FileExtractor::FileExtractorDialog::qt_metacall(QMetaObject::Call _c, int _i
         _id -= 3;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
         if (_id < 3)
-            *reinterpret_cast<int*>(_a[0]) = -1;
+            *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
         _id -= 3;
     }
     return _id;

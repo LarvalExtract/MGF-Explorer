@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'PlainTextViewerWidget.h'
 **
-** Created by: The Qt Meta Object Compiler version 67 (Qt 5.14.2)
+** Created by: The Qt Meta Object Compiler version 68 (Qt 6.0.3)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -12,8 +12,8 @@
 #include <QtCore/qmetatype.h>
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'PlainTextViewerWidget.h' doesn't include <QObject>."
-#elif Q_MOC_OUTPUT_REVISION != 67
-#error "This file was generated using the moc from 5.14.2. It"
+#elif Q_MOC_OUTPUT_REVISION != 68
+#error "This file was generated using the moc from 6.0.3. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
@@ -22,17 +22,14 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_PlainTextViewer__PlainTextViewerWidget_t {
-    QByteArrayData data[1];
+    const uint offsetsAndSize[2];
     char stringdata0[39];
 };
-#define QT_MOC_LITERAL(idx, ofs, len) \
-    Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
-    qptrdiff(offsetof(qt_meta_stringdata_PlainTextViewer__PlainTextViewerWidget_t, stringdata0) + ofs \
-        - idx * sizeof(QByteArrayData)) \
-    )
+#define QT_MOC_LITERAL(ofs, len) \
+    uint(offsetof(qt_meta_stringdata_PlainTextViewer__PlainTextViewerWidget_t, stringdata0) + ofs), len 
 static const qt_meta_stringdata_PlainTextViewer__PlainTextViewerWidget_t qt_meta_stringdata_PlainTextViewer__PlainTextViewerWidget = {
     {
-QT_MOC_LITERAL(0, 0, 38) // "PlainTextViewer::PlainTextVie..."
+QT_MOC_LITERAL(0, 38) // "PlainTextViewer::PlainTextVie..."
 
     },
     "PlainTextViewer::PlainTextViewerWidget"
@@ -42,7 +39,7 @@ QT_MOC_LITERAL(0, 0, 38) // "PlainTextViewer::PlainTextVie..."
 static const uint qt_meta_data_PlainTextViewer__PlainTextViewerWidget[] = {
 
  // content:
-       8,       // revision
+       9,       // revision
        0,       // classname
        0,    0, // classinfo
        0,    0, // methods
@@ -57,17 +54,18 @@ static const uint qt_meta_data_PlainTextViewer__PlainTextViewerWidget[] = {
 
 void PlainTextViewer::PlainTextViewerWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
-    Q_UNUSED(_o);
-    Q_UNUSED(_id);
-    Q_UNUSED(_c);
-    Q_UNUSED(_a);
+    (void)_o;
+    (void)_id;
+    (void)_c;
+    (void)_a;
 }
 
-QT_INIT_METAOBJECT const QMetaObject PlainTextViewer::PlainTextViewerWidget::staticMetaObject = { {
+const QMetaObject PlainTextViewer::PlainTextViewerWidget::staticMetaObject = { {
     QMetaObject::SuperData::link<QWidget::staticMetaObject>(),
-    qt_meta_stringdata_PlainTextViewer__PlainTextViewerWidget.data,
+    qt_meta_stringdata_PlainTextViewer__PlainTextViewerWidget.offsetsAndSize,
     qt_meta_data_PlainTextViewer__PlainTextViewerWidget,
     qt_static_metacall,
+    nullptr,
     nullptr,
     nullptr
 } };

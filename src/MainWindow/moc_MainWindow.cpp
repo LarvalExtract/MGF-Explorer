@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'MainWindow.h'
 **
-** Created by: The Qt Meta Object Compiler version 67 (Qt 5.14.2)
+** Created by: The Qt Meta Object Compiler version 68 (Qt 6.0.3)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -12,8 +12,8 @@
 #include <QtCore/qmetatype.h>
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'MainWindow.h' doesn't include <QObject>."
-#elif Q_MOC_OUTPUT_REVISION != 67
-#error "This file was generated using the moc from 5.14.2. It"
+#elif Q_MOC_OUTPUT_REVISION != 68
+#error "This file was generated using the moc from 6.0.3. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
@@ -22,24 +22,21 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_MainWindow_t {
-    QByteArrayData data[8];
+    const uint offsetsAndSize[16];
     char stringdata0[174];
 };
-#define QT_MOC_LITERAL(idx, ofs, len) \
-    Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
-    qptrdiff(offsetof(qt_meta_stringdata_MainWindow_t, stringdata0) + ofs \
-        - idx * sizeof(QByteArrayData)) \
-    )
+#define QT_MOC_LITERAL(ofs, len) \
+    uint(offsetof(qt_meta_stringdata_MainWindow_t, stringdata0) + ofs), len 
 static const qt_meta_stringdata_MainWindow_t qt_meta_stringdata_MainWindow = {
     {
-QT_MOC_LITERAL(0, 0, 10), // "MainWindow"
-QT_MOC_LITERAL(1, 11, 32), // "on_actionOpen_MGF_file_triggered"
-QT_MOC_LITERAL(2, 44, 0), // ""
-QT_MOC_LITERAL(3, 45, 38), // "on_actionClose_all_MGF_files_..."
-QT_MOC_LITERAL(4, 84, 30), // "on_tabWidget_tabCloseRequested"
-QT_MOC_LITERAL(5, 115, 5), // "index"
-QT_MOC_LITERAL(6, 121, 27), // "on_tabWidget_currentChanged"
-QT_MOC_LITERAL(7, 149, 24) // "on_actionAbout_triggered"
+QT_MOC_LITERAL(0, 10), // "MainWindow"
+QT_MOC_LITERAL(11, 32), // "on_actionOpen_MGF_file_triggered"
+QT_MOC_LITERAL(44, 0), // ""
+QT_MOC_LITERAL(45, 38), // "on_actionClose_all_MGF_files_..."
+QT_MOC_LITERAL(84, 30), // "on_tabWidget_tabCloseRequested"
+QT_MOC_LITERAL(115, 5), // "index"
+QT_MOC_LITERAL(121, 27), // "on_tabWidget_currentChanged"
+QT_MOC_LITERAL(149, 24) // "on_actionAbout_triggered"
 
     },
     "MainWindow\0on_actionOpen_MGF_file_triggered\0"
@@ -53,7 +50,7 @@ QT_MOC_LITERAL(7, 149, 24) // "on_actionAbout_triggered"
 static const uint qt_meta_data_MainWindow[] = {
 
  // content:
-       8,       // revision
+       9,       // revision
        0,       // classname
        0,    0, // classinfo
        5,   14, // methods
@@ -63,12 +60,12 @@ static const uint qt_meta_data_MainWindow[] = {
        0,       // flags
        0,       // signalCount
 
- // slots: name, argc, parameters, tag, flags
-       1,    0,   39,    2, 0x08 /* Private */,
-       3,    0,   40,    2, 0x08 /* Private */,
-       4,    1,   41,    2, 0x08 /* Private */,
-       6,    1,   44,    2, 0x08 /* Private */,
-       7,    0,   47,    2, 0x08 /* Private */,
+ // slots: name, argc, parameters, tag, flags, initial metatype offsets
+       1,    0,   44,    2, 0x08,    0 /* Private */,
+       3,    0,   45,    2, 0x08,    1 /* Private */,
+       4,    1,   46,    2, 0x08,    2 /* Private */,
+       6,    1,   49,    2, 0x08,    4 /* Private */,
+       7,    0,   52,    2, 0x08,    6 /* Private */,
 
  // slots: parameters
     QMetaType::Void,
@@ -84,7 +81,7 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
 {
     if (_c == QMetaObject::InvokeMetaMethod) {
         auto *_t = static_cast<MainWindow *>(_o);
-        Q_UNUSED(_t)
+        (void)_t;
         switch (_id) {
         case 0: _t->on_actionOpen_MGF_file_triggered(); break;
         case 1: _t->on_actionClose_all_MGF_files_triggered(); break;
@@ -96,12 +93,18 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
     }
 }
 
-QT_INIT_METAOBJECT const QMetaObject MainWindow::staticMetaObject = { {
+const QMetaObject MainWindow::staticMetaObject = { {
     QMetaObject::SuperData::link<QMainWindow::staticMetaObject>(),
-    qt_meta_stringdata_MainWindow.data,
+    qt_meta_stringdata_MainWindow.offsetsAndSize,
     qt_meta_data_MainWindow,
     qt_static_metacall,
     nullptr,
+qt_incomplete_metaTypeArray<qt_meta_stringdata_MainWindow_t
+
+, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<int, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<int, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>
+
+
+>,
     nullptr
 } };
 
@@ -130,7 +133,7 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         _id -= 5;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
         if (_id < 5)
-            *reinterpret_cast<int*>(_a[0]) = -1;
+            *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
         _id -= 5;
     }
     return _id;
