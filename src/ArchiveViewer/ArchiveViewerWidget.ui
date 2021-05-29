@@ -121,7 +121,18 @@
        </widget>
       </item>
       <item>
-       <widget class="QWidget" name="EmptyWidget" native="true"/>
+       <widget class="QStackedWidget" name="AssetViewerStack">
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Sunken</enum>
+        </property>
+        <property name="currentIndex">
+         <number>0</number>
+        </property>
+        <widget class="QWidget" name="EmptyPage"/>
+       </widget>
       </item>
      </layout>
     </widget>

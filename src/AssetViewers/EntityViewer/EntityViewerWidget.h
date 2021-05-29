@@ -3,15 +3,13 @@
 #include "AssetViewers/IAssetViewerWidget.h"
 #include "Models/EntityTreeModel.h"
 
-#include <QWidget>
-
 namespace Ui {
     class EntityViewerWidget;
 }
 
 namespace EntityViewer {
 
-    class EntityViewerWidget : public QWidget, public IAssetViewerWidget
+    class EntityViewerWidget : public IAssetViewerWidget
     {
         Q_OBJECT
 

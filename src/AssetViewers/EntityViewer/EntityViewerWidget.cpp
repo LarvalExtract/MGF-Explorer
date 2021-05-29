@@ -6,7 +6,6 @@
 using namespace EntityViewer;
 
 EntityViewerWidget::EntityViewerWidget(QWidget *parent) :
-    QWidget(parent),
     ui(new Ui::EntityViewerWidget)
 {
     ui->setupUi(this);

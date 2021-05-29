@@ -3,15 +3,13 @@
 #include "AssetViewers/IAssetViewerWidget.h"
 #include "Models/StringTableModel.h"
 
-#include <QWidget>
-
 namespace Ui {
     class StringTableViewerWidget;
 }
 
 namespace StringTableViewer {
 
-    class StringTableViewerWidget : public QWidget, public IAssetViewerWidget
+    class StringTableViewerWidget : public IAssetViewerWidget
     {
         Q_OBJECT
 

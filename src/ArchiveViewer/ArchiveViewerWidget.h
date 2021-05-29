@@ -48,9 +48,6 @@ namespace ArchiveViewer {
 		ContextMenus::TextureFileMenu TextureFileMenu;
 
 		MGF::AssetManager& AssetManager;
-
-	private:
-		void DisplayAssetViewer(QWidget* newAssetViewer);
 	};
 
 }

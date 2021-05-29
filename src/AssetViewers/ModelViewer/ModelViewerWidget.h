@@ -1,11 +1,7 @@
-#ifndef MGMODELVIEWERWIDGET_H
-#define MGMODELVIEWERWIDGET_H
+#pragma once
 
 #include "AssetViewers/IAssetViewerWidget.h"
-
 #include "OgreWindow/ogrewindow.h"
-
-#include <QWidget>
 
 namespace Ui {
     class ModelViewerWidget;
@@ -13,7 +9,7 @@ namespace Ui {
 
 namespace ModelViewer {
 
-	class ModelViewerWidget : public QWidget, public IAssetViewerWidget
+	class ModelViewerWidget : public IAssetViewerWidget
 	{
 		Q_OBJECT
 
@@ -67,5 +63,3 @@ namespace ModelViewer {
 	};
 
 }
-
-#endif // MGMODELVIEWERWIDGET_H

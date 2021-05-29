@@ -61,7 +61,7 @@ void PlainTextViewer::PlainTextViewerWidget::qt_static_metacall(QObject *_o, QMe
 }
 
 const QMetaObject PlainTextViewer::PlainTextViewerWidget::staticMetaObject = { {
-    QMetaObject::SuperData::link<QWidget::staticMetaObject>(),
+    QMetaObject::SuperData::link<IAssetViewerWidget::staticMetaObject>(),
     qt_meta_stringdata_PlainTextViewer__PlainTextViewerWidget.offsetsAndSize,
     qt_meta_data_PlainTextViewer__PlainTextViewerWidget,
     qt_static_metacall,
@@ -81,14 +81,12 @@ void *PlainTextViewer::PlainTextViewerWidget::qt_metacast(const char *_clname)
     if (!_clname) return nullptr;
     if (!strcmp(_clname, qt_meta_stringdata_PlainTextViewer__PlainTextViewerWidget.stringdata0))
         return static_cast<void*>(this);
-    if (!strcmp(_clname, "IAssetViewerWidget"))
-        return static_cast< IAssetViewerWidget*>(this);
-    return QWidget::qt_metacast(_clname);
+    return IAssetViewerWidget::qt_metacast(_clname);
 }
 
 int PlainTextViewer::PlainTextViewerWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
-    _id = QWidget::qt_metacall(_c, _id, _a);
+    _id = IAssetViewerWidget::qt_metacall(_c, _id, _a);
     return _id;
 }
 QT_WARNING_POP

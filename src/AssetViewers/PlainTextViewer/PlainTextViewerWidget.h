@@ -2,15 +2,13 @@
 
 #include "AssetViewers/IAssetViewerWidget.h"
 
-#include <QWidget>
-
 namespace Ui {
 	class PlainTextViewerWidget;
 }
 
 namespace PlainTextViewer {
 
-	class PlainTextViewerWidget : public QWidget, public IAssetViewerWidget
+	class PlainTextViewerWidget : public IAssetViewerWidget
 	{
 		Q_OBJECT
 

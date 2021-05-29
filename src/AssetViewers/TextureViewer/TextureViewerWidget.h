@@ -1,13 +1,8 @@
-#ifndef MGFTEXTUREVIEWERWIDGET_H
-#define MGFTEXTUREVIEWERWIDGET_H
+#pragma once
 
 #include "AssetViewers/IAssetViewerWidget.h"
-
 #include "Models/TextureDetailsTableModel.h"
-
 #include "OgreWindow/ogrewindow.h"
-
-#include <QWidget>
 
 class OgreWindow;
 
@@ -17,7 +12,7 @@ class TextureViewerWidget;
 
 namespace TextureViewer {
 
-    class TextureViewerWidget : public QWidget, public IAssetViewerWidget
+    class TextureViewerWidget : public IAssetViewerWidget
     {
         Q_OBJECT
 
@@ -48,5 +43,3 @@ namespace TextureViewer {
     };
 
 }
-
-#endif // MGFTEXTUREVIEWERWIDGET_H

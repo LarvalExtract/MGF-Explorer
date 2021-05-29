@@ -2,7 +2,9 @@
 
 #include "MGF/Assets/AssetBase.h"
 
-class IAssetViewerWidget
+#include <QWidget>
+
+class IAssetViewerWidget : public QWidget
 {
 public:
     virtual void LoadAsset(MGF::Asset::AssetPtr asset) = 0;

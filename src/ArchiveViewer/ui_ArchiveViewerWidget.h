@@ -15,6 +15,7 @@
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
+#include <QtWidgets/QStackedWidget>
 #include <QtWidgets/QTreeView>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
@@ -31,7 +32,8 @@ public:
     QVBoxLayout *AssetViewerLayout;
     QLabel *label;
     QFrame *line;
-    QWidget *EmptyWidget;
+    QStackedWidget *AssetViewerStack;
+    QWidget *EmptyPage;
 
     void setupUi(QWidget *ArchiveViewerWidget)
     {
@@ -96,16 +98,24 @@ public:
 
         AssetViewerLayout->addWidget(line);
 
-        EmptyWidget = new QWidget(Frame);
-        EmptyWidget->setObjectName(QString::fromUtf8("EmptyWidget"));
+        AssetViewerStack = new QStackedWidget(Frame);
+        AssetViewerStack->setObjectName(QString::fromUtf8("AssetViewerStack"));
+        AssetViewerStack->setFrameShape(QFrame::NoFrame);
+        AssetViewerStack->setFrameShadow(QFrame::Sunken);
+        EmptyPage = new QWidget();
+        EmptyPage->setObjectName(QString::fromUtf8("EmptyPage"));
+        AssetViewerStack->addWidget(EmptyPage);
 
-        AssetViewerLayout->addWidget(EmptyWidget);
+        AssetViewerLayout->addWidget(AssetViewerStack);
 
 
         horizontalLayout->addWidget(Frame);
 
 
         retranslateUi(ArchiveViewerWidget);
+
+        AssetViewerStack->setCurrentIndex(0);
+
 
         QMetaObject::connectSlotsByName(ArchiveViewerWidget);
     } // setupUi
