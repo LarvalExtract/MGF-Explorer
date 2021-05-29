@@ -6,7 +6,7 @@
 #include "Utilities/ContextProvider/ServiceProvider.h"
 #include "Utilities/configfile.h"
 
-#include "ResourceManager/ResourceManager.h"
+#include "MGF/AssetManager.h"
 
 #include <QMainWindow>
 #include <QString>
@@ -47,7 +47,7 @@ private:
     std::unique_ptr<Ogre::LogManager> m_OgreLogManager;
     std::unique_ptr<Ogre::Root> m_OgreRoot;
 
-    ResourceManager m_ResourceManager;
+    MGF::AssetManager AssetManager;
     ConfigFile m_AppConfig;
    
 private:

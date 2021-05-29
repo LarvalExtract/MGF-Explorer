@@ -66,7 +66,7 @@
     <ClCompile Include="src\mgf\File.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\ResourceManager\ResourceManager.cpp">
+    <ClCompile Include="src\MGF\AssetManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\main.cpp">
@@ -97,9 +97,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\MainWindow\MainWindow.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ResourceManager\AssetFactory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\mgf\Assets\Factories\MeshFactory.cpp">
@@ -183,6 +180,9 @@
     <ClCompile Include="src\ArchiveViewer\ContextMenus\TextureFileMenu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\MGF\Assets\AssetBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\AssetViewers\PlainTextViewer\PlainTextViewerWidget.h">
@@ -242,7 +242,7 @@
     <ClInclude Include="src\mgf\File.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ResourceManager\ResourceManager.h">
+    <ClInclude Include="src\MGF\AssetManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\AssetViewers\TextureViewer\TextureViewerWidget.h">
@@ -293,9 +293,6 @@
     <ClInclude Include="src\MainWindow\MainWindow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ResourceManager\AssetFactory.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\mgf\Assets\Factories\MeshFactory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -315,9 +312,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\MGF\Assets\ModelAsset.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\mgf\Assets\AssetMappings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\MGF\EFileTypes.h">

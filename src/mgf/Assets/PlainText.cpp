@@ -1,11 +1,14 @@
 #include "PlainText.h"
 
-MGF::Asset::PlainText::PlainText(const MGF::File& file) :
-    AssetBase(file, EAssetType::PlainText)
-{
-	QByteArray data(file.FileLength() + 1, 0);
+using namespace MGF::Asset;
 
-	file.Read(data.data());
+PlainText::PlainText(const File& soureFile) :
+	AssetBase(soureFile, EAssetType::PlainText)
+{
+	const auto length = soureFile.FileLength() + 1;
+
+	QByteArray data(length, 0);
+	soureFile.Read(data.data());
 
 	Text = data;
 }

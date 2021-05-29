@@ -3,7 +3,7 @@
 #include "Factories/MaterialFactory.h"
 
 #include "Utilities/ContextProvider/ServiceProvider.h"
-#include "ResourceManager/ResourceManager.h"
+#include "MGF/AssetManager.h"
 
 #include <OgreSceneManager.h>
 #include <OgreEntity.h>
@@ -126,7 +126,7 @@ Model::Node* ModelAsset::CreateSceneNode(Model::Node* parent, const std::functio
 
 	if (const auto& nodeType = vars["type"]; nodeType == "ANIMNODE")
 	{
-		auto& rm = *ServiceProvider::Inject<ResourceManager>();
+		auto& rm = *ServiceProvider::Inject<AssetManager>();
 		auto childNodeFile = FileRef.FindRelativeItem(vars["child"].c_str());
 		auto childNodeAsset = static_cast<ModelAsset*>(rm.Get(*childNodeFile).get());
 

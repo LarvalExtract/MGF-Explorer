@@ -7,23 +7,25 @@
 
 namespace MGF {	namespace Asset {
 
+    using AssetPtr = std::shared_ptr<class AssetBase>;
+
     class AssetBase
 	{
     public:
-        AssetBase(const File& fileRef, const MGF::Asset::EAssetType assetType) : 
-            FileRef(fileRef), AssetType(assetType)
-        {
-            
-        }
+		AssetBase() = delete;
+		AssetBase(const AssetBase&) = delete;
+		AssetBase(AssetBase&&) = delete;
+		AssetBase& operator=(const AssetBase&) = delete;
+		AssetBase& operator=(AssetBase&) = delete;
 
-        inline const File& GetSourceFile() const { return FileRef; }
-        inline const EAssetType GetAssetType() const { return AssetType; }
+        static AssetPtr Create(const File& soureFile);
+        static EAssetType ToAssetType(const EFileType sourceFileType);
+
+		const File& FileRef;
+		const EAssetType AssetType;
 
     protected:
-        const File& FileRef;
-        const EAssetType AssetType;
+        AssetBase(const File& sourceFile, const MGF::Asset::EAssetType assetType) : FileRef(sourceFile), AssetType(assetType) {}
 	};
-
-    using AssetPtr = std::shared_ptr<AssetBase>;
 
 } }

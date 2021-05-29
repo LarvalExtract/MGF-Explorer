@@ -3,8 +3,6 @@
 
 #include "Utilities/ContextProvider/ServiceProvider.h"
 
-#include "MGF/Assets/AssetMappings.h"
-
 #include <QMessageBox>
 
 using namespace ArchiveViewer;
@@ -14,7 +12,7 @@ ArchiveViewerWidget::ArchiveViewerWidget(const QString& mgfFilePath, QWidget *pa
     ui(new Ui::ArchiveViewerWidget),
     MgfArchive(mgfFilePath),
     FileTreeModel(MgfArchive.GetFileList()),
-    AssetManager(*ServiceProvider::Inject<ResourceManager>())
+    AssetManager(*ServiceProvider::Inject<MGF::AssetManager>())
 {
     ui->setupUi(this); 
     ui->Frame->hide();
@@ -58,7 +56,7 @@ void ArchiveViewerWidget::on_treeView_selectionChanged(const QModelIndex &sel, c
     {
         ui->Frame->show();
 
-		QString str = QString("%1 | %2 | %3 | %4 bytes").arg(
+		const auto str = QString("%1 | %2 | %3 | %4 bytes").arg(
             selectedItem.FilePath().c_str(),
 			QString::number(selectedItem.GUID(), 16),
 			QString::number(selectedItem.FileOffset()),
@@ -69,9 +67,9 @@ void ArchiveViewerWidget::on_treeView_selectionChanged(const QModelIndex &sel, c
 
         try
         {
-			if (const auto asset = AssetManager.Get(selectedItem); asset != nullptr)
+			if (const auto asset = this->AssetManager.Get(selectedItem); asset != nullptr)
 			{
-				switch (asset->GetAssetType())
+				switch (asset->AssetType)
 				{
 				case MGF::Asset::EAssetType::PlainText:   DisplayAssetViewer(&PlainTextViewer);   PlainTextViewer.LoadAsset(asset);  break;
 				case MGF::Asset::EAssetType::StringTable: DisplayAssetViewer(&StringTableViewer); StringTableViewer.LoadAsset(asset); break;
@@ -89,7 +87,7 @@ void ArchiveViewerWidget::on_treeView_selectionChanged(const QModelIndex &sel, c
         {
             DisplayAssetViewer(ui->EmptyWidget);
 
-            QMessageBox::critical(this, QString("Failed to load asset for %1").arg(selectedItem.Name()), e.what());
+            QMessageBox::critical(this, QString("Failed to load asset %1\n%2").arg(selectedItem.Name()), e.what());
         }
     }
     else
@@ -120,11 +118,11 @@ void ArchiveViewerWidget::on_treeView_customContextMenuRequested(const QPoint &p
     {
         if (const auto selectedItem = static_cast<MGF::File*>(index.internalPointer()); selectedItem->IsFile())
         {
-			switch (MGF::Asset::sAssetMapping.at(selectedItem->FileType()))
+			switch (MGF::Asset::AssetBase::ToAssetType(selectedItem->FileType()))
 			{
             case MGF::Asset::EAssetType::PlainText:
             case MGF::Asset::EAssetType::StringTable:
-            case MGF::Asset::EAssetType::Texture: TextureFileMenu.popup(screenPos); break;
+            case MGF::Asset::EAssetType::Texture:       TextureFileMenu.popup(screenPos); break;
             case MGF::Asset::EAssetType::Model:
 
             default: FileMenu.popup(screenPos); break;

@@ -1,14 +1,14 @@
-#include "ResourceManager.h"
+#include "AssetManager.h"
 
-#include "AssetFactory.h"
+using namespace MGF;
 
-std::shared_ptr<MGF::Asset::AssetBase> ResourceManager::Get(const MGF::File& file)
+Asset::AssetPtr AssetManager::Get(const MGF::File& file)
 {
     const auto id = file.GUID();
 
     if (Assets.find(id) == Assets.end())
     {
-        auto asset = AssetFactory::Create(file);
+        auto asset = Asset::AssetBase::Create(file);
         if (asset == nullptr)
         {
             return nullptr;

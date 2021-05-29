@@ -1,7 +1,8 @@
-#ifndef MGFWORKSPACE_H
-#define MGFWORKSPACE_H
+#pragma once
 
 #include "MGF/Archive.h"
+#include "MGF/AssetManager.h"
+
 #include "Models/ArchiveFileTreeModel.h"
 #include "AssetViewers/PlainTextViewer/PlainTextViewerWidget.h"
 #include "AssetViewers/TextureViewer/TextureViewerWidget.h"
@@ -10,8 +11,6 @@
 #include "AssetViewers/EntityViewer/EntityViewerWidget.h"
 
 #include "ContextMenus/TextureFileMenu.h"
-
-#include "ResourceManager/ResourceManager.h"
 
 namespace Ui {
 class ArchiveViewerWidget;
@@ -48,11 +47,10 @@ namespace ArchiveViewer {
 		ContextMenus::FileMenu FileMenu;
 		ContextMenus::TextureFileMenu TextureFileMenu;
 
+		MGF::AssetManager& AssetManager;
+
 	private:
 		void DisplayAssetViewer(QWidget* newAssetViewer);
-		ResourceManager& AssetManager;
 	};
 
 }
-
-#endif // MGFWORKSPACE_H

@@ -1,6 +1,5 @@
 #include "ArchiveFileTreeModel.h"
-#include "MGF/File.h"
-#include "MGF/Assets/AssetMappings.h"
+#include "MGF/Assets/AssetBase.h"
 
 #include <QFileIconProvider>
 #include <QLocale>
@@ -70,17 +69,15 @@ QVariant ArchiveFileTreeModel::data(const QModelIndex &index, int role) const
 
     auto AssetTypeString = [](MGF::EFileType type)
     {
-		static const std::unordered_map<MGF::Asset::EAssetType, QVariant> assetTypeStrings = {
-            { MGF::Asset::EAssetType::PlainText,   "Text" },
-            { MGF::Asset::EAssetType::StringTable, "String Table" },
-            { MGF::Asset::EAssetType::Texture,     "Texture" },
-            { MGF::Asset::EAssetType::Model,       "Model" },
-            { MGF::Asset::EAssetType::Entity,      "Map" },
-            { MGF::Asset::EAssetType::None,        QVariant() }
-		};
-
-        auto assetType = MGF::Asset::sAssetMapping.at(type);
-        return assetTypeStrings.at(assetType);
+        switch (MGF::Asset::AssetBase::ToAssetType(type))
+        {
+        case MGF::Asset::EAssetType::PlainText:     return "Text";
+        case MGF::Asset::EAssetType::StringTable:   return "String Table";
+        case MGF::Asset::EAssetType::Texture:       return "Texture";
+        case MGF::Asset::EAssetType::Model:         return "Model";
+        case MGF::Asset::EAssetType::Entity:        return "Entities";
+        }
+        return "";
     };
 
     if (!index.isValid())

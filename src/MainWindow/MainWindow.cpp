@@ -34,7 +34,7 @@ MainWindow::MainWindow(QWidget *parent) :
     }
 
     ServiceProvider::Initialise();
-	ServiceProvider::Add<ResourceManager>(&m_ResourceManager);
+	ServiceProvider::Add<MGF::AssetManager>(&AssetManager);
 	ServiceProvider::Add<ConfigFile>(&m_AppConfig);
 	ServiceProvider::Add<Ogre::SceneManager>(m_OgreRoot->createSceneManager());
 }

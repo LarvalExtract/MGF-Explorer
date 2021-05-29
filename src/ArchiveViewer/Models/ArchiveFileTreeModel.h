@@ -1,5 +1,4 @@
-#ifndef MGFFILETREEMODEL_H
-#define MGFFILETREEMODEL_H
+#pragma once
 
 #include <QAbstractItemModel>
 
@@ -26,6 +25,3 @@ namespace ArchiveViewer { namespace Models {
 	};
 
 } }
-
-
-#endif // MGFFILETREEMODEL_H
