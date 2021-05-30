@@ -54,10 +54,10 @@
     <ClCompile Include="src\FileExtractorWindow\moc_FileExtractorDialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\mgf\Assets\PlainText.cpp">
+    <ClCompile Include="src\mgf\Assets\PlainTextAsset.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\mgf\Assets\StringTable.cpp">
+    <ClCompile Include="src\mgf\Assets\StringTableAsset.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\mgf\Archive.cpp">
@@ -81,7 +81,7 @@
     <ClCompile Include="src\AssetViewers\TextureViewer\Models\TextureDetailsTableModel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\mgf\Assets\Texture.cpp">
+    <ClCompile Include="src\mgf\Assets\TextureAsset.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\ArchiveViewer\ArchiveViewerWidget.cpp">
@@ -230,10 +230,10 @@
     <ClInclude Include="src\FileExtractorWindow\ui_FileExtractorDialog.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\mgf\Assets\PlainText.h">
+    <ClInclude Include="src\mgf\Assets\PlainTextAsset.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\mgf\Assets\StringTable.h">
+    <ClInclude Include="src\mgf\Assets\StringTableAsset.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\mgf\Archive.h">
@@ -251,7 +251,7 @@
     <ClInclude Include="src\AssetViewers\TextureViewer\Models\TextureDetailsTableModel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\mgf\Assets\Texture.h">
+    <ClInclude Include="src\mgf\Assets\TextureAsset.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\mgf\VersionConstants.h">

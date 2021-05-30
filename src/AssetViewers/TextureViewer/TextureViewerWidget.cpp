@@ -1,7 +1,7 @@
 #include "TextureViewerWidget.h"
 #include "ui_TextureViewerWidget.h"
 
-#include "MGF/Assets/Texture.h"
+#include "MGF/Assets/TextureAsset.h"
 
 static int s_Count = 0;
 
@@ -28,7 +28,7 @@ TextureViewerWidget::TextureViewerWidget(QWidget *parent) :
     }
     catch (const Ogre::Exception& e)
     {
-        std::string s = e.what();
+        throw std::runtime_error(e.what());
     }
 }
 
@@ -39,13 +39,12 @@ TextureViewerWidget::~TextureViewerWidget()
 
 void TextureViewerWidget::LoadAsset(MGF::Asset::AssetPtr asset)
 {
-    const auto textureAsset = static_cast<MGF::Asset::Texture*>(asset.get());
+    const auto textureAsset = static_cast<MGF::Asset::TextureAsset*>(asset.get());
 
-    TextureDetailsTableModel.SetTextureReference(textureAsset);
-    ui->TextureDetailsTable->setModel(&TextureDetailsTableModel);
+    ui->TextureDetailsTable->setModel(&textureAsset->TextureDetails);
 
-	m_Container->resize(textureAsset->GetWidth(), textureAsset->GetHeight());
-	m_TextureUnit->setTexture(textureAsset->GetOgreTexture());
+	m_Container->resize(textureAsset->OgreTexture->getWidth(), textureAsset->OgreTexture->getHeight());
+	m_TextureUnit->setTexture(textureAsset->OgreTexture);
 	m_OgreWindow.render();
 	m_Container->update();
 }

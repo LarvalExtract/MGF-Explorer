@@ -2,7 +2,7 @@
 #include "Utilities/configfile.h"
 #include "Utilities/ContextProvider/ServiceProvider.h"
 #include "MGF/AssetManager.h"
-#include "MGF/Assets/Texture.h"
+#include "MGF/Assets/TextureAsset.h"
 
 #include <Ogre.h>
 
@@ -231,7 +231,7 @@ Ogre::TexturePtr MaterialFactory::UploadTexture(const MGF::Asset::Model::Texture
 {
     auto& rm = *ServiceProvider::Inject<AssetManager>();
  
-    Ogre::TexturePtr texture = static_cast<MGF::Asset::Texture*>(rm.Get(*textureFile).get())->GetOgreTexture();
+    Ogre::TexturePtr texture = static_cast<MGF::Asset::TextureAsset*>(rm.Get(*textureFile).get())->OgreTexture;
 
     tu.setTextureFiltering(textureParams.filter);
     tu.setTextureMipmapBias(textureParams.mipmap_bias);

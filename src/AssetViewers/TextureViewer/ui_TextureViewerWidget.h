@@ -49,6 +49,8 @@ public:
         sizePolicy1.setHeightForWidth(TextureDetailsTable->sizePolicy().hasHeightForWidth());
         TextureDetailsTable->setSizePolicy(sizePolicy1);
         TextureDetailsTable->setMaximumSize(QSize(700, 55));
+        TextureDetailsTable->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        TextureDetailsTable->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
         TextureDetailsTable->verticalHeader()->setVisible(false);
 
         verticalLayout->addWidget(TextureDetailsTable);

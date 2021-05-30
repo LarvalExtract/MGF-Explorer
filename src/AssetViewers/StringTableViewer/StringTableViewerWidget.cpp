@@ -1,6 +1,6 @@
 #include "StringTableViewerWidget.h"
 #include "ui_StringTableViewerWidget.h"
-
+#include "MGF/Assets/StringTableAsset.h"
 
 using namespace StringTableViewer;
 
@@ -17,9 +17,7 @@ StringTableViewerWidget::~StringTableViewerWidget()
 
 void StringTableViewerWidget::LoadAsset(MGF::Asset::AssetPtr asset)
 {
-    auto stringTableAsset = static_cast<MGF::Asset::StringTable*>(asset.get());
+    auto stringTableAsset = static_cast<MGF::Asset::StringTableAsset*>(asset.get());
 
-    StringTableModel.SetAssetReference(stringTableAsset);
-
-    ui->tableView->setModel(&StringTableModel);
+    ui->tableView->setModel(&stringTableAsset->Strings);
 }

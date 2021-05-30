@@ -1,7 +1,7 @@
 #include "AssetBase.h"
-#include "PlainText.h"
-#include "StringTable.h"
-#include "Texture.h"
+#include "PlainTextAsset.h"
+#include "StringTableAsset.h"
+#include "TextureAsset.h"
 #include "ModelAsset.h"
 #include "EntityAsset.h"
 
@@ -17,9 +17,9 @@ AssetPtr AssetBase::Create(const File& soureFile)
 	using namespace Asset;
 	switch (AssetBase::ToAssetType(soureFile.FileType()))
 	{
-	case EAssetType::PlainText:   return std::make_shared<PlainText>(soureFile);
-	case EAssetType::StringTable: return std::make_shared<StringTable>(soureFile);
-	case EAssetType::Texture:     return std::make_shared<Texture>(soureFile);
+	case EAssetType::PlainText:   return std::make_shared<PlainTextAsset>(soureFile);
+	case EAssetType::StringTable: return std::make_shared<StringTableAsset>(soureFile);
+	case EAssetType::Texture:     return std::make_shared<TextureAsset>(soureFile);
 	case EAssetType::Model:       return std::make_shared<ModelAsset>(soureFile);
 	case EAssetType::Entity:      return std::make_shared<EntityAsset>(soureFile);
 	}

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MGF/Assets/Texture.h"
+#include "MGF/VersionConstants.h"
 
 #include <QAbstractTableModel>
 
@@ -9,15 +9,19 @@ namespace TextureViewer { namespace Models {
 	class TextureDetailsTable : public QAbstractTableModel
 	{
 	public:
-		void SetTextureReference(const MGF::Asset::Texture* textureAsset);
-
 		int rowCount(const QModelIndex& parent = QModelIndex()) const override;
 		int columnCount(const QModelIndex& parent = QModelIndex()) const override;
 		QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
 		QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
-	private:
-		const MGF::Asset::Texture* TextureAsset = nullptr;
+		MGF::Version Version;
+		std::uint32_t Width;
+		std::uint32_t Height;
+		std::uint32_t Depth;
+		std::uint32_t Frames;
+		std::uint32_t Mips;
+		std::uint32_t Size;
+		std::uint32_t Flags;
 	};
 
 } }

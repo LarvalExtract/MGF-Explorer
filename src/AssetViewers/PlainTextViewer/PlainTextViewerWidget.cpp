@@ -1,7 +1,7 @@
 #include "PlainTextViewerWidget.h"
 #include "ui_PlainTextViewerWidget.h"
 
-#include "MGF/Assets/PlainText.h"
+#include "MGF/Assets/PlainTextAsset.h"
 
 using namespace PlainTextViewer;
 
@@ -18,7 +18,7 @@ PlainTextViewerWidget::~PlainTextViewerWidget()
 
 void PlainTextViewerWidget::LoadAsset(MGF::Asset::AssetPtr asset)
 {
-    auto plainTextAsset = static_cast<MGF::Asset::PlainText*>(asset.get());
+    auto plainTextAsset = static_cast<MGF::Asset::PlainTextAsset*>(asset.get());
 
-    ui->plainTextEdit->setPlainText(plainTextAsset->TextData());
+    ui->plainTextEdit->setPlainText(plainTextAsset->Text);
 }

@@ -4,8 +4,6 @@
 #include "MGF/Structures/Tif.h"
 #include "MGF/Factories/ImageFactory.h"
 
-#define STB_IMAGE_WRITE_IMPLEMENTATION
-#include <stb/stb_image_write.h>
 #include <s3tc/s3tc.h>
 
 #include <QImage>
@@ -58,15 +56,15 @@ bool TextureExtractor::Extract(const MGF::File& sourceFile, const std::filesyste
 	}
 	else
 	{
-		const auto [format, bytesPerPixel] = [](uint8_t uncompressed_format_bits)
+		const auto format = [](uint8_t uncompressed_format_bits)
 		{
 			switch (uncompressed_format_bits)
 			{
-			case 0: return std::make_pair(QImage::Format::Format_ARGB32, 4);
-			case 1: return std::make_pair(QImage::Format::Format_RGB16, 2);
-			case 3: return std::make_pair(QImage::Format::Format_ARGB4444_Premultiplied, 2);
-			case 5: return std::make_pair(QImage::Format::Format_Alpha8, 1);
-			case 7: return std::make_pair(QImage::Format::Format_Grayscale8, 1);
+			case 0: return QImage::Format::Format_ARGB32;
+			case 1: return QImage::Format::Format_RGB16;
+			case 3: return QImage::Format::Format_ARGB4444_Premultiplied;
+			case 5: return QImage::Format::Format_Alpha8;
+			case 7: return QImage::Format::Format_Grayscale8;
 			}
 		}(flags & 0x0F);
 
