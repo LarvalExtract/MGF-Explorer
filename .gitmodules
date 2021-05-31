@@ -1,4 +1,2 @@
-[submodule "vendor/stb"]
-	url = https://github.com/nothings/stb
 [submodule "vendor/s3tc"]
 	url = https://github.com/Benjamin-Dobell/s3tc-dxt-decompression
