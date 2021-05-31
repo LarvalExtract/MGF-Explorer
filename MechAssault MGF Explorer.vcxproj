@@ -142,15 +142,16 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)src;$(ProjectDir)vendor;$(QT_DIR)\6.0.3\msvc2019_64\include;$(QT_DIR)\6.0.3\msvc2019_64\include\QtCore;$(QT_DIR)\6.0.3\msvc2019_64\include\QtGui;$(QT_DIR)\6.0.3\msvc2019_64\include\QtWidgets;$(OGRE3D_DIR)\Binaries\include;$(OGRE3D_DIR)\Source\ogre-1.12.6\OgreMain\include;$(OGRE3D_DIR)\Source\ogre-1.12.6\RenderSystems\Direct3D9\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)src;$(ProjectDir)vendor;$(QT_DIR)\6.1.0\msvc2019_64\include;$(QT_DIR)\6.1.0\msvc2019_64\include\QtCore;$(QT_DIR)\6.1.0\msvc2019_64\include\QtGui;$(QT_DIR)\6.1.0\msvc2019_64\include\QtWidgets;$(OGRE3D_DIR)\Binaries\include;$(OGRE3D_DIR)\Source\ogre-1.12.6\OgreMain\include;$(OGRE3D_DIR)\Source\ogre-1.12.6\RenderSystems\Direct3D9\include;D:\SDK\FBX\2020.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <DisableSpecificWarnings>4996;</DisableSpecificWarnings>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Qt6Cored.lib;Qt6Guid.lib;Qt6Widgetsd.lib;OgreMain_d.lib;RenderSystem_Direct3D9_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(QT_DIR)\6.0.3\msvc2019_64\lib;$(OGRE3D_DIR)\Binaries\lib\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Qt6Cored.lib;Qt6Guid.lib;Qt6Widgetsd.lib;OgreMain_d.lib;RenderSystem_Direct3D9_d.lib;RenderSystem_GL3Plus_d.lib;libfbxsdk.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(QT_DIR)\6.1.0\msvc2019_64\lib;$(OGRE3D_DIR)\Binaries\lib\Debug;D:\SDK\FBX\2020.2\lib\vs2019\x64\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <EntryPointSymbol>
       </EntryPointSymbol>
     </Link>
@@ -169,18 +170,19 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)src;$(ProjectDir)vendor;$(QT_DIR)\6.0.3\msvc2019_64\include;$(QT_DIR)\6.0.3\msvc2019_64\include\QtCore;$(QT_DIR)\6.0.3\msvc2019_64\include\QtGui;$(QT_DIR)\6.0.3\msvc2019_64\include\QtWidgets;$(OGRE3D_DIR)\Binaries\include;$(OGRE3D_DIR)\Source\ogre-1.12.6\OgreMain\include;$(OGRE3D_DIR)\Source\ogre-1.12.6\RenderSystems\Direct3D9\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)src;$(ProjectDir)vendor;$(QT_DIR)\6.1.0\msvc2019_64\include;$(QT_DIR)\6.1.0\msvc2019_64\include\QtCore;$(QT_DIR)\6.1.0\msvc2019_64\include\QtGui;$(QT_DIR)\6.1.0\msvc2019_64\include\QtWidgets;$(OGRE3D_DIR)\Binaries\include;$(OGRE3D_DIR)\Source\ogre-1.12.6\OgreMain\include;$(OGRE3D_DIR)\Source\ogre-1.12.6\RenderSystems\Direct3D9\include;D:\SDK\FBX\2020.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <DisableSpecificWarnings>4996;</DisableSpecificWarnings>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(QT_DIR)\6.0.3\msvc2019_64\lib;$(OGRE3D_DIR)\Binaries\lib\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Qt6Core.lib;Qt6Gui.lib;Qt6Widgets.lib;OgreMain.lib;RenderSystem_Direct3D9.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(QT_DIR)\6.1.0\msvc2019_64\lib;$(OGRE3D_DIR)\Binaries\lib\Release;D:\SDK\FBX\2020.2\lib\vs2019\x64\release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Qt6Core.lib;Qt6Gui.lib;Qt6Widgets.lib;OgreMain.lib;RenderSystem_Direct3D9.lib;libfbxsdk.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
     </Link>
     <PreBuildEvent>
@@ -193,6 +195,7 @@
   <ItemGroup>
     <ClCompile Include="src\ArchiveViewer\ContextMenus\FileMenu.cpp" />
     <ClCompile Include="src\ArchiveViewer\ContextMenus\TextureFileMenu.cpp" />
+    <ClCompile Include="src\AssetExtractors\ModelExtractor\ModelExtractor.cpp" />
     <ClCompile Include="src\AssetExtractors\TextureExtractor\TextureExtractor.cpp" />
     <ClCompile Include="src\AssetViewers\EntityViewer\EntityViewerWidget.cpp">
       <SubType>
@@ -209,6 +212,7 @@
     <ClCompile Include="src\AssetViewers\StringTableViewer\Models\StringTableModel.cpp" />
     <ClCompile Include="src\AssetViewers\StringTableViewer\StringTableViewerWidget.cpp" />
     <ClCompile Include="src\AssetViewers\TextureViewer\Models\TextureDetailsTableModel.cpp" />
+    <ClCompile Include="src\MainWindow\qrc_icon.cpp" />
     <ClCompile Include="src\MGF\Assets\AssetBase.cpp" />
     <ClCompile Include="src\MGF\Assets\EntityAsset.cpp" />
     <ClCompile Include="src\MGF\Factories\ImageFactory.cpp" />
@@ -252,10 +256,10 @@
     <ClCompile Include="src\OgreWindow\moc_ogrewindow.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="resource.h" />
     <ClInclude Include="src\ArchiveViewer\ContextMenus\FileMenu.h" />
     <ClInclude Include="src\ArchiveViewer\ContextMenus\TextureFileMenu.h" />
     <ClInclude Include="src\AssetExtractors\IAssetExtractor.h" />
+    <ClInclude Include="src\AssetExtractors\ModelExtractor\ModelExtractor.h" />
     <ClInclude Include="src\AssetExtractors\TextureExtractor\TextureExtractor.h" />
     <ClInclude Include="src\AssetViewers\EntityViewer\Models\AttributeTableModel.h" />
     <ClInclude Include="src\AssetViewers\EntityViewer\Models\EntityTreeModel.h" />
@@ -344,10 +348,10 @@
     <None Include="src\MainWindow\MainWindow.ui" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="MechAssault MGF Explorer.rc" />
+    <Image Include="res\madcat.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="res\madcat.ico" />
+    <ResourceCompile Include="res\MechAssault-MGF-Explorer_resource.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
 </Project>

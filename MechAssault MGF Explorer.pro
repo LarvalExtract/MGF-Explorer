@@ -58,16 +58,14 @@ SOURCES += \
         src/MGF/File.cpp \
         src/MGF/Assets/EntityAsset.cpp \
         src/MGF/Assets/ModelAsset.cpp \
-        src/MGF/Assets/PlainText.cpp \
-        src/MGF/Assets/StringTable.cpp \
-        src/MGF/Assets/Texture.cpp \
+        src/MGF/Assets/PlainTextAsset.cpp \
+        src/MGF/Assets/StringTableAsset.cpp \
+        src/MGF/Assets/TextureAsset.cpp \
         src/MGF/Assets/Factories/MaterialFactory.cpp \
         src/MGF/Assets/Factories/MeshFactory.cpp \
         src/MGF/Factories/ImageFactory.cpp \
         src/OgreWindow/moc_ogrewindow.cpp \
         src/OgreWindow/ogrewindow.cpp \
-        src/ResourceManager/AssetFactory.cpp \
-        src/ResourceManager/ResourceManager.cpp \
         src/Utilities/configfile.cpp \
         src/Utilities/ContextProvider/Context.cpp \
         src/Utilities/ContextProvider/ServiceProvider.cpp \
@@ -121,10 +119,10 @@ HEADERS += \
         src/MGF/Assets/AssetMappings.h \
         src/MGF/Assets/EAssetTypes.h \
         src/MGF/Assets/EntityAsset.h \
-        src/MGF/Assets/ModelAsset.h \
-        src/MGF/Assets/PlainText.h \
-        src/MGF/Assets/StringTable.h \
-        src/MGF/Assets/Texture.h \
+        src/MGF/Assets/ModelAssetAsset.h \
+        src/MGF/Assets/PlainTextAsset.h \
+        src/MGF/Assets/StringTableAsset.h \
+        src/MGF/Assets/TextureAsset.h \
         src/MGF/Assets/Factories/AttributeNames.h \
         src/MGF/Assets/Factories/EntityNames.h \
         src/MGF/Assets/Factories/MaterialFactory.h \
@@ -140,8 +138,6 @@ HEADERS += \
         src/MGF/Structures/Tif.h \
         src/MGF/Structures/wdf.h \
         src/OgreWindow/ogrewindow.h \
-        src/ResourceManager/AssetFactory.h \
-        src/ResourceManager/ResourceManager.h \
         src/Utilities/configfile.h \
         src/Utilities/ContextProvider/Context.h \
         src/Utilities/ContextProvider/ServiceProvider.h \
@@ -195,7 +191,7 @@ DEPENDPATH += \
 win32:CONFIG(debug, debug|release):OBJECTS_DIR = $$PWD/obj/x64/Debug
 win32:CONFIG(release, debug|release):OBJECTS_DIR = $$PWD/obj/x64/Release
 
-win32:RC_ICONS += madcat.ico
+win32:RC_ICONS = res/madcat.ico
 
 RESOURCES += \
     res/icon.qrc

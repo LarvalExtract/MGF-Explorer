@@ -74,20 +74,16 @@ void ArchiveViewerWidget::on_treeView_selectionChanged(const QModelIndex &sel, c
         {
 			if (const auto asset = this->AssetManager.Get(selectedItem); asset != nullptr)
 			{
-				auto assetViewer = [this, asset]() -> IAssetViewerWidget*
+				switch (asset->AssetType)
 				{
-					switch (asset->AssetType)
-					{
-					case MGF::Asset::EAssetType::PlainText:   return &PlainTextViewer;
-					case MGF::Asset::EAssetType::StringTable: return &StringTableViewer;
-					case MGF::Asset::EAssetType::Texture:     return &TextureViewer;
-					case MGF::Asset::EAssetType::Model:       return &ModelViewer;
-					case MGF::Asset::EAssetType::Entity:      return &EntityViewer;
-					}
-                }();
+				case MGF::Asset::EAssetType::PlainText:   ui->AssetViewerStack->setCurrentWidget(&PlainTextViewer);   break;
+				case MGF::Asset::EAssetType::StringTable: ui->AssetViewerStack->setCurrentWidget(&StringTableViewer); break;
+				case MGF::Asset::EAssetType::Texture:     ui->AssetViewerStack->setCurrentWidget(&TextureViewer);     break;
+				case MGF::Asset::EAssetType::Model:       ui->AssetViewerStack->setCurrentWidget(&ModelViewer);       break;
+				case MGF::Asset::EAssetType::Entity:      ui->AssetViewerStack->setCurrentWidget(&EntityViewer);      break;
+				}
 
-                assetViewer->LoadAsset(asset);
-                ui->AssetViewerStack->setCurrentWidget(assetViewer);
+                static_cast<IAssetViewerWidget*>(ui->AssetViewerStack->currentWidget())->LoadAsset(asset);
 			}
 			else
 			{
@@ -98,7 +94,7 @@ void ArchiveViewerWidget::on_treeView_selectionChanged(const QModelIndex &sel, c
         {
             ui->AssetViewerStack->setCurrentWidget(ui->EmptyPage);
 
-            QMessageBox::critical(this, QString("Failed to load asset %1\n%2").arg(selectedItem.Name()), e.what());
+            QMessageBox::critical(this, QString("Failed to load asset %1").arg(selectedItem.Name()), e.what());
         }
     }
     else
