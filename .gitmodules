@@ -1,2 +1,5 @@
 [submodule "vendor/s3tc"]
 	url = https://github.com/Benjamin-Dobell/s3tc-dxt-decompression
+[submodule "libmorton"]
+	path = libmorton
+	url = https://github.com/Forceflow/libmorton
