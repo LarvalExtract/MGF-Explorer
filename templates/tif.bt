@@ -32,7 +32,7 @@ struct TIF {
         struct FLAGS {
             char flgs[4];
             uint32 chunkSize;
-            uint32 imageFlags;
+            uint32 imageFlags <format=hex>;
         } cFlags;
         struct WIDTH {
             char wdth[4];

@@ -51,8 +51,8 @@ bool TextureExtractor::Extract(const MGF::File& sourceFile, const std::filesyste
 		case 5: BlockDecompressImageDXT5(width, height, data, decompressed.data()); break;
 		}
 
-		QImage image(reinterpret_cast<const unsigned char*>(decompressed.data()), width, height, QImage::Format::Format_RGBA8888);
-		ImageWriter.write(image);
+		QImage image(reinterpret_cast<const unsigned char*>(decompressed.data()), width, height, QImage::Format::Format_ARGB32);
+		ImageWriter.write(image.rgbSwapped());
 	}
 	else
 	{

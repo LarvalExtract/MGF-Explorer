@@ -173,7 +173,6 @@ void MainWindow::AllTabsClosed()
     m_pCurrentWorkspace = nullptr;
     ui->tabWidget->hide();
     ui->labelCurrentArchive->clear();
-    ui->labelCurrentItem->clear();
     ui->actionTextures->setEnabled(false);
     ui->actionFiles->setEnabled(false);
 }

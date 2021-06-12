@@ -24,11 +24,11 @@ ModelAsset::ModelAsset(const MGF::File& file) :
 	Meshes{std::make_shared<ModelViewer::Models::MeshTable>()},
 	Materials{std::make_shared<ModelViewer::Models::MaterialTable>()}
 {
-	if (file.FileType() == MGF::EFileType::MgModel)
+	if (file.FileType() == MGF::EFileType::mgmodel)
 	{
 		ParseMgmodelXml();
 	}
-	else if (file.FileType() == MGF::EFileType::Node)
+	else if (file.FileType() == MGF::EFileType::node)
 	{
 		ParseNodeTxt();
 	}

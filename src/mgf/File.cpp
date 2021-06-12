@@ -5,19 +5,20 @@
 #include <functional>
 
 const std::unordered_map<std::string, MGF::EFileType> MGF::File::MapExtensionFileType = {
-    { ".tif",        MGF::EFileType::Tif },
-    { ".mgmodel",    MGF::EFileType::MgModel },
-    { ".mgtext",     MGF::EFileType::MgText },
-    { ".txt",        MGF::EFileType::Text },
-    { ".ini",        MGF::EFileType::Text },
-    { ".cfg",        MGF::EFileType::Text },
-    { ".mesh",       MGF::EFileType::Text },    // temp
-    { ".road",       MGF::EFileType::Text },    // temp
-    { ".node",       MGF::EFileType::Node },
-    { ".mat",        MGF::EFileType::Text },    // temp
-    { ".mgv",        MGF::EFileType::Text },
-    { ".wdf",        MGF::EFileType::Wdf  },
-    { ".mtb",        MGF::EFileType::Mtb  },
+    { ".tif",        MGF::EFileType::tif },
+    { ".mgmodel",    MGF::EFileType::mgmodel },
+    { ".mgtext",     MGF::EFileType::mgtext },
+    { ".txt",        MGF::EFileType::txt },
+    { ".ini",        MGF::EFileType::txt },
+    { ".cfg",        MGF::EFileType::txt },
+    { ".mesh",       MGF::EFileType::txt },    // temp
+    { ".road",       MGF::EFileType::txt },    // temp
+    { ".node",       MGF::EFileType::node },
+    { ".mat",        MGF::EFileType::txt },    // temp
+    { ".mgv",        MGF::EFileType::txt },
+    { ".wdf",        MGF::EFileType::wdf },
+    { ".sdf",        MGF::EFileType::sdf },
+    { ".mtb",        MGF::EFileType::mtb },
     { "",            MGF::EFileType::Unassigned }
 };
 

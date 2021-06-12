@@ -30,6 +30,13 @@ TextureViewerWidget::TextureViewerWidget(QWidget *parent) :
     {
         throw std::runtime_error(e.what());
     }
+
+    connect(
+        ui->ToggleAlphaCheckBox,
+        &QCheckBox::clicked,
+        this,
+        &TextureViewerWidget::on_ToggleAlphaCheckBox_toggled
+    );
 }
 
 TextureViewerWidget::~TextureViewerWidget()
@@ -60,6 +67,9 @@ void TextureViewerWidget::InitialiseScene()
     m_OrthoCamera->setOrthoWindow(200.0f, 200.0f);
 
     m_TextureViewerViewport = m_OgreWindow.GetWindow().addViewport(m_OrthoCamera);
+    constexpr float grey = 160.0f / 255.0f;
+	const auto bgColour = Ogre::ColourValue(grey, grey, grey, 1.0f);
+    m_TextureViewerViewport->setBackgroundColour(bgColour);
 
     m_OrthoCameraNode = m_SceneManager->getRootSceneNode()->createChildSceneNode();
     m_OrthoCameraNode->attachObject(m_OrthoCamera);
@@ -76,4 +86,16 @@ void TextureViewerWidget::InitialiseScene()
     m_TexturePlane = m_SceneManager->createEntity(Ogre::SceneManager::PrefabType::PT_PLANE);
     m_TexturePlane->setMaterial(m_MatUnlitTextured);
     node->attachObject(m_TexturePlane);
+    node->setPosition(0.5f, -0.5f, 0.0f);
+}
+
+void TextureViewerWidget::on_ToggleAlphaCheckBox_toggled(bool checked)
+{
+    auto pass = m_MatUnlitTextured->getTechnique(0)->getPass(0);
+    pass->setSceneBlending(checked
+        ? Ogre::SBT_TRANSPARENT_ALPHA
+        : Ogre::SBT_REPLACE
+    );
+
+    m_OgreWindow.render();
 }

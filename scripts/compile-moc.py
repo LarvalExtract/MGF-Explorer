@@ -5,8 +5,8 @@ import glob
 import os.path
 import datetime
 
-MOC_PATH = os.path.join(os.path.expandvars('%QT_DIR%'), '6.1.0', 'msvc2019_64', 'bin', 'moc.exe')
-UIC_PATH = os.path.join(os.path.expandvars('%QT_DIR%'), '6.1.0', 'msvc2019_64', 'bin', 'uic.exe')
+MOC_PATH = os.path.join(os.path.expandvars('%QT_DIR%'), '6.0.3', 'msvc2019_64', 'bin', 'moc.exe')
+UIC_PATH = os.path.join(os.path.expandvars('%QT_DIR%'), '6.0.3', 'msvc2019_64', 'bin', 'uic.exe')
 
 
 def compile_uic(vcxproj):

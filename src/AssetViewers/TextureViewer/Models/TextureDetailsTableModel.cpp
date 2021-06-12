@@ -42,7 +42,7 @@ QVariant TextureDetailsTable::data(const QModelIndex& index, int role /*= Qt::Di
 
 QVariant TextureDetailsTable::headerData(int section, Qt::Orientation orientation, int role /*= Qt::DisplayRole*/) const
 {
-	return role == Qt::DisplayRole && section == Qt::Horizontal
+	return role == Qt::DisplayRole && orientation == Qt::Horizontal
 		? HEADERS[section]
 		: QVariant();
 }

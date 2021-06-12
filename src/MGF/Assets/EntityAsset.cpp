@@ -24,7 +24,7 @@ MGF::Asset::EntityAsset::EntityAsset(const MGF::File& entityFile) :
 		offset += sizeof(entity);
 		
 		auto e = new Entity;
-		e->Class = entityFile.FileType() == EFileType::Wdf
+		e->Class = entityFile.FileType() == EFileType::wdf
 			? GetEntityClassNameWdf(entity.crc)
 			: GetEntityClassNameMtb(entity.crc);
 
@@ -82,7 +82,7 @@ MGF::Asset::EntityAsset::EntityAsset(const MGF::File& entityFile) :
 			case 13: a = "TIF"; break;
 			}
 			
-			auto attributeString = entityFile.FileType() == EFileType::Wdf
+			auto attributeString = entityFile.FileType() == EFileType::wdf
 				? GetAttributeNameWdf(attribute.crc)
 				: GetAtrributeNameMtb(attribute.crc);
 

@@ -40,6 +40,9 @@ namespace TextureViewer {
 
     private:
         void InitialiseScene();
+
+    private slots:
+        void on_ToggleAlphaCheckBox_toggled(bool checked);
     };
 
 }

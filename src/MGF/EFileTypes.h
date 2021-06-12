@@ -4,14 +4,15 @@ namespace MGF {
 
 	enum class EFileType
 	{
-		MgModel,
-		MgText,
-		Node,
-		Text,
-		Tif,
-		Wdf,
-		Mtb,
-		Ggf,
+		mgmodel,
+		mgtext,
+		node,
+		txt,
+		tif,
+		wdf,
+		sdf,
+		mtb,
+		ggf,
 
 		Unassigned
 	};

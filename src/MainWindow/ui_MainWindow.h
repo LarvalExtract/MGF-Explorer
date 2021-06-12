@@ -13,7 +13,6 @@
 #include <QtGui/QAction>
 #include <QtGui/QIcon>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
@@ -35,9 +34,7 @@ public:
     QWidget *centralWidget;
     QVBoxLayout *verticalLayout;
     QTabWidget *tabWidget;
-    QHBoxLayout *horizontalLayout;
     QLabel *labelCurrentArchive;
-    QLabel *labelCurrentItem;
     QMenuBar *menuBar;
     QMenu *menuFile;
     QMenu *menuView;
@@ -86,28 +83,15 @@ public:
 
         verticalLayout->addWidget(tabWidget);
 
-        horizontalLayout = new QHBoxLayout();
-        horizontalLayout->setSpacing(0);
-        horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
         labelCurrentArchive = new QLabel(centralWidget);
         labelCurrentArchive->setObjectName(QString::fromUtf8("labelCurrentArchive"));
-        labelCurrentArchive->setMinimumSize(QSize(0, 13));
-        labelCurrentArchive->setMaximumSize(QSize(620, 13));
 
-        horizontalLayout->addWidget(labelCurrentArchive);
-
-        labelCurrentItem = new QLabel(centralWidget);
-        labelCurrentItem->setObjectName(QString::fromUtf8("labelCurrentItem"));
-
-        horizontalLayout->addWidget(labelCurrentItem);
-
-
-        verticalLayout->addLayout(horizontalLayout);
+        verticalLayout->addWidget(labelCurrentArchive);
 
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 1600, 21));
+        menuBar->setGeometry(QRect(0, 0, 1600, 22));
         menuFile = new QMenu(menuBar);
         menuFile->setObjectName(QString::fromUtf8("menuFile"));
         menuView = new QMenu(menuBar);
@@ -142,7 +126,6 @@ public:
         actionAbout->setText(QCoreApplication::translate("MainWindow", "About Qt...", nullptr));
         actionFiles->setText(QCoreApplication::translate("MainWindow", "Files...", nullptr));
         labelCurrentArchive->setText(QString());
-        labelCurrentItem->setText(QString());
         menuFile->setTitle(QCoreApplication::translate("MainWindow", "File", nullptr));
         menuView->setTitle(QCoreApplication::translate("MainWindow", "View", nullptr));
         menuAbout->setTitle(QCoreApplication::translate("MainWindow", "Help", nullptr));
