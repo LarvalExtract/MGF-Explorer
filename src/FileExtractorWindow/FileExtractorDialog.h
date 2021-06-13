@@ -21,7 +21,7 @@ namespace FileExtractor {
 		explicit FileExtractorDialog(QWidget* parent = nullptr);
 		~FileExtractorDialog();
 
-		void QueueFiles(const std::vector<Models::FileExtractItem>& fileList);
+		void QueueFiles(const Models::FileItemList& fileList);
 
 		inline const std::filesystem::path& GetDestination() const { return Destination; }
 
@@ -34,8 +34,7 @@ namespace FileExtractor {
 		Ui::FileExtractorDialog* ui;
 
 	private:
-		std::vector<Models::FileExtractItem> FileExtractList;
-		Models::FileExtractListModel Model;
+		std::unique_ptr<Models::FileExtractListModel> Model;
 		States::FileExtractorStateGroup StateMachine;
 		std::filesystem::path Destination;
 	};

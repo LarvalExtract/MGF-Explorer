@@ -26,7 +26,7 @@ namespace FileExtractor {
 			friend class FinishedState;
 
 		public:
-			FileExtractorStateGroup(FileExtractorDialog* dialog, Models::FileExtractListModel* model);
+			FileExtractorStateGroup(FileExtractorDialog* dialog, const std::unique_ptr<Models::FileExtractListModel>& model);
 		};
 
 }}

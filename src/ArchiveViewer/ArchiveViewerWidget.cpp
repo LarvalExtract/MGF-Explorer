@@ -61,7 +61,7 @@ void ArchiveViewerWidget::on_treeView_selectionChanged(const QModelIndex &sel, c
     {
         ui->Frame->show();
 
-		const auto str = QString("%1 | %2 | %3 | %4 bytes").arg(
+		const auto str = QString("%1 | ID: %2 | Offset: %3 | Length: %4 bytes").arg(
             selectedItem.FilePath().c_str(),
 			QString::number(selectedItem.GUID(), 16),
 			QString::number(selectedItem.FileOffset()),
@@ -113,10 +113,10 @@ void ArchiveViewerWidget::on_treeView_customContextMenuRequested(const QPoint &p
         {
 			switch (MGF::Asset::AssetBase::ToAssetType(selectedItem->FileType()))
 			{
-            case MGF::Asset::EAssetType::PlainText:
-            case MGF::Asset::EAssetType::StringTable:
+            case MGF::Asset::EAssetType::PlainText:     break;
+            case MGF::Asset::EAssetType::StringTable:   break;
             case MGF::Asset::EAssetType::Texture:       TextureFileMenu.popup(screenPos); break;
-            case MGF::Asset::EAssetType::Model:
+            case MGF::Asset::EAssetType::Model:         break;
 
             default: FileMenu.popup(screenPos); break;
 			}

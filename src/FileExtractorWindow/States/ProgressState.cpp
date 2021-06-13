@@ -33,7 +33,7 @@ void ProgressState::OnEnter()
 	std::async(
 		std::launch::async,
 		Extractor::ExtractFiles,
-		std::ref(Model->FileExtractQueue),
+		std::ref(*Model),
 		std::ref(Dialog->GetDestination()),
 		Dialog->ui->checkBoxOverwrite->isChecked(),
 		onFileExtracted,

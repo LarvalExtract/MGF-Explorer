@@ -18,6 +18,8 @@ void IdleState::OnEnter()
 
 	QObject::disconnect(Dialog->ui->buttonBox, SIGNAL(accepted()), Dialog, SLOT(accept()));
 	QObject::connect(Dialog->ui->buttonBox, SIGNAL(accepted()), Dialog, SLOT(OnStarted()));
+
+	QObject::connect(Dialog->ui->buttonBox, &QDialogButtonBox::rejected, Dialog, &FileExtractorDialog::reject);
 }
 
 void IdleState::OnExit()

@@ -19,7 +19,7 @@ using namespace FileExtractor::Models;
 
 int FileExtractListModel::rowCount(const QModelIndex& parent) const
 {
-	return FileExtractQueue.size();
+	return size();
 }
 
 int FileExtractListModel::columnCount(const QModelIndex& parent) const
@@ -36,7 +36,7 @@ QVariant FileExtractListModel::data(const QModelIndex& index, int role) const
 	if (role != Qt::DisplayRole)
 		return QVariant();
 
-	const auto& file = FileExtractQueue[index.row()];
+	const auto& file = this->at(index.row());
 	switch (index.column())
 	{
 	case 0: return file.mgfItem->FilePath().u8string().c_str();

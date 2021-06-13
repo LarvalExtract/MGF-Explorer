@@ -7,7 +7,7 @@ namespace FileExtractor { namespace States {
     class IdleState : public FileExtractorStateBase
 	{
 	public:
-		IdleState(StateGroup* stateGroup, FileExtractorDialog* dialog, Models::FileExtractListModel* model) :
+		IdleState(StateGroup* stateGroup, FileExtractorDialog* dialog, const std::unique_ptr<Models::FileExtractListModel>& model) :
 			FileExtractorStateBase(stateGroup, dialog, model) {}
 
 	protected:

@@ -46,13 +46,13 @@ bool TextureExtractor::Extract(const MGF::File& sourceFile, const std::filesyste
 		std::vector<unsigned long> decompressed(width * height);
 		switch (compressed_format_bits)
 		{
-		case 1: BlockDecompressImageDXT1(width, height, data, decompressed.data()); break;
-		case 3: BlockDecompressImageDXT5(width, height, data, decompressed.data()); break;
-		case 5: BlockDecompressImageDXT5(width, height, data, decompressed.data()); break;
+		case 1: BlockDecompressImageDXT1(width, height, data, decompressed.data(), true); break;
+		case 3: BlockDecompressImageDXT5(width, height, data, decompressed.data(), true); break;
+		case 5: BlockDecompressImageDXT5(width, height, data, decompressed.data(), true); break;
 		}
 
-		QImage image(reinterpret_cast<const unsigned char*>(decompressed.data()), width, height, QImage::Format::Format_ARGB32);
-		ImageWriter.write(image.rgbSwapped());
+		QImage image(reinterpret_cast<const unsigned char*>(decompressed.data()), width, height, QImage::Format::Format_RGBA8888);
+		ImageWriter.write(image);
 	}
 	else
 	{
@@ -64,7 +64,7 @@ bool TextureExtractor::Extract(const MGF::File& sourceFile, const std::filesyste
 			case 1: return QImage::Format::Format_RGB16;
 			case 3: return QImage::Format::Format_ARGB4444_Premultiplied;
 			case 5: return QImage::Format::Format_Alpha8;
-			case 7: return QImage::Format::Format_Grayscale8;
+			case 7: return QImage::Format::Format_Grayscale16;
 			}
 		}(flags & 0x0F);
 

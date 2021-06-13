@@ -11,8 +11,7 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow),
-    m_AppConfig(std::filesystem::path("paths.ini"))
+    ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
     this->setWindowTitle("MechAssault MGF Explorer");
@@ -35,14 +34,12 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ServiceProvider::Initialise();
 	ServiceProvider::Add<MGF::AssetManager>(&AssetManager);
-	ServiceProvider::Add<ConfigFile>(&m_AppConfig);
 	ServiceProvider::Add<Ogre::SceneManager>(m_OgreRoot->createSceneManager());
 }
 
 MainWindow::~MainWindow()
 {
     m_Workspaces.clear();
-    m_AppConfig.WriteOut();
     ServiceProvider::Destroy();
 
     delete ui;
@@ -50,12 +47,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_actionOpen_MGF_file_triggered()
 {
-    auto folder(m_AppConfig["Folders"]["DefaultMgfFolder"]);
-
-    if (!std::filesystem::exists(folder))
-        folder = "";
-
-    QStringList fileNames = QFileDialog::getOpenFileNames(this, "Open MGF file", QString(folder.c_str()), tr("MechAssault MGF files (*.mgf)"));
+    QStringList fileNames = QFileDialog::getOpenFileNames(this, "Open MGF file", QString{}, tr("MechAssault MGF files (*.mgf)"));
 
     if (fileNames.size() > 0)
     {
@@ -65,9 +57,6 @@ void MainWindow::on_actionOpen_MGF_file_triggered()
             {
                 OpenMGFWorkspace(fileName);
             }
-
-			std::filesystem::path parent(fileNames[0].toStdString());
-			m_AppConfig["Folders"]["DefaultMgfFolder"] = parent.parent_path().u8string();
 		}
 		catch (const std::runtime_error& err)
 		{

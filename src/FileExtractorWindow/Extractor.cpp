@@ -6,7 +6,7 @@
 using namespace FileExtractor;
 
 void Extractor::ExtractFiles(
-    std::vector<Models::FileExtractItem>& items,
+    Models::FileExtractListModel& items,
 	const std::filesystem::path& destination,
 	bool bOverwriteExistingFiles,
 	const std::function<void(int)>& onFileExtracted,

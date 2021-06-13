@@ -371,9 +371,6 @@
     <ClInclude Include="src\MGF\Factories\ImageFactory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="vendor\stb\stb_image_write.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\OgreWindow\ogrewindow.h">
       <Filter>Header Files</Filter>
     </ClInclude>

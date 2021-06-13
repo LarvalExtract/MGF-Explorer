@@ -108,7 +108,7 @@ MGF::Asset::Model::Material MaterialFactory::CreateMaterialDefinition(const MGF:
     {
         MGF::Asset::Model::TextureParams texture;
         texture.filename = vars.at("base");
-        texture.tiling = vars.at("base_tiling");
+        texture.tiling = vars.find("base_tiling") != vars.end() ? vars.at("base_tiling") : vars.at("tiling");
         texture.filter = Ogre::TextureFilterOptions::TFO_BILINEAR;
         texture.bMipmapping = true;
         texture.mipmap_bias = 0.5f;

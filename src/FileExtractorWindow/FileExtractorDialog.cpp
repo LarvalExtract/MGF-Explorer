@@ -16,19 +16,12 @@ using namespace FileExtractor;
 FileExtractorDialog::FileExtractorDialog(QWidget* parent) :
 	QDialog(parent),
 	ui(new Ui::FileExtractorDialog),
-	Model(FileExtractList),
-	StateMachine(this, &Model)
+	StateMachine(this, Model)
 {
 	setWindowFlag(Qt::WindowContextHelpButtonHint, false);
 	ui->setupUi(this);
 
-	ui->tableFileQueue->setModel(&Model);
-
-	const auto& path = (*ServiceProvider::Inject<ConfigFile>())["Folders"]["DefaultExtractFolder"];
-	Destination = path;
-	Destination.make_preferred();
-
-	ui->destinationFolderPath->setText(path.c_str());
+	setWindowTitle("Extract files");
 
 	StateMachine.ChangeState(States::EState::Idle);
 }
@@ -38,17 +31,20 @@ FileExtractorDialog::~FileExtractorDialog()
 	delete ui;
 }
 
-void FileExtractorDialog::QueueFiles(const std::vector<Models::FileExtractItem>& fileList)
+void FileExtractorDialog::QueueFiles(const Models::FileItemList& fileList)
 {
-	FileExtractList = std::move(fileList);
-	const auto& archive = FileExtractList[0].mgfItem->Archive(); 
+	Model.reset(new Models::FileExtractListModel(fileList));
+
+	const auto& archive = Model->at(0).mgfItem->Archive(); 
 
 	QString label = QString("Extracting %1 of %2 files from %3").arg(
-		QString::number(FileExtractList.size()), 
+		QString::number(Model->size()), 
 		QString::number(archive.GetFileCount()), 
 		archive.GetFileName());
 
 	ui->labelTask->setText(label);
+
+	ui->tableFileQueue->setModel(Model.get());
 }
 
 void FileExtractorDialog::on_browseButton_clicked()
@@ -58,8 +54,7 @@ void FileExtractorDialog::on_browseButton_clicked()
 	Destination = folder;
 	Destination.make_preferred();
 
-	const auto& path = (*ServiceProvider::Inject<ConfigFile>())["Folders"]["DefaultExtractFolder"] = folder;
-	ui->destinationFolderPath->setText(path.c_str());
+	ui->destinationFolderPath->setText(Destination.u8string().c_str());
 }
 
 void FileExtractorDialog::OnStarted()

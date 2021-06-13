@@ -2,6 +2,8 @@
 
 #include "Utilities/StateMachine/State.h"
 
+#include <memory>
+
 namespace FileExtractor 
 { 
 	class FileExtractorDialog;
@@ -15,14 +17,14 @@ namespace FileExtractor
         class FileExtractorStateBase : public State
 		{
 		public:
-			FileExtractorStateBase(StateGroup* stateGroup, FileExtractorDialog* dialog, Models::FileExtractListModel* model) :
+			FileExtractorStateBase(StateGroup* stateGroup, FileExtractorDialog* dialog, const std::unique_ptr<Models::FileExtractListModel>& model) :
 				State(stateGroup),
 				Dialog(dialog),
 				Model(model) {}
 
 		protected:
 			FileExtractorDialog* Dialog;
-			Models::FileExtractListModel* Model;
+			const std::unique_ptr<Models::FileExtractListModel>& Model;
 		};
 
 	}

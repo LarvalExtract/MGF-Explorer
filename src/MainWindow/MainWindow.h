@@ -48,7 +48,6 @@ private:
     std::unique_ptr<Ogre::Root> m_OgreRoot;
 
     MGF::AssetManager AssetManager;
-    ConfigFile m_AppConfig;
    
 private:
     void InitialiseOgre();

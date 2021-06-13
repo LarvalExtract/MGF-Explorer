@@ -1,7 +1,7 @@
 #ifndef FILEEXTRACTOR_H
 #define FILEEXTRACTOR_H
 
-#include "FileExtractorWindow/Models/FileExtractItem.h"
+#include "FileExtractorWindow/Models/FileExtractListModel.h"
 
 #include <QModelIndexList>
 
@@ -31,7 +31,7 @@ namespace FileExtractor {
 		Extractor& operator=(Extractor&&) = delete;
 
 		static void ExtractFiles(
-			std::vector<Models::FileExtractItem>& items,
+			Models::FileExtractListModel& items,
 			const std::filesystem::path& destination,
 			bool bOverwriteExistingFiles,
 			const std::function<void(int)>& onFileExtracted,
