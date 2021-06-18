@@ -6,6 +6,7 @@
 #include "FileExtractorWindow/Extractor.h"
 
 #include <future>
+#include <chrono>
 
 using namespace FileExtractor::States;
 
@@ -19,26 +20,24 @@ void ProgressState::OnEnter()
 	Dialog->ui->progressBar->setEnabled(true);
 	Dialog->ui->progressBar->setRange(0, Model->rowCount());
 
-	auto onFileExtracted = [this](int count)
-	{
-		QMetaObject::invokeMethod(Dialog->ui->progressBar, "setValue", Qt::QueuedConnection, Q_ARG(int, count));
-		QMetaObject::invokeMethod(Dialog, "update", Qt::QueuedConnection);
-	};
-
-	auto onAllFiledExtracted = [this]()
-	{
-		QMetaObject::invokeMethod(Dialog, "OnFinished");
-	};
-	
-	std::async(
+	unsigned int progress = 0;
+	auto result = std::async(
 		std::launch::async,
 		Extractor::ExtractFiles,
 		std::ref(*Model),
 		std::ref(Dialog->GetDestination()),
 		Dialog->ui->checkBoxOverwrite->isChecked(),
-		onFileExtracted,
-		onAllFiledExtracted
+		std::ref(progress)
 	);
+
+	while (result.wait_for(std::chrono::milliseconds(100)) != std::future_status::ready)
+	{
+		Dialog->ui->progressBar->setValue(progress);
+	}
+
+	Dialog->ui->progressBar->setValue(Model->rowCount());
+
+	GoTo(EState::Finished);
 }
 
 void ProgressState::OnExit()

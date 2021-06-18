@@ -34,8 +34,7 @@ namespace FileExtractor {
 			Models::FileExtractListModel& items,
 			const std::filesystem::path& destination,
 			bool bOverwriteExistingFiles,
-			const std::function<void(int)>& onFileExtracted,
-			const std::function<void()>& onAllFilesExtracted);
+			unsigned int& numFilesExtracted);
 
 		static std::vector<Models::FileExtractItem> ToList(const QModelIndexList& selection);
 	};

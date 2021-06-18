@@ -9,8 +9,7 @@ void Extractor::ExtractFiles(
     Models::FileExtractListModel& items,
 	const std::filesystem::path& destination,
 	bool bOverwriteExistingFiles,
-	const std::function<void(int)>& onFileExtracted,
-	const std::function<void()>& onAllFilesExtracted)
+	unsigned int& numFilesExtracted)
 {
     auto createFile = [&destination](Models::FileExtractItem& item, std::vector<char>& buf) -> void
     {
@@ -53,7 +52,7 @@ void Extractor::ExtractFiles(
 		for (auto& item : items)
         {
             createFile(item, buffer);
-			onFileExtracted(++extractedFileCount);
+			numFilesExtracted++;
 		}
 	}
 	else
@@ -65,11 +64,9 @@ void Extractor::ExtractFiles(
             else
                 item.status = Models::FileExtractStatus::Skipped;
 
-			onFileExtracted(++extractedFileCount);
+			numFilesExtracted++;
 		}
 	}
-
-	onAllFilesExtracted();
 }
 
 void TraverseTreeItem(std::vector<Models::FileExtractItem>& list, const MGF::File* item)

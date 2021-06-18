@@ -50,7 +50,7 @@ TextureAsset::TextureAsset(const File& file) :
 	const auto flags = TextureDetails.Flags;
 	const auto depth = 1;// TextureDetails.Depth;
 	const auto mips = 0;// TextureDetails.Mips - 1;
-	const auto frames = TextureDetails.Frames;
+	const auto frames = 1;// TextureDetails.Frames;
 	const auto pf = DeterminePixelFormat();
 
 	size_t actualWidth = (width % 16 == 0) ? width : width + (16 - (width % 16));
