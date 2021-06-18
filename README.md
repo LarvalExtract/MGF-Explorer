@@ -86,9 +86,9 @@ Click any .mgText file (only found within text.mgf) to open the string table vie
 This is used for localisation (i.e. translating the game to different languages). If you dig around the .ini files elsewhere, you'll sometimes see references to the IDs in here. This is so the text the player sees can be changed depending on the player's language.
 
 ### Extracting files
-As of MGF Explorer 0.3, you can extract individual files from MGF files. You can only dump them as they are, however - you cannot yet export textures as PNG files, for example.
-To use the file extractor:
+As of MGF Explorer 0.3, you can extract individual files from MGF files. As of 0.3.1, you can also extract textures (.tif files) as BMP and PNG images.
 1. Right click any folder or file in the tree view.
+  * Files that can be converted to other formats will show "Extract as <format>" in the drop down menu
 2. Click "Extract..." to open the file extractor dialog. This dialog will show you a list of all the files queued for extraction.
 3. Choose where you want to extract the files to with the "Browse" button at the top.
 4. Toggle the options on the right to your preference.
@@ -98,3 +98,5 @@ To use the file extractor:
 * https://www.qt.io/
 * https://pugixml.org/
 * https://www.ogre3d.org/
+* https://github.com/Benjamin-Dobell/s3tc-dxt-decompression
+* https://github.com/Forceflow/libmorton
