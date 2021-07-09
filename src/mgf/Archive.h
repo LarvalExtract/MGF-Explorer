@@ -1,44 +1,35 @@
-#ifndef MGFARCHIVE_H
-#define MGFARCHIVE_H
+#pragma once
 
 #include "File.h"
 #include "VersionConstants.h"
 
-#include <QString>
-
 #include <fstream>
-#include <string>
 
 namespace MGF {
 
-    class Archive
+    class Archive : protected std::ifstream
     {
-    public:
-        Archive(const QString& mgfFilePath);
+        friend class File;
 
     public:
-        inline const QString& GetFileName() const { return m_FileName; }
-        inline const QString& GetFilePath() const { return m_FilePath; }
-        inline uint32_t GetFileSize() const { return FileSize; }
-        inline uint32_t GetFileCount() const { return FileCount; }
-        inline MGF::Version GetArchiveVersion() const { return ArchiveVersion; }
-        inline std::ifstream& FileStream() { return m_FileStream; }
+        Archive(const std::filesystem::path& mgfFilePath);
 
-        const auto& GetFileList() const { return m_TreeItems; }
+    public:
+        inline auto GetFileName() const { return Path.filename(); }
+        inline auto GetFilePath() const { return Path; }
+        inline auto GetFileSize() const { return FileSize; }
+        inline auto GetFileCount() const { return FileCount; }
+        inline auto GetArchiveVersion() const { return ArchiveVersion; }
+
+        const auto& GetFileList() const { return Files; }
 
     private:
-        mutable std::ifstream m_FileStream;
-
-        QString m_FilePath;
-        QString m_FileName;
-
-        uint32_t     FileSize;
+        std::filesystem::path Path;
         MGF::Version ArchiveVersion;
-		uint32_t     FileCount;
+        uint32_t FileSize;
+		uint32_t FileCount;
 
-        std::vector<MGF::File> m_TreeItems;
+        std::vector<MGF::File> Files;
     };
 
 }
-
-#endif // MGFARCHIVE_H

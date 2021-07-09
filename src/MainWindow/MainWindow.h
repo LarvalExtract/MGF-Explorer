@@ -41,15 +41,13 @@ private slots:
 private:
     Ui::MainWindow *ui;
 
-    std::unordered_map<std::string, ArchiveViewer::ArchiveViewerWidget> m_Workspaces;
-    ArchiveViewer::ArchiveViewerWidget* m_pCurrentWorkspace = nullptr;
-
-    std::unique_ptr<Ogre::LogManager> m_OgreLogManager;
+    std::unordered_map<std::string, ArchiveViewer::ArchiveViewerWidget> ArchiveWidgets;
+    ArchiveViewer::ArchiveViewerWidget* CurrentArchiveWidget = nullptr;
+    
     std::unique_ptr<Ogre::Root> m_OgreRoot;
 
     MGF::AssetManager AssetManager;
    
-private:
     void InitialiseOgre();
     void UpdateStatusBar();
     void AllTabsClosed();

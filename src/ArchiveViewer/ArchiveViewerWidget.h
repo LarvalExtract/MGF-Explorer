@@ -23,7 +23,7 @@ namespace ArchiveViewer {
 		Q_OBJECT
 
 	public:
-		explicit ArchiveViewerWidget(const QString& mgfFilePath, QWidget* parent = nullptr);
+		explicit ArchiveViewerWidget(const std::filesystem::path& mgfFilePath, QWidget* parent = nullptr);
 		~ArchiveViewerWidget();
 
 		inline const MGF::Archive& MGFFile() const { return MgfArchive; }

@@ -24,11 +24,11 @@ ModelAsset::ModelAsset(const MGF::File& file) :
 	Meshes{std::make_shared<ModelViewer::Models::MeshTable>()},
 	Materials{std::make_shared<ModelViewer::Models::MaterialTable>()}
 {
-	if (file.FileType() == MGF::EFileType::mgmodel)
+	if (file.FileType == MGF::EFileType::mgmodel)
 	{
 		ParseMgmodelXml();
 	}
-	else if (file.FileType() == MGF::EFileType::node)
+	else if (file.FileType == MGF::EFileType::node)
 	{
 		ParseNodeTxt();
 	}
@@ -36,7 +36,7 @@ ModelAsset::ModelAsset(const MGF::File& file) :
 
 void ModelAsset::ParseMgmodelXml()
 {
-	std::vector<char> buffer(FileRef.FileLength());
+	std::vector<char> buffer(FileRef.FileLength);
 	FileRef.Read(buffer.data());
 
 	pugi::xml_document document;
@@ -98,7 +98,8 @@ void ModelAsset::ParseMgmodelXml()
 void ModelAsset::ParseNodeTxt()
 {
 	std::string buf;
-	FileRef.LoadBuffer(buf);
+	buf.resize(FileRef.FileLength);
+	FileRef.Read(buf.data());
 	std::string_view buf_view(buf);
 
 	std::size_t chunkStart = buf_view.find('[', 0);
@@ -186,8 +187,6 @@ Model::Node* ModelAsset::CreateSceneNode(Model::Node* parent, const std::functio
 
 			const auto entity = node->sceneNode->getCreator()->createEntity(mesh);
 			node->sceneNode->attachObject(entity);
-
-			
 		}
 
 		for (int i = 0, num_children = std::stoi(vars["num_children"].data()); i < num_children; i++)

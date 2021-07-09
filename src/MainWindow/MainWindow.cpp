@@ -39,17 +39,14 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-    m_Workspaces.clear();
+    ArchiveWidgets.clear();
     ServiceProvider::Destroy();
-
     delete ui;
 }
 
 void MainWindow::on_actionOpen_MGF_file_triggered()
 {
-    QStringList fileNames = QFileDialog::getOpenFileNames(this, "Open MGF file", QString{}, tr("MechAssault MGF files (*.mgf)"));
-
-    if (fileNames.size() > 0)
+    if (const auto fileNames = QFileDialog::getOpenFileNames(this, "Open MGF file", QString{}, tr("MechAssault MGF files (*.mgf)")); !fileNames.empty())
     {
 		try
 		{
@@ -67,7 +64,7 @@ void MainWindow::on_actionOpen_MGF_file_triggered()
 
 void MainWindow::on_actionClose_all_MGF_files_triggered()
 {
-    m_Workspaces.clear();
+    ArchiveWidgets.clear();
 
     AllTabsClosed();
 }
@@ -75,10 +72,10 @@ void MainWindow::on_actionClose_all_MGF_files_triggered()
 void MainWindow::on_tabWidget_tabCloseRequested(int index)
 {
     auto ws = static_cast<ArchiveViewer::ArchiveViewerWidget*>(ui->tabWidget->widget(index));
-    auto str = ws->MGFFile().GetFilePath();
+    auto str = QString(ws->MGFFile().GetFilePath().u8string().c_str());
 
     ui->tabWidget->removeTab(index);
-    m_Workspaces.erase(str.toStdString());
+    ArchiveWidgets.erase(str.toStdString());
 
     if (ui->tabWidget->count() == 0)
     {
@@ -88,55 +85,48 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index)
 
 void MainWindow::OpenMGFWorkspace(const QString &mgfFilePath)
 {
-    // file workspace is already open
-    const auto& str = mgfFilePath.toStdString();
+    std::filesystem::path path = mgfFilePath.toStdString();
 
-    if (m_Workspaces.find(str) != m_Workspaces.end())
+    if (const auto str = mgfFilePath.toStdString(); ArchiveWidgets.find(str) != ArchiveWidgets.end())
     {
-        int tabIndex = ui->tabWidget->indexOf(&m_Workspaces.at(str));
+        int tabIndex = ui->tabWidget->indexOf(&ArchiveWidgets.at(str));
         ui->tabWidget->setCurrentIndex(tabIndex);
     }
     else
     {
-        auto ws_it = m_Workspaces.try_emplace(str, mgfFilePath, ui->tabWidget);
-        auto ws = &(*ws_it.first).second;
-        int newTabIndex = ui->tabWidget->addTab(ws,ws->MGFFile().GetFileName());
+        ArchiveWidgets.try_emplace(str, path, ui->tabWidget);
 
+        auto& widget = ArchiveWidgets.at(str);
+        const QString tabTitle = path.filename().u8string().c_str();
+
+        int newTabIndex = ui->tabWidget->addTab(&widget, tabTitle);
         ui->tabWidget->setCurrentIndex(newTabIndex);
     }
-
-    if (ui->tabWidget->isHidden())
-        ui->tabWidget->show();
-
-    ui->actionTextures->setEnabled(true);
+    
+    ui->tabWidget->show();
 }
 
 
 void MainWindow::on_tabWidget_currentChanged(int index)
 {
-    if (index == -1 || m_Workspaces.size() == 0)
+    if (index == -1 || ArchiveWidgets.empty())
     {
-        m_pCurrentWorkspace = nullptr;
+        CurrentArchiveWidget = nullptr;
         return;
     }
 
-    m_pCurrentWorkspace = static_cast<ArchiveViewer::ArchiveViewerWidget*>(ui->tabWidget->currentWidget());
-    
-    ui->actionFiles->setText(m_pCurrentWorkspace->MGFFile().GetFileName() + " file table...");
+    CurrentArchiveWidget = static_cast<ArchiveViewer::ArchiveViewerWidget*>(ui->tabWidget->currentWidget());
 
     UpdateStatusBar();
 }
 
 void MainWindow::InitialiseOgre()
 {
-    //m_OgreLogManager = std::make_unique<Ogre::LogManager>();
-    //m_OgreLogManager->createLog("ogre.log", true, false, false);
-
     m_OgreRoot = std::make_unique<Ogre::Root>("plugins.cfg", "ogre.cfg", "");
 
     const auto& renderers = m_OgreRoot->getAvailableRenderers();
 
-    if (renderers.size() == 0)
+    if (renderers.empty())
         throw std::runtime_error("No renderers found. Please ensure plugins.cfg is present in the application root.");
 
     m_OgreRoot->setRenderSystem(renderers[0]);
@@ -145,21 +135,22 @@ void MainWindow::InitialiseOgre()
 
 void MainWindow::UpdateStatusBar()
 {
-    const auto& mgf = m_pCurrentWorkspace->MGFFile();
+    const auto& mgf = CurrentArchiveWidget->MGFFile();
+    const auto& loc = this->locale();
 
-    const QLocale& loc = this->locale();
-
-    QString labelText = mgf.GetArchiveVersion() == MGF::Version::MechAssault2LW ? "MechAssault 2: Lone Wolf | " : "MechAssault | ";
-    labelText += mgf.GetFileName() + " | ";
-    labelText += loc.formattedDataSize(mgf.GetFileSize()) + " | ";
-    labelText += QString::number(mgf.GetFileCount()) + " files";
+    const auto labelText = QString("%1 | %2 | %3 | %4 files").arg(
+        MGF::ToString(mgf.GetArchiveVersion()),
+        mgf.GetFileName().u8string().c_str(),
+        loc.formattedDataSize(mgf.GetFileSize()),
+        QString::number(mgf.GetFileCount())
+    );
 
     ui->labelCurrentArchive->setText(labelText);
 }
 
 void MainWindow::AllTabsClosed()
 {
-    m_pCurrentWorkspace = nullptr;
+    CurrentArchiveWidget = nullptr;
     ui->tabWidget->hide();
     ui->labelCurrentArchive->clear();
     ui->actionTextures->setEnabled(false);

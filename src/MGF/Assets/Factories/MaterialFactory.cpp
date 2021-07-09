@@ -44,7 +44,7 @@ Ogre::MaterialPtr MaterialFactory::Create(const MGF::Asset::Model::Material& par
     auto& matMgr = Ogre::MaterialManager::getSingleton();
 
     // generate a unique material name from the model and material name to avoid clashes
-    std::string name(sourceFile.Name().toLatin1());
+    std::string name(sourceFile.Name.toLatin1());
     name += "::" + params.name;
 
     auto mat = matMgr.getByName(name, "General");
@@ -77,28 +77,31 @@ Ogre::MaterialPtr MaterialFactory::Create(const MGF::Asset::Model::Material& par
 MGF::Asset::Model::Material MaterialFactory::CreateMaterialDefinition(const MGF::File &materialFile)
 {
     std::string buf;
-    materialFile.LoadBuffer(buf);
+    buf.resize(materialFile.FileLength);
+    materialFile.Read(buf.data());
 
     // Load parameters from MA1 .mat file
     ConfigFile meshCfg(buf);
     auto& vars = meshCfg["material"];
 
-    std::transform(vars["type"].begin(), vars["type"].end(), vars["type"].begin(), [](unsigned char c){ return std::tolower(c); });
+    std::transform(vars["type"].begin(), vars["type"].end(), vars["type"].begin(), tolower);
+
+    const auto ExtractVar = [&vars](const std::string& key) { return vars.find(key) != vars.end() ? vars.extract(key).mapped() : ""; };
 
     // Fetch common material parameters and remove them from the vars map
     MGF::Asset::Model::Material params;
-    params.name         = vars["name"];                                                                 vars.erase("name");
-    params.type         = vars["type"];                                                                 vars.erase("type");
-    params.diffuse      = StrToColour(vars["diff_color"]);                                              vars.erase("diff_color");
-    params.specular     = StrToColour(vars["spec_color"]);                                              vars.erase("spec_color");
-    params.selfillum    = StrToColour(vars["selfillum_color"]);                                         vars.erase("selfillum_color");
-    params.ambient      = StrToColour(vars["amb_color"]);                                               vars.erase("amb_color");
-    params.shininess    = !vars["shininess"].empty() ? std::stof(vars["shininess"]) : 0.0f;             vars.erase("shininess");
-    params.shin_strength = !vars["shin_strength"].empty() ? std::stof(vars["shin_strength"]) : 1.0f;    vars.erase("shin_strength");
-    params.opacity      = !vars["opacity"].empty() ? std::stof(vars["opacity"]) : 1.0f;                 vars.erase("opacity");
-    params.shading      = vars["shading"];                                                              vars.erase("shading");
-    params.cull         = CullModes[vars["two_sided"]];                                                 vars.erase("two_sided");
-    params.blending     = BlendTypes[vars["blending"]];                                                 vars.erase("blending");
+	params.name          = ExtractVar("name");
+	params.type          = ExtractVar("type");
+	params.diffuse       = StrToColour(ExtractVar("diff_color"));
+	params.specular      = StrToColour(ExtractVar("spec_color"));
+	params.selfillum     = StrToColour(ExtractVar("selfillum_color"));
+	params.ambient       = StrToColour(ExtractVar("ambient"));
+	params.shininess     = !vars["shininess"].empty() ? std::stof(ExtractVar("shininess")) : 0.0f;
+    params.shin_strength = !vars["shin_strength"].empty() ? std::stof(ExtractVar("shin_strength")) : 1.0f;
+    params.opacity       = !vars["opacity"].empty() ? std::stof(ExtractVar("opacity")) : 1.0f;
+    params.shading       = vars.extract("shading").mapped();
+    params.cull          = CullModes[ExtractVar("two_sided")];
+    params.blending      = BlendTypes[ExtractVar("blending")];
 
     // Copy remaining vars over to material special parameters
     for (const auto& var : vars)
@@ -193,14 +196,14 @@ void MaterialFactory::CreateAnimatedMaterial(Ogre::Material& mat, const MGF::Ass
 
     for (uint32_t i = 1; i <= animMaxFrameNum; i++)
     {
-        QString fileName(textureParams.filename.data());
+        std::filesystem::path fileName(textureParams.filename);
 
         QString frameIndex(" ");
         if (i + 1 <= 10)
             frameIndex += '0';
         frameIndex += QString::number(i);
 
-        fileName.insert(fileName.lastIndexOf('.'), frameIndex);
+        fileName.replace_filename(fileName.filename().u8string() + frameIndex.toStdString());
 
         auto textureFile = mgmodelFile.FindRelativeItem(fileName);
 
@@ -242,17 +245,18 @@ Ogre::TexturePtr MaterialFactory::UploadTexture(const MGF::Asset::Model::Texture
 
 Ogre::ColourValue MaterialFactory::StrToColour(std::string_view str)
 {
-    if (str.empty())
-        return Ogre::ColourValue::White;
+    return str.empty()
+        ? Ogre::ColourValue::White
+        : [str]()
+        {
+			auto c1 = str.find(',');
+			auto c2 = str.find(',', c1 + 1);
 
-    auto c1 = str.find(',');
-    auto c2 = str.find(',', c1+1);
-
-    Ogre::ColourValue result;
-    result.r = std::stof(str.substr(0, c1).data()) / 255.0f;
-    result.g = std::stof(str.substr(c1+1, c2).data()) / 255.0f;
-    result.b = std::stof(str.substr(c2+1, str.size()).data()) / 255.0f;
-    result.a = 1.0f;
-
-    return result;
+            return Ogre::ColourValue(
+                std::stof(str.substr(0, c1).data()) / 255.0f,
+				std::stof(str.substr(c1 + 1, c2).data()) / 255.0f,
+				std::stof(str.substr(c2 + 1, str.size()).data()) / 255.0f,
+                1.0f
+            );
+		}();
 }

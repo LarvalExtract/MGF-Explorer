@@ -12,7 +12,7 @@ TextureAsset::TextureAsset(const File& file) :
 {
 	char* pixels = nullptr;
 
-	if (file.GetArchiveVersion() == MGF::Version::MechAssault2LW)
+	if (file.ArchiveVersion == MGF::Version::MechAssault2LW)
 	{
 		MA2_TIF_FILE tif;
 		Factories::ImageFactory::Deserialize(file, tif);
@@ -60,7 +60,7 @@ TextureAsset::TextureAsset(const File& file) :
 	stream.reset(new Ogre::MemoryDataStream(pixels, actualSize));
 
 	auto& textureManager = Ogre::TextureManager::getSingleton();
-	OgreTexture = textureManager.loadRawData(std::to_string(file.GUID()), "General", stream, actualWidth, height, pf, DetermineTextureType(), 0);
+	OgreTexture = textureManager.loadRawData(std::to_string(file.GUID), "General", stream, actualWidth, height, pf, DetermineTextureType(), 0);
 
 	delete[] pixels;
 }

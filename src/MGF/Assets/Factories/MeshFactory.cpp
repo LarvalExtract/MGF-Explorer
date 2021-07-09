@@ -23,30 +23,30 @@ using namespace MGF::Factories;
 
 Ogre::MeshPtr MeshFactory::Create(const MGF::Asset::Model::Mesh&def, const MGF::File& sourceFile)
 {
-    QString vbPath, ibPath;
+    std::filesystem::path vbPath, ibPath;
     if (def.bUsesMGModel)
     {
-        vbPath = sourceFile.Name();
+        vbPath = sourceFile.Name.toLatin1().data();
         vbPath += '{';
         vbPath += def.verticesFilename.data();
         vbPath += '}';
 
-        ibPath = sourceFile.Name();
+        ibPath = sourceFile.Name.toLatin1().data();
         ibPath += '{';
         ibPath += def.indicesFilename.data();
         ibPath += '}';
     }
     else
     {
-        vbPath = def.verticesFilename.data();
-        ibPath = def.indicesFilename.data();
+        vbPath = def.verticesFilename;
+        ibPath = def.indicesFilename;
     }
 
     const auto& vertices = *sourceFile.FindRelativeItem(vbPath);
     const auto& indices = *sourceFile.FindRelativeItem(ibPath);
 
     // Generate unique mesh name using source file name + mesh name
-    Ogre::String name(std::to_string(vertices.GUID()));
+    Ogre::String name(std::to_string(vertices.GUID));
 
     // Create mesh and default submesh
     Ogre::MeshPtr mesh = Ogre::MeshManager::getSingleton().getByName(name, "General");
@@ -101,7 +101,8 @@ Ogre::MeshPtr MeshFactory::Create(const MGF::Asset::Model::Mesh&def, const MGF::
 MGF::Asset::Model::Mesh MeshFactory::CreateMeshDefinition(const MGF::File &meshFile)
 {
     std::string buf;
-    meshFile.LoadBuffer(buf);
+    buf.resize(meshFile.FileLength);
+    meshFile.Read(buf.data());
 
     ConfigFile meshCfg(buf);
     auto& vars = meshCfg["mesh"];
@@ -134,8 +135,8 @@ Ogre::VertexData *MeshFactory::LoadVertexBuffer(Ogre::Mesh& mesh, const MGF::Fil
 {
     Ogre::VertexData* data = new Ogre::VertexData;
 
-    std::string buf;
-    vertFile.LoadBuffer(buf);
+    std::vector<char> buf(vertFile.FileLength);
+    vertFile.Read(buf.data());
 
     uint32_t count = *reinterpret_cast<uint32_t*>(&buf[def.count]);
     uint32_t flags = *reinterpret_cast<uint32_t*>(&buf[def.flags]);
@@ -180,8 +181,8 @@ Ogre::IndexData *MeshFactory::LoadIndexBuffer(const MGF::File &indicesFile, cons
 {
     Ogre::IndexData* data = new Ogre::IndexData;
 
-    std::string buf;
-    indicesFile.LoadBuffer(buf);
+	std::vector<char> buf(indicesFile.FileLength);
+    indicesFile.Read(buf.data());
 
     data->indexCount = *reinterpret_cast<uint32_t*>(&buf[def.count]);
     data->indexStart = 0;
@@ -289,8 +290,7 @@ bool MeshFactory::SetupVertexElements(Ogre::VertexDeclaration *decl, uint32_t fl
         break;
 
     default:
-        throw "Unrecognised vertex buffer flags";
-        break;
+        throw std::runtime_error("Unrecognized vertex buffer flags");
     }
 
     return bScaleTexCoords;

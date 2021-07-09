@@ -55,7 +55,7 @@ ConfigSection::ConfigSection(const std::string_view &section)
     this->name = section.substr(nameStart, nameEnd - nameStart);
 
     std::size_t lineStart = 0;
-    std::size_t lineEnd = section.find('\n', lineStart);;
+    std::size_t lineEnd = section.find('\n', lineStart);
 
     while (lineStart < section.size())
     {

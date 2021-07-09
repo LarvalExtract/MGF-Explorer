@@ -4,7 +4,7 @@ using namespace MGF;
 
 Asset::AssetPtr AssetManager::Get(const MGF::File& file)
 {
-    const auto id = file.GUID();
+    const auto id = file.GUID;
 
     if (Assets.find(id) == Assets.end())
     {

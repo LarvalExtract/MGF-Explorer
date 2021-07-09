@@ -9,13 +9,13 @@ using namespace MGF::Asset;
 
 AssetPtr AssetBase::Create(const File& soureFile)
 {
-	if (!soureFile.IsFile())
+	if (!soureFile.IsFile)
 	{
 		return nullptr;
 	}
 
 	using namespace Asset;
-	switch (AssetBase::ToAssetType(soureFile.FileType()))
+	switch (ToAssetType(soureFile.FileType))
 	{
 	case EAssetType::PlainText:   return std::make_shared<PlainTextAsset>(soureFile);
 	case EAssetType::StringTable: return std::make_shared<StringTableAsset>(soureFile);

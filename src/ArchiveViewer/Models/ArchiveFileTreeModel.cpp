@@ -15,10 +15,9 @@ using namespace ArchiveViewer::Models;
 
 QVariant ArchiveFileTreeModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    if (role != Qt::DisplayRole)
-        return QVariant();
-
-    return HEADERS[section];
+    return role == Qt::DisplayRole
+        ? HEADERS[section]
+        : QVariant();
 }
 
 QModelIndex ArchiveFileTreeModel::index(int row, int column, const QModelIndex &parent) const
@@ -26,10 +25,10 @@ QModelIndex ArchiveFileTreeModel::index(int row, int column, const QModelIndex &
     if (!hasIndex(row, column, parent))
         return QModelIndex();
 
-    auto parentItem = (parent.isValid()) ? static_cast<MGF::File*>(parent.internalPointer()) : &FileListReference[0];
-    auto childItem = parentItem->GetNthChild(row);
+    const auto parentItem = parent.isValid() ? static_cast<MGF::File*>(parent.internalPointer()) : &FileListReference[0];
+    const auto childItem = parentItem->GetNthChild(row);
 
-    return createIndex(row, column, const_cast<MGF::File*>(childItem));
+    return createIndex(row, column, childItem);
 }
 
 QModelIndex ArchiveFileTreeModel::parent(const QModelIndex &child) const
@@ -37,13 +36,13 @@ QModelIndex ArchiveFileTreeModel::parent(const QModelIndex &child) const
     if (!child.isValid())
         return QModelIndex();
 
-    auto childItem = static_cast<const MGF::File*>(child.internalPointer());
-    auto parentItem = childItem->GetParent();
+    const auto childItem = static_cast<const MGF::File*>(child.internalPointer());
+    const auto parentItem = childItem->Parent;
 
     if (parentItem == &FileListReference[0])
         return QModelIndex();
 
-    return createIndex(parentItem->Row(), 0, const_cast<MGF::File*>(parentItem));
+    return createIndex(parentItem->TreeViewRow, 0, parentItem);
 }
 
 int ArchiveFileTreeModel::rowCount(const QModelIndex &parent) const
@@ -51,7 +50,7 @@ int ArchiveFileTreeModel::rowCount(const QModelIndex &parent) const
     if (parent.column() > 0)
         return 0;
 
-    auto parentItem = (parent.isValid()) ? static_cast<const MGF::File*>(parent.internalPointer()) : &FileListReference[0];
+    const auto parentItem = parent.isValid() ? static_cast<const MGF::File*>(parent.internalPointer()) : &FileListReference[0];
 
     return parentItem->GetChildCount();
 }
@@ -83,25 +82,24 @@ QVariant ArchiveFileTreeModel::data(const QModelIndex &index, int role) const
     if (!index.isValid())
         return QVariant();
 
-    auto item = static_cast<const MGF::File*>(index.internalPointer());
-    bool isFile = item->IsFile();
+    const auto item = static_cast<const MGF::File*>(index.internalPointer());
 
     if (role == Qt::DecorationRole && index.column() == 0)
-        return item->IsFile() ? FileIcon : FolderIcon;
+        return item->IsFile ? FileIcon : FolderIcon;
 
     if (role == Qt::DisplayRole)
     {
-        if (!item->IsFile())
+        if (!item->IsFile)
         {
-            return index.column() == 0 ? item->Name() : QVariant();
+            return index.column() == 0 ? item->Name : QVariant();
         }
 
         switch (index.column())
         {
-		case 0:  return item->Name();
-        case 1:  return AssetTypeString(item->FileType());
-		case 2:  return item->FileDate().toString("dd/MM/yyyy hh:mm");
-		case 3:  return QLocale::system().formattedDataSize(item->FileLength(), 1);
+		case 0:  return item->Name;
+        case 1:  return AssetTypeString(item->FileType);
+		case 2:  return item->FileDate.toString("dd/MM/yyyy hh:mm");
+		case 3:  return QLocale::system().formattedDataSize(item->FileLength, 1);
         }
     }
 

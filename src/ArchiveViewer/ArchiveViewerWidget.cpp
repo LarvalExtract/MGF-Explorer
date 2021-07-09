@@ -7,7 +7,7 @@
 
 using namespace ArchiveViewer;
 
-ArchiveViewerWidget::ArchiveViewerWidget(const QString& mgfFilePath, QWidget *parent) :
+ArchiveViewerWidget::ArchiveViewerWidget(const std::filesystem::path& mgfFilePath, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::ArchiveViewerWidget),
     MgfArchive(mgfFilePath),
@@ -57,15 +57,15 @@ void ArchiveViewerWidget::on_treeView_selectionChanged(const QModelIndex &sel, c
         return;
     }
 
-    if (const auto& selectedItem = *static_cast<MGF::File*>(sel.internalPointer()); selectedItem.IsFile())
+    if (const auto& selectedItem = *static_cast<MGF::File*>(sel.internalPointer()); selectedItem.IsFile)
     {
         ui->Frame->show();
 
 		const auto str = QString("%1 | ID: %2 | Offset: %3 | Length: %4 bytes").arg(
-            selectedItem.FilePath().c_str(),
-			QString::number(selectedItem.GUID(), 16),
-			QString::number(selectedItem.FileOffset()),
-			QString::number(selectedItem.FileLength())
+            selectedItem.FilePath.c_str(),
+			QString::number(selectedItem.GUID, 16),
+			QString::number(selectedItem.FileOffset),
+			QString::number(selectedItem.FileLength)
 		);
 
         ui->label->setText(str);
@@ -94,7 +94,7 @@ void ArchiveViewerWidget::on_treeView_selectionChanged(const QModelIndex &sel, c
         {
             ui->AssetViewerStack->setCurrentWidget(ui->EmptyPage);
 
-            QMessageBox::critical(this, QString("Failed to load asset %1").arg(selectedItem.Name()), e.what());
+            QMessageBox::critical(this, QString("Failed to load asset %1").arg(selectedItem.Name), e.what());
         }
     }
     else
@@ -109,9 +109,9 @@ void ArchiveViewerWidget::on_treeView_customContextMenuRequested(const QPoint &p
 
     if (QModelIndex index(ui->FileTreeView->indexAt(pos)); index.isValid())
     {
-        if (const auto selectedItem = static_cast<MGF::File*>(index.internalPointer()); selectedItem->IsFile())
+        if (const auto selectedItem = static_cast<MGF::File*>(index.internalPointer()); selectedItem->IsFile)
         {
-			switch (MGF::Asset::AssetBase::ToAssetType(selectedItem->FileType()))
+			switch (MGF::Asset::AssetBase::ToAssetType(selectedItem->FileType))
 			{
             case MGF::Asset::EAssetType::PlainText:     break;
             case MGF::Asset::EAssetType::StringTable:   break;

@@ -1,30 +1,27 @@
 #include "File.h"
 #include "Archive.h"
 
-#include <sstream>
-#include <functional>
-
-const std::unordered_map<std::string, MGF::EFileType> MGF::File::MapExtensionFileType = {
-    { ".tif",        MGF::EFileType::tif },
-    { ".mgmodel",    MGF::EFileType::mgmodel },
-    { ".mgtext",     MGF::EFileType::mgtext },
-    { ".txt",        MGF::EFileType::txt },
-    { ".ini",        MGF::EFileType::txt },
-    { ".cfg",        MGF::EFileType::txt },
-    { ".mesh",       MGF::EFileType::txt },    // temp
-    { ".road",       MGF::EFileType::txt },    // temp
-    { ".node",       MGF::EFileType::node },
-    { ".mat",        MGF::EFileType::txt },    // temp
-    { ".mgv",        MGF::EFileType::txt },
-    { ".wdf",        MGF::EFileType::wdf },
-    { ".sdf",        MGF::EFileType::sdf },
-    { ".mtb",        MGF::EFileType::mtb },
-    { "",            MGF::EFileType::Unassigned }
-};
-
 using namespace MGF;
 
-File::File(MGF::File* parent,
+const std::unordered_map<std::string, EFileType> File::MapExtensionFileType = {
+    { ".tif",     EFileType::tif },
+    { ".mgmodel", EFileType::mgmodel },
+    { ".mgtext",  EFileType::mgtext },
+    { ".txt",     EFileType::txt },
+    { ".ini",     EFileType::txt },
+    { ".cfg",     EFileType::txt },
+    { ".mesh",    EFileType::txt },    // temp
+    { ".road",    EFileType::txt },    // temp
+    { ".node",    EFileType::node },
+    { ".mat",     EFileType::txt },    // temp
+    { ".mgv",     EFileType::txt },
+    { ".wdf",     EFileType::wdf },
+    { ".sdf",     EFileType::sdf },
+    { ".mtb",     EFileType::mtb },
+    { "",         EFileType::Unassigned }
+};
+
+File::File(File* parent,
           const char* name,
           uint64_t id,
           uint32_t index,
@@ -32,123 +29,77 @@ File::File(MGF::File* parent,
           uint32_t length,
           int32_t  timestamp,
           bool     isFile,
-          MGF::Archive& mgfFile) :
-    m_Parent(parent),
-    m_Name(name),
-    m_GUID(id),
-    m_Index(index),
-    m_FileType(EFileType::Unassigned),
-    m_FileOffset(offset),
-    m_FileLength(length),
-    //m_FileDate(timestamp),
-    m_IsFile(isFile),
-    m_MGFArchive(mgfFile),
-    m_TreeViewRow(0)
+          Archive& mgfFile) :
+    Parent(parent),
+	FilePath(parent ? parent->FilePath / name : name),
+    Name(name),
+    GUID(id),
+    Index(index),
+    FileType([&fp = this->FilePath]() -> EFileType
+	{
+		auto extension = fp.extension().u8string();
+        std::transform(extension.begin(), extension.end(), extension.begin(), tolower);
+        return MapExtensionFileType.find(extension) != MapExtensionFileType.end() ? MapExtensionFileType.at(extension) : EFileType::Unassigned;
+	}()),
+    FileOffset(offset),
+    FileLength(length),
+	FileDate(QDateTime::fromSecsSinceEpoch(timestamp)),
+    IsFile(isFile),
+    MGFArchive(mgfFile),
+    ArchiveVersion(MGFArchive.GetArchiveVersion()),
+    TreeViewRow(parent ? parent->GetChildCount() : 0)
 {
-    m_FileDate.setOffsetFromUtc(timestamp);
-
     if (parent != nullptr)
     {
         parent->AddChildItem(this);
-        m_TreeViewRow = parent->GetChildCount() - 1;
-        m_FilePath = parent->FilePath();
-        m_FilePath.append(name);
-    }
-    else
-    {
-        m_FilePath = m_Name.toLatin1().data();
-    }
-
-    if (m_IsFile)
-    {
-        auto toLower = [](std::string& str)
-        {
-            for (auto& c : str)
-                if (c >= 'A' && c <= 'Z')
-                    c += ' ';
-        };
-
-        auto ext = m_FilePath.extension().u8string();
-        toLower(ext);
-
-        if (MapExtensionFileType.find(ext) != MapExtensionFileType.end())
-            m_FileType = MapExtensionFileType.at(ext);
     }
 }
 
-const MGF::File *MGF::File::GetNthChild(int index) const
+File* File::GetNthChild(int index) const
 {
-    return m_ChildrenArray[index];
+    return ChildrenArray[index];
 }
 
-const MGF::File *MGF::File::GetNamedChild(const QString &name) const
+File* File::GetNamedChild(const QString &name) const
 {
-    return m_Children[name.toLower()];
+    return Children[name.toLower()];
 }
 
-const MGF::File *MGF::File::GetNamedSibling(const QString &name) const
+File* File::GetNamedSibling(const QString &name) const
 {
-    if (m_Parent == nullptr)
+    if (Parent == nullptr)
         return nullptr;
 
-    return m_Parent->GetNamedChild(name);
+    return Parent->GetNamedChild(name);
 }
 
-const MGF::Version File::GetArchiveVersion() const
+void File::AddChildItem(File *item)
 {
-    return m_MGFArchive.GetArchiveVersion();
+    ChildrenArray.push_back(item);
+    Children.insert(item->Name.toLower(), item);
 }
 
-void MGF::File::LoadBuffer(std::string &out, unsigned int offset, int length) const
+size_t File::GetChildCount() const
 {
-    if (length < 0)
-        length = m_FileLength - offset;
-    
-    out.resize(length);
-    m_MGFArchive.FileStream().seekg(m_FileOffset + offset, std::ios::beg);
-    m_MGFArchive.FileStream().read(out.data(), length);
+    return Children.size();
 }
 
-void MGF::File::AddChildItem(const MGF::File *item)
+const File* File::FindRelativeItem(const std::filesystem::path &relativePath) const
 {
-    m_ChildrenArray.push_back(item);
-    m_Children.insert(item->Name().toLower(), item);
-}
-
-size_t MGF::File::GetChildCount() const
-{
-    return m_Children.size();
-}
-
-const MGF::File *MGF::File::FindRelativeItem(const QString &relativePath) const
-{
-    MGF::File* parent = m_Parent;
-    MGF::File* result = nullptr;
-
-    QString& path = const_cast<QString&>(relativePath);
-
-    for (int i = 0; i < path.size(); i++)
-        if (path[i] == '/')
-            path[i] = '\\';
-
-    std::stringstream ss(relativePath.toLower().toStdString());
-    std::string name;
-    while (std::getline(ss, name, '\\'))
+    File* node = nullptr;
+	
+    std::for_each(relativePath.begin(), relativePath.end(), [parent = Parent, &node](const auto& i) 
     {
-        if (name == "..")
-            parent = parent->GetParent();
-        else
-        {
-            result = const_cast<MGF::File*>(parent->GetNamedChild(name.c_str()));
-            parent = result;
-        }
-    }
+        parent = i == ".."
+            ? parent->Parent
+            : node = parent->GetNamedChild(i.u8string().c_str());
+    });
 
-    return result;
+    return node;
 }
 
-void MGF::File::Read(char* buffer, std::uint32_t offset, std::uint32_t length) const
+void File::Read(char* buffer, uint32_t offset, uint32_t length) const
 {
-    m_MGFArchive.FileStream().seekg(offset + m_FileOffset, std::ios::beg);
-    m_MGFArchive.FileStream().read(buffer, std::min(length, m_FileLength - offset));
+    MGFArchive.seekg(offset + FileOffset, std::ios::beg);
+    MGFArchive.read(buffer, std::min(length, FileLength - offset));
 }

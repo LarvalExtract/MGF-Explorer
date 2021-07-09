@@ -17,7 +17,7 @@ bool TextureExtractor::Extract(const MGF::File& sourceFile, const std::filesyste
 	uint32_t width, height, flags, size;
 	const unsigned char* data = nullptr;
 
-	if (sourceFile.GetArchiveVersion() == MGF::Version::MechAssault)
+	if (sourceFile.ArchiveVersion == MGF::Version::MechAssault)
 	{
 		MA1_TIF_FILE tif;
 		MGF::Factories::ImageFactory::Deserialize(sourceFile, tif);

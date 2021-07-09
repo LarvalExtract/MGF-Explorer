@@ -14,7 +14,7 @@ void Extractor::ExtractFiles(
     auto createFile = [&destination](Models::FileExtractItem& item, std::vector<char>& buf) -> void
     {
 		auto path = destination;
-		path += item.mgfItem->FilePath();
+		path += item.mgfItem->FilePath;
 
 		std::filesystem::create_directories(path.parent_path());
 		std::ofstream file(path, std::ios::binary);
@@ -26,7 +26,7 @@ void Extractor::ExtractFiles(
 		}
 
 		std::int32_t offset = 0;
-		std::int32_t remainingBytes = item.mgfItem->FileLength();
+		std::int32_t remainingBytes = item.mgfItem->FileLength;
 		std::size_t bufSize = buf.capacity();
 		std::int32_t bytesToCopy;
 
@@ -59,7 +59,7 @@ void Extractor::ExtractFiles(
 	{
 		for (auto& item : items)
 		{
-            if (!std::filesystem::exists(item.mgfItem->FilePath()))
+            if (!std::filesystem::exists(item.mgfItem->FilePath))
                 createFile(item, buffer);
             else
                 item.status = Models::FileExtractStatus::Skipped;
@@ -71,7 +71,7 @@ void Extractor::ExtractFiles(
 
 void TraverseTreeItem(std::vector<Models::FileExtractItem>& list, const MGF::File* item)
 {
-	if (item->IsFile())
+	if (item->IsFile)
 	{
 		list.push_back({ item, Models::FileExtractStatus::Queued });
 	}

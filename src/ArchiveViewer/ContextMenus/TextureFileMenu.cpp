@@ -11,25 +11,33 @@ void TextureFileMenu::Initialise(QTreeView* treeView)
 
 	addSeparator();
 
-	connect(addAction("Extract BMP"), &QAction::triggered, [this, treeView]()
+	connect(
+		addAction("Extract BMP"), 
+		&QAction::triggered, 
+		[this, treeView]()
 		{
 			const auto& textureFile = *static_cast<MGF::File*>(treeView->selectionModel()->selectedRows(0)[0].internalPointer());
-			const auto fileName = QString(textureFile.FilePath().stem().u8string().append(".bmp").c_str());
+			const auto fileName = QString(textureFile.FilePath.stem().append(".bmp").u8string().c_str());
 
 			if (const auto destination = QFileDialog::getSaveFileName(nullptr, "Extract texture image", fileName); !destination.isEmpty())
 			{
 				TextureExtractor.Extract(textureFile, std::filesystem::path(destination.toLatin1().data()));
 			}
-		});
+		}
+	);
 
-	connect(addAction("Extract PNG"), &QAction::triggered, [this, treeView]()
+	connect(
+		addAction("Extract PNG"), 
+		&QAction::triggered, 
+		[this, treeView]()
 		{
 			const auto& textureFile = *static_cast<MGF::File*>(treeView->selectionModel()->selectedRows(0)[0].internalPointer());
-			const auto fileName = QString(textureFile.FilePath().stem().u8string().append(".png").c_str());
+			const auto fileName = QString(textureFile.FilePath.stem().append(".png").u8string().c_str());
 
 			if (const auto destination = QFileDialog::getSaveFileName(nullptr, "Extract texture image", fileName); !destination.isEmpty())
 			{
 				TextureExtractor.Extract(textureFile, std::filesystem::path(destination.toLatin1().data()));
 			}
-		});
+		}
+	);
 }

@@ -35,12 +35,13 @@ void FileExtractorDialog::QueueFiles(const Models::FileItemList& fileList)
 {
 	Model.reset(new Models::FileExtractListModel(fileList));
 
-	const auto& archive = Model->at(0).mgfItem->Archive(); 
+	const auto& archive = Model->at(0).mgfItem->MGFArchive; 
 
 	QString label = QString("Extracting %1 of %2 files from %3").arg(
 		QString::number(Model->size()), 
 		QString::number(archive.GetFileCount()), 
-		archive.GetFileName());
+		archive.GetFileName().u8string().c_str()
+	);
 
 	ui->labelTask->setText(label);
 

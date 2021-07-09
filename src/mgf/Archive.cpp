@@ -2,24 +2,17 @@
 
 #include "MGF/Structures/mgf.h"
 
-#include <exception>
-
-MGF::Archive::Archive(const QString& mgfFilePath) :
-    m_FilePath(mgfFilePath)
+MGF::Archive::Archive(const std::filesystem::path& mgfFilePath) :
+    std::ifstream(mgfFilePath, std::ios::binary),
+	Path(mgfFilePath)
 {
-    int lastSeparator = m_FilePath.lastIndexOf('/') + 1;
-    int length = m_FilePath.size() - lastSeparator;
-    m_FileName = m_FilePath.mid(lastSeparator, length);
-
-    m_FileStream.open(mgfFilePath.toStdString(), std::ios::binary);
-
-    if (!m_FileStream.is_open())
-        throw std::runtime_error("Couldn't open " + mgfFilePath.toStdString());
+    if (!is_open())
+        throw std::runtime_error("Couldn't open " + Path.u8string());
 
     // read header from MGF file (first 64 bytes)
     MGF_HEADER mgfHeader;
-    m_FileStream.seekg(0, std::ios::beg);
-    m_FileStream.read(reinterpret_cast<char*>(&mgfHeader), sizeof(mgfHeader));
+    seekg(0, std::ios::beg);
+    read(reinterpret_cast<char*>(&mgfHeader), sizeof(mgfHeader));
 
     // check for valid MGF file
     if (!(mgfHeader.signature[0] == 'm' &&
@@ -27,7 +20,7 @@ MGF::Archive::Archive(const QString& mgfFilePath) :
 		  mgfHeader.signature[2] == 'f' &&
 		  mgfHeader.signature[3] == ' '))
     {
-        throw std::runtime_error(mgfFilePath.toStdString() + " is either compressed or not a valid MechAssault 1 or MechAssault 2: Lone Wolf MGF file");
+        throw std::runtime_error(Path.u8string() + " is either compressed or not a valid MechAssault 1 or MechAssault 2: Lone Wolf MGF file");
     }  
 
     ArchiveVersion = static_cast<MGF::Version>(mgfHeader.version);
@@ -39,26 +32,26 @@ MGF::Archive::Archive(const QString& mgfFilePath) :
     if (ArchiveVersion == Version::MechAssault2LW)
     {
 		fileRecordsMa2.resize(mgfHeader.fileRecordCount);
-		m_FileStream.seekg(mgfHeader.fileRecordOffset);
-        m_FileStream.read(reinterpret_cast<char*>(fileRecordsMa2.data()), mgfHeader.fileRecordLength);
+		seekg(mgfHeader.fileRecordOffset);
+        read(reinterpret_cast<char*>(fileRecordsMa2.data()), mgfHeader.fileRecordLength);
     }
     else
     {
 		fileRecordsMa1.resize(mgfHeader.fileRecordCount);
-		m_FileStream.seekg(mgfHeader.fileRecordOffset);
-        m_FileStream.read(reinterpret_cast<char*>(fileRecordsMa1.data()), mgfHeader.fileRecordLength);
+		seekg(mgfHeader.fileRecordOffset);
+        read(reinterpret_cast<char*>(fileRecordsMa1.data()), mgfHeader.fileRecordLength);
     }
 
 	std::vector<MGF_DIRECTORY> directoryRows(mgfHeader.indexTableCount);
-	m_FileStream.seekg(mgfHeader.indexTableOffset);
-	m_FileStream.read(reinterpret_cast<char*>(directoryRows.data()), mgfHeader.indexTableLength);
+	seekg(mgfHeader.indexTableOffset);
+	read(reinterpret_cast<char*>(directoryRows.data()), mgfHeader.indexTableLength);
 
 	std::vector<char> stringBuffer(mgfHeader.stringsLength);
-	m_FileStream.seekg(mgfHeader.stringsOffset);
-    m_FileStream.read(stringBuffer.data(), mgfHeader.stringsLength);
+	seekg(mgfHeader.stringsOffset);
+    read(stringBuffer.data(), mgfHeader.stringsLength);
 
-	m_TreeItems.reserve(mgfHeader.indexTableCount);
-	m_TreeItems.emplace_back(nullptr, &stringBuffer[directoryRows[0].stringOffset], 0, 0, 0, 0, 0, false, *this);
+	Files.reserve(mgfHeader.indexTableCount);
+	Files.emplace_back(nullptr, &stringBuffer[directoryRows[0].stringOffset], 0, 0, 0, 0, 0, false, *this);
 
     if (ArchiveVersion == Version::MechAssault2LW)
     {
@@ -67,8 +60,8 @@ MGF::Archive::Archive(const QString& mgfFilePath) :
 			// item is a file
 			if (directoryRows[i].fileIndex != -1)
 			{
-				m_TreeItems.emplace_back(
-					&m_TreeItems[directoryRows[i].parentIndex],
+				Files.emplace_back(
+					&Files[directoryRows[i].parentIndex],
 					&stringBuffer[directoryRows[i].stringOffset],
 					fileRecordsMa2[directoryRows[i].fileIndex].guid,
                     fileRecordsMa2[directoryRows[i].fileIndex].index,
@@ -82,8 +75,8 @@ MGF::Archive::Archive(const QString& mgfFilePath) :
 			// item is a folder
 			else
 			{
-				m_TreeItems.emplace_back(
-					&m_TreeItems[directoryRows[i].parentIndex],
+				Files.emplace_back(
+					&Files[directoryRows[i].parentIndex],
 					&stringBuffer[directoryRows[i].stringOffset],
 					0,
 					0, // this should be an index
@@ -102,8 +95,8 @@ MGF::Archive::Archive(const QString& mgfFilePath) :
 			// item is a file
 			if (directoryRows[i].fileIndex != -1)
 			{
-				m_TreeItems.emplace_back(
-					&m_TreeItems[directoryRows[i].parentIndex],
+				Files.emplace_back(
+					&Files[directoryRows[i].parentIndex],
 					&stringBuffer[directoryRows[i].stringOffset],
 					fileRecordsMa1[directoryRows[i].fileIndex].guid,
 					fileRecordsMa1[directoryRows[i].fileIndex].index,
@@ -117,8 +110,8 @@ MGF::Archive::Archive(const QString& mgfFilePath) :
 			// item is a folder
 			else
 			{
-				m_TreeItems.emplace_back(
-					&m_TreeItems[directoryRows[i].parentIndex],
+				Files.emplace_back(
+					&Files[directoryRows[i].parentIndex],
 					&stringBuffer[directoryRows[i].stringOffset],
 					0,
 					0, // this should be an index
@@ -131,6 +124,6 @@ MGF::Archive::Archive(const QString& mgfFilePath) :
 		}
     }
 
-    m_FileStream.seekg(0, std::ios::end);
-    FileSize = m_FileStream.tellg();
+    seekg(0, std::ios::end);
+    FileSize = tellg();
 }

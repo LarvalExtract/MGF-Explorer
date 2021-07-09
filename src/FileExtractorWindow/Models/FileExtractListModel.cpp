@@ -39,8 +39,8 @@ QVariant FileExtractListModel::data(const QModelIndex& index, int role) const
 	const auto& file = this->at(index.row());
 	switch (index.column())
 	{
-	case 0: return file.mgfItem->FilePath().u8string().c_str();
-	case 1: return QLocale::system().formattedDataSize(file.mgfItem->FileLength());
+	case 0: return file.mgfItem->FilePath.u8string().c_str();
+	case 1: return QLocale::system().formattedDataSize(file.mgfItem->FileLength);
 	case 2: return STATUS[(int)file.status];
 	}
 }
