@@ -5,39 +5,31 @@
 
 using namespace ArchiveViewer::ContextMenus;
 
-void TextureFileMenu::Initialise(QTreeView* treeView)
+TextureFileMenu::TextureFileMenu()
 {
-	FileMenu::Initialise(treeView);
-
 	addSeparator();
 
-	connect(
-		addAction("Extract BMP"), 
-		&QAction::triggered, 
-		[this, treeView]()
-		{
-			const auto& textureFile = *static_cast<MGF::File*>(treeView->selectionModel()->selectedRows(0)[0].internalPointer());
-			const auto fileName = QString(textureFile.FilePath.stem().append(".bmp").u8string().c_str());
+	const auto ExtractImageFileAction = [this](const char* extension)
+	{
+		const auto selection = SelectedItems();
+		const auto textureFile = selection.at(0).mgfItem;
+		const auto fileName = QString(textureFile->FilePath.stem().append(extension).u8string().c_str());
 
-			if (const auto destination = QFileDialog::getSaveFileName(nullptr, "Extract texture image", fileName); !destination.isEmpty())
-			{
-				TextureExtractor.Extract(textureFile, std::filesystem::path(destination.toLatin1().data()));
-			}
+		if (const auto destination = QFileDialog::getSaveFileName(nullptr, QString("Extract %1").arg(fileName), fileName); !destination.isEmpty())
+		{
+			TextureExtractor.Extract(*textureFile, std::filesystem::path(destination.toLatin1().data()));
 		}
+	};
+
+	connect(
+		addAction("Extract BMP"),
+		&QAction::triggered,
+		[ExtractImageFileAction]() { ExtractImageFileAction(".bmp"); }
 	);
 
 	connect(
-		addAction("Extract PNG"), 
-		&QAction::triggered, 
-		[this, treeView]()
-		{
-			const auto& textureFile = *static_cast<MGF::File*>(treeView->selectionModel()->selectedRows(0)[0].internalPointer());
-			const auto fileName = QString(textureFile.FilePath.stem().append(".png").u8string().c_str());
-
-			if (const auto destination = QFileDialog::getSaveFileName(nullptr, "Extract texture image", fileName); !destination.isEmpty())
-			{
-				TextureExtractor.Extract(textureFile, std::filesystem::path(destination.toLatin1().data()));
-			}
-		}
+		addAction("Extract PNG"),
+		&QAction::triggered,
+		[ExtractImageFileAction]() { ExtractImageFileAction(".png"); }
 	);
 }

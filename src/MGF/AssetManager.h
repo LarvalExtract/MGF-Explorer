@@ -12,7 +12,7 @@ namespace MGF {
 		MGF::Asset::AssetPtr Get(const MGF::File& file);
 
 	private:
-		std::unordered_map<std::uint64_t, MGF::Asset::AssetPtr> Assets;
+		std::unordered_map<std::uint32_t, MGF::Asset::AssetPtr> Assets;
 	};
 
 }

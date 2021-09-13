@@ -11,7 +11,7 @@ void Extractor::ExtractFiles(
 	bool bOverwriteExistingFiles,
 	unsigned int& numFilesExtracted)
 {
-    auto createFile = [&destination](Models::FileExtractItem& item, std::vector<char>& buf) -> void
+    auto createFile = [&destination,&numFilesExtracted](Models::FileExtractItem& item, std::vector<char>& buf)
     {
 		auto path = destination;
 		path += item.mgfItem->FilePath;
@@ -21,8 +21,7 @@ void Extractor::ExtractFiles(
 
 		if (file.fail())
 		{
-			item.status = Models::FileExtractStatus::Failed;
-			return;
+			return Models::FileExtractStatus::Failed;
 		}
 
 		std::int32_t offset = 0;
@@ -39,9 +38,9 @@ void Extractor::ExtractFiles(
 			remainingBytes -= bufSize;
 			offset += bufSize;
 		}
-
-		file.close();
-		item.status = Models::FileExtractStatus::Done;
+    	
+		numFilesExtracted++;
+		return Models::FileExtractStatus::Done;
     };
 
     std::vector<char> buffer(FILE_BUFFER_SIZE);
@@ -52,19 +51,15 @@ void Extractor::ExtractFiles(
 		for (auto& item : items)
         {
             createFile(item, buffer);
-			numFilesExtracted++;
 		}
 	}
 	else
 	{
 		for (auto& item : items)
 		{
-            if (!std::filesystem::exists(item.mgfItem->FilePath))
-                createFile(item, buffer);
-            else
-                item.status = Models::FileExtractStatus::Skipped;
-
-			numFilesExtracted++;
+			item.status = std::filesystem::exists(item.mgfItem->FilePath)
+				? Models::FileExtractStatus::Skipped
+				: createFile(item, buffer);
 		}
 	}
 }
@@ -77,13 +72,20 @@ void TraverseTreeItem(std::vector<Models::FileExtractItem>& list, const MGF::Fil
 	}
 	else
 	{
-		for (const auto child : item->GetChildren())
-			TraverseTreeItem(list, child);
+		for (item = item->Child(); item != nullptr; item = item->Sibling())
+		{
+			TraverseTreeItem(list, item);
+		}
 	}
 }
 
 std::vector<Models::FileExtractItem> Extractor::ToList(const QModelIndexList& selection)
 {
+	if (selection.isEmpty())
+	{
+		
+	}
+	
     std::vector<Models::FileExtractItem> result;
     result.reserve(selection.count());
 
@@ -98,4 +100,32 @@ std::vector<Models::FileExtractItem> Extractor::ToList(const QModelIndexList& se
 	}
 
     return result;
+}
+
+bool Extractor::WriteFile(const MGF::File& item, const std::filesystem::path& destination, std::vector<char>& buf)
+{
+	std::filesystem::create_directories(destination.parent_path());
+	std::ofstream file(destination, std::ios::binary);
+
+	if (file.fail())
+	{
+		return false;
+	}
+
+	std::int32_t offset = 0;
+	std::int32_t remainingBytes = item.FileLength;
+	std::size_t bufSize = buf.capacity();
+	std::int32_t bytesToCopy;
+
+	while (remainingBytes > 0)
+	{
+		bytesToCopy = std::min<int>(bufSize, remainingBytes);
+		item.Read(buf.data(), offset, bytesToCopy);
+		file.write(buf.data(), bytesToCopy);
+
+		remainingBytes -= bufSize;
+		offset += bufSize;
+	}
+
+	return true;
 }

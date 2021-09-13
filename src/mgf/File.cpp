@@ -21,81 +21,100 @@ const std::unordered_map<std::string, EFileType> File::MapExtensionFileType = {
     { "",         EFileType::Unassigned }
 };
 
-File::File(File* parent,
-          const char* name,
-          uint64_t id,
-          uint32_t index,
-          uint32_t offset,
-          uint32_t length,
-          int32_t  timestamp,
-          bool     isFile,
-          Archive& mgfFile) :
-    Parent(parent),
-	FilePath(parent ? parent->FilePath / name : name),
-    Name(name),
-    GUID(id),
-    Index(index),
-    FileType([&fp = this->FilePath]() -> EFileType
-	{
-		auto extension = fp.extension().u8string();
-        std::transform(extension.begin(), extension.end(), extension.begin(), tolower);
-        return MapExtensionFileType.find(extension) != MapExtensionFileType.end() ? MapExtensionFileType.at(extension) : EFileType::Unassigned;
-	}()),
-    FileOffset(offset),
-    FileLength(length),
-	FileDate(QDateTime::fromSecsSinceEpoch(timestamp)),
-    IsFile(isFile),
-    MGFArchive(mgfFile),
-    ArchiveVersion(MGFArchive.GetArchiveVersion()),
-    TreeViewRow(parent ? parent->GetChildCount() : 0)
+File::File(
+    int32_t  index,
+    int32_t  parentIndex,
+    int32_t  siblingIndex,
+    int32_t  childIndex,
+    Archive& mgfFile,
+    const char* name,
+    uint32_t hash,
+    uint32_t checksum,
+    uint32_t offset,
+    uint32_t length,
+    int32_t  timestamp,
+    bool     isFile)
+: _Index(index)
+, _ParentIndex(parentIndex)
+, _SiblingIndex(siblingIndex)
+, _ChildIndex(childIndex)
+, MGFArchive(mgfFile)
+, FilePath(Parent() ? Parent()->FilePath / name : name)
+, Name(name)
+, FilepathHash(hash)
+, FileChecksum(checksum)
+, FileType([&fp = this->FilePath]() -> EFileType
 {
-    if (parent != nullptr)
+	auto extension = fp.extension().u8string();
+    std::transform(extension.begin(), extension.end(), extension.begin(), tolower);
+    return MapExtensionFileType.find(extension) != MapExtensionFileType.end() ? MapExtensionFileType.at(extension) : EFileType::Unassigned;
+}())
+, FileOffset(offset)
+, FileLength(length)
+, FileDate(QDateTime::fromSecsSinceEpoch(timestamp))
+, IsFile(isFile)
+, ArchiveVersion(MGFArchive.ArchiveVersion)
+{
+    if (Parent())
     {
-        parent->AddChildItem(this);
+        const_cast<File*>(Parent())->_ChildCount++;
     }
 }
 
-File* File::GetNthChild(int index) const
+const File* File::Parent() const
 {
-    return ChildrenArray[index];
+    return _ParentIndex != -1 ? &MGFArchive.Files[_ParentIndex] : nullptr;
 }
 
-File* File::GetNamedChild(const QString &name) const
+const File* File::Sibling() const
 {
-    return Children[name.toLower()];
+    return _SiblingIndex != -1 ? &MGFArchive.Files[_SiblingIndex] : nullptr;
 }
 
-File* File::GetNamedSibling(const QString &name) const
+const File* File::Child() const
 {
-    if (Parent == nullptr)
-        return nullptr;
-
-    return Parent->GetNamedChild(name);
+    return _ChildIndex != -1 ? &MGFArchive.Files[_ChildIndex] : nullptr;
 }
 
-void File::AddChildItem(File *item)
+const File* File::ChildAt(size_t at) const
 {
-    ChildrenArray.push_back(item);
-    Children.insert(item->Name.toLower(), item);
+    return Child() ? Child()->SiblingAt(at) : nullptr;
 }
 
-size_t File::GetChildCount() const
+const File* File::SiblingAt(size_t at) const
 {
-    return Children.size();
+    auto sibling = this;
+	for (size_t i = 0; sibling && i < at; i++)
+	{
+        sibling = sibling->Sibling();
+	}
+    return sibling;
 }
 
 const File* File::FindRelativeItem(const std::filesystem::path &relativePath) const
 {
-    File* node = nullptr;
+    const File* parent = Parent();
+    const File* target = nullptr;
 	
-    std::for_each(relativePath.begin(), relativePath.end(), [parent = Parent, &node](const auto& i) 
+    std::for_each(relativePath.begin(), relativePath.end(), [&parent, &target](const auto& i) 
     {
         parent = i == ".."
-            ? parent->Parent
-            : node = parent->GetNamedChild(i.u8string().c_str());
+            ? parent->Parent()
+            : target = [parent](QString&& name) -> const File*
+            {
+				for (auto child = parent->Child(); child; child = child->Sibling())
+				{
+					if (child->Name.toLower() == name.toLower())
+					{
+                        return child;
+					}
+				}
+                return nullptr;
+            	
+			}(QString(i.u8string().c_str()));
     });
 
-    return node;
+    return target;
 }
 
 void File::Read(char* buffer, uint32_t offset, uint32_t length) const

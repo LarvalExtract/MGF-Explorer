@@ -13,6 +13,7 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QTableView>
+#include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -20,6 +21,7 @@ QT_BEGIN_NAMESPACE
 class Ui_StringTableViewerWidget
 {
 public:
+    QVBoxLayout *verticalLayout;
     QTableView *tableView;
 
     void setupUi(QWidget *StringTableViewerWidget)
@@ -32,11 +34,16 @@ public:
         sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(StringTableViewerWidget->sizePolicy().hasHeightForWidth());
         StringTableViewerWidget->setSizePolicy(sizePolicy);
+        verticalLayout = new QVBoxLayout(StringTableViewerWidget);
+        verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
+        verticalLayout->setContentsMargins(0, 0, 0, 0);
         tableView = new QTableView(StringTableViewerWidget);
         tableView->setObjectName(QString::fromUtf8("tableView"));
-        tableView->setGeometry(QRect(0, 0, 600, 500));
         tableView->verticalHeader()->setVisible(false);
-        tableView->verticalHeader()->setDefaultSectionSize(23);
+        tableView->verticalHeader()->setDefaultSectionSize(24);
+
+        verticalLayout->addWidget(tableView);
+
 
         retranslateUi(StringTableViewerWidget);
 

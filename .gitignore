@@ -46,3 +46,5 @@ data/
 doc/
 
 res/test.cpp
+
+scripts/update_mgf_offsets.1sc

@@ -3,13 +3,14 @@
 #include "MGF/Archive.h"
 #include "MGF/AssetManager.h"
 
-#include "Models/ArchiveFileTreeModel.h"
 #include "AssetViewers/PlainTextViewer/PlainTextViewerWidget.h"
 #include "AssetViewers/TextureViewer/TextureViewerWidget.h"
 #include "AssetViewers/ModelViewer/ModelViewerWidget.h"
 #include "AssetViewers/StringTableViewer/StringTableViewerWidget.h"
 #include "AssetViewers/EntityViewer/EntityViewerWidget.h"
 
+#include "ContextMenus/FolderMenu.h"
+#include "ContextMenus/FolderRootMenu.h"
 #include "ContextMenus/TextureFileMenu.h"
 
 namespace Ui {
@@ -24,9 +25,9 @@ namespace ArchiveViewer {
 
 	public:
 		explicit ArchiveViewerWidget(const std::filesystem::path& mgfFilePath, QWidget* parent = nullptr);
-		~ArchiveViewerWidget();
+		~ArchiveViewerWidget() override;
 
-		inline const MGF::Archive& MGFFile() const { return MgfArchive; }
+		const auto& MGFArchive() const { return MgfArchive; }
 
 	private slots:
 		void on_treeView_selectionChanged(const QModelIndex& sel, const QModelIndex& desel);
@@ -34,9 +35,7 @@ namespace ArchiveViewer {
 
 	private:
 		Ui::ArchiveViewerWidget* ui;
-
 		MGF::Archive MgfArchive;
-		Models::ArchiveFileTreeModel FileTreeModel;
 
 		PlainTextViewer::PlainTextViewerWidget PlainTextViewer;
 		StringTableViewer::StringTableViewerWidget StringTableViewer;
@@ -45,6 +44,8 @@ namespace ArchiveViewer {
 		EntityViewer::EntityViewerWidget EntityViewer;
 
 		ContextMenus::FileMenu FileMenu;
+		ContextMenus::FolderMenu FolderMenu;
+		ContextMenus::FolderRootMenu FolderRootMenu;
 		ContextMenus::TextureFileMenu TextureFileMenu;
 
 		MGF::AssetManager& AssetManager;

@@ -87,9 +87,6 @@
     <ClCompile Include="src\ArchiveViewer\ArchiveViewerWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\ArchiveViewer\Models\ArchiveFileTreeModel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\ArchiveViewer\moc_ArchiveViewerWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -189,6 +186,15 @@
     <ClCompile Include="src\MainWindow\qrc_icon.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\ArchiveViewer\ContextMenus\FolderMenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ArchiveViewer\ContextMenus\IContextMenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ArchiveViewer\ContextMenus\FolderRootMenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\AssetViewers\PlainTextViewer\PlainTextViewerWidget.h">
@@ -267,9 +273,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\ArchiveViewer\ArchiveViewerWidget.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ArchiveViewer\Models\ArchiveFileTreeModel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\MGF\Assets\EAssetTypes.h">
@@ -408,6 +411,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\AssetExtractors\ModelExtractor\ModelExtractor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ArchiveViewer\ContextMenus\FolderMenu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ArchiveViewer\ContextMenus\IContextMenu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ArchiveViewer\ContextMenus\FolderRootMenu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

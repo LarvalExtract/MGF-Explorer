@@ -4,9 +4,7 @@
 #include "VersionConstants.h"
 
 #include <QDateTime>
-#include <QHash>
 
-#include <vector>
 #include <filesystem>
 #include <unordered_map>
 
@@ -16,39 +14,48 @@ namespace MGF {
 
     class File
     {
+        friend class Archive;
+    	
+        const int32_t _Index = 0;
+        const int32_t _ParentIndex = 0;
+        const int32_t _SiblingIndex = 0;
+        const int32_t _ChildIndex = 0;
+        uint32_t _ChildCount = 0;
+    
     public:
         File(
-            File* parent,
+            int32_t  index,
+            int32_t  parentIndex,
+            int32_t  siblingIndex,
+            int32_t  childIndex,
+            Archive& mgfFile,
             const char* name,
-            uint64_t id,
-            uint32_t index,
+            uint32_t hash,
+            uint32_t checksum,
             uint32_t offset,
             uint32_t length,
             int32_t  timestamp,
-            bool     isFile,
-            Archive& mgfFile
+            bool     isFile
         );
-
-        const File*     Parent;
+    	
+        Archive&        MGFArchive;
         const std::filesystem::path FilePath;
         const QString   Name;
-        const uint64_t  GUID;
-        const uint32_t  Index;
+        const uint32_t  FilepathHash;
+        const uint32_t  FileChecksum;
         const EFileType FileType;
         const uint32_t  FileOffset;
         const uint32_t  FileLength;
         const QDateTime FileDate;
         const bool      IsFile;
-        Archive&        MGFArchive;
         const Version   ArchiveVersion;
-        const int       TreeViewRow;
-    	
-        File* GetNthChild(int index) const;
-        File* GetNamedChild(const QString& name) const;
-        File* GetNamedSibling(const QString& name) const;
-        void AddChildItem(File* item);
-        size_t GetChildCount() const;
-        const auto& GetChildren() const { return Children; }
+
+        const File* Parent() const;
+        const File* Sibling() const;
+        const File* Child() const;
+        const File* ChildAt(size_t at = 0) const;
+        const File* SiblingAt(size_t at = 0) const;
+        int GetChildCount() const { return _ChildCount; }
 
         // takes a relative file path and traverses the MGF file system to find the desired item
         const File* FindRelativeItem(const std::filesystem::path& relativePath) const;
@@ -62,10 +69,6 @@ namespace MGF {
             this->Read(reinterpret_cast<char*>(&result), offset, sizeof(result));
             return result;
         }
-
-    private:
-        QHash<QString, File*> Children;
-        std::vector<File*> ChildrenArray;
 
         static const std::unordered_map<std::string, EFileType>  MapExtensionFileType;
     };

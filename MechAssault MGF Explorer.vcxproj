@@ -150,8 +150,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Qt6Cored.lib;Qt6Guid.lib;Qt6Widgetsd.lib;OgreMain_d.lib;RenderSystem_Direct3D9_d.lib;RenderSystem_GL3Plus_d.lib;libfbxsdk.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(QT_DIR)\6.0.3\msvc2019_64\lib;$(OGRE3D_DIR)\Binaries\lib\Debug;D:\SDK\FBX\2020.2\lib\vs2019\x64\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Qt6Cored.lib;Qt6Guid.lib;Qt6Widgetsd.lib;OgreMain_d.lib;RenderSystem_Direct3D9_d.lib;RenderSystem_GL3Plus_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(QT_DIR)\6.0.3\msvc2019_64\lib;$(OGRE3D_DIR)\Binaries\lib\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <EntryPointSymbol>
       </EntryPointSymbol>
     </Link>
@@ -181,8 +181,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(QT_DIR)\6.0.3\msvc2019_64\lib;$(OGRE3D_DIR)\Binaries\lib\Release;D:\SDK\FBX\2020.2\lib\vs2019\x64\release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Qt6Core.lib;Qt6Gui.lib;Qt6Widgets.lib;OgreMain.lib;RenderSystem_Direct3D9.lib;libfbxsdk.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(QT_DIR)\6.0.3\msvc2019_64\lib;$(OGRE3D_DIR)\Binaries\lib\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Qt6Core.lib;Qt6Gui.lib;Qt6Widgets.lib;OgreMain.lib;RenderSystem_Direct3D9.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
     </Link>
     <PreBuildEvent>
@@ -194,6 +194,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\ArchiveViewer\ContextMenus\FileMenu.cpp" />
+    <ClCompile Include="src\ArchiveViewer\ContextMenus\FolderMenu.cpp" />
+    <ClCompile Include="src\ArchiveViewer\ContextMenus\FolderRootMenu.cpp" />
+    <ClCompile Include="src\ArchiveViewer\ContextMenus\IContextMenu.cpp" />
     <ClCompile Include="src\ArchiveViewer\ContextMenus\TextureFileMenu.cpp" />
     <ClCompile Include="src\AssetExtractors\ModelExtractor\ModelExtractor.cpp" />
     <ClCompile Include="src\AssetExtractors\TextureExtractor\TextureExtractor.cpp" />
@@ -232,7 +235,6 @@
     <ClCompile Include="src\mgf\File.cpp" />
     <ClCompile Include="src\mgf\Assets\Factories\MaterialFactory.cpp" />
     <ClCompile Include="src\mgf\Assets\Factories\MeshFactory.cpp" />
-    <ClCompile Include="src\ArchiveViewer\Models\ArchiveFileTreeModel.cpp" />
     <ClCompile Include="src\MGF\AssetManager.cpp" />
     <ClCompile Include="src\Utilities\configfile.cpp" />
     <ClCompile Include="src\Utilities\ContextProvider\Context.cpp" />
@@ -245,18 +247,12 @@
     <ClCompile Include="src\OgreWindow\ogrewindow.cpp" />
     <ClCompile Include="vendor\pugixml-1.10\src\pugixml.cpp" />
     <ClCompile Include="vendor\s3tc\s3tc.cpp" />
-    <ClCompile Include="src\AssetViewers\EntityViewer\moc_EntityViewerWidget.cpp" />
-    <ClCompile Include="src\AssetViewers\ModelViewer\moc_ModelViewerWidget.cpp" />
-    <ClCompile Include="src\AssetViewers\PlainTextViewer\moc_PlainTextViewerWidget.cpp" />
-    <ClCompile Include="src\AssetViewers\StringTableViewer\moc_StringTableViewerWidget.cpp" />
-    <ClCompile Include="src\FileExtractorWindow\moc_FileExtractorDialog.cpp" />
-    <ClCompile Include="src\AssetViewers\TextureViewer\moc_TextureViewerWidget.cpp" />
-    <ClCompile Include="src\ArchiveViewer\moc_ArchiveViewerWidget.cpp" />
-    <ClCompile Include="src\MainWindow\moc_MainWindow.cpp" />
-    <ClCompile Include="src\OgreWindow\moc_ogrewindow.cpp" />
-  </ItemGroup>
+    <ClCompile Include="src\AssetViewers\EntityViewer\moc_EntityViewerWidget.cpp" /><ClCompile Include="src\AssetViewers\ModelViewer\moc_ModelViewerWidget.cpp" /><ClCompile Include="src\AssetViewers\PlainTextViewer\moc_PlainTextViewerWidget.cpp" /><ClCompile Include="src\AssetViewers\StringTableViewer\moc_StringTableViewerWidget.cpp" /><ClCompile Include="src\FileExtractorWindow\moc_FileExtractorDialog.cpp" /><ClCompile Include="src\AssetViewers\TextureViewer\moc_TextureViewerWidget.cpp" /><ClCompile Include="src\ArchiveViewer\moc_ArchiveViewerWidget.cpp" /><ClCompile Include="src\MainWindow\moc_MainWindow.cpp" /><ClCompile Include="src\OgreWindow\moc_ogrewindow.cpp" /></ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ArchiveViewer\ContextMenus\FileMenu.h" />
+    <ClInclude Include="src\ArchiveViewer\ContextMenus\FolderMenu.h" />
+    <ClInclude Include="src\ArchiveViewer\ContextMenus\FolderRootMenu.h" />
+    <ClInclude Include="src\ArchiveViewer\ContextMenus\IContextMenu.h" />
     <ClInclude Include="src\ArchiveViewer\ContextMenus\TextureFileMenu.h" />
     <ClInclude Include="src\AssetExtractors\IAssetExtractor.h" />
     <ClInclude Include="src\AssetExtractors\ModelExtractor\ModelExtractor.h" />
@@ -311,7 +307,6 @@
     <ClInclude Include="src\MGF\Structures\MgText.h" />
     <ClInclude Include="src\MGF\Structures\Tif.h" />
     <ClInclude Include="src\mgf\VersionConstants.h" />
-    <ClInclude Include="src\ArchiveViewer\Models\ArchiveFileTreeModel.h" />
     <ClInclude Include="src\MGF\AssetManager.h" />
     <ClInclude Include="src\Utilities\configfile.h" />
     <ClInclude Include="src\Utilities\ContextProvider\Context.h" />
@@ -324,15 +319,7 @@
     <ClInclude Include="src\OgreWindow\ogrewindow.h" />
     <ClInclude Include="vendor\pugixml-1.10\src\pugixml.hpp" />
     <ClInclude Include="vendor\s3tc\s3tc.h" />
-    <ClInclude Include="src\ArchiveViewer\ui_ArchiveViewerWidget.h" />
-    <ClInclude Include="src\AssetViewers\EntityViewer\ui_EntityViewerWidget.h" />
-    <ClInclude Include="src\AssetViewers\ModelViewer\ui_ModelViewerWidget.h" />
-    <ClInclude Include="src\AssetViewers\PlainTextViewer\ui_PlainTextViewerWidget.h" />
-    <ClInclude Include="src\AssetViewers\TextureViewer\ui_TextureViewerWidget.h" />
-    <ClInclude Include="src\AssetViewers\StringTableViewer\ui_StringTableViewerWidget.h" />
-    <ClInclude Include="src\FileExtractorWindow\ui_FileExtractorDialog.h" />
-    <ClInclude Include="src\MainWindow\ui_MainWindow.h" />
-  </ItemGroup>
+    <ClInclude Include="src\ArchiveViewer\ui_ArchiveViewerWidget.h" /><ClInclude Include="src\AssetViewers\EntityViewer\ui_EntityViewerWidget.h" /><ClInclude Include="src\AssetViewers\ModelViewer\ui_ModelViewerWidget.h" /><ClInclude Include="src\AssetViewers\PlainTextViewer\ui_PlainTextViewerWidget.h" /><ClInclude Include="src\AssetViewers\TextureViewer\ui_TextureViewerWidget.h" /><ClInclude Include="src\AssetViewers\StringTableViewer\ui_StringTableViewerWidget.h" /><ClInclude Include="src\FileExtractorWindow\ui_FileExtractorDialog.h" /><ClInclude Include="src\MainWindow\ui_MainWindow.h" /></ItemGroup>
   <ItemGroup>
     <None Include="src\ArchiveViewer\ArchiveViewerWidget.ui" />
     <None Include="src\AssetViewers\EntityViewer\EntityViewerWidget.ui">

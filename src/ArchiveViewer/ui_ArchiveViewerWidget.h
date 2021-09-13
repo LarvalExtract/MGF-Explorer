@@ -31,7 +31,6 @@ public:
     QFrame *Frame;
     QVBoxLayout *AssetViewerLayout;
     QLabel *label;
-    QFrame *line;
     QStackedWidget *AssetViewerStack;
     QWidget *EmptyPage;
 
@@ -90,13 +89,6 @@ public:
         label->setTextInteractionFlags(Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse);
 
         AssetViewerLayout->addWidget(label);
-
-        line = new QFrame(Frame);
-        line->setObjectName(QString::fromUtf8("line"));
-        line->setFrameShape(QFrame::HLine);
-        line->setFrameShadow(QFrame::Sunken);
-
-        AssetViewerLayout->addWidget(line);
 
         AssetViewerStack = new QStackedWidget(Frame);
         AssetViewerStack->setObjectName(QString::fromUtf8("AssetViewerStack"));

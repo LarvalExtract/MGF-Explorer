@@ -36,6 +36,8 @@ namespace FileExtractor {
 			bool bOverwriteExistingFiles,
 			unsigned int& numFilesExtracted);
 
+		static bool WriteFile(const MGF::File& item, const std::filesystem::path& destination, std::vector<char>& buf);
+
 		static std::vector<Models::FileExtractItem> ToList(const QModelIndexList& selection);
 	};
 

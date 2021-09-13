@@ -1,18 +1,29 @@
 #include "FileMenu.h"
 #include "FileExtractorWindow/Extractor.h"
-#include "FileExtractorWindow/FileExtractorDialog.h"
+
+#include <QFileDialog>
 
 using namespace ArchiveViewer::ContextMenus;
 
-void FileMenu::Initialise(QTreeView* treeView)
+FileMenu::FileMenu()
 {
-	connect(addAction("Extract..."), &QAction::triggered, [treeView]()
+	connect(
+		addAction("Extract"),
+		&QAction::triggered,
+		[this]()
 		{
-			const auto& files = FileExtractor::Extractor::ToList(treeView->selectionModel()->selection().indexes());
+			const auto selection = SelectedItems();
+			const auto file = selection.at(0).mgfItem;
+			const auto fileName = QString(file->FilePath.filename().u8string().c_str());
 
-			FileExtractor::FileExtractorDialog dialog;
-			dialog.QueueFiles(files);
-			dialog.exec();
-		});
+			if (const auto destination = QFileDialog::getSaveFileName(nullptr, QString("Extract %1").arg(fileName), fileName); !destination.isEmpty())
+			{
+				std::filesystem::path dest(destination.toLatin1().data());
+				std::vector<char> fileBuffer(16384);
+
+				FileExtractor::Extractor::WriteFile(*file, dest, fileBuffer);
+			}
+		}
+	);
 }
 

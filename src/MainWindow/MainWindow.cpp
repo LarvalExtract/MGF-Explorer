@@ -72,7 +72,7 @@ void MainWindow::on_actionClose_all_MGF_files_triggered()
 void MainWindow::on_tabWidget_tabCloseRequested(int index)
 {
     auto ws = static_cast<ArchiveViewer::ArchiveViewerWidget*>(ui->tabWidget->widget(index));
-    auto str = QString(ws->MGFFile().GetFilePath().u8string().c_str());
+    auto str = QString(ws->MGFArchive().Path.u8string().c_str());
 
     ui->tabWidget->removeTab(index);
     ArchiveWidgets.erase(str.toStdString());
@@ -135,12 +135,12 @@ void MainWindow::InitialiseOgre()
 
 void MainWindow::UpdateStatusBar()
 {
-    const auto& mgf = CurrentArchiveWidget->MGFFile();
+    const auto& mgf = CurrentArchiveWidget->MGFArchive();
     const auto& loc = this->locale();
 
     const auto labelText = QString("%1 | %2 | %3 | %4 files").arg(
-        MGF::ToString(mgf.GetArchiveVersion()),
-        mgf.GetFileName().u8string().c_str(),
+        MGF::ToString(mgf.GetVersion()),
+        mgf.Path.filename().u8string().c_str(),
         loc.formattedDataSize(mgf.GetFileSize()),
         QString::number(mgf.GetFileCount())
     );

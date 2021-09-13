@@ -16,7 +16,7 @@ struct MGF_FILE {
         char   version;
         char   unk1;
         char   ZZ[2];
-        uint32 empty;
+        uint32 unknown1;
         uint32 fileRecordCount;
         uint32 fileRecordLength;
         uint32 fileRecordOffset;
@@ -25,30 +25,117 @@ struct MGF_FILE {
         uint32 indexTableOffset;
         uint32 stringsLength;
         uint32 stringsOffset;
-        char   padding[20];
+        uint32 unknown2;
+        uint32 pageLength;
+        char   padding[12];
     } header <bgcolor=cRed>;
 
-    struct MGF_FILE_RECORD {
-        uint32 index;
-        uint64 guid;
-        uint32 fileLength;
-        uint32 fileLength2;
-        time_t timestamp;
-        uint32 fileOffset;
-        char   padding[4];
-    } records[header.fileRecordCount] <bgcolor=cBlue>;
+    if (header.version == 4) {
+        struct MGF_FILE_RECORD_MA2 {
+            uint32 index;
+            uint32 unk1<format=hex>;
+			uint32 crc<format=hex>;
+            uint32 fileLength;
+            uint32 fileLength2;
+            time_t timestamp;
+            uint32 fileOffset;
+            uint32 unk2;
+        } records[header.fileRecordCount] <name=getFileNameMA2,bgcolor=cBlue>;
+    }
+    else {
+        struct MGF_FILE_RECORD_MA1 {
+            uint32 unk1;
+	        uint32 index;
+	        time_t timestamp;
+	        uint32 checksum<format=hex>;
+			uint32 filepathHash
+<format=hex>;
+	        uint32 fileLength;
+	        uint32 fileOffset;
+        } records[header.fileRecordCount] <name=getFileNameMA1,bgcolor=cBlue>;
+    }
+    
+    byte padding[header.indexTableOffset - (sizeof(MGF_HEADER) + header.fileRecordLength)];
 
     struct MGF_DIRECTORY {
-        int32 unk1;
-        int32 parentIndex;
-        int32 folderIndex;
-        int32 unk2;
-        int32 stringOffset;
-        int32 fileIndex;
-    } directoryTable[header.indexTableCount] <bgcolor=cPurple>;
+        int32 crc<name="CRC",format=hex>;
+        int32 parentIndex<name=getParentName>;
+        int32 firstChildIndex<name=getChildName>;
+        int32 nextSiblingIndex<name=getSiblingName>;
+        int32 stringOffset<hidden=true>;
+        int32 fileIndex<name="File record index">;
+    } directoryTable[header.indexTableCount] <name=getFullPath,bgcolor=cPurple>;
 
-    struct MGF_STRING {
-        char str[];
-    } strings[header.indexTableCount] <bgcolor=cYellow,optimize=false>;
-    
+    byte padding2[header.stringsOffset - (sizeof(MGF_HEADER) + header.fileRecordLength + header.indexTableLength)];
+    char stringData[header.stringsLength] <bgcolor=cGreen>; 
 } file;
+
+string getFileNameMA1(MGF_FILE_RECORD_MA1& record)
+{
+    return getFullPath(file.directoryTable[record.index]);
+}
+
+string getFileNameMA2(MGF_FILE_RECORD_MA2& record)
+{
+    return getFullPath(file.directoryTable[record.index]);
+}
+
+string getDirName(MGF_DIRECTORY &d)
+{
+    local char name[50];
+    Memcpy(name, file.stringData, 50, 0, d.stringOffset);
+    return name;
+}
+
+string getParentName(int32 parentIndex)
+{
+    if (parentIndex == -1)
+    {
+        return "Parent: NULL";
+    }
+
+    return "Parent: " + getDirName(file.directoryTable[parentIndex]);
+}
+
+string getSiblingName(int32 siblingIndex)
+{
+    if (siblingIndex == -1)
+    {
+        return "Sibling: NULL";
+    }
+
+    return "Sibling: " + getDirName(file.directoryTable[siblingIndex]);
+}
+
+string getChildName(int32 firstChildIndex)
+{
+    if (firstChildIndex == -1)
+    {
+        return "Child: NULL";
+    }
+
+    return "Child: " + getDirName(file.directoryTable[firstChildIndex]);
+}
+
+string getFullPath(MGF_DIRECTORY& d)
+{
+    local string path = getDirName(d);
+    local string folder;
+
+    int32 parentIndex = d.parentIndex;
+    while (parentIndex != -1)
+    {
+        folder = getDirName(file.directoryTable[parentIndex]);
+        if (folder != "\\")
+        {
+            path = folder + "\\" + path;
+        }
+        else
+        {
+            path = folder + path;
+        }
+        parentIndex = file.directoryTable[parentIndex].parentIndex;
+    }
+
+    return path;
+}

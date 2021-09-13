@@ -24,26 +24,28 @@ struct MGF_FILE_RECORD_MA1 {
 	uint32_t unk1;
 	uint32_t index;
 	uint32_t timestamp;
-	uint64_t guid;
+	uint32_t checksum;
+	uint32_t hash;
 	uint32_t fileLength;
 	uint32_t fileOffset;
 };
 
 struct MGF_FILE_RECORD_MA2 {
 	uint32_t index;
-	uint64_t guid;
+	uint32_t checksum;
+	uint32_t hash;
 	uint32_t fileLength;
 	uint32_t fileLength2;
 	uint32_t timestamp;
 	uint32_t fileOffset;
-	char     padding[4];
+	uint32_t unknown;
 };
 
 struct MGF_DIRECTORY {
-	int32_t unk1;
+	int32_t hash;
 	int32_t parentIndex;
-	int32_t folderIndex;
-	int32_t unk2;
+	int32_t childIndex;
+	int32_t siblingIndex;
 	int32_t stringOffset;
 	int32_t fileIndex;
 };

@@ -1,0 +1,35 @@
+//------------------------------------------------
+//--- 010 Editor v11.0.1h Binary Template
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+
+struct WDF {
+    uint32 magic_number<format=hex>;
+    uint32 unk1;
+    uint32 num_entities;
+    uint32 unk2;
+    uint32 unk3;
+
+    struct WDF_Entity {
+        uint32 magic_number<format=hex>;
+        uint32 num_attributes;
+        uint32 unknown<format=hex>;
+
+        struct WDF_Attribute {
+            uint32 magic_number<format=hex>;
+            uint32 unk1;
+            uint32 unk2<format=hex>;
+            uint32 data_length;
+            byte data[data_length];
+        } attributes[num_attributes]<optimize=false>;
+    } entities[num_entities]<optimize=false>;
+} wdf;
+

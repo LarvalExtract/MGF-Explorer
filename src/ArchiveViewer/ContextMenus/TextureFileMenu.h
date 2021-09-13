@@ -8,7 +8,7 @@ namespace ArchiveViewer { namespace ContextMenus {
 	class TextureFileMenu : public FileMenu
 	{
 	public:
-		void Initialise(QTreeView* treeView) override;
+		TextureFileMenu();
 
 	private:
 		AssetExtractor::TextureExtractor TextureExtractor;

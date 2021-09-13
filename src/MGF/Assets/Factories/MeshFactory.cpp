@@ -46,7 +46,7 @@ Ogre::MeshPtr MeshFactory::Create(const MGF::Asset::Model::Mesh&def, const MGF::
     const auto& indices = *sourceFile.FindRelativeItem(ibPath);
 
     // Generate unique mesh name using source file name + mesh name
-    Ogre::String name(std::to_string(vertices.GUID));
+    Ogre::String name(std::to_string(vertices.FilepathHash));
 
     // Create mesh and default submesh
     Ogre::MeshPtr mesh = Ogre::MeshManager::getSingleton().getByName(name, "General");

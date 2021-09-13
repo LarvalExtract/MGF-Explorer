@@ -60,7 +60,7 @@ TextureAsset::TextureAsset(const File& file) :
 	stream.reset(new Ogre::MemoryDataStream(pixels, actualSize));
 
 	auto& textureManager = Ogre::TextureManager::getSingleton();
-	OgreTexture = textureManager.loadRawData(std::to_string(file.GUID), "General", stream, actualWidth, height, pf, DetermineTextureType(), 0);
+	OgreTexture = textureManager.loadRawData(std::to_string(file.FilepathHash), "General", stream, actualWidth, height, pf, DetermineTextureType(), 0);
 
 	delete[] pixels;
 }

@@ -1,7 +1,7 @@
 #include "FileExtractorDialog.h"
 #include "ui_FileExtractorDialog.h"
 
-#include "mgf/Archive.h"
+#include "MGF/Archive.h"
 
 #include "Extractor.h"
 
@@ -40,7 +40,7 @@ void FileExtractorDialog::QueueFiles(const Models::FileItemList& fileList)
 	QString label = QString("Extracting %1 of %2 files from %3").arg(
 		QString::number(Model->size()), 
 		QString::number(archive.GetFileCount()), 
-		archive.GetFileName().u8string().c_str()
+		archive.Path.filename().u8string().c_str()
 	);
 
 	ui->labelTask->setText(label);

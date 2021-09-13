@@ -4,10 +4,11 @@
 
 namespace ArchiveViewer { namespace ContextMenus {
 
-	class FileMenu : public IContextMenu
-	{
-	public:
-		FileMenu();
-	};
+		class FolderMenu : public IContextMenu
+		{
+		public:
+			FolderMenu();
+		};
 
-} }
+	}
+}

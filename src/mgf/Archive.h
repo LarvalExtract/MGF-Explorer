@@ -4,32 +4,40 @@
 #include "VersionConstants.h"
 
 #include <fstream>
+#include <QAbstractItemModel>
+
+struct MGF_HEADER;
+struct MGF_FILE_RECORD_MA1;
+struct MGF_FILE_RECORD_MA2;
+struct MGF_DIRECTORY;
 
 namespace MGF {
 
-    class Archive : protected std::ifstream
+    class Archive : protected std::ifstream, public QAbstractItemModel
     {
         friend class File;
 
     public:
         Archive(const std::filesystem::path& mgfFilePath);
+    	
+        QModelIndex index(int row, int column, const QModelIndex& parent) const override;
+        QModelIndex parent(const QModelIndex& child) const override;
+        QModelIndex sibling(int row, int column, const QModelIndex& idx) const override;
+        int rowCount(const QModelIndex& parent) const override;
+        int columnCount(const QModelIndex& parent) const override;
+        QVariant data(const QModelIndex& index, int role) const override;
+        QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
+    	
+        const std::filesystem::path Path;
+        Version GetVersion() const { return ArchiveVersion; }
+        size_t GetFileSize() const { return FileSize; }
+        uint32_t GetFileCount() const { return FileCount; }
+        auto Root() const { return &Files[0]; }
 
-    public:
-        inline auto GetFileName() const { return Path.filename(); }
-        inline auto GetFilePath() const { return Path; }
-        inline auto GetFileSize() const { return FileSize; }
-        inline auto GetFileCount() const { return FileCount; }
-        inline auto GetArchiveVersion() const { return ArchiveVersion; }
-
-        const auto& GetFileList() const { return Files; }
-
-    private:
-        std::filesystem::path Path;
-        MGF::Version ArchiveVersion;
-        uint32_t FileSize;
-		uint32_t FileCount;
-
-        std::vector<MGF::File> Files;
+    private:  	
+        Version ArchiveVersion = Version::MechAssault;
+        size_t FileSize = 0;
+		uint32_t FileCount = 0;
+        std::vector<File> Files;
     };
-
 }

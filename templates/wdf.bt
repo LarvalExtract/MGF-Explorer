@@ -40,17 +40,30 @@ struct Entity {
 };
 
 struct WDF {
-    uint32 magic_number         <hidden=true,name="MagicNumber",format=hex>;
-    uint32 version              <hidden=true,name="Version">;
+    uint32 magic_number         <name="MagicNumber",format=hex>;
+    uint32 version              <name="Version">;
     uint32 entity_count         <name="EntityCount">;
-    uint32 highest_entity_uid   <hidden=true>;
-    uint32 root_entity_uid      <hidden=true>;
+    uint32 highest_entity_uid   <name="HighestEntityUID">;
+    uint32 root_entity_uid      <name="RootEntityUID">;
     Entity entities[entity_count] <optimize=false,open=false,name=getEntityName>;
 } wdf;
 
 string getEntityName(Entity& entity)
 {
-    return getStringFromCrc(entity.e_crc);
+    uint32 uid;
+    int i;
+    for (i = 0; i < entity.e_attribute_count; i++)
+    {
+        if (getStringFromCrc(entity.attributes[i].a_crc) == "UID")
+        {
+            uid = entity.attributes[i].data;
+            break;
+        }
+    } 
+
+    string name;
+    SPrintf(name, "%s (%d)", getStringFromCrc(entity.e_crc), uid);
+    return name;
 }
 
 string getAttributeName(Attribute& attrib)
