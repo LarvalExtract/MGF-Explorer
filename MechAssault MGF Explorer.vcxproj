@@ -29,26 +29,26 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -142,7 +142,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)src;$(ProjectDir)vendor;$(QT_DIR)\6.0.3\msvc2019_64\include;$(QT_DIR)\6.0.3\msvc2019_64\include\QtCore;$(QT_DIR)\6.0.3\msvc2019_64\include\QtGui;$(QT_DIR)\6.0.3\msvc2019_64\include\QtWidgets;$(OGRE3D_DIR)\Binaries\include;$(OGRE3D_DIR)\Source\ogre-1.12.6\OgreMain\include;$(OGRE3D_DIR)\Source\ogre-1.12.6\RenderSystems\Direct3D9\include;D:\SDK\FBX\2020.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)src;$(ProjectDir)vendor;$(QT_DIR)\6.1.3\msvc2019_64\include;$(QT_DIR)\6.1.3\msvc2019_64\include\QtCore;$(QT_DIR)\6.1.3\msvc2019_64\include\QtGui;$(QT_DIR)\6.1.3\msvc2019_64\include\QtWidgets;$(OGRE3D_DIR)\Binaries\include;$(OGRE3D_DIR)\Source\ogre-1.12.6\OgreMain\include;$(OGRE3D_DIR)\Source\ogre-1.12.6\RenderSystems\Direct3D9\include;D:\SDK\FBX\2020.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <DisableSpecificWarnings>4996;</DisableSpecificWarnings>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -151,7 +151,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>Qt6Cored.lib;Qt6Guid.lib;Qt6Widgetsd.lib;OgreMain_d.lib;RenderSystem_Direct3D9_d.lib;RenderSystem_GL3Plus_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(QT_DIR)\6.0.3\msvc2019_64\lib;$(OGRE3D_DIR)\Binaries\lib\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(QT_DIR)\6.1.3\msvc2019_64\lib;$(OGRE3D_DIR)\Binaries\lib\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <EntryPointSymbol>
       </EntryPointSymbol>
     </Link>
@@ -170,7 +170,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)src;$(ProjectDir)vendor;$(QT_DIR)\6.0.3\msvc2019_64\include;$(QT_DIR)\6.0.3\msvc2019_64\include\QtCore;$(QT_DIR)\6.0.3\msvc2019_64\include\QtGui;$(QT_DIR)\6.0.3\msvc2019_64\include\QtWidgets;$(OGRE3D_DIR)\Binaries\include;$(OGRE3D_DIR)\Source\ogre-1.12.6\OgreMain\include;$(OGRE3D_DIR)\Source\ogre-1.12.6\RenderSystems\Direct3D9\include;D:\SDK\FBX\2020.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)src;$(ProjectDir)vendor;$(QT_DIR)\6.1.3\msvc2019_64\include;$(QT_DIR)\6.1.3\msvc2019_64\include\QtCore;$(QT_DIR)\6.1.3\msvc2019_64\include\QtGui;$(QT_DIR)\6.1.3\msvc2019_64\include\QtWidgets;$(OGRE3D_DIR)\Binaries\include;$(OGRE3D_DIR)\Source\ogre-1.12.6\OgreMain\include;$(OGRE3D_DIR)\Source\ogre-1.12.6\RenderSystems\Direct3D9\include;D:\SDK\FBX\2020.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <DisableSpecificWarnings>4996;</DisableSpecificWarnings>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -181,7 +181,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(QT_DIR)\6.0.3\msvc2019_64\lib;$(OGRE3D_DIR)\Binaries\lib\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(QT_DIR)\6.1.3\msvc2019_64\lib;$(OGRE3D_DIR)\Binaries\lib\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>Qt6Core.lib;Qt6Gui.lib;Qt6Widgets.lib;OgreMain.lib;RenderSystem_Direct3D9.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
     </Link>
@@ -247,7 +247,16 @@
     <ClCompile Include="src\OgreWindow\ogrewindow.cpp" />
     <ClCompile Include="vendor\pugixml-1.10\src\pugixml.cpp" />
     <ClCompile Include="vendor\s3tc\s3tc.cpp" />
-    <ClCompile Include="src\AssetViewers\EntityViewer\moc_EntityViewerWidget.cpp" /><ClCompile Include="src\AssetViewers\ModelViewer\moc_ModelViewerWidget.cpp" /><ClCompile Include="src\AssetViewers\PlainTextViewer\moc_PlainTextViewerWidget.cpp" /><ClCompile Include="src\AssetViewers\StringTableViewer\moc_StringTableViewerWidget.cpp" /><ClCompile Include="src\FileExtractorWindow\moc_FileExtractorDialog.cpp" /><ClCompile Include="src\AssetViewers\TextureViewer\moc_TextureViewerWidget.cpp" /><ClCompile Include="src\ArchiveViewer\moc_ArchiveViewerWidget.cpp" /><ClCompile Include="src\MainWindow\moc_MainWindow.cpp" /><ClCompile Include="src\OgreWindow\moc_ogrewindow.cpp" /></ItemGroup>
+    <ClCompile Include="src\AssetViewers\EntityViewer\moc_EntityViewerWidget.cpp" />
+    <ClCompile Include="src\AssetViewers\ModelViewer\moc_ModelViewerWidget.cpp" />
+    <ClCompile Include="src\AssetViewers\PlainTextViewer\moc_PlainTextViewerWidget.cpp" />
+    <ClCompile Include="src\AssetViewers\StringTableViewer\moc_StringTableViewerWidget.cpp" />
+    <ClCompile Include="src\FileExtractorWindow\moc_FileExtractorDialog.cpp" />
+    <ClCompile Include="src\AssetViewers\TextureViewer\moc_TextureViewerWidget.cpp" />
+    <ClCompile Include="src\ArchiveViewer\moc_ArchiveViewerWidget.cpp" />
+    <ClCompile Include="src\MainWindow\moc_MainWindow.cpp" />
+    <ClCompile Include="src\OgreWindow\moc_ogrewindow.cpp" />
+  </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ArchiveViewer\ContextMenus\FileMenu.h" />
     <ClInclude Include="src\ArchiveViewer\ContextMenus\FolderMenu.h" />
@@ -319,7 +328,15 @@
     <ClInclude Include="src\OgreWindow\ogrewindow.h" />
     <ClInclude Include="vendor\pugixml-1.10\src\pugixml.hpp" />
     <ClInclude Include="vendor\s3tc\s3tc.h" />
-    <ClInclude Include="src\ArchiveViewer\ui_ArchiveViewerWidget.h" /><ClInclude Include="src\AssetViewers\EntityViewer\ui_EntityViewerWidget.h" /><ClInclude Include="src\AssetViewers\ModelViewer\ui_ModelViewerWidget.h" /><ClInclude Include="src\AssetViewers\PlainTextViewer\ui_PlainTextViewerWidget.h" /><ClInclude Include="src\AssetViewers\TextureViewer\ui_TextureViewerWidget.h" /><ClInclude Include="src\AssetViewers\StringTableViewer\ui_StringTableViewerWidget.h" /><ClInclude Include="src\FileExtractorWindow\ui_FileExtractorDialog.h" /><ClInclude Include="src\MainWindow\ui_MainWindow.h" /></ItemGroup>
+    <ClInclude Include="src\ArchiveViewer\ui_ArchiveViewerWidget.h" />
+    <ClInclude Include="src\AssetViewers\EntityViewer\ui_EntityViewerWidget.h" />
+    <ClInclude Include="src\AssetViewers\ModelViewer\ui_ModelViewerWidget.h" />
+    <ClInclude Include="src\AssetViewers\PlainTextViewer\ui_PlainTextViewerWidget.h" />
+    <ClInclude Include="src\AssetViewers\TextureViewer\ui_TextureViewerWidget.h" />
+    <ClInclude Include="src\AssetViewers\StringTableViewer\ui_StringTableViewerWidget.h" />
+    <ClInclude Include="src\FileExtractorWindow\ui_FileExtractorDialog.h" />
+    <ClInclude Include="src\MainWindow\ui_MainWindow.h" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="src\ArchiveViewer\ArchiveViewerWidget.ui" />
     <None Include="src\AssetViewers\EntityViewer\EntityViewerWidget.ui">
