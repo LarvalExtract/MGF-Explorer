@@ -20,73 +20,68 @@ MGF::Archive::Archive(const std::filesystem::path& mgfFilePath)
 {
 	if (!is_open())
 	{
-		throw std::runtime_error("Couldn't open " + mgfFilePath.u8string());
+		throw std::runtime_error("Couldn't open " + mgfFilePath.string());
 	}
 
 	// read header from MGF file (first 64 bytes)
-	MGF_HEADER mgfHeader;
-	seekg(0, std::ios::beg);
-	read(reinterpret_cast<char*>(&mgfHeader), sizeof(mgfHeader));
+	MGF_HEADER header{};
+	seekg(0, std::ios::beg).read(reinterpret_cast<char*>(&header), sizeof(header));
 
 	// check for valid MGF file
-	if (!(mgfHeader.signature[0] == 'm' &&
-		mgfHeader.signature[1] == 'g' &&
-		mgfHeader.signature[2] == 'f' &&
-		mgfHeader.signature[3] == ' '))
+	if (!(header.signature[0] == 'm' &&
+		header.signature[1] == 'g' &&
+		header.signature[2] == 'f' &&
+		header.signature[3] == ' '))
 	{
-		throw std::runtime_error(mgfFilePath.u8string() + " is either compressed or not a valid MechAssault 1 or MechAssault 2: Lone Wolf MGF file");
+		throw std::runtime_error(mgfFilePath.string() + " is either compressed or not a valid MechAssault 1 or MechAssault 2: Lone Wolf MGF file");
 	}
 
-	ArchiveVersion = static_cast<Version>(mgfHeader.version);
-	FileCount = mgfHeader.fileRecordCount;
+	ArchiveVersion = static_cast<Version>(header.version);
+	FileCount = header.fileRecordCount;
 
 	std::vector<MGF_FILE_RECORD_MA1> fileRecordsMa1;
 	std::vector<MGF_FILE_RECORD_MA2> fileRecordsMa2;
 
 	if (ArchiveVersion == Version::MechAssault2LW)
 	{
-		fileRecordsMa2.resize(mgfHeader.fileRecordCount);
-		seekg(mgfHeader.fileRecordOffset);
-		read(reinterpret_cast<char*>(fileRecordsMa2.data()), mgfHeader.fileRecordLength);
+		fileRecordsMa2.resize(header.fileRecordCount);
+		seekg(header.fileRecordOffset).read(reinterpret_cast<char*>(fileRecordsMa2.data()), header.fileRecordLength);
 	}
 	else
 	{
-		fileRecordsMa1.resize(mgfHeader.fileRecordCount);
-		seekg(mgfHeader.fileRecordOffset);
-		read(reinterpret_cast<char*>(fileRecordsMa1.data()), mgfHeader.fileRecordLength);
+		fileRecordsMa1.resize(header.fileRecordCount);
+		seekg(header.fileRecordOffset).read(reinterpret_cast<char*>(fileRecordsMa1.data()), header.fileRecordLength);
 	}
 
-	std::vector<MGF_DIRECTORY> directoryRows(mgfHeader.indexTableCount);
-	seekg(mgfHeader.indexTableOffset);
-	read(reinterpret_cast<char*>(directoryRows.data()), mgfHeader.indexTableLength);
+	std::vector<MGF_DIRECTORY> directoryRows(header.indexTableCount);
+	seekg(header.indexTableOffset).read(reinterpret_cast<char*>(directoryRows.data()), header.indexTableLength);
 
-	std::vector<char> stringBuffer(mgfHeader.stringsLength);
-	seekg(mgfHeader.stringsOffset);
-	read(stringBuffer.data(), mgfHeader.stringsLength);
+	std::vector<char> stringBuffer(header.stringsLength);
+	seekg(header.stringsOffset).read(stringBuffer.data(), header.stringsLength);
 
-	seekg(0, std::ios::end);
-	FileSize = tellg();
+	Size = seekg(0, std::ios::end).tellg();
 
-	Files.reserve(mgfHeader.indexTableCount);
+	Files.reserve(header.indexTableCount);
 	if (ArchiveVersion == Version::MechAssault)
 	{
 		for (size_t i = 0; i < directoryRows.size(); i++)
 		{
-			const auto& row = directoryRows[i];
-			const bool bIsFile = row.fileIndex != -1;
+			const auto& [dirhash, parentIndex, childIndex, siblingIndex, stringOffset, fileIndex] = directoryRows[i];
+			const bool bIsFile = fileIndex != -1;
+			const auto& [unk1, index, timestamp, checksum, filehash, fileLength, fileOffset] = bIsFile ? fileRecordsMa1[fileIndex] : MGF_FILE_RECORD_MA1{};
 
 			Files.emplace_back(
 				i,
-				row.parentIndex,
-				row.siblingIndex,
-				row.childIndex,
+				parentIndex,
+				siblingIndex,
+				childIndex,
 				*this,
-				&stringBuffer[row.stringOffset],
-				bIsFile ? fileRecordsMa1[row.fileIndex].hash : row.hash,
-				bIsFile ? fileRecordsMa1[row.fileIndex].checksum : 0,
-				bIsFile ? fileRecordsMa1[row.fileIndex].fileOffset : 0,
-				bIsFile ? fileRecordsMa1[row.fileIndex].fileLength : 0,
-				bIsFile ? fileRecordsMa1[row.fileIndex].timestamp : 0,
+				&stringBuffer[stringOffset],
+				bIsFile ? filehash : dirhash,
+				bIsFile ? checksum : 0,
+				bIsFile ? fileOffset : 0,
+				bIsFile ? fileLength : 0,
+				bIsFile ? timestamp : 0,
 				bIsFile
 			);
 		}
@@ -95,21 +90,22 @@ MGF::Archive::Archive(const std::filesystem::path& mgfFilePath)
 	{
 		for (size_t i = 0; i < directoryRows.size(); i++)
 		{
-			const auto& row = directoryRows[i];
-			const bool bIsFile = row.fileIndex != -1;
+			const auto& [dirhash, parentIndex, childIndex, siblingIndex, stringOffset, fileIndex] = directoryRows[i];
+			const bool bIsFile = fileIndex != -1;
+			const auto [index, checksum, filehash, fileLength, fileLength2, timestamp, fileOffset, unknown] = bIsFile ? fileRecordsMa2[fileIndex] : MGF_FILE_RECORD_MA2{};
 
 			Files.emplace_back(
 				i,
-				row.parentIndex,
-				row.siblingIndex,
-				row.childIndex,
+				parentIndex,
+				siblingIndex,
+				childIndex,
 				*this,
-				&stringBuffer[row.stringOffset],
-				bIsFile ? fileRecordsMa2[row.fileIndex].hash : row.hash,
-				bIsFile ? fileRecordsMa2[row.fileIndex].checksum : 0,
-				bIsFile ? fileRecordsMa2[row.fileIndex].fileOffset : 0,
-				bIsFile ? fileRecordsMa2[row.fileIndex].fileLength : 0,
-				bIsFile ? fileRecordsMa2[row.fileIndex].timestamp : 0,
+				&stringBuffer[stringOffset],
+				bIsFile ? filehash : dirhash,
+				checksum,
+				fileOffset,
+				fileLength,
+				timestamp,
 				bIsFile
 			);
 		}
@@ -124,11 +120,10 @@ QModelIndex MGF::Archive::index(int row, int column, const QModelIndex& parent) 
 {
 	if (!hasIndex(row, column, parent))
 	{
-		return QModelIndex();
+		return {};
 	}
-
-	const auto parentItem = parent.isValid() ? static_cast<MGF::File*>(parent.internalPointer()) : &Files[0];
-	const auto child = parentItem->ChildAt(row);
+	
+	const auto child = (parent.isValid() ? static_cast<MGF::File*>(parent.internalPointer()) : Root())->ChildAt(row);
 
 	return child ? createIndex(row, column, child) : QModelIndex();
 }
@@ -137,42 +132,36 @@ QModelIndex MGF::Archive::parent(const QModelIndex& child) const
 {
 	if (!child.isValid())
 	{
-		return QModelIndex();
+		return {};
 	}
 
-	const auto file = static_cast<MGF::File*>(child.internalPointer());
-	const auto parent = file->Parent();
+	const auto item = static_cast<MGF::File*>(child.internalPointer());
 	
-	return parent ? createIndex(file->_ParentIndex, 0, parent) : QModelIndex();
+	return item->Parent() ? createIndex(item->_ParentIndex, 0, item->Parent()) : QModelIndex();
 }
 
 QModelIndex MGF::Archive::sibling(int row, int column, const QModelIndex& idx) const
 {
 	if (!hasIndex(row, column, idx) || !idx.isValid())
 	{
-		return QModelIndex();
+		return {};
 	}
-
-	const auto item = static_cast<MGF::File*>(idx.internalPointer());
-	const auto sibling = item->SiblingAt(row);
+	
+	const auto sibling = static_cast<MGF::File*>(idx.internalPointer())->SiblingAt(row);
 
 	return sibling ? createIndex(row, column, sibling) : QModelIndex();
 }
 
 int MGF::Archive::rowCount(const QModelIndex& parent) const
 {
-	if (parent.column() > 0)
-	{
-		return 0;
-	}
-
-	const auto parentItem = parent.isValid() ? static_cast<MGF::File*>(parent.internalPointer()) : &Files[0];
-	return parentItem->GetChildCount();
+	return parent.column() == 0
+		? (parent.isValid() ? static_cast<MGF::File*>(parent.internalPointer()) : Root())->GetChildCount()
+		: 0;
 }
 
 int MGF::Archive::columnCount(const QModelIndex& parent) const
 {
-	return sizeof(HEADERS) / sizeof(HEADERS[0]);
+	return std::size(HEADERS);
 }
 
 QVariant MGF::Archive::data(const QModelIndex& index, int role) const
@@ -181,22 +170,9 @@ QVariant MGF::Archive::data(const QModelIndex& index, int role) const
 	static const QIcon FileIcon = IconProvider.icon(QFileIconProvider::File);
 	static const QIcon FolderIcon = IconProvider.icon(QFileIconProvider::Folder);
 
-	auto AssetTypeString = [](MGF::EFileType type)
-	{
-		switch (MGF::Asset::AssetBase::ToAssetType(type))
-		{
-		case MGF::Asset::EAssetType::PlainText:     return "Text";
-		case MGF::Asset::EAssetType::StringTable:   return "String Table";
-		case MGF::Asset::EAssetType::Texture:       return "Texture";
-		case MGF::Asset::EAssetType::Model:         return "Model";
-		case MGF::Asset::EAssetType::Entity:        return "Entities";
-		}
-		return "";
-	};
-
 	if (!index.isValid())
 	{
-		return QVariant();
+		return {};
 	}
 
 	const auto item = static_cast<const MGF::File*>(index.internalPointer());
@@ -216,18 +192,25 @@ QVariant MGF::Archive::data(const QModelIndex& index, int role) const
 		switch (index.column())
 		{
 		case 0:  return item->Name;
-		case 1:  return AssetTypeString(item->FileType);
+		case 1:
+			switch (Asset::AssetBase::ToAssetType(item->FileType))
+			{
+			case Asset::EAssetType::PlainText:     return "Text";
+			case Asset::EAssetType::StringTable:   return "String Table";
+			case Asset::EAssetType::Texture:       return "Texture";
+			case Asset::EAssetType::Model:         return "Model";
+			case Asset::EAssetType::Entity:        return "Entities";
+			}
+			return "";
 		case 2:  return item->FileDate.toString("dd/MM/yyyy hh:mm");
 		case 3:  return QLocale::system().formattedDataSize(item->FileLength, 1);
 		}
 	}
 
-	return QVariant();
+	return {};
 }
 
 QVariant MGF::Archive::headerData(int section, Qt::Orientation orientation, int role) const
 {
-	return role == Qt::DisplayRole
-		? HEADERS[section]
-		: QVariant();
+	return role == Qt::DisplayRole ? HEADERS[section]	: QVariant();
 }

@@ -21,32 +21,32 @@ struct MGF_HEADER {
 };
 
 struct MGF_FILE_RECORD_MA1 {
-	uint32_t unk1;
-	uint32_t index;
-	uint32_t timestamp;
-	uint32_t checksum;
-	uint32_t hash;
-	uint32_t fileLength;
-	uint32_t fileOffset;
+	uint32_t unk1 = 0;
+	uint32_t index = 0;
+	uint32_t timestamp = 0;
+	uint32_t checksum = 0;
+	uint32_t hash = 0;
+	uint32_t fileLength = 0;
+	uint32_t fileOffset = 0;
 };
 
 struct MGF_FILE_RECORD_MA2 {
-	uint32_t index;
-	uint32_t checksum;
-	uint32_t hash;
-	uint32_t fileLength;
-	uint32_t fileLength2;
-	uint32_t timestamp;
-	uint32_t fileOffset;
-	uint32_t unknown;
+	uint32_t index = 0;
+	uint32_t checksum = 0;
+	uint32_t hash = 0;
+	uint32_t fileLength = 0;
+	uint32_t fileLength2 = 0;
+	uint32_t timestamp = 0;
+	uint32_t fileOffset = 0;
+	uint32_t unknown = 0;
 };
 
 struct MGF_DIRECTORY {
-	int32_t hash;
-	int32_t parentIndex;
-	int32_t childIndex;
-	int32_t siblingIndex;
-	int32_t stringOffset;
-	int32_t fileIndex;
+	int32_t hash = 0;
+	int32_t parentIndex = 0;
+	int32_t childIndex = 0;
+	int32_t siblingIndex = 0;
+	int32_t stringOffset = 0;
+	int32_t fileIndex = 0;
 };
 #pragma pack(pop)

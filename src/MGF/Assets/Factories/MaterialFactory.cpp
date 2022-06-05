@@ -203,7 +203,7 @@ void MaterialFactory::CreateAnimatedMaterial(Ogre::Material& mat, const MGF::Ass
             frameIndex += '0';
         frameIndex += QString::number(i);
 
-        fileName.replace_filename(fileName.filename().u8string() + frameIndex.toStdString());
+        fileName.replace_filename(fileName.filename().string() + frameIndex.toStdString());
 
         auto textureFile = mgmodelFile.FindRelativeItem(fileName);
 

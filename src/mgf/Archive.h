@@ -30,13 +30,13 @@ namespace MGF {
     	
         const std::filesystem::path Path;
         Version GetVersion() const { return ArchiveVersion; }
-        size_t GetFileSize() const { return FileSize; }
+        size_t GetFileSize() const { return Size; }
         uint32_t GetFileCount() const { return FileCount; }
         auto Root() const { return &Files[0]; }
 
     private:  	
         Version ArchiveVersion = Version::MechAssault;
-        size_t FileSize = 0;
+        size_t Size = 0;
 		uint32_t FileCount = 0;
         std::vector<File> Files;
     };

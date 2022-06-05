@@ -1,6 +1,8 @@
 #include "File.h"
 #include "Archive.h"
 
+#include <ranges>
+
 using namespace MGF;
 
 const std::unordered_map<std::string, EFileType> File::MapExtensionFileType = {
@@ -43,11 +45,9 @@ File::File(
 , Name(name)
 , FilepathHash(hash)
 , FileChecksum(checksum)
-, FileType([&fp = this->FilePath]() -> EFileType
-{
-	auto extension = fp.extension().u8string();
-    std::transform(extension.begin(), extension.end(), extension.begin(), tolower);
-    return MapExtensionFileType.find(extension) != MapExtensionFileType.end() ? MapExtensionFileType.at(extension) : EFileType::Unassigned;
+, FileType([ext = FilePath.extension().string()](){
+    std::ranges::for_each(ext, [](const auto c) { return std::tolower(c); });
+    return MapExtensionFileType.contains(ext) ? MapExtensionFileType.at(ext) : EFileType::Unassigned;
 }())
 , FileOffset(offset)
 , FileLength(length)

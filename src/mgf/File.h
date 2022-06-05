@@ -57,6 +57,9 @@ namespace MGF {
         const File* SiblingAt(size_t at = 0) const;
         int GetChildCount() const { return _ChildCount; }
 
+        File* m_Parent = nullptr;
+        QVector<File*> m_Children;
+
         // takes a relative file path and traverses the MGF file system to find the desired item
         const File* FindRelativeItem(const std::filesystem::path& relativePath) const;
 

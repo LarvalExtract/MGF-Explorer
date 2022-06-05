@@ -100,7 +100,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -121,7 +121,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -143,7 +143,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)src;$(ProjectDir)vendor;$(QT_DIR)\6.1.3\msvc2019_64\include;$(QT_DIR)\6.1.3\msvc2019_64\include\QtCore;$(QT_DIR)\6.1.3\msvc2019_64\include\QtGui;$(QT_DIR)\6.1.3\msvc2019_64\include\QtWidgets;$(OGRE3D_DIR)\Binaries\include;$(OGRE3D_DIR)\Source\ogre-1.12.6\OgreMain\include;$(OGRE3D_DIR)\Source\ogre-1.12.6\RenderSystems\Direct3D9\include;D:\SDK\FBX\2020.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
       <DisableSpecificWarnings>4996;</DisableSpecificWarnings>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
@@ -171,7 +171,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)src;$(ProjectDir)vendor;$(QT_DIR)\6.1.3\msvc2019_64\include;$(QT_DIR)\6.1.3\msvc2019_64\include\QtCore;$(QT_DIR)\6.1.3\msvc2019_64\include\QtGui;$(QT_DIR)\6.1.3\msvc2019_64\include\QtWidgets;$(OGRE3D_DIR)\Binaries\include;$(OGRE3D_DIR)\Source\ogre-1.12.6\OgreMain\include;$(OGRE3D_DIR)\Source\ogre-1.12.6\RenderSystems\Direct3D9\include;D:\SDK\FBX\2020.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
       <DisableSpecificWarnings>4996;</DisableSpecificWarnings>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
