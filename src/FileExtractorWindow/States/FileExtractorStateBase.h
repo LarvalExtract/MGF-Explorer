@@ -25,6 +25,7 @@ namespace FileExtractor
 		protected:
 			FileExtractorDialog* Dialog;
 			const std::unique_ptr<Models::FileExtractListModel>& Model;
+			unsigned int ExtractedFileCount = 0;
 		};
 
 	}

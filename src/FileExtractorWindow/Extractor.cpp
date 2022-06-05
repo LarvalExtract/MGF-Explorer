@@ -1,5 +1,5 @@
 #include "Extractor.h"
-#include "mgf/Archive.h"
+#include "MGF/Archive.h"
 
 #include <fstream>
 
@@ -11,11 +11,8 @@ void Extractor::ExtractFiles(
 	bool bOverwriteExistingFiles,
 	unsigned int& numFilesExtracted)
 {
-    auto createFile = [&destination,&numFilesExtracted](Models::FileExtractItem& item, std::vector<char>& buf)
+    auto createFile = [&destination,&numFilesExtracted](const std::filesystem::path& path, Models::FileExtractItem& item, std::vector<char>& buf)
     {
-		auto path = destination;
-		path += item.mgfItem->FilePath;
-
 		std::filesystem::create_directories(path.parent_path());
 		std::ofstream file(path, std::ios::binary);
 
@@ -26,17 +23,15 @@ void Extractor::ExtractFiles(
 
 		std::int32_t offset = 0;
 		std::int32_t remainingBytes = item.mgfItem->FileLength;
-		std::size_t bufSize = buf.capacity();
-		std::int32_t bytesToCopy;
 
 		while (remainingBytes > 0)
 		{
-			bytesToCopy = std::min<int>(bufSize, remainingBytes);
+			const std::int32_t bytesToCopy = std::min<int>(buf.capacity(), remainingBytes);
 			item.mgfItem->Read(buf.data(), offset, bytesToCopy);
 			file.write(buf.data(), bytesToCopy);
 
-			remainingBytes -= bufSize;
-			offset += bufSize;
+			remainingBytes -= buf.capacity();
+			offset += buf.capacity();
 		}
     	
 		numFilesExtracted++;
@@ -44,22 +39,25 @@ void Extractor::ExtractFiles(
     };
 
     std::vector<char> buffer(FILE_BUFFER_SIZE);
-
-	unsigned int extractedFileCount = 0;
+	
 	if (bOverwriteExistingFiles)
 	{
 		for (auto& item : items)
         {
-            createFile(item, buffer);
+			auto path = destination;
+			path += item.mgfItem->FilePath;
+            createFile(path, item, buffer);
 		}
 	}
 	else
 	{
 		for (auto& item : items)
 		{
-			item.status = std::filesystem::exists(item.mgfItem->FilePath)
+			auto path = destination;
+			path += item.mgfItem->FilePath;
+			item.status = std::filesystem::exists(path)
 				? Models::FileExtractStatus::Skipped
-				: createFile(item, buffer);
+				: createFile(path, item, buffer);
 		}
 	}
 }

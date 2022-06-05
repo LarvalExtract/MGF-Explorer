@@ -19,20 +19,20 @@ void ProgressState::OnEnter()
 
 	Dialog->ui->progressBar->setEnabled(true);
 	Dialog->ui->progressBar->setRange(0, Model->rowCount());
-
-	unsigned int progress = 0;
-	auto result = std::async(
+	
+	const auto result = std::async(
 		std::launch::async,
 		Extractor::ExtractFiles,
 		std::ref(*Model),
 		std::ref(Dialog->GetDestination()),
 		Dialog->ui->checkBoxOverwrite->isChecked(),
-		std::ref(progress)
+		std::ref(ExtractedFileCount)
 	);
 
-	while (result.wait_for(std::chrono::milliseconds(100)) != std::future_status::ready)
+	while (result.wait_for(std::chrono::milliseconds(20)) != std::future_status::ready)
 	{
-		Dialog->ui->progressBar->setValue(progress);
+		Dialog->ui->progressBar->setValue(ExtractedFileCount);
+		Dialog->ui->tableFileQueue->update();
 	}
 
 	Dialog->ui->progressBar->setValue(Model->rowCount());
