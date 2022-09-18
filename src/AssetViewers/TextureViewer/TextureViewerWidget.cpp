@@ -3,7 +3,7 @@
 
 #include "MGF/Assets/TextureAsset.h"
 
-static int s_Count = 0;
+#include "MGFExplorerApplication.h"
 
 using namespace TextureViewer;
 
@@ -11,26 +11,7 @@ TextureViewerWidget::TextureViewerWidget(QWidget *parent) :
     ui(new Ui::TextureViewerWidget)
 {
     ui->setupUi(this);
-
-    s_Count++;
-
-    try
-    {
-        QString title("TextureViewerWindow");
-        title += QString::number(s_Count);
-        m_OgreWindow.initialize(title);
-
-        m_Container = QWidget::createWindowContainer(&m_OgreWindow, this);
-        ui->scrollArea->setWidget(m_Container);
-        ui->scrollArea->setBackgroundRole(QPalette::Dark);
-
-        InitialiseScene();
-    }
-    catch (const Ogre::Exception& e)
-    {
-        throw std::runtime_error(e.what());
-    }
-
+    
     connect(
         ui->ToggleAlphaCheckBox,
         &QCheckBox::clicked,
@@ -50,10 +31,10 @@ void TextureViewerWidget::LoadAsset(MGF::Asset::AssetPtr asset)
 
     ui->TextureDetailsTable->setModel(&textureAsset->TextureDetails);
 
-	m_Container->resize(textureAsset->OgreTexture->getWidth(), textureAsset->OgreTexture->getHeight());
+	qApp->GetRenderWindowContainer()->resize(textureAsset->OgreTexture->getWidth(), textureAsset->OgreTexture->getHeight());
 	m_TextureUnit->setTexture(textureAsset->OgreTexture);
-	m_OgreWindow.render();
-	m_Container->update();
+	qApp->GetRenderWindow()->render();
+	qApp->GetRenderWindowContainer()->update();
 }
 
 void TextureViewerWidget::InitialiseScene()
@@ -66,7 +47,7 @@ void TextureViewerWidget::InitialiseScene()
     m_OrthoCamera->setFarClipDistance(2.0f);
     m_OrthoCamera->setOrthoWindow(200.0f, 200.0f);
 
-    m_TextureViewerViewport = m_OgreWindow.GetWindow().addViewport(m_OrthoCamera);
+    m_TextureViewerViewport = qApp->GetRenderWindow()->GetWindow().addViewport(m_OrthoCamera);
     constexpr float grey = 160.0f / 255.0f;
 	const auto bgColour = Ogre::ColourValue(grey, grey, grey, 1.0f);
     m_TextureViewerViewport->setBackgroundColour(bgColour);
@@ -74,8 +55,9 @@ void TextureViewerWidget::InitialiseScene()
     m_OrthoCameraNode = m_SceneManager->getRootSceneNode()->createChildSceneNode();
     m_OrthoCameraNode->attachObject(m_OrthoCamera);
     m_OrthoCameraNode->setPosition(0.0f, 0.0f, 1.0f);
-
-    m_MatUnlitTextured = Ogre::MaterialManager::getSingleton().create(m_OgreWindow.GetWindow().getName(), "General");
+    
+    auto result = Ogre::MaterialManager::getSingleton().createOrRetrieve("MatUnlit", "General");
+    m_MatUnlitTextured = result.first;
     auto technique = m_MatUnlitTextured->getTechnique(0);
     auto pass = technique->getPass(0);
     pass->setLightingEnabled(false);
@@ -97,5 +79,17 @@ void TextureViewerWidget::on_ToggleAlphaCheckBox_toggled(bool checked)
         : Ogre::SBT_REPLACE
     );
 
-    m_OgreWindow.render();
+    qApp->GetRenderWindow()->render();
+}
+
+void TextureViewerWidget::showEvent(QShowEvent* event)
+{
+    qApp->GetRenderWindowContainer()->show();
+    ui->scrollArea->setWidget(qApp->GetRenderWindowContainer());
+}
+
+void TextureViewerWidget::hideEvent(QHideEvent* event)
+{
+    qApp->GetRenderWindowContainer()->hide();
+    ui->scrollArea->setWidget(nullptr);
 }

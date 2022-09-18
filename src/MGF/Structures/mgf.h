@@ -4,7 +4,7 @@
 
 #pragma pack(push, 1)
 struct MGF_HEADER {
-	char     signature[4];
+	uint32_t signature;
 	char     version;
 	char     unk1;
 	char     ZZ[2];

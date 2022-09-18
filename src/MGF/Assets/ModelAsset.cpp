@@ -4,6 +4,7 @@
 
 #include "Utilities/ContextProvider/ServiceProvider.h"
 #include "MGF/AssetManager.h"
+#include "MGF/Deserializer.h"
 
 #include <OgreSceneManager.h>
 #include <OgreEntity.h>
@@ -36,8 +37,8 @@ ModelAsset::ModelAsset(const MGF::File& file) :
 
 void ModelAsset::ParseMgmodelXml()
 {
-	std::vector<char> buffer(FileRef.FileLength);
-	FileRef.Read(buffer.data());
+	const MGF::Deserializer mgmodelDeserializer(FileRef);
+	const auto buffer = mgmodelDeserializer.ReadAllBytes();
 
 	pugi::xml_document document;
 	document.load_string(buffer.data());
@@ -49,28 +50,28 @@ void ModelAsset::ParseMgmodelXml()
 
 	std::string_view name(node.name());
 	// Load materials from XML
-	for (; name.find("mat") != std::string::npos; node = node.next_sibling(), name = node.name())
+	for (; name.contains("mat"); node = node.next_sibling(), name = node.name())
 	{
 		std::string matName(node.attribute("name").as_string());
 
 		if (materials.find(matName) == materials.end())
 		{
-			auto& matDef = Materials->emplace_back(MGF::Factories::MaterialFactory::CreateMaterialDefinition(node));
-			auto material = MGF::Factories::MaterialFactory::Create(matDef, FileRef);
+			auto& matDef = Materials->emplace_back(MaterialFactory::CreateMaterialDefinition(node));
+			auto material = MaterialFactory::Create(matDef, FileRef);
 			materials.insert(std::make_pair(matName, material));
 		}
 	}
 
 	// Load meshes from XML
-	for (; name.find("mesh") != std::string::npos; node = node.next_sibling(), name = node.name())
+	for (; name.contains("mesh"); node = node.next_sibling(), name = node.name())
 	{
 		std::string meshName(node.attribute("name").as_string());
 
 		if (meshes.find(meshName) == meshes.end())
 		{
-			auto& meshDef = Meshes->emplace_back(MeshFactory::CreateMeshDefinition(node));
-
-			auto mesh = MeshFactory::Create(meshDef, FileRef);
+			Model::Mesh m;
+			auto mesh = MeshFactory::Create(node, FileRef, m);
+			Meshes->push_back(m);
 
 			auto material = materials.at(node.attribute("material").as_string());
 			mesh->getSubMesh(0)->setMaterial(material);
@@ -79,8 +80,8 @@ void ModelAsset::ParseMgmodelXml()
 			auto pass = technique->getPass(0);
 			if (pass->getTextureUnitStates().size() > 0)
 			{
-				pass->getTextureUnitState(0)->setTextureScale(meshDef.texCoordScale, meshDef.texCoordScale);
-				pass->getTextureUnitState(0)->setTextureScroll(meshDef.texCoordOffset, meshDef.texCoordOffset);
+				pass->getTextureUnitState(0)->setTextureScale(m.texCoordScale, m.texCoordScale);
+				pass->getTextureUnitState(0)->setTextureScroll(m.texCoordOffset, m.texCoordOffset);
 			}
 
 			meshes.insert(std::make_pair(meshName, mesh));
@@ -88,8 +89,7 @@ void ModelAsset::ParseMgmodelXml()
 	}
 
 	Nodes->RootNode = new Model::Node;
-	Nodes->RootNode->sceneNode = SceneManager.createSceneNode();
-	for (; name.find("node") != std::string::npos; node = node.next_sibling(), name = node.name())
+	for (; name.contains("node"); node = node.next_sibling(), name = node.name())
 	{
 		Nodes->RootNode->children.push_back(CreateSceneNode(Nodes->RootNode, node, meshes));
 	}
@@ -97,10 +97,10 @@ void ModelAsset::ParseMgmodelXml()
 
 void ModelAsset::ParseNodeTxt()
 {
-	std::string buf;
-	buf.resize(FileRef.FileLength);
-	FileRef.Read(buf.data());
-	std::string_view buf_view(buf);
+	const MGF::Deserializer deserializer(FileRef);
+	const auto bytes = deserializer.ReadAllBytes();
+
+	std::string_view buf_view(bytes.data());
 
 	std::size_t chunkStart = buf_view.find('[', 0);
 	std::size_t chunkEnd = buf_view.find('[', chunkStart + 1);
@@ -168,10 +168,11 @@ Model::Node* ModelAsset::CreateSceneNode(Model::Node* parent, const std::functio
 		if (nodeType == "3DOBJECT" || nodeType == "SKIN")
 		{
 			const auto meshFile = FileRef.FindRelativeItem(vars["mesh"].data());
-			const auto& meshDef = Meshes->emplace_back(MGF::Factories::MeshFactory::CreateMeshDefinition(*meshFile));
-			const auto mesh = MGF::Factories::MeshFactory::Create(meshDef, *meshFile);
 
-			const auto materialFile = meshFile->FindRelativeItem(meshDef.materialPath.data());
+			Model::Mesh m;
+			const auto mesh = MeshFactory::Create(*meshFile, m);
+
+			const auto materialFile = meshFile->FindRelativeItem(m.materialPath.data());
 			const auto& materialDef = Materials->emplace_back(MGF::Factories::MaterialFactory::CreateMaterialDefinition(*materialFile));
 			const auto material = MGF::Factories::MaterialFactory::Create(materialDef, *materialFile);
 
@@ -181,8 +182,8 @@ Model::Node* ModelAsset::CreateSceneNode(Model::Node* parent, const std::functio
 			const auto pass = technique->getPass(0);
 			if (pass->getTextureUnitStates().size() > 0)
 			{
-				pass->getTextureUnitState(0)->setTextureScale(meshDef.texCoordScale, meshDef.texCoordScale);
-				pass->getTextureUnitState(0)->setTextureScroll(meshDef.texCoordOffset, meshDef.texCoordOffset);
+				pass->getTextureUnitState(0)->setTextureScale(m.texCoordScale, m.texCoordScale);
+				pass->getTextureUnitState(0)->setTextureScroll(m.texCoordOffset, m.texCoordOffset);
 			}
 
 			const auto entity = node->sceneNode->getCreator()->createEntity(mesh);
@@ -206,12 +207,15 @@ Model::Node* ModelAsset::CreateSceneNode(Model::Node* parent, const std::functio
 Model::Node* ModelAsset::CreateSceneNode(Model::Node* parent, const pugi::xml_node& xmlnode, const std::unordered_map<std::string, Ogre::MeshPtr>& meshes)
 {
 	// only process nodes that include "node" in the name
-	if (std::string_view type = xmlnode.name(); type.find("node_") == std::string::npos)
+	const std::string_view nodeType = xmlnode.name();
+	if (!nodeType.contains("node_"))
 	{
 		return nullptr;
 	}
 
-	auto node = new Model::Node;
+	Model::Node* node = new Model::Node;
+
+	std::string name = std::format("{0}.{1}", xmlnode.attribute("name").as_string(), xmlnode.name());
 	node->name = xmlnode.attribute("name").as_string();
 	node->type = xmlnode.name();
 	node->parent = parent;
@@ -221,17 +225,23 @@ Model::Node* ModelAsset::CreateSceneNode(Model::Node* parent, const pugi::xml_no
 	node->sceneNode->setScale(StrToVector(xmlnode.attribute("scale").as_string()));
 
 	// is this a node_3dobject?
-	for (const auto& mesh : xmlnode.children())
+	if (nodeType.contains("3dobject"))
 	{
-		// ignoring shadow meshes for now
-		if (std::strcmp(mesh.name(), "mesh") == 0)
+		for (const auto& mesh : xmlnode.children("mesh"))
 		{
-			std::string meshName(mesh.attribute("name").as_string());
-			auto meshPtr = meshes.at(meshName);
+			auto meshPtr = meshes.at(mesh.attribute("name").as_string());
 
 			Ogre::Entity* ent = node->sceneNode->getCreator()->createEntity(meshPtr);
 			node->sceneNode->attachObject(ent);
 		}
+	}
+	else if (nodeType.contains("skinned"))
+	{
+		
+	}
+	else if (nodeType.contains("light"))
+	{
+		
 	}
 
 	for (const auto& child : xmlnode.child("children").children())
@@ -249,8 +259,8 @@ Model::Node* ModelAsset::CreateSceneNode(Model::Node* parent, const pugi::xml_no
 
 Ogre::Vector3 StrToVector(const std::string_view str)
 {
-	auto c1 = str.find(',', 0);
-	auto c2 = str.find(',', c1 + 1);
+	const auto c1 = str.find(',', 0);
+	const auto c2 = str.find(',', c1 + 1);
 
 	return {
 		std::stof(str.substr(0, c1).data()),

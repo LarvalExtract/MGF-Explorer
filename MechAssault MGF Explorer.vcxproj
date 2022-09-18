@@ -124,7 +124,7 @@
       <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -200,10 +200,7 @@
     <ClCompile Include="src\ArchiveViewer\ContextMenus\TextureFileMenu.cpp" />
     <ClCompile Include="src\AssetExtractors\ModelExtractor\ModelExtractor.cpp" />
     <ClCompile Include="src\AssetExtractors\TextureExtractor\TextureExtractor.cpp" />
-    <ClCompile Include="src\AssetViewers\EntityViewer\EntityViewerWidget.cpp">
-      <SubType>
-      </SubType>
-    </ClCompile>
+    <ClCompile Include="src\AssetViewers\EntityViewer\EntityViewerWidget.cpp" />
     <ClCompile Include="src\AssetViewers\EntityViewer\Models\AttributeTableModel.cpp" />
     <ClCompile Include="src\AssetViewers\EntityViewer\Models\EntityTreeModel.cpp" />
     <ClCompile Include="src\AssetViewers\ModelViewer\Models\AnimationTableModel.cpp" />
@@ -216,6 +213,7 @@
     <ClCompile Include="src\AssetViewers\StringTableViewer\StringTableViewerWidget.cpp" />
     <ClCompile Include="src\AssetViewers\TextureViewer\Models\TextureDetailsTableModel.cpp" />
     <ClCompile Include="src\MainWindow\qrc_icon.cpp" />
+    <ClCompile Include="src\MGFExplorerApplication.cpp" />
     <ClCompile Include="src\MGF\Assets\AssetBase.cpp" />
     <ClCompile Include="src\MGF\Assets\EntityAsset.cpp" />
     <ClCompile Include="src\MGF\Factories\ImageFactory.cpp" />
@@ -269,10 +267,7 @@
     <ClInclude Include="src\AssetViewers\EntityViewer\Models\AttributeTableModel.h" />
     <ClInclude Include="src\AssetViewers\EntityViewer\Models\EntityTreeModel.h" />
     <ClInclude Include="src\AssetViewers\IAssetViewerWidget.h" />
-    <ClInclude Include="src\AssetViewers\EntityViewer\EntityViewerWidget.h">
-      <SubType>
-      </SubType>
-    </ClInclude>
+    <ClInclude Include="src\AssetViewers\EntityViewer\EntityViewerWidget.h" />
     <ClInclude Include="src\AssetViewers\ModelViewer\Models\AnimationTableModel.h" />
     <ClInclude Include="src\AssetViewers\ModelViewer\Models\MaterialTableModel.h" />
     <ClInclude Include="src\AssetViewers\ModelViewer\Models\MeshTableModel.h" />
@@ -282,6 +277,7 @@
     <ClInclude Include="src\AssetViewers\StringTableViewer\Models\StringTableModel.h" />
     <ClInclude Include="src\AssetViewers\StringTableViewer\StringTableViewerWidget.h" />
     <ClInclude Include="src\AssetViewers\TextureViewer\Models\TextureDetailsTableModel.h" />
+    <ClInclude Include="src\MGFExplorerApplication.h" />
     <ClInclude Include="src\MGF\Assets\EntityAsset.h" />
     <ClInclude Include="src\MGF\Assets\Factories\AttributeNames.h" />
     <ClInclude Include="src\MGF\Assets\Factories\EntityNames.h" />
@@ -289,7 +285,10 @@
     <ClInclude Include="src\mgf\Assets\Model\Material.h" />
     <ClInclude Include="src\mgf\Assets\Model\Mesh.h" />
     <ClInclude Include="src\mgf\Assets\Model\Node.h" />
+    <ClInclude Include="src\MGF\Deserializer.h" />
     <ClInclude Include="src\MGF\Factories\ImageFactory.h" />
+    <ClInclude Include="src\MGF\Structures\geomFace.h" />
+    <ClInclude Include="src\MGF\Structures\geomVert.h" />
     <ClInclude Include="src\MGF\Structures\wdf.h" />
     <ClInclude Include="src\FileExtractorWindow\Extractor.h" />
     <ClInclude Include="src\FileExtractorWindow\FileExtractorDialog.h" />
@@ -339,10 +338,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="src\ArchiveViewer\ArchiveViewerWidget.ui" />
-    <None Include="src\AssetViewers\EntityViewer\EntityViewerWidget.ui">
-      <SubType>
-      </SubType>
-    </None>
+    <None Include="src\AssetViewers\EntityViewer\EntityViewerWidget.ui" />
     <None Include="src\AssetViewers\ModelViewer\ModelViewerWidget.ui" />
     <None Include="src\AssetViewers\PlainTextViewer\PlainTextViewerWidget.ui" />
     <None Include="src\AssetViewers\TextureViewer\TextureViewerWidget.ui" />

@@ -3,17 +3,13 @@
 
 #include "ArchiveViewer/ArchiveViewerWidget.h"
 
-#include "Utilities/ContextProvider/ServiceProvider.h"
 #include "Utilities/configfile.h"
-
-#include "MGF/AssetManager.h"
 
 #include <QMainWindow>
 #include <QString>
 
 #include <string>
 #include <unordered_map>
-#include <memory>
 
 #include <Ogre.h>
 
@@ -43,13 +39,8 @@ private:
 
     std::unordered_map<std::string, ArchiveViewer::ArchiveViewerWidget> ArchiveWidgets;
     ArchiveViewer::ArchiveViewerWidget* CurrentArchiveWidget = nullptr;
-    
-    std::unique_ptr<Ogre::Root> m_OgreRoot;
 
-    MGF::AssetManager AssetManager;
-   
-    void InitialiseOgre();
-    void UpdateStatusBar();
+    void UpdateStatusBar() const;
     void AllTabsClosed();
 };
 

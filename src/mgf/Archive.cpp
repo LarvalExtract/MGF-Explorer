@@ -27,11 +27,10 @@ MGF::Archive::Archive(const std::filesystem::path& mgfFilePath)
 	MGF_HEADER header{};
 	seekg(0, std::ios::beg).read(reinterpret_cast<char*>(&header), sizeof(header));
 
+	static constexpr uint32_t mgf_signature = 0x2066676D;
+
 	// check for valid MGF file
-	if (!(header.signature[0] == 'm' &&
-		header.signature[1] == 'g' &&
-		header.signature[2] == 'f' &&
-		header.signature[3] == ' '))
+	if (header.signature != mgf_signature)
 	{
 		throw std::runtime_error(mgfFilePath.string() + " is either compressed or not a valid MechAssault 1 or MechAssault 2: Lone Wolf MGF file");
 	}
@@ -66,22 +65,18 @@ MGF::Archive::Archive(const std::filesystem::path& mgfFilePath)
 	{
 		for (size_t i = 0; i < directoryRows.size(); i++)
 		{
-			const auto& [dirhash, parentIndex, childIndex, siblingIndex, stringOffset, fileIndex] = directoryRows[i];
-			const bool bIsFile = fileIndex != -1;
-			const auto& [unk1, index, timestamp, checksum, filehash, fileLength, fileOffset] = bIsFile ? fileRecordsMa1[fileIndex] : MGF_FILE_RECORD_MA1{};
+			const MGF_DIRECTORY directoryEntry = directoryRows[i];
+			const bool bIsFile = directoryEntry.fileIndex != -1;
+			const MGF_FILE_RECORD_MA1 fileRecord = bIsFile ? fileRecordsMa1[directoryEntry.fileIndex] : MGF_FILE_RECORD_MA1{};
 
 			Files.emplace_back(
-				i,
-				parentIndex,
-				siblingIndex,
-				childIndex,
 				*this,
-				&stringBuffer[stringOffset],
-				bIsFile ? filehash : dirhash,
-				bIsFile ? checksum : 0,
-				bIsFile ? fileOffset : 0,
-				bIsFile ? fileLength : 0,
-				bIsFile ? timestamp : 0,
+				&stringBuffer[directoryEntry.stringOffset],
+				bIsFile ? fileRecord.hash : directoryEntry.hash,
+				fileRecord.checksum,
+				fileRecord.fileOffset,
+				fileRecord.fileLength,
+				fileRecord.timestamp,
 				bIsFile
 			);
 		}
@@ -90,22 +85,18 @@ MGF::Archive::Archive(const std::filesystem::path& mgfFilePath)
 	{
 		for (size_t i = 0; i < directoryRows.size(); i++)
 		{
-			const auto& [dirhash, parentIndex, childIndex, siblingIndex, stringOffset, fileIndex] = directoryRows[i];
-			const bool bIsFile = fileIndex != -1;
-			const auto [index, checksum, filehash, fileLength, fileLength2, timestamp, fileOffset, unknown] = bIsFile ? fileRecordsMa2[fileIndex] : MGF_FILE_RECORD_MA2{};
+			const MGF_DIRECTORY directoryEntry = directoryRows[i];
+			const bool bIsFile = directoryEntry.fileIndex != -1;
+			const MGF_FILE_RECORD_MA2 fileRecord = bIsFile ? fileRecordsMa2[directoryEntry.fileIndex] : MGF_FILE_RECORD_MA2{};
 
 			Files.emplace_back(
-				i,
-				parentIndex,
-				siblingIndex,
-				childIndex,
 				*this,
-				&stringBuffer[stringOffset],
-				bIsFile ? filehash : dirhash,
-				checksum,
-				fileOffset,
-				fileLength,
-				timestamp,
+				&stringBuffer[directoryEntry.stringOffset],
+				bIsFile ? fileRecord.hash : directoryEntry.hash,
+				fileRecord.checksum,
+				fileRecord.fileOffset,
+				fileRecord.fileLength,
+				fileRecord.timestamp,
 				bIsFile
 			);
 		}
@@ -113,6 +104,15 @@ MGF::Archive::Archive(const std::filesystem::path& mgfFilePath)
 	else
 	{
 		throw std::runtime_error("Unknown archive version");
+	}
+
+	// Second pass
+	for (size_t i = 0; i < directoryRows.size(); ++i)
+	{
+		if (const auto directoryEntry = directoryRows[i]; directoryEntry.parentIndex >= 0)
+		{
+			Files.at(directoryEntry.parentIndex).AddChild(&Files.at(i));
+		}
 	}
 }
 
@@ -137,9 +137,9 @@ QModelIndex MGF::Archive::parent(const QModelIndex& child) const
 
 	const auto item = static_cast<MGF::File*>(child.internalPointer());
 	
-	return item->Parent() ? createIndex(item->_ParentIndex, 0, item->Parent()) : QModelIndex();
+	return item->Parent() ? createIndex(item->Parent()->Row(), 0, item->Parent()) : QModelIndex();
 }
-
+/*
 QModelIndex MGF::Archive::sibling(int row, int column, const QModelIndex& idx) const
 {
 	if (!hasIndex(row, column, idx) || !idx.isValid())
@@ -151,12 +151,18 @@ QModelIndex MGF::Archive::sibling(int row, int column, const QModelIndex& idx) c
 
 	return sibling ? createIndex(row, column, sibling) : QModelIndex();
 }
-
+*/
 int MGF::Archive::rowCount(const QModelIndex& parent) const
 {
-	return parent.column() == 0
-		? (parent.isValid() ? static_cast<MGF::File*>(parent.internalPointer()) : Root())->GetChildCount()
-		: 0;
+	if (parent.isValid())
+	{
+		const int childCount = parent.column() == 0
+			? static_cast<MGF::File*>(parent.internalPointer())->GetChildCount()
+			: 0;
+		return childCount;
+	}
+	
+	return Root()->GetChildCount();
 }
 
 int MGF::Archive::columnCount(const QModelIndex& parent) const

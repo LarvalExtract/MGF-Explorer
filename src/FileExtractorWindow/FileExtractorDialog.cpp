@@ -2,26 +2,28 @@
 #include "ui_FileExtractorDialog.h"
 
 #include "MGF/Archive.h"
-
 #include "Extractor.h"
-
-#include "Utilities/configfile.h"
-#include "Utilities/ContextProvider/ServiceProvider.h"
 
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QSettings>
 
 using namespace FileExtractor;
+
+static const QString s_SavedFileExtractorDestinationKey = "SavedFileExtractorDestinationPath";
 
 FileExtractorDialog::FileExtractorDialog(QWidget* parent) :
 	QDialog(parent),
 	ui(new Ui::FileExtractorDialog),
 	StateMachine(this, Model)
 {
-	setWindowFlag(Qt::WindowContextHelpButtonHint, false);
 	ui->setupUi(this);
 
+	setWindowFlag(Qt::WindowContextHelpButtonHint, false);
 	setWindowTitle("Extract files");
+
+	const QSettings settings;
+	ui->destinationFolderPath->setText(settings.value(s_SavedFileExtractorDestinationKey).toString());
 
 	StateMachine.ChangeState(States::EState::Idle);
 }
@@ -37,14 +39,13 @@ void FileExtractorDialog::QueueFiles(const Models::FileItemList& fileList)
 
 	const auto& archive = Model->at(0).mgfItem->MGFArchive; 
 
-	QString label = QString("Extracting %1 of %2 files from %3").arg(
+	const auto label = QString("Extracting %1 of %2 files from %3").arg(
 		QString::number(Model->size()), 
 		QString::number(archive.GetFileCount()), 
-		archive.Path.filename().u8string().c_str()
+		archive.Path.filename().string().c_str()
 	);
 
 	ui->labelTask->setText(label);
-
 	ui->tableFileQueue->setModel(Model.get());
 }
 
@@ -55,7 +56,9 @@ void FileExtractorDialog::on_browseButton_clicked()
 	Destination = folder;
 	Destination.make_preferred();
 
-	ui->destinationFolderPath->setText(Destination.u8string().c_str());
+	QSettings settings;
+	settings.setValue(s_SavedFileExtractorDestinationKey, Destination.c_str());
+	ui->destinationFolderPath->setText(settings.value(s_SavedFileExtractorDestinationKey).toString());
 }
 
 void FileExtractorDialog::OnStarted()

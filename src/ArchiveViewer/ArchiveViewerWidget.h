@@ -47,8 +47,6 @@ namespace ArchiveViewer {
 		ContextMenus::FolderMenu FolderMenu;
 		ContextMenus::FolderRootMenu FolderRootMenu;
 		ContextMenus::TextureFileMenu TextureFileMenu;
-
-		MGF::AssetManager& AssetManager;
 	};
 
 }

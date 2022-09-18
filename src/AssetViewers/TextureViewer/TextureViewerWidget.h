@@ -18,7 +18,7 @@ namespace TextureViewer {
 
     public:
         explicit TextureViewerWidget(QWidget* parent = nullptr);
-        ~TextureViewerWidget();
+        ~TextureViewerWidget() override;
 
         void LoadAsset(MGF::Asset::AssetPtr asset) override;
 
@@ -27,9 +27,6 @@ namespace TextureViewer {
 
         Models::TextureDetailsTable TextureDetailsTableModel;
 
-        QWidget* m_Container;
-        OgreWindow m_OgreWindow;
-
         Ogre::SceneManager* m_SceneManager = nullptr;
         Ogre::Camera* m_OrthoCamera = nullptr;
         Ogre::Viewport* m_TextureViewerViewport = nullptr;
@@ -37,12 +34,15 @@ namespace TextureViewer {
         Ogre::Entity* m_TexturePlane = nullptr;
         Ogre::MaterialPtr m_MatUnlitTextured;
         Ogre::TextureUnitState* m_TextureUnit = nullptr;
-
-    private:
+        
         void InitialiseScene();
 
     private slots:
         void on_ToggleAlphaCheckBox_toggled(bool checked);
+        
+    protected:
+        void showEvent(QShowEvent* event) override;
+        void hideEvent(QHideEvent* event) override;
     };
 
 }

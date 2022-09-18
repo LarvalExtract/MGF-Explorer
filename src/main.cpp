@@ -1,12 +1,7 @@
-#include "MainWindow/MainWindow.h"
-#include <QApplication>
+#include "MGFExplorerApplication.h"
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
-
-    MainWindow w;
-    w.show();
-
+    MGFExplorerApplication a(argc, argv);
     return a.exec();
 }

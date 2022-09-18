@@ -195,6 +195,9 @@
     <ClCompile Include="src\ArchiveViewer\ContextMenus\FolderRootMenu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\MGFExplorerApplication.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\AssetViewers\PlainTextViewer\PlainTextViewerWidget.h">
@@ -317,9 +320,6 @@
     <ClInclude Include="src\mgf\Assets\Model\Mesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\mgf\Assets\Model\Node.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\MGF\Assets\ModelAsset.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -420,6 +420,24 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\ArchiveViewer\ContextMenus\FolderRootMenu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MGF\Structures\geomVert.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MGF\Deserializer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MGF\Structures\geomFace.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MGF\Structures\geomVert.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mgf\Assets\Model\Node.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MGFExplorerApplication.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

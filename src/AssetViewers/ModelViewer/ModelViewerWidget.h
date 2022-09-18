@@ -22,9 +22,6 @@ namespace ModelViewer {
 	private:
 		Ui::ModelViewerWidget* ui;
 
-		OgreWindow m_OgreWindow;
-		QWidget* m_OgreWindowContainer = nullptr;
-
 		Ogre::SceneManager* m_SceneManager = nullptr;
 		Ogre::Camera* m_Camera = nullptr;
 		Ogre::Viewport* m_Viewport = nullptr;
@@ -32,6 +29,8 @@ namespace ModelViewer {
 		Ogre::SceneNode* m_SceneRoot = nullptr;
 		float m_CameraSpeed = 1.0f;
 		float m_ScrollAngle = 0.0f;
+
+		int m_WindowTimerId;
 
 	private:
 		QPoint m_CursorLocation;
@@ -60,6 +59,10 @@ namespace ModelViewer {
 
 	public:
 		bool eventFilter(QObject* watched, QEvent* event) override;
+
+	protected:
+		void showEvent(QShowEvent* event) override;
+		void hideEvent(QHideEvent* event) override;
 	};
 
 }

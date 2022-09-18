@@ -1,5 +1,6 @@
 #include "IContextMenu.h"
 #include "MGF/Archive.h"
+#include "MGF/File.h"
 
 using namespace ArchiveViewer::ContextMenus;
 using namespace FileExtractor::Models;
@@ -44,9 +45,9 @@ void TraverseTreeItem(FileExtractListModel& list, const MGF::File* item)
 	}
 	else
 	{
-		for (item = item->Child(); item != nullptr; item = item->Sibling())
+		for (const auto child : item->Children())
 		{
-			TraverseTreeItem(list, item);
+			TraverseTreeItem(list, child);
 		}
 	}
 }

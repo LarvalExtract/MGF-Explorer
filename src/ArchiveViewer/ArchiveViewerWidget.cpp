@@ -1,7 +1,7 @@
 #include "ArchiveViewerWidget.h"
 #include "ui_ArchiveViewerWidget.h"
 
-#include "Utilities/ContextProvider/ServiceProvider.h"
+#include "MGFExplorerApplication.h"
 
 #include <QMessageBox>
 
@@ -10,8 +10,7 @@ using namespace ArchiveViewer;
 ArchiveViewerWidget::ArchiveViewerWidget(const std::filesystem::path& mgfFilePath, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::ArchiveViewerWidget),
-    MgfArchive{ mgfFilePath },
-    AssetManager(*ServiceProvider::Inject<MGF::AssetManager>())
+    MgfArchive{ mgfFilePath }
 {
     ui->setupUi(this); 
     ui->Frame->hide();
@@ -63,7 +62,7 @@ void ArchiveViewerWidget::on_treeView_selectionChanged(const QModelIndex &sel, c
         ui->Frame->show();
 
 		const auto str = QString("%1 | Hash: %2 | Checksum: %3 | Offset: %4 | Length: %5 bytes").arg(
-            selectedItem.FilePath.c_str(),
+            selectedItem.FilePath().c_str(),
 			QString::number(selectedItem.FilepathHash, 16).toUpper(),
 			QString::number(selectedItem.FileChecksum, 16).toUpper(),
 			QString::number(selectedItem.FileOffset),
@@ -74,7 +73,7 @@ void ArchiveViewerWidget::on_treeView_selectionChanged(const QModelIndex &sel, c
 
         try
         {
-			if (const auto asset = this->AssetManager.Get(selectedItem); asset != nullptr)
+			if (const auto asset = qApp->AssetManager.Get(selectedItem); asset != nullptr)
 			{
 				switch (asset->AssetType)
 				{

@@ -1,5 +1,6 @@
 #include "Extractor.h"
 #include "MGF/Archive.h"
+#include "MGF/Deserializer.h"
 
 #include <fstream>
 
@@ -24,10 +25,12 @@ void Extractor::ExtractFiles(
 		std::int32_t offset = 0;
 		std::int32_t remainingBytes = item.mgfItem->FileLength;
 
+		MGF::Deserializer deserializer(*item.mgfItem);
+
 		while (remainingBytes > 0)
 		{
 			const std::int32_t bytesToCopy = std::min<int>(buf.capacity(), remainingBytes);
-			item.mgfItem->Read(buf.data(), offset, bytesToCopy);
+			deserializer.ReadBytes(buf.data(), bytesToCopy, offset);
 			file.write(buf.data(), bytesToCopy);
 
 			remainingBytes -= buf.capacity();
@@ -45,7 +48,7 @@ void Extractor::ExtractFiles(
 		for (auto& item : items)
         {
 			auto path = destination;
-			path += item.mgfItem->FilePath;
+			path += item.mgfItem->FilePath();
             createFile(path, item, buffer);
 		}
 	}
@@ -54,7 +57,7 @@ void Extractor::ExtractFiles(
 		for (auto& item : items)
 		{
 			auto path = destination;
-			path += item.mgfItem->FilePath;
+			path += item.mgfItem->FilePath();
 			item.status = std::filesystem::exists(path)
 				? Models::FileExtractStatus::Skipped
 				: createFile(path, item, buffer);
@@ -70,7 +73,7 @@ void TraverseTreeItem(std::vector<Models::FileExtractItem>& list, const MGF::Fil
 	}
 	else
 	{
-		for (item = item->Child(); item != nullptr; item = item->Sibling())
+		for (const auto child : item->Children())
 		{
 			TraverseTreeItem(list, item);
 		}
@@ -115,10 +118,12 @@ bool Extractor::WriteFile(const MGF::File& item, const std::filesystem::path& de
 	std::size_t bufSize = buf.capacity();
 	std::int32_t bytesToCopy;
 
+	MGF::Deserializer deserializer(item);
+
 	while (remainingBytes > 0)
 	{
 		bytesToCopy = std::min<int>(bufSize, remainingBytes);
-		item.Read(buf.data(), offset, bytesToCopy);
+		deserializer.ReadBytes(buf.data(), bytesToCopy, offset);
 		file.write(buf.data(), bytesToCopy);
 
 		remainingBytes -= bufSize;

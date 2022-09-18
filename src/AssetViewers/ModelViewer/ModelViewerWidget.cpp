@@ -2,34 +2,19 @@
 #include "ui_ModelViewerWidget.h"
 
 #include "MGF/Assets/ModelAsset.h"
-#include "Utilities/ContextProvider/ServiceProvider.h"
-
-static int s_Count = 0;
+#include "MGFExplorerApplication.h"
 
 using namespace ModelViewer;
 
 ModelViewerWidget::ModelViewerWidget(QWidget *parent) :
-    ui(new Ui::ModelViewerWidget),
-    m_SceneManager(ServiceProvider::Inject<Ogre::SceneManager>())
+    ui(new Ui::ModelViewerWidget)
 {
     ui->setupUi(this);
-
-    s_Count++;
-
-    QString title("ModelViewerWindow");
-    title += QString::number(s_Count);
-    m_OgreWindow.initialize(title);
-    m_SceneRoot = m_SceneManager->createSceneNode(title.toStdString());
-
-    m_OgreWindowContainer = QWidget::createWindowContainer(&m_OgreWindow, this);
-    ui->frameLayout->insertWidget(0, m_OgreWindowContainer);
-
     InitialiseScene();
 
-    m_OgreWindowContainer->setMouseTracking(true);
-    m_OgreWindowContainer->installEventFilter(this);
-    m_OgreWindow.installEventFilter(this);
-    m_OgreWindowContainer->startTimer(16);
+    m_SceneRoot = m_SceneManager->createSceneNode();
+    
+    ui->frameLayout->insertWidget(0, qApp->GetRenderWindowContainer());
 }
 
 ModelViewerWidget::~ModelViewerWidget()
@@ -105,7 +90,7 @@ void ModelViewerWidget::InitialiseScene()
     m_CameraNode->attachObject(m_Camera);
     m_CameraNode->setPosition(0.0f, 0.0f, -100.0f);
 
-    m_Viewport = m_OgreWindow.GetWindow().addViewport(m_Camera);
+    m_Viewport = qApp->GetRenderWindow()->GetWindow().addViewport(m_Camera);
     m_Viewport->setBackgroundColour(Ogre::ColourValue(0.4f, 0.4f, 0.4f));
 
     m_SceneManager->setAmbientLight(Ogre::ColourValue());
@@ -144,7 +129,7 @@ bool ModelViewerWidget::eventFilter(QObject *watched, QEvent *event)
             this->setCursor(c);
         }
     };
-
+    /*
     if (watched == m_OgreWindowContainer)
     {
         if (event->type() == QEvent::Timer)
@@ -193,8 +178,27 @@ bool ModelViewerWidget::eventFilter(QObject *watched, QEvent *event)
 
         return true;
     }
+    */
 
     return QWidget::eventFilter(watched, event);
+}
+
+void ModelViewerWidget::showEvent(QShowEvent* event)
+{
+    ui->frameLayout->insertWidget(0, qApp->GetRenderWindowContainer());
+
+    qApp->GetRenderWindowContainer()->setMouseTracking(true);
+    qApp->GetRenderWindowContainer()->installEventFilter(this);
+    m_WindowTimerId = qApp->GetRenderWindowContainer()->startTimer(16);
+}
+
+void ModelViewerWidget::hideEvent(QHideEvent* event)
+{
+    ui->frameLayout->insertWidget(0, qApp->GetRenderWindowContainer());
+
+    qApp->GetRenderWindowContainer()->setMouseTracking(false);
+    qApp->GetRenderWindowContainer()->removeEventFilter(this);
+    qApp->GetRenderWindowContainer()->killTimer(m_WindowTimerId);
 }
 
 void ModelViewerWidget::UpdateFrame(QTimerEvent* timerEvt)
@@ -221,8 +225,6 @@ void ModelViewerWidget::UpdateFrame(QTimerEvent* timerEvt)
 
         m_CameraNode->setPosition(move);
     }
-
-    m_OgreWindow.render();
 }
 
 void ModelViewerWidget::ResetCamera(const Ogre::AxisAlignedBox &modelAABB)

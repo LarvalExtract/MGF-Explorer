@@ -19,11 +19,11 @@ namespace FileExtractor {
 
 	public:
 		explicit FileExtractorDialog(QWidget* parent = nullptr);
-		~FileExtractorDialog();
+		~FileExtractorDialog() override;
 
 		void QueueFiles(const Models::FileItemList& fileList);
 
-		inline const std::filesystem::path& GetDestination() const { return Destination; }
+		const auto& GetDestination() const { return Destination; }
 
 	private slots:
 		void on_browseButton_clicked();

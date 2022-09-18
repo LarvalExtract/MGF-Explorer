@@ -19,14 +19,12 @@ namespace MGF { namespace Factories {
 		MeshFactory& operator=(const MeshFactory&) = delete;
 		MeshFactory& operator=(MeshFactory&&) = delete;
 
-	public:
-		static Ogre::MeshPtr Create(const MGF::Asset::Model::Mesh& def, const MGF::File& sourceFile);
-
-		static MGF::Asset::Model::Mesh CreateMeshDefinition(const MGF::File& meshFile);
-		static MGF::Asset::Model::Mesh CreateMeshDefinition(const pugi::xml_node& meshxml);
+		static Ogre::MeshPtr Create(const pugi::xml_node& meshXml, const MGF::File& mgmodelFile, Asset::Model::Mesh& meshDef);
+		static Ogre::MeshPtr Create(const MGF::File& meshFile, Asset::Model::Mesh& meshDef);
 
 	private:
-
+		static MGF::Asset::Model::Mesh CreateMeshDefinition(const MGF::File& meshFile);
+		static MGF::Asset::Model::Mesh CreateMeshDefinition(const pugi::xml_node& meshxml);
 
 		struct MGVertexBufferOffsets
 		{
@@ -44,8 +42,6 @@ namespace MGF { namespace Factories {
 			uint32_t data = 0;
 		};
 
-		static Ogre::VertexData* LoadVertexBuffer(Ogre::Mesh& mesh, const MGF::File& vertFile, const MGVertexBufferOffsets& def, MGF::Asset::Model::Mesh& meshDef);
-		static Ogre::IndexData* LoadIndexBuffer(const MGF::File& indicesFile, const MGIndexBufferOffsets& def);
 		static bool SetupVertexElements(Ogre::VertexDeclaration* decl, uint32_t flags);
 	};
 

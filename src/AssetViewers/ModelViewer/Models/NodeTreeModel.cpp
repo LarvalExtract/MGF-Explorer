@@ -37,7 +37,7 @@ QModelIndex NodeTree::parent(const QModelIndex& child) const
 
 	if (parentNode == RootNode)
 	{
-		return QModelIndex();
+		return {};
 	}
 	
 	return createIndex(parentNode->childIndex, 0, parentNode);

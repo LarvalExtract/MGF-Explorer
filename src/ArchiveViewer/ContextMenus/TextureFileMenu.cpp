@@ -13,7 +13,7 @@ TextureFileMenu::TextureFileMenu()
 	{
 		const auto selection = SelectedItems();
 		const auto textureFile = selection.at(0).mgfItem;
-		const auto fileName = QString(textureFile->FilePath.stem().append(extension).u8string().c_str());
+		const auto fileName = QString(textureFile->FilePath().stem().append(extension).u8string().c_str());
 
 		if (const auto destination = QFileDialog::getSaveFileName(nullptr, QString("Extract %1").arg(fileName), fileName); !destination.isEmpty())
 		{

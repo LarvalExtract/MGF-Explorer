@@ -1,6 +1,7 @@
 #include "EntityAsset.h"
 
 #include "MGF/Structures/wdf.h"
+#include "MGF/Deserializer.h"
 #include "Factories/EntityNames.h"
 #include "Factories/AttributeNames.h"
 
@@ -13,15 +14,15 @@ MGF::Asset::EntityAsset::EntityAsset(const MGF::File& entityFile) :
 {
 	size_t offset = 0;
 
-	const auto wdf = entityFile.Read<WDF>(offset);
-	offset += sizeof(wdf);
+	MGF::Deserializer entityDeserializer(entityFile);
+
+	const auto wdf = entityDeserializer.Deserialize<WDF>();
 
 	std::unordered_map<uint32_t, Entity*> mapEntities;
 
 	for (size_t i = 0; i < wdf.numEntities; i++)
 	{
-		const auto entity = entityFile.Read<ENTITY>(offset);
-		offset += sizeof(entity);
+		const auto entity = entityDeserializer.Deserialize<ENTITY>();
 		
 		auto e = new Entity;
 		e->Class = entityFile.FileType == EFileType::wdf
@@ -32,53 +33,46 @@ MGF::Asset::EntityAsset::EntityAsset(const MGF::File& entityFile) :
 
 		for (size_t j = 0; j < entity.numAttributes; j++)
 		{
-			const auto attribute = entityFile.Read<ATTRIBUTE>(offset);
-			offset += sizeof(attribute);
+			const auto attribute = entityDeserializer.Deserialize<ATTRIBUTE>();
 			
 			QString a;
 			switch (attribute.dataType)
 			{
 			case 1:
-			case 16:
-				a = entityFile.Read<bool>(offset) ? "true" : "false"; 
-				break;
-			case 3: a = QString::number(entityFile.Read<int32_t>(offset)); break;
-			case 4: a = QString::number(entityFile.Read<uint8_t>(offset)); break;
-			case 5: a = QString::number(entityFile.Read<uint16_t>(offset)); break;
-			case 7: a = QString::number(entityFile.Read<float>(offset)); break;
+			case 16: a = entityDeserializer.Deserialize<bool>() ? "true" : "false";	break;
+			case 3: a = QString::number(entityDeserializer.Deserialize<int32_t>()); break;
+			case 4: a = QString::number(entityDeserializer.Deserialize<uint8_t>()); break;
+			case 5: a = QString::number(entityDeserializer.Deserialize<uint16_t>()); break;
+			case 7: a = QString::number(entityDeserializer.Deserialize<float>()); break;
 			case 9:
 			{
-				char* str = new char[attribute.dataLength];
-				entityFile.Read(str, offset, attribute.dataLength);
-				a = str;
-				delete[] str;
+				std::vector<char> str(attribute.dataLength);
+				entityDeserializer.ReadBytes(str.data(), str.size());
+				a = str.data();
 			} break;
 			case 10:
-			{
 				a = QString("%1, %2").arg(
-					QString::number(entityFile.Read<float>(offset)),
-					QString::number(entityFile.Read<float>(offset + 4))
+					QString::number(entityDeserializer.Deserialize<float>()),
+					QString::number(entityDeserializer.Deserialize<float>())
 				);
-			} break;
+				break;
 			case 11:
 			case 14:
-			{
 				a = QString("%1, %2, %3").arg(
-					QString::number(entityFile.Read<float>(offset)),
-					QString::number(entityFile.Read<float>(offset + 4)),
-					QString::number(entityFile.Read<float>(offset + 8))
+					QString::number(entityDeserializer.Deserialize<float>()),
+					QString::number(entityDeserializer.Deserialize<float>()),
+					QString::number(entityDeserializer.Deserialize<float>())
 				);
-			} break;
-			case 6: a = QString::number(entityFile.Read<uint32_t>(offset)); break;
+				break;
+			case 6: a = QString::number(entityDeserializer.Deserialize<uint32_t>()); break;
 			case 12: 
-			{
 				a = QString("%1, %2, %3, %4").arg(
-					QString::number(entityFile.Read<uint8_t>(offset)),
-					QString::number(entityFile.Read<uint8_t>(offset + 1)),
-					QString::number(entityFile.Read<uint8_t>(offset + 2)),
-					QString::number(entityFile.Read<uint8_t>(offset + 3))
+					QString::number(entityDeserializer.Deserialize<uint8_t>()),
+					QString::number(entityDeserializer.Deserialize<uint8_t>()),
+					QString::number(entityDeserializer.Deserialize<uint8_t>()),
+					QString::number(entityDeserializer.Deserialize<uint8_t>())
 				);
-			} break;
+				break;
 			case 13: a = "TIF"; break;
 			}
 			
@@ -113,7 +107,7 @@ MGF::Asset::EntityAsset::EntityAsset(const MGF::File& entityFile) :
 				offset
 			));
 
-			offset += attribute.dataLength;
+			entityDeserializer.CurrentOffset() += attribute.dataLength;
 		}
 
 		mapEntities.emplace(e->UID, e);

@@ -1,8 +1,7 @@
 #include "MainWindow.h"
-#include "ui_mainwindow.h"
+#include "ui_MainWindow.h"
 
-#include "Utilities/ContextProvider/ServiceProvider.h"
-
+#include <QSettings>
 #include <QFileDialog>
 #include <QMessageBox>
 
@@ -17,48 +16,49 @@ MainWindow::MainWindow(QWidget *parent) :
     this->setWindowTitle("MechAssault MGF Explorer");
     this->showMaximized();
     ui->tabWidget->hide();
-
-    try
-    {
-        InitialiseOgre();
-    }
-    catch (const std::exception& error)
-    {
-        QString msg = error.what();
-        msg += "\n\nYou will not be able to preview models and textures.";
-        msg += "\nYou will still be able to open, explore, and extract the contents of MGF files.";
-
-        QMessageBox::critical(this, "Failed to initialise renderer",
-                              msg);
-    }
-
-    ServiceProvider::Initialise();
-	ServiceProvider::Add<MGF::AssetManager>(&AssetManager);
-	ServiceProvider::Add<Ogre::SceneManager>(m_OgreRoot->createSceneManager());
 }
 
 MainWindow::~MainWindow()
 {
     ArchiveWidgets.clear();
-    ServiceProvider::Destroy();
     delete ui;
 }
 
 void MainWindow::on_actionOpen_MGF_file_triggered()
 {
-    if (const auto fileNames = QFileDialog::getOpenFileNames(this, "Open MGF file", QString{}, tr("MechAssault MGF files (*.mgf)")); !fileNames.empty())
+    QSettings settings;
+    const QString defaultMgfFolderKey = "SavedMgfFolder";
+
+    if (const auto fileNames = QFileDialog::getOpenFileNames(this, "Open MGF file", settings.value(defaultMgfFolderKey).toString(), tr("MechAssault MGF files (*.mgf)")); !fileNames.empty())
     {
-		try
-		{
-            for (const auto& fileName : fileNames)
+        std::vector<std::exception> errors;
+
+    	for (const auto& fileName : fileNames)
+    	{
+    		try
+    		{
+    			OpenMGFWorkspace(fileName);
+    		}
+            catch (const std::runtime_error& err)
             {
-                OpenMGFWorkspace(fileName);
+                errors.push_back(err);
             }
-		}
-		catch (const std::runtime_error& err)
+    	}
+		
+		if (!errors.empty())
 		{
-			QMessageBox::critical(this, "Error", err.what());
+            QString message;
+            for (const auto& err : errors)
+            {
+                message.append(err.what()) + '\n';
+            }
+            QMessageBox::critical(this, QString("Could not open %1 MGF file%2").arg(QString::number(errors.size()), errors.size() > 1 ? "s" : ""), message);
 		}
+
+        const std::filesystem::path mgfFolder(fileNames.first().toStdString());
+        const QString folder(mgfFolder.parent_path().string().c_str());
+        
+        settings.setValue(defaultMgfFolderKey, folder);
     }
 }
 
@@ -71,8 +71,8 @@ void MainWindow::on_actionClose_all_MGF_files_triggered()
 
 void MainWindow::on_tabWidget_tabCloseRequested(int index)
 {
-    auto ws = static_cast<ArchiveViewer::ArchiveViewerWidget*>(ui->tabWidget->widget(index));
-    auto str = QString(ws->MGFArchive().Path.u8string().c_str());
+    const auto ws = static_cast<ArchiveViewer::ArchiveViewerWidget*>(ui->tabWidget->widget(index));
+    const auto str = QString(ws->MGFArchive().Path.u8string().c_str());
 
     ui->tabWidget->removeTab(index);
     ArchiveWidgets.erase(str.toStdString());
@@ -109,31 +109,18 @@ void MainWindow::OpenMGFWorkspace(const QString &mgfFilePath)
 
 void MainWindow::on_tabWidget_currentChanged(int index)
 {
-    if (index == -1 || ArchiveWidgets.empty())
+    if (index >= 0 && index < ArchiveWidgets.size())
+    {
+		CurrentArchiveWidget = static_cast<ArchiveViewer::ArchiveViewerWidget*>(ui->tabWidget->currentWidget());
+		UpdateStatusBar();
+    }
+    else
     {
         CurrentArchiveWidget = nullptr;
-        return;
     }
-
-    CurrentArchiveWidget = static_cast<ArchiveViewer::ArchiveViewerWidget*>(ui->tabWidget->currentWidget());
-
-    UpdateStatusBar();
 }
 
-void MainWindow::InitialiseOgre()
-{
-    m_OgreRoot = std::make_unique<Ogre::Root>("plugins.cfg", "ogre.cfg", "");
-
-    const auto& renderers = m_OgreRoot->getAvailableRenderers();
-
-    if (renderers.empty())
-        throw std::runtime_error("No renderers found. Please ensure plugins.cfg is present in the application root.");
-
-    m_OgreRoot->setRenderSystem(renderers[0]);
-    m_OgreRoot->initialise(false);
-}
-
-void MainWindow::UpdateStatusBar()
+void MainWindow::UpdateStatusBar() const
 {
     const auto& mgf = CurrentArchiveWidget->MGFArchive();
     const auto& loc = this->locale();

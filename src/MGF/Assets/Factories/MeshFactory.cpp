@@ -12,6 +12,10 @@
 #include <OgrePass.h>
 #include <OgreTextureUnitState.h>
 
+#include "MGF/Deserializer.h"
+#include "MGF/Structures/geomFace.h"
+#include "MGF/Structures/geomVert.h"
+
 static std::unordered_map<std::string_view, Ogre::RenderOperation::OperationType> MapTopologies = {
     { "indexedlist",    Ogre::RenderOperation::OT_TRIANGLE_LIST },
     { "indexedstrip",   Ogre::RenderOperation::OT_TRIANGLE_STRIP },
@@ -21,98 +25,148 @@ static std::unordered_map<std::string_view, Ogre::RenderOperation::OperationType
 
 using namespace MGF::Factories;
 
-Ogre::MeshPtr MeshFactory::Create(const MGF::Asset::Model::Mesh&def, const MGF::File& sourceFile)
+Ogre::MeshPtr MeshFactory::Create(const pugi::xml_node& meshXml, const MGF::File& mgmodelFile, Asset::Model::Mesh& meshDef)
 {
-    std::filesystem::path vbPath, ibPath;
-    if (def.bUsesMGModel)
+    Ogre::MeshPtr mesh = Ogre::MeshManager::getSingleton().getByName(meshXml.name());
+    if (mesh)
     {
-        vbPath = sourceFile.Name.toLatin1().data();
-        vbPath += '{';
-        vbPath += def.verticesFilename.data();
-        vbPath += '}';
-
-        ibPath = sourceFile.Name.toLatin1().data();
-        ibPath += '{';
-        ibPath += def.indicesFilename.data();
-        ibPath += '}';
-    }
-    else
-    {
-        vbPath = def.verticesFilename;
-        ibPath = def.indicesFilename;
+        return mesh;
     }
 
-    const auto& vertices = *sourceFile.FindRelativeItem(vbPath);
-    const auto& indices = *sourceFile.FindRelativeItem(ibPath);
+	mesh = Ogre::MeshManager::getSingleton().create(meshXml.name(), "General");
 
-    // Generate unique mesh name using source file name + mesh name
-    Ogre::String name(std::to_string(vertices.FilepathHash));
+    MGF::Deserializer vbDeserializer(*mgmodelFile.FindRelativeItem(meshXml.attribute("vertices").as_string()));
+    MGF::Deserializer ibDeserializer(*mgmodelFile.FindRelativeItem(meshXml.attribute("indices").as_string()));
 
-    // Create mesh and default submesh
-    Ogre::MeshPtr mesh = Ogre::MeshManager::getSingleton().getByName(name, "General");
+    const auto vbHeader = vbDeserializer.Deserialize<GEOMVERT_MA2>();
+    const auto ibHeader = ibDeserializer.Deserialize<GEOMFACE_MA2>();
 
-    if (!mesh)
+    std::vector<char> vertices(vbHeader.vers.data_size - 8);
+    std::vector<uint16_t> indices(ibHeader.indx.nidx.indexCount);
+
+    vbDeserializer.ReadBytes(vertices.data(), vertices.size());
+    ibDeserializer.ReadBytes(reinterpret_cast<char*>(indices.data()), indices.size() * sizeof(uint16_t));
+
+    const auto vbuf = Ogre::HardwareBufferManager::getSingleton().createVertexBuffer(
+        (vbHeader.vers.data_size - 8) / vbHeader.vers.info.vertexCount,
+        vbHeader.vers.info.vertexCount,
+        Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY,
+        false
+    );
+
+    vbuf->writeData(0, vbuf->getSizeInBytes(), vertices.data());
+
+    const auto vertexData = new Ogre::VertexData;
+    vertexData->vertexBufferBinding->setBinding(0, vbuf);
+    if (SetupVertexElements(vertexData->vertexDeclaration, vbHeader.vers.info.vertexBufferLayoutFlags))
     {
-        mesh = Ogre::MeshManager::getSingleton().createManual(name, "General");
-
-        Ogre::SubMesh* submesh = mesh->createSubMesh();
-
-        MGVertexBufferOffsets vtxOffsets;
-        MGIndexBufferOffsets idxOffsets;
-
-        if (def.bUsesMGModel)
-        {
-            // MGModel style buffer offsets
-            vtxOffsets.count = 84;
-            vtxOffsets.flags = 88;
-            vtxOffsets.aabb_bounds = 92;
-            vtxOffsets.size = 120;
-            vtxOffsets.data = 124;
-
-            idxOffsets.count = 88;
-            idxOffsets.size = 96;
-            idxOffsets.data = 100;
-        }
-        else
-        {
-            // .mesh file style offsets
-            vtxOffsets.count = 60;
-            vtxOffsets.flags = 64;
-            vtxOffsets.aabb_bounds = 68;
-            vtxOffsets.size = 96;
-            vtxOffsets.data = 100;
-
-            idxOffsets.count = 65;
-            idxOffsets.size = 73;
-            idxOffsets.data = 77;
-        }
-
-        submesh->operationType = def.topology;
-        submesh->useSharedVertices = false;
-        submesh->vertexData = LoadVertexBuffer(*mesh, vertices, vtxOffsets, const_cast<MGF::Asset::Model::Mesh&>(def));
-        submesh->indexData = LoadIndexBuffer(indices, idxOffsets);
-
-        mesh->load();
+        // meshDef.texCoordScale = 1.0f / 32.0f;
+        // meshDef.texCoordOffset = 0.5f;
     }
+
+    const auto indexData = new Ogre::IndexData;
+    indexData->indexBuffer = Ogre::HardwareBufferManager::getSingleton().createIndexBuffer(
+        Ogre::HardwareIndexBuffer::IT_16BIT, 
+        ibHeader.indx.nidx.indexCount, 
+        Ogre::HardwareBuffer::HBU_WRITE_ONLY
+    );
+    indexData->indexStart = 0;
+    indexData->indexCount = ibHeader.indx.nidx.indexCount;
+    indexData->indexBuffer->writeData(0, indexData->indexBuffer->getSizeInBytes(), indices.data());
+
+    const auto submesh = mesh->createSubMesh();
+    submesh->vertexData = vertexData;
+    submesh->indexData = indexData;
+    submesh->useSharedVertices = false;
+    submesh->operationType = MapTopologies.at(meshXml.attribute("type").as_string());
+
+    const auto [min, max] = vbHeader.vers.info.extents;
+    mesh->_setBounds({ min.x, min.y, min.z, max.x, max.y, max.z });
+    mesh->load();
+
+    meshDef = CreateMeshDefinition(meshXml);
+
+    return mesh;
+}
+
+Ogre::MeshPtr MeshFactory::Create(const MGF::File& meshFile, Asset::Model::Mesh& meshDef)
+{
+    ConfigFile meshCfg(&meshFile);
+    const auto& vars = meshCfg["mesh"];
+
+    Ogre::MeshPtr mesh = Ogre::MeshManager::getSingleton().getByName(vars.at("name"));
+    if (mesh)
+    {
+        return mesh;
+    }
+
+    mesh = Ogre::MeshManager::getSingleton().create(vars.at("name"), "General");
+
+    MGF::Deserializer vbDeserializer(*meshFile.FindRelativeItem(vars.at("vertices")));
+    MGF::Deserializer ibDeserializer(*meshFile.FindRelativeItem(vars.at("faces")));
+
+    const auto vbHeader = vbDeserializer.Deserialize<GEOMVERT_MA1>();
+    const auto ibHeader = ibDeserializer.Deserialize<GEOMFACE_MA1>();
+
+    std::vector<char> vertices(vbHeader.vers.data_size - 8);
+    std::vector<uint16_t> indices(ibHeader.indx.nidx.indexCount);
+
+    vbDeserializer.ReadBytes(vertices.data(), vertices.size());
+    ibDeserializer.ReadBytes(reinterpret_cast<char*>(indices.data()), indices.size() * sizeof(uint16_t));
+
+    const auto vbuf = Ogre::HardwareBufferManager::getSingleton().createVertexBuffer(
+        (vbHeader.vers.data_size - 8) / vbHeader.vers.info.vertexCount,
+        vbHeader.vers.info.vertexCount,
+        Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY,
+        false
+    );
+
+    vbuf->writeData(0, vbuf->getSizeInBytes(), vertices.data());
+
+    const auto vertexData = new Ogre::VertexData;
+    vertexData->vertexBufferBinding->setBinding(0, vbuf);
+    if (SetupVertexElements(vertexData->vertexDeclaration, vbHeader.vers.info.vertexBufferLayoutFlags))
+    {
+        // meshDef.texCoordScale = 1.0f / 32.0f;
+        // meshDef.texCoordOffset = 0.5f;
+    }
+
+    const auto indexData = new Ogre::IndexData;
+    indexData->indexBuffer = Ogre::HardwareBufferManager::getSingleton().createIndexBuffer(
+        Ogre::HardwareIndexBuffer::IT_16BIT,
+        ibHeader.indx.nidx.indexCount,
+        Ogre::HardwareBuffer::HBU_WRITE_ONLY
+    );
+    indexData->indexStart = 0;
+    indexData->indexCount = ibHeader.indx.nidx.indexCount;
+    indexData->indexBuffer->writeData(0, indexData->indexBuffer->getSizeInBytes(), indices.data());
+
+    const auto submesh = mesh->createSubMesh();
+    submesh->vertexData = vertexData;
+    submesh->indexData = indexData;
+    submesh->useSharedVertices = false;
+    submesh->operationType = MapTopologies.at(vars.at("type"));
+
+    const auto [min, max] = vbHeader.vers.info.extents;
+    mesh->_setBounds({ min.x, min.y, min.z, max.x, max.y, max.z });
+    mesh->load();
+
+    meshDef = CreateMeshDefinition(meshFile);
 
     return mesh;
 }
 
 MGF::Asset::Model::Mesh MeshFactory::CreateMeshDefinition(const MGF::File &meshFile)
 {
-    std::string buf;
-    buf.resize(meshFile.FileLength);
-    meshFile.Read(buf.data());
-
-    ConfigFile meshCfg(buf);
-    auto& vars = meshCfg["mesh"];
+    ConfigFile meshCfg(&meshFile);
+    const auto& vars = meshCfg["mesh"];
 
     MGF::Asset::Model::Mesh meshDef;
-    meshDef.name = vars["name"];
-    meshDef.topology = MapTopologies[vars["type"]];
-    meshDef.verticesFilename = vars["vertices"];
-    meshDef.indicesFilename = vars["faces"];
-    meshDef.materialPath = vars["material"];
+    meshDef.name = vars.at("name");
+    meshDef.topology = MapTopologies.at(vars.at("type"));
+    meshDef.verticesFilename = vars.at("vertices");
+    meshDef.indicesFilename = vars.at("faces");
+    meshDef.materialPath = vars.at("material");
     meshDef.bUsesMGModel = false;
 
     return meshDef;
@@ -122,78 +176,13 @@ MGF::Asset::Model::Mesh MeshFactory::CreateMeshDefinition(const pugi::xml_node &
 {
     MGF::Asset::Model::Mesh meshDef;
     meshDef.name = meshxml.attribute("name").as_string();
-    meshDef.topology = MapTopologies[meshxml.attribute("type").as_string()];
+    meshDef.topology = MapTopologies.at(meshxml.attribute("type").as_string());
     meshDef.verticesFilename = meshxml.attribute("vertices").as_string();
     meshDef.indicesFilename = meshxml.attribute("indices").as_string();
     meshDef.materialPath = meshxml.attribute("material").as_string();
     meshDef.bUsesMGModel = true;
 
     return meshDef;
-}
-
-Ogre::VertexData *MeshFactory::LoadVertexBuffer(Ogre::Mesh& mesh, const MGF::File &vertFile, const MeshFactory::MGVertexBufferOffsets &def, MGF::Asset::Model::Mesh& meshDef)
-{
-    Ogre::VertexData* data = new Ogre::VertexData;
-
-    std::vector<char> buf(vertFile.FileLength);
-    vertFile.Read(buf.data());
-
-    uint32_t count = *reinterpret_cast<uint32_t*>(&buf[def.count]);
-    uint32_t flags = *reinterpret_cast<uint32_t*>(&buf[def.flags]);
-
-    std::array<float, 6> AABB_values;
-    std::memcpy(&AABB_values, &buf[def.aabb_bounds], AABB_values.size() * sizeof(float));
-
-    uint32_t size = *reinterpret_cast<uint32_t*>(&buf[def.size]) - 8;
-
-    data->vertexCount = count;
-
-    bool bScaleTexCoords = SetupVertexElements(data->vertexDeclaration, flags);
-
-    auto vbuf = Ogre::HardwareBufferManager::getSingleton().createVertexBuffer(
-                size / count,
-                count,
-                Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY,
-                false);
-
-    vbuf->writeData(0, vbuf->getSizeInBytes(), &buf[def.data]);
-
-    data->vertexBufferBinding->setBinding(0, vbuf);
-
-    mesh._setBounds(Ogre::AxisAlignedBox(
-            AABB_values[0], AABB_values[1], AABB_values[2],
-            AABB_values[3], AABB_values[4], AABB_values[5]));
-
-    meshDef.numVerts = count;
-    meshDef.flags = flags;
-    meshDef.stride = size / count;
-
-    if (bScaleTexCoords)
-    {
-        meshDef.texCoordScale = 1.0f / 32.0f;
-        meshDef.texCoordOffset = 0.5f;
-    }
-
-    return data;
-}
-
-Ogre::IndexData *MeshFactory::LoadIndexBuffer(const MGF::File &indicesFile, const MeshFactory::MGIndexBufferOffsets &def)
-{
-    Ogre::IndexData* data = new Ogre::IndexData;
-
-	std::vector<char> buf(indicesFile.FileLength);
-    indicesFile.Read(buf.data());
-
-    data->indexCount = *reinterpret_cast<uint32_t*>(&buf[def.count]);
-    data->indexStart = 0;
-    data->indexBuffer = Ogre::HardwareBufferManager::getSingleton().createIndexBuffer(
-                Ogre::HardwareIndexBuffer::IndexType::IT_16BIT,
-                data->indexCount,
-                Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
-
-    data->indexBuffer->writeData(0, data->indexBuffer->getSizeInBytes(), &buf[def.data]);
-
-    return data;
 }
 
 bool MeshFactory::SetupVertexElements(Ogre::VertexDeclaration *decl, uint32_t flags)

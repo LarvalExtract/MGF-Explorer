@@ -1,8 +1,8 @@
 #include "MaterialFactory.h"
 #include "Utilities/configfile.h"
-#include "Utilities/ContextProvider/ServiceProvider.h"
 #include "MGF/AssetManager.h"
 #include "MGF/Assets/TextureAsset.h"
+#include "MGFExplorerApplication.h"
 
 #include <Ogre.h>
 
@@ -76,12 +76,8 @@ Ogre::MaterialPtr MaterialFactory::Create(const MGF::Asset::Model::Material& par
 
 MGF::Asset::Model::Material MaterialFactory::CreateMaterialDefinition(const MGF::File &materialFile)
 {
-    std::string buf;
-    buf.resize(materialFile.FileLength);
-    materialFile.Read(buf.data());
-
     // Load parameters from MA1 .mat file
-    ConfigFile meshCfg(buf);
+    ConfigFile meshCfg(&materialFile);
     auto& vars = meshCfg["material"];
 
     std::transform(vars["type"].begin(), vars["type"].end(), vars["type"].begin(), tolower);
@@ -232,7 +228,7 @@ void MaterialFactory::CreateDistortMaterial(Ogre::Material& mat, const MGF::Asse
 
 Ogre::TexturePtr MaterialFactory::UploadTexture(const MGF::Asset::Model::TextureParams& textureParams, const MGF::File* textureFile, Ogre::TextureUnitState& tu)
 {
-    auto& rm = *ServiceProvider::Inject<AssetManager>();
+    auto& rm = qApp->AssetManager;
  
     Ogre::TexturePtr texture = static_cast<MGF::Asset::TextureAsset*>(rm.Get(*textureFile).get())->OgreTexture;
 
