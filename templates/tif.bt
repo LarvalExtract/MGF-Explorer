@@ -18,7 +18,7 @@ struct TIF {
         uint32 fileLength;
         uint32 one;
         char padding[16];
-    } mgiHeader;
+    } mgiHeader<hidden=true>;
     struct PIC {
         char PIC[4];
         uint32 pad1;
@@ -71,6 +71,11 @@ struct TIF {
             char bits[4];
             uint32 imageDataLength;
             byte pixels[imageDataLength - 8];
-        } cBits;
-    } cPic;
-} tif;
+        } cBits<hidden=true>;
+    } pic;
+} tif<name=getTifName>;
+
+string getTifName(TIF& tif)
+{
+    return GetFileName();
+}
