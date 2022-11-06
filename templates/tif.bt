@@ -72,6 +72,13 @@ struct TIF {
             uint32 imageDataLength;
             byte pixels[imageDataLength - 8];
         } cBits<hidden=true>;
+        if (!FEof())
+        {
+            struct MIPMAP_FILTER {
+                byte crap[9]<hidden=true>;
+                string filter;
+            } cMipFilter;
+        }
     } pic;
 } tif<name=getTifName>;
 
