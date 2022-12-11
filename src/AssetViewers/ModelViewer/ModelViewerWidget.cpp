@@ -250,7 +250,7 @@ void ModelViewerWidget::ResetCamera(const Ogre::AxisAlignedBox &modelAABB)
     dir.normalise();
 
     m_CameraNode->setPosition(pos);
-    m_Camera->setDirection(dir);
+    m_CameraNode->setDirection(dir);
 
     Ogre::Vector2 adjacent(dir.x, dir.z);
     m_CameraYaw = Ogre::Math::ATan2(adjacent.y, adjacent.x).valueRadians();
@@ -273,7 +273,7 @@ void ModelViewerWidget::UpdateCamera()
 
     UpdateCameraAxes(m_CameraYaw, m_CameraPitch);
 
-    m_Camera->setDirection(m_Forward);
+    m_CameraNode->setDirection(m_Forward);
 
     c.setPos(m_CursorLocation);
     setCursor(c);

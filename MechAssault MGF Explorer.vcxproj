@@ -59,15 +59,19 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="MechAssault-MGF-Explorer.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="MechAssault-MGF-Explorer.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="MechAssault-MGF-Explorer.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="MechAssault-MGF-Explorer.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -142,7 +146,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)src;$(ProjectDir)vendor;$(QT_DIR)\6.1.3\msvc2019_64\include;$(QT_DIR)\6.1.3\msvc2019_64\include\QtCore;$(QT_DIR)\6.1.3\msvc2019_64\include\QtGui;$(QT_DIR)\6.1.3\msvc2019_64\include\QtWidgets;$(OGRE3D_DIR)\Binaries\include;$(OGRE3D_DIR)\Source\ogre-1.12.6\OgreMain\include;$(OGRE3D_DIR)\Source\ogre-1.12.6\RenderSystems\Direct3D9\include;D:\SDK\FBX\2020.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)src;$(ProjectDir)vendor;$(QtDir)\6.1.3\msvc2019_64\include;$(QtDir)\6.1.3\msvc2019_64\include\QtCore;$(QtDir)\6.1.3\msvc2019_64\include\QtGui;$(QtDir)\6.1.3\msvc2019_64\include\QtWidgets;$(Ogre3dDir)\include\OGRE;$Ogre3dDir)\Source\ogre-1.12.6\OgreMain\include;$(Ogre3dDir)\Source\ogre-1.12.6\RenderSystems\Direct3D9\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <DisableSpecificWarnings>4996;</DisableSpecificWarnings>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -151,7 +155,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>Qt6Cored.lib;Qt6Guid.lib;Qt6Widgetsd.lib;OgreMain_d.lib;RenderSystem_Direct3D9_d.lib;RenderSystem_GL3Plus_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(QT_DIR)\6.1.3\msvc2019_64\lib;$(OGRE3D_DIR)\Binaries\lib\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(QtDir)\6.1.3\msvc2019_64\lib;$(Ogre3dDir)\Binaries\lib\$(Configuration)</AdditionalLibraryDirectories>
       <EntryPointSymbol>
       </EntryPointSymbol>
     </Link>
@@ -170,7 +174,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)src;$(ProjectDir)vendor;$(QT_DIR)\6.1.3\msvc2019_64\include;$(QT_DIR)\6.1.3\msvc2019_64\include\QtCore;$(QT_DIR)\6.1.3\msvc2019_64\include\QtGui;$(QT_DIR)\6.1.3\msvc2019_64\include\QtWidgets;$(OGRE3D_DIR)\Binaries\include;$(OGRE3D_DIR)\Source\ogre-1.12.6\OgreMain\include;$(OGRE3D_DIR)\Source\ogre-1.12.6\RenderSystems\Direct3D9\include;D:\SDK\FBX\2020.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)src;$(ProjectDir)vendor;$(QtDir)\6.1.3\msvc2019_64\include;$(QtDir)\6.1.3\msvc2019_64\include\QtCore;$(QtDir)\6.1.3\msvc2019_64\include\QtGui;$(QtDir)\6.1.3\msvc2019_64\include\QtWidgets;$(Ogre3dDir)\include\OGRE;$(Ogre3dDir)\Source\ogre-1.12.6\OgreMain\include;$(Ogre3dDir)\Source\ogre-1.12.6\RenderSystems\Direct3D9\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <DisableSpecificWarnings>4996;</DisableSpecificWarnings>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -181,7 +185,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(QT_DIR)\6.1.3\msvc2019_64\lib;$(OGRE3D_DIR)\Binaries\lib\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(QtDir)\6.1.3\msvc2019_64\lib;$(Ogre3dDir)\Binaries\lib\$(Configuration)</AdditionalLibraryDirectories>
       <AdditionalDependencies>Qt6Core.lib;Qt6Gui.lib;Qt6Widgets.lib;OgreMain.lib;RenderSystem_Direct3D9.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
     </Link>
