@@ -10,7 +10,7 @@ namespace MGF {	namespace Asset {
 	{
 	public:
 		PlainTextAsset(const File& soureFile);
-		const QString Text;
+		QString Text;
 	};
 
 } }

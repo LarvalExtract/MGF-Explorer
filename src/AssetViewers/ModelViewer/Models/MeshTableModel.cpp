@@ -28,7 +28,7 @@ QVariant MeshTable::data(const QModelIndex& index, int role /*= Qt::DisplayRole*
 	{
 		return QVariant();
 	}
-
+	/*
 	const auto renderOperationTypeString = [](Ogre::RenderOperation::OperationType type)
 	{
 		using ot = Ogre::RenderOperation::OperationType;
@@ -49,7 +49,7 @@ QVariant MeshTable::data(const QModelIndex& index, int role /*= Qt::DisplayRole*
 	case 3: return mesh.stride;
 	case 4: return renderOperationTypeString(mesh.topology);
 	}
-
+	*/
 	return QVariant();
 }
 

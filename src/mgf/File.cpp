@@ -120,6 +120,6 @@ const File* File::FindRelativeItem(const std::filesystem::path &relativePath) co
 EFileType File::GetEFileTypeFromExtension(const std::filesystem::path& extension)
 {
     auto ext = extension.string();
-    std::ranges::for_each(ext, [](const auto c) { return std::tolower(c); });
+    for (char& c : ext) { c = std::tolower(c); }
     return MapExtensionFileType.contains(ext) ? MapExtensionFileType.at(ext) : EFileType::Unassigned;
 }

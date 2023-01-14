@@ -15,29 +15,27 @@ bool TextureExtractor::Extract(const MGF::File& sourceFile, const std::filesyste
 	ImageWriter.setFileName(destinationPath.u8string().c_str());
 
 	uint32_t width, height, flags, size;
-	const unsigned char* data = nullptr;
+	char* data = nullptr;
 
 	if (sourceFile.ArchiveVersion == MGF::Version::MechAssault)
 	{
 		MA1_TIF_FILE tif;
-		MGF::Factories::ImageFactory::Deserialize(sourceFile, tif);
+		MGF::Factories::ImageFactory::Deserialize(sourceFile, tif, &data);
 
 		width = tif.header.cWidth.imageWidth;
 		height = tif.header.cHeight.imageHeight;
 		flags = tif.header.cFlags.flags;
 		size = tif.header.cSize.imageSize;
-		data = reinterpret_cast<const unsigned char*>(tif.pixels);
 	}
 	else
 	{
 		MA2_TIF_FILE tif;
-		MGF::Factories::ImageFactory::Deserialize(sourceFile, tif);
+		MGF::Factories::ImageFactory::Deserialize(sourceFile, tif, &data);
 
 		width = tif.header.cWidth.imageWidth;
 		height = tif.header.cHeight.imageHeight;
 		flags = tif.header.cFlags.flags;
 		size = tif.header.cSize.imageSize;
-		data = reinterpret_cast<const unsigned char*>(tif.pixels);
 	}
 
 
@@ -46,9 +44,9 @@ bool TextureExtractor::Extract(const MGF::File& sourceFile, const std::filesyste
 		std::vector<unsigned long> decompressed(width * height);
 		switch (compressed_format_bits)
 		{
-		case 1: BlockDecompressImageDXT1(width, height, data, decompressed.data(), true); break;
-		case 3: BlockDecompressImageDXT5(width, height, data, decompressed.data(), true); break;
-		case 5: BlockDecompressImageDXT5(width, height, data, decompressed.data(), true); break;
+		case 1: BlockDecompressImageDXT1(width, height, (unsigned char*)data, decompressed.data(), true); break;
+		case 3: BlockDecompressImageDXT5(width, height, (unsigned char*)data, decompressed.data(), true); break;
+		case 5: BlockDecompressImageDXT5(width, height, (unsigned char*)data, decompressed.data(), true); break;
 		}
 
 		QImage image(reinterpret_cast<const unsigned char*>(decompressed.data()), width, height, QImage::Format::Format_RGBA8888);
@@ -68,7 +66,7 @@ bool TextureExtractor::Extract(const MGF::File& sourceFile, const std::filesyste
 			}
 		}(flags & 0x0F);
 
-		QImage image(data, width, height, (size / height), format, nullptr, nullptr);
+		QImage image((unsigned char*)data, width, height, (size / height), format, nullptr, nullptr);
 		ImageWriter.write(image);
 	}
 

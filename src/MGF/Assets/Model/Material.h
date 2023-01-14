@@ -1,8 +1,6 @@
 #pragma once
 
 #include <string>
-#include <OgreCommon.h>
-#include <OgreBlendMode.h>
 
 namespace MGF {	namespace Asset { namespace Model {
 
@@ -12,13 +10,13 @@ namespace MGF {	namespace Asset { namespace Model {
 		std::string tiling;
 		bool bMipmapping = true;
 		float mipmap_bias = 0.0f;
-		Ogre::TextureFilterOptions filter = Ogre::TextureFilterOptions::TFO_BILINEAR;
 	};
 
 	struct Material
 	{
 		std::string name;
 		std::string type;
+		/*
 		Ogre::ColourValue diffuse = Ogre::ColourValue::White;
 		Ogre::ColourValue ambient = Ogre::ColourValue::White;
 		Ogre::ColourValue specular = Ogre::ColourValue::White;
@@ -32,6 +30,7 @@ namespace MGF {	namespace Asset { namespace Model {
 
 		std::unordered_map<std::string, std::string> specialParams;
 		std::unordered_map<std::string, TextureParams> textures;
+		*/
 	};
 
 } } }

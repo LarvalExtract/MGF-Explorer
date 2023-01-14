@@ -4,8 +4,6 @@
 #include "MGF/Assets/TextureAsset.h"
 #include "MGFExplorerApplication.h"
 
-#include <Ogre.h>
-
 #include <functional>
 #include <unordered_map>
 #include <string_view>
@@ -28,6 +26,7 @@ static std::unordered_map<std::string_view, std::function<void(Ogre::Material&, 
     { "solid",          std::bind(MaterialFactory::CreateSolidMaterial,   _1, _2, _3) }
 };
 
+/*
 static std::unordered_map<std::string_view, Ogre::SceneBlendType> BlendTypes = {
     { "additive",   Ogre::SceneBlendType::SBT_ADD },
     { "normal",     Ogre::SceneBlendType::SBT_REPLACE },
@@ -38,6 +37,8 @@ static std::unordered_map<std::string_view, Ogre::CullingMode> CullModes = {
     { "true",       Ogre::CullingMode::CULL_NONE },
     { "false",      Ogre::CullingMode::CULL_CLOCKWISE }
 };
+*/
+
 
 Ogre::MaterialPtr MaterialFactory::Create(const MGF::Asset::Model::Material& params, const MGF::File &sourceFile)
 {

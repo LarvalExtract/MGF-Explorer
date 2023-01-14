@@ -1,7 +1,15 @@
 #include "MGFExplorerApplication.h"
 
 #include <QMessageBox>
+
 #include <filesystem>
+
+#include <Qt3DCore>
+#include <Qt3DRender>
+#include <Qt3DExtras>
+#include <QPlaneMesh>
+#include <QTextureMaterial>
+#include <QTransform>
 
 MGFExplorerApplication::MGFExplorerApplication(int argc, char* argv[], int flags)
 	: QApplication(argc, argv, flags)
@@ -29,22 +37,26 @@ MGFExplorerApplication::MGFExplorerApplication(int argc, char* argv[], int flags
 
 int MGFExplorerApplication::exec()
 {
-	InitialiseOgre();
-	RenderWindowContainer = QWidget::createWindowContainer(OgreWindow.get(), &MainWindow);
+	qputenv("QT3D_RENDERER", "opengl");
+
+	RenderWindow = new Qt3DExtras::Qt3DWindow(nullptr, Qt3DRender::API::OpenGL);
+	RenderWindowContainer = QWidget::createWindowContainer(RenderWindow, &MainWindow);
+
+	SetupTextureViewerScene();
 
 	MainWindow.show();
 
 	for (const auto& [mgfPath, assetPath] : FileList)
 	{
-		MainWindow.OpenMGFWorkspace(mgfPath.u8string().c_str());
+		MainWindow.OpenMGFWorkspace(mgfPath);
 	}
 
 	return QApplication::exec();
 }
 
-OgreWindow* MGFExplorerApplication::GetRenderWindow() const
+Qt3DExtras::Qt3DWindow* MGFExplorerApplication::GetRenderWindow() const
 {
-	return OgreWindow.get();
+	return RenderWindow;
 }
 
 QWidget* MGFExplorerApplication::GetRenderWindowContainer() const
@@ -52,19 +64,38 @@ QWidget* MGFExplorerApplication::GetRenderWindowContainer() const
 	return RenderWindowContainer;
 }
 
-void MGFExplorerApplication::InitialiseOgre()
+MGFExplorerApplication::TextureViewerData MGFExplorerApplication::GetTextureViewerData()
 {
-	OgreRoot = std::make_unique<Ogre::Root>("plugins.cfg", "ogre.cfg", "");
-	OgreWindow = std::make_unique<::OgreWindow>();
+	RenderWindow->setRootEntity(mTextureViewerRootEntity);
 
-	const auto& renderers = OgreRoot->getAvailableRenderers();
+	RenderWindow->camera()->lens()->setOrthographicProjection(-0.5f, 0.5f, -0.5f, 0.5f, 0.1f, 10.0f);
+	RenderWindow->camera()->setPosition(QVector3D(0.0f, 0.0f, 1.0f));
+	RenderWindow->camera()->setUpVector(QVector3D(0.0f, 1.0f, 0.0f));
+	RenderWindow->camera()->setViewCenter(QVector3D(0.0f, 0.0f, 0.0f));
 
-	if (renderers.empty())
-		throw std::runtime_error("No renderers found. Please ensure plugins.cfg is present in the application root.");
+	return TextureViewerData{
+		RenderWindow->camera(),
+		mTextureViewerMaterial
+	};
+}
 
-	OgreRoot->setRenderSystem(renderers[0]);
-	OgreRoot->initialise(false);
-	OgreWindow->initialize("OgreWindow");
+void MGFExplorerApplication::SetupTextureViewerScene()
+{
+	mTextureViewerRootEntity = new Qt3DCore::QEntity();
 
-	OgreRoot->createSceneManager();
+	mTextureViewerMaterial = new Qt3DExtras::QTextureMaterial();
+	auto plane = new Qt3DExtras::QPlaneMesh();
+
+	auto trnsfm = new Qt3DCore::QTransform();
+	trnsfm->setTranslation(QVector3D(0.0f, 0.0f, 0.0f));
+	trnsfm->setRotation(QQuaternion::fromEulerAngles(QVector3D(90.0f, 0.0f, 0.0f)));
+	trnsfm->setScale(1.0f);
+	
+	mTextureViewerRootEntity->addComponent(plane);
+	mTextureViewerRootEntity->addComponent(mTextureViewerMaterial);
+	mTextureViewerRootEntity->addComponent(trnsfm);
+}
+
+void MGFExplorerApplication::SetupModelViewerScene()
+{
 }

@@ -2,20 +2,11 @@
 #include "MaterialFactory.h"
 #include "Utilities/configfile.h"
 
-#include <sstream>
-
-#include <OgreMeshManager.h>
-#include <OgreSubMesh.h>
-#include <OgreHardwareBuffer.h>
-#include <OgreHardwareBufferManager.h>
-#include <OgreTechnique.h>
-#include <OgrePass.h>
-#include <OgreTextureUnitState.h>
-
 #include "MGF/Deserializer.h"
 #include "MGF/Structures/geomFace.h"
 #include "MGF/Structures/geomVert.h"
 
+/*
 static std::unordered_map<std::string_view, Ogre::RenderOperation::OperationType> MapTopologies = {
     { "indexedlist",    Ogre::RenderOperation::OT_TRIANGLE_LIST },
     { "indexedstrip",   Ogre::RenderOperation::OT_TRIANGLE_STRIP },
@@ -284,3 +275,4 @@ bool MeshFactory::SetupVertexElements(Ogre::VertexDeclaration *decl, uint32_t fl
 
     return bScaleTexCoords;
 }
+*/

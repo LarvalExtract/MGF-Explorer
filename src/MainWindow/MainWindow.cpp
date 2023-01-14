@@ -37,7 +37,8 @@ void MainWindow::on_actionOpen_MGF_file_triggered()
     	{
     		try
     		{
-    			OpenMGFWorkspace(fileName);
+                const std::filesystem::path path(fileName.toLatin1().constData());
+    			OpenMGFWorkspace(path);
     		}
             catch (const std::runtime_error& err)
             {
@@ -72,10 +73,10 @@ void MainWindow::on_actionClose_all_MGF_files_triggered()
 void MainWindow::on_tabWidget_tabCloseRequested(int index)
 {
     const auto ws = static_cast<ArchiveViewer::ArchiveViewerWidget*>(ui->tabWidget->widget(index));
-    const auto str = QString(ws->MGFArchive().Path.u8string().c_str());
+    const auto str = ws->MGFArchive().Path.string();
 
     ui->tabWidget->removeTab(index);
-    ArchiveWidgets.erase(str.toStdString());
+    ArchiveWidgets.erase(str);
 
     if (ui->tabWidget->count() == 0)
     {
@@ -83,23 +84,19 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index)
     }
 }
 
-void MainWindow::OpenMGFWorkspace(const QString &mgfFilePath)
+void MainWindow::OpenMGFWorkspace(const std::filesystem::path& mgfFilePath)
 {
-    std::filesystem::path path = mgfFilePath.toStdString();
-
-    if (const auto str = mgfFilePath.toStdString(); ArchiveWidgets.find(str) != ArchiveWidgets.end())
+    const auto str = mgfFilePath.string();
+    if (ArchiveWidgets.contains(str))
     {
-        int tabIndex = ui->tabWidget->indexOf(&ArchiveWidgets.at(str));
+        const int tabIndex = ui->tabWidget->indexOf(&ArchiveWidgets.at(str));
         ui->tabWidget->setCurrentIndex(tabIndex);
     }
     else
     {
-        ArchiveWidgets.try_emplace(str, path, ui->tabWidget);
+        ArchiveWidgets.try_emplace(str, mgfFilePath, ui->tabWidget);
 
-        auto& widget = ArchiveWidgets.at(str);
-        const QString tabTitle = path.filename().u8string().c_str();
-
-        int newTabIndex = ui->tabWidget->addTab(&widget, tabTitle);
+        const int newTabIndex = ui->tabWidget->addTab(&ArchiveWidgets.at(str), QString{mgfFilePath.filename().string().c_str()});
         ui->tabWidget->setCurrentIndex(newTabIndex);
     }
     

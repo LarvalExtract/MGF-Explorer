@@ -1,14 +1,12 @@
 #pragma once
 
 #include <string>
-#include <OgreRenderOperation.h>
 
 namespace MGF {	namespace Asset { namespace Model {
 
 	struct Mesh
 	{
 		std::string name;
-		Ogre::RenderOperation::OperationType topology;
 		std::string verticesFilename;
 		std::string indicesFilename;
 		std::string materialPath;

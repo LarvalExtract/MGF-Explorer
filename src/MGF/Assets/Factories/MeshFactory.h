@@ -3,11 +3,6 @@
 
 #include "MGF/Assets/ModelAsset.h"
 
-#include <OgreMesh.h>
-#include <OgreRenderOperation.h>
-
-#include <pugixml-1.10/src/pugixml.hpp>
-
 namespace MGF { namespace Factories { 
 
 	class MeshFactory
@@ -18,9 +13,6 @@ namespace MGF { namespace Factories {
 		MeshFactory(MeshFactory&&) = delete;
 		MeshFactory& operator=(const MeshFactory&) = delete;
 		MeshFactory& operator=(MeshFactory&&) = delete;
-
-		static Ogre::MeshPtr Create(const pugi::xml_node& meshXml, const MGF::File& mgmodelFile, Asset::Model::Mesh& meshDef);
-		static Ogre::MeshPtr Create(const MGF::File& meshFile, Asset::Model::Mesh& meshDef);
 
 	private:
 		static MGF::Asset::Model::Mesh CreateMeshDefinition(const MGF::File& meshFile);
@@ -41,8 +33,6 @@ namespace MGF { namespace Factories {
 			uint32_t size = 0;
 			uint32_t data = 0;
 		};
-
-		static bool SetupVertexElements(Ogre::VertexDeclaration* decl, uint32_t flags);
 	};
 
 }}

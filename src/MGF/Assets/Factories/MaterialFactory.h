@@ -3,8 +3,6 @@
 
 #include "MGF/Assets/ModelAsset.h"
 
-#include <OgreMaterial.h>
-
 #include <pugixml-1.10/src/pugixml.hpp>
 
 namespace MGF { namespace Factories {

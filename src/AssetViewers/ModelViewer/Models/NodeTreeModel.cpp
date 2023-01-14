@@ -102,7 +102,6 @@ int SetVisibility(MGF::Asset::Model::Node* node, bool visible)
 	int result = 1;
 
 	node->bVisible = visible;
-	node->sceneNode->setVisible(visible);
 
 	for (auto& child : node->children)
 	{

@@ -7,8 +7,6 @@
 #include "AssetViewers/ModelViewer/Models/AnimationTableModel.h"
 #include "Utilities/configfile.h"
 
-#include <OgreSceneNode.h>
-
 #include <pugixml-1.10/src/pugixml.hpp>
 
 namespace MGF { namespace Asset {
@@ -33,10 +31,8 @@ namespace MGF { namespace Asset {
 		void ParseMgmodelXml();
 		void ParseNodeTxt();
 
-		Model::Node* CreateSceneNode(Model::Node* parent, const pugi::xml_node& xmlnode, const std::unordered_map<std::string, Ogre::MeshPtr>& meshes);
+		Model::Node* CreateSceneNode(Model::Node* parent, const pugi::xml_node& xmlnode, const std::unordered_map<std::string, void*>& meshes);
 		Model::Node* CreateSceneNode(Model::Node* parent, const std::function<ConfigSection()>& func);
-
-		Ogre::SceneManager& SceneManager;
 	};
 
 } }

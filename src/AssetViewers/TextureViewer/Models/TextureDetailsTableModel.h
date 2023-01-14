@@ -3,6 +3,7 @@
 #include "MGF/VersionConstants.h"
 
 #include <QAbstractTableModel>
+#include <QAbstractTexture>
 
 namespace TextureViewer { namespace Models {
 
@@ -21,7 +22,7 @@ namespace TextureViewer { namespace Models {
 		std::uint32_t Frames;
 		std::uint32_t Mips;
 		std::uint32_t Size;
-		std::uint32_t Flags;
+		Qt3DRender::QAbstractTexture::TextureFormat Format;
 	};
 
 } }
