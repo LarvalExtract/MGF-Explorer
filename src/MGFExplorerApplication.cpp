@@ -10,6 +10,7 @@
 #include <QPlaneMesh>
 #include <QTextureMaterial>
 #include <QTransform>
+#include <QPointLight>
 
 MGFExplorerApplication::MGFExplorerApplication(int argc, char* argv[], int flags)
 	: QApplication(argc, argv, flags)
@@ -43,6 +44,7 @@ int MGFExplorerApplication::exec()
 	RenderWindowContainer = QWidget::createWindowContainer(RenderWindow, &MainWindow);
 
 	SetupTextureViewerScene();
+	SetupModelViewerScene();
 
 	MainWindow.show();
 
@@ -79,6 +81,27 @@ MGFExplorerApplication::TextureViewerData MGFExplorerApplication::GetTextureView
 	};
 }
 
+MGFExplorerApplication::ModelViewerData MGFExplorerApplication::GetModelViewerData()
+{
+	if (mLastEntity)
+	{
+		mLastEntity->setParent((Qt3DCore::QNode*)nullptr);
+	}
+
+	RenderWindow->setRootEntity(mModelViewerRootEntity);
+
+	auto camera = RenderWindow->camera();
+	camera->lens()->setPerspectiveProjection(55.0f, 16.0f / 9.0f, 0.1f, 1000.0f);
+	camera->setPosition(QVector3D(0.0f, 0.0f, 20.0f));
+	camera->setUpVector(QVector3D(0.0f, 1.0f, 0.0f));
+	camera->setViewCenter(QVector3D(0.0f, 0.0f, 0.0f));
+
+	return ModelViewerData{
+		RenderWindow,
+		mModelViewerRootEntity
+	};
+}
+
 void MGFExplorerApplication::SetupTextureViewerScene()
 {
 	mTextureViewerRootEntity = new Qt3DCore::QEntity();
@@ -98,4 +121,19 @@ void MGFExplorerApplication::SetupTextureViewerScene()
 
 void MGFExplorerApplication::SetupModelViewerScene()
 {
+	mModelViewerRootEntity = new Qt3DCore::QEntity();
+	auto trnsfm = new Qt3DCore::QTransform();
+	trnsfm->setTranslation(QVector3D(0.0f, 0.0f, 0.0f));
+	trnsfm->setRotation(QQuaternion::fromEulerAngles(QVector3D(0.0f, 0.0f, 0.0f)));
+	trnsfm->setScale(1.0f);
+
+	auto cameraController = new Qt3DExtras::QFirstPersonCameraController(mModelViewerRootEntity);
+	cameraController->setCamera(RenderWindow->camera());
+
+	auto light = new Qt3DRender::QPointLight;
+	light->setConstantAttenuation(1.0f);
+	light->setColor(QColor::fromRgbF(1.0f, 1.0f, 1.0f));
+	light->setIntensity(100.0f);
+
+	mModelViewerRootEntity->addComponent(light);
 }

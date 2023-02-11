@@ -59,7 +59,7 @@ QOpenGLTexture::TextureFormat DetermineFormat(uint32_t flags)
 	case 1: return QOpenGLTexture::TextureFormat::R5G6B5;
 	case 3: return QOpenGLTexture::TextureFormat::RGBA4;
 	case 5: return QOpenGLTexture::TextureFormat::R8_UNorm;
-	case 7: return QOpenGLTexture::TextureFormat::R16_UNorm;
+	case 7: return QOpenGLTexture::TextureFormat::R16U;
 	}
 }
 
@@ -77,7 +77,7 @@ QOpenGLTexture::PixelFormat DeterminePixelFormat(uint32_t flags)
 	case 1: return QOpenGLTexture::PixelFormat::RGB;
 	case 3: return QOpenGLTexture::PixelFormat::BGRA;
 	case 5: return QOpenGLTexture::PixelFormat::Luminance;
-	case 7: return QOpenGLTexture::PixelFormat::LuminanceAlpha;
+	case 7: return QOpenGLTexture::PixelFormat::Luminance;
 	}
 }
 
@@ -300,6 +300,11 @@ QAbstractTexture* TextureLibrary::CreateTexture(const MGF::File& sourceFile)
 			return QAbstractTexture::TextureFormat::RGBA_DXT5;
 		}
 	}());
+
+	Qt3DRender::QTextureWrapMode wrapMode;
+	wrapMode.setX(QTextureWrapMode::WrapMode::Repeat);
+	wrapMode.setY(QTextureWrapMode::WrapMode::Repeat);
+	texture->setWrapMode(wrapMode);
 
 	return texture;
 }

@@ -3,6 +3,8 @@
 #include "MainWindow/MainWindow.h"
 #include "MGF/AssetManager.h"
 #include "MGF/Assets/Factories/TextureLibrary.h"
+#include "MGF/Assets/Factories/MeshLibrary.h"
+#include "MGF/Assets/Factories/MaterialLibrary.h"
 
 #include <QApplication>
 #include <Qt3DWindow>
@@ -48,12 +50,21 @@ public:
 
 	MGF::AssetManager AssetManager;
 	MA::TextureLibrary mTextureLibrary;
+	MA::MeshLibrary mMeshLibrary;
+	MA::MaterialLibrary mMaterialLibrary;
 
 	struct TextureViewerData
 	{
 		Qt3DRender::QCamera* pCamera;
 		Qt3DExtras::QTextureMaterial* pMaterial;
 	} GetTextureViewerData();
+
+	struct ModelViewerData
+	{
+		Qt3DExtras::Qt3DWindow* pRenderWindow;
+		Qt3DCore::QEntity* pRootEntity;
+	} GetModelViewerData();
+	Qt3DCore::QEntity* mLastEntity = nullptr;
 
 private:
 	MainWindow MainWindow;
@@ -67,4 +78,6 @@ private:
 
 	Qt3DCore::QEntity* mTextureViewerRootEntity = nullptr;
 	Qt3DExtras::QTextureMaterial* mTextureViewerMaterial = nullptr;
+
+	Qt3DCore::QEntity* mModelViewerRootEntity = nullptr;
 };

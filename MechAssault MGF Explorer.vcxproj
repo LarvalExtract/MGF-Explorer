@@ -218,7 +218,9 @@
     <ClCompile Include="src\MGFExplorerApplication.cpp" />
     <ClCompile Include="src\MGF\Assets\AssetBase.cpp" />
     <ClCompile Include="src\MGF\Assets\EntityAsset.cpp" />
-    <ClCompile Include="src\MGF\Assets\Factories\MaterialFactory2.cpp" />
+    <ClCompile Include="src\MGF\Assets\Factories\MaterialLibrary.cpp" />
+    <ClCompile Include="src\MGF\Assets\Factories\MeshLibrary.cpp" />
+    <ClCompile Include="src\MGF\Assets\Factories\ShaderProgramProvider.cpp" />
     <ClCompile Include="src\MGF\Assets\Factories\TextureLibrary.cpp" />
     <ClCompile Include="src\MGF\Factories\ImageFactory.cpp" />
     <ClCompile Include="src\FileExtractorWindow\Extractor.cpp" />
@@ -282,8 +284,11 @@
     <ClInclude Include="src\MGF\Assets\Factories\AttributeNames.h" />
     <ClInclude Include="src\MGF\Assets\Factories\EffectLibrary.h" />
     <ClInclude Include="src\MGF\Assets\Factories\EntityNames.h" />
-    <ClInclude Include="src\MGF\Assets\Factories\MaterialFactory2.h" />
+    <ClInclude Include="src\MGF\Assets\Factories\MaterialLibrary.h" />
+    <ClInclude Include="src\MGF\Assets\Factories\MeshLibrary.h" />
+    <ClInclude Include="src\MGF\Assets\Factories\ShaderProgramProvider.h" />
     <ClInclude Include="src\MGF\Assets\Factories\TextureLibrary.h" />
+    <ClInclude Include="src\MGF\Assets\Factories\XmlUtils.h" />
     <ClInclude Include="src\mgf\Assets\Model\Animation.h" />
     <ClInclude Include="src\mgf\Assets\Model\Material.h" />
     <ClInclude Include="src\mgf\Assets\Model\Mesh.h" />
@@ -337,6 +342,7 @@
     <ClInclude Include="src\MainWindow\ui_MainWindow.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="shaders\Basic.vert.glsl" />
     <None Include="src\ArchiveViewer\ArchiveViewerWidget.ui" />
     <None Include="src\AssetViewers\EntityViewer\EntityViewerWidget.ui" />
     <None Include="src\AssetViewers\ModelViewer\ModelViewerWidget.ui" />

@@ -47,8 +47,9 @@ MGF::Asset::EntityAsset::EntityAsset(const MGF::File& entityFile) :
 			case 9:
 			{
 				std::vector<char> str(attribute.dataLength);
-				entityDeserializer.ReadBytes(str.data(), str.size());
+				entityDeserializer.ReadBytes(str.data(), str.size(), entityDeserializer.CurrentOffset());
 				a = str.data();
+				entityDeserializer.CurrentOffset() += attribute.dataLength;
 			} break;
 			case 10:
 				a = QString("%1, %2").arg(
@@ -73,7 +74,10 @@ MGF::Asset::EntityAsset::EntityAsset(const MGF::File& entityFile) :
 					QString::number(entityDeserializer.Deserialize<uint8_t>())
 				);
 				break;
-			case 13: a = "TIF"; break;
+			case 13: 
+				a = "TIF"; 
+				entityDeserializer.CurrentOffset() += attribute.dataLength;
+				break;
 			}
 			
 			auto attributeString = entityFile.FileType == EFileType::wdf
@@ -106,8 +110,6 @@ MGF::Asset::EntityAsset::EntityAsset(const MGF::File& entityFile) :
 				a,
 				offset
 			));
-
-			entityDeserializer.CurrentOffset() += attribute.dataLength;
 		}
 
 		mapEntities.emplace(e->UID, e);

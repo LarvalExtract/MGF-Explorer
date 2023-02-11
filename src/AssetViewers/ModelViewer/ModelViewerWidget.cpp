@@ -5,31 +5,17 @@
 #include "MGF/Assets/ModelAsset.h"
 
 #include <QMouseEvent>
-
-#include <QRandomGenerator>
-#include <QForwardRenderer>
-#include <QEntity>
 #include <QCamera>
-#include <QFirstPersonCameraController>
-#include <QCuboidMesh>
-#include <QTransform>
-#include <QPhongMaterial>
+#include <QForwardRenderer>
+
 
 using namespace ModelViewer;
-
-bool ModelViewerWidget::sStaticInitialized = false;
-Qt3DCore::QEntity* ModelViewerWidget::sRootEntity = nullptr;
-Qt3DRender::QCamera* ModelViewerWidget::sCamera = nullptr;
-Qt3DExtras::QFirstPersonCameraController* ModelViewerWidget::sCameraController = nullptr;
-Qt3DExtras::QCuboidMesh* ModelViewerWidget::sCube = nullptr;
 
 ModelViewerWidget::ModelViewerWidget(QWidget *parent) :
     ui(new Ui::ModelViewerWidget)
 {
     ui->setupUi(this);
-
-    if (!ModelViewerWidget::sStaticInitialized)
-        ModelViewerWidget::InitScene();
+    qApp->installEventFilter(this);
 }
 
 ModelViewerWidget::~ModelViewerWidget()
@@ -41,88 +27,53 @@ void ModelViewerWidget::LoadAsset(MGF::Asset::AssetPtr asset)
 {
 	auto& model = *static_cast<MGF::Asset::ModelAsset*>(asset.get());
 
-
-
-    const int random = static_cast<int>(QRandomGenerator::global()->generate64());
-    qApp->GetRenderWindow()->defaultFrameGraph()->setClearColor(QColor::fromRgba(QRgb(random)));
+    auto [wnd, rootEntity] = qApp->GetModelViewerData();
+    wnd->defaultFrameGraph()->setClearColor(QColor::fromRgba(0xFFFF00FF));
+    wnd->camera()->lens()->setAspectRatio((float)wnd->geometry().width() / (float)wnd->geometry().height());
+    // wnd->defaultFrameGraph()->setShowDebugOverlay(true);
+    model.mRootNode->setParent(rootEntity);
+    qApp->mLastEntity = model.mRootNode;
     
-	ui->animTableView->setModel(model.GetAnimationTableModel());
-	ui->meshTableView->setModel(model.GetMeshTableModel());
-	ui->materialTableView->setModel(model.GetMaterialTableModel());
-	ui->nodeTreeView->setModel(model.GetNodeTreeModel());
-	ui->nodeTreeView->setColumnWidth(0, 400);
+	// ui->animTableView->setModel(model.GetAnimationTableModel());
+	// ui->meshTableView->setModel(model.GetMeshTableModel());
+	// ui->materialTableView->setModel(model.GetMaterialTableModel());
+	// ui->nodeTreeView->setModel(model.GetNodeTreeModel());
+	// ui->nodeTreeView->setColumnWidth(0, 400);
 
-    const auto RemoveOrAddTab = [this](QAbstractItemModel* model, QWidget* tab, int index, const QString& label)
-    {
-        // tab exists
-        if (int tabIndex = ui->tabWidget->indexOf(tab); tabIndex > -1)
-        {
-            if (model->rowCount() == 0)
-            {
-                ui->tabWidget->removeTab(tabIndex);
-            }
-        }
-        // tab doesn't exist
-        else
-        {
-            if (model->rowCount() > 0)
-            {
-                ui->tabWidget->insertTab(index, tab, label);
-            }
-        }
-    };
-
-    constexpr int NodeTabIndex = 0;
-    constexpr int AnimationTabIndex = 1;
-    constexpr int MeshTabIndex = 2;
-    constexpr int MaterialTabIndex = 3;
-
-    static const QString NodeTabLabel = "Nodes";
-    static const QString AnimationTabLabel = "Animations";
-    static const QString MeshTabLabel = "Meshes";
-    static const QString MaterialTabLabel = "Materials";
-
-    RemoveOrAddTab(ui->nodeTreeView->model(),      ui->tabNodes,      NodeTabIndex,      NodeTabLabel);
-    RemoveOrAddTab(ui->animTableView->model(),     ui->tabAnimations, AnimationTabIndex, AnimationTabLabel);
-    RemoveOrAddTab(ui->meshTableView->model(),     ui->tabMeshes,     MeshTabIndex,      MeshTabLabel);
-    RemoveOrAddTab(ui->materialTableView->model(), ui->tabMaterials,  MaterialTabIndex,  MaterialTabLabel);
-}
-
-void ModelViewerWidget::InitScene()
-{
-    if (sStaticInitialized)
-        return;
-
-    auto wnd = qApp->GetRenderWindow();
-
-    sRootEntity = new Qt3DCore::QEntity();
-    sCamera = wnd->camera();
-    sCamera->lens()->setPerspectiveProjection(55.0f, 16.0f / 9.0f, 0.1f, 1000.0f);
-    sCamera->setPosition(QVector3D(0.0f, 0.0f, 20.0f));
-    sCamera->setUpVector(QVector3D(0.0f, 1.0f, 0.0f));
-    sCamera->setViewCenter(QVector3D(0.0f, 0.0f, 0.0f));
-
-    sCameraController = new Qt3DExtras::QFirstPersonCameraController(sRootEntity);
-    sCameraController->setCamera(sCamera);
-
-    sCube = new Qt3DExtras::QCuboidMesh();
-
-    auto mat = new Qt3DExtras::QPhongMaterial();
-    mat->setAmbient(QColor::fromRgba(QRgb(0xffff00ff)));
-
-    auto trns = new Qt3DCore::QTransform();
-    trns->setTranslation(QVector3D(0.0f, 0.0f, 0.0f));
-    trns->setScale(3.0f);
-    trns->setRotation(QQuaternion::fromAxisAndAngle(QVector3D(1.0f, 0.0f, 0.0f), 0.0f));
-
-    auto cubeEntity = new Qt3DCore::QEntity(sRootEntity);
-    cubeEntity->addComponent(sCube);
-    cubeEntity->addComponent(mat);
-    cubeEntity->addComponent(trns);
-
-    wnd->setRootEntity(sRootEntity);
-
-    sStaticInitialized = true;
+    // const auto RemoveOrAddTab = [this](QAbstractItemModel* model, QWidget* tab, int index, const QString& label)
+    // {
+    //     // tab exists
+    //     if (int tabIndex = ui->tabWidget->indexOf(tab); tabIndex > -1)
+    //     {
+    //         if (model->rowCount() == 0)
+    //         {
+    //             ui->tabWidget->removeTab(tabIndex);
+    //         }
+    //     }
+    //     // tab doesn't exist
+    //     else
+    //     {
+    //         if (model->rowCount() > 0)
+    //         {
+    //             ui->tabWidget->insertTab(index, tab, label);
+    //         }
+    //     }
+    // };
+    // 
+    // constexpr int NodeTabIndex = 0;
+    // constexpr int AnimationTabIndex = 1;
+    // constexpr int MeshTabIndex = 2;
+    // constexpr int MaterialTabIndex = 3;
+    // 
+    // static const QString NodeTabLabel = "Nodes";
+    // static const QString AnimationTabLabel = "Animations";
+    // static const QString MeshTabLabel = "Meshes";
+    // static const QString MaterialTabLabel = "Materials";
+    // 
+    // RemoveOrAddTab(ui->nodeTreeView->model(),      ui->tabNodes,      NodeTabIndex,      NodeTabLabel);
+    // RemoveOrAddTab(ui->animTableView->model(),     ui->tabAnimations, AnimationTabIndex, AnimationTabLabel);
+    // RemoveOrAddTab(ui->meshTableView->model(),     ui->tabMeshes,     MeshTabIndex,      MeshTabLabel);
+    // RemoveOrAddTab(ui->materialTableView->model(), ui->tabMaterials,  MaterialTabIndex,  MaterialTabLabel);
 }
 
 void ModelViewerWidget::showEvent(QShowEvent* event)
@@ -141,5 +92,43 @@ void ModelViewerWidget::hideEvent(QHideEvent* event)
     qApp->GetRenderWindowContainer()->setMouseTracking(false);
     qApp->GetRenderWindowContainer()->removeEventFilter(this);
     qApp->GetRenderWindowContainer()->killTimer(m_WindowTimerId);
+}
+
+bool ModelViewer::ModelViewerWidget::eventFilter(QObject* object, QEvent* event)
+{
+    // fucking stupid default camera controls
+    if (event->type() == QEvent::KeyPress)
+    {
+        using namespace Qt;
+
+        switch (QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event); keyEvent->key())
+        {
+        case Key_W:
+            qApp->postEvent(this, new QKeyEvent(QEvent::KeyPress, Key_Up, KeyboardModifier::NoModifier));
+            return true;
+
+        case Key_A:
+            qApp->postEvent(this, new QKeyEvent(QEvent::KeyPress, Key_Left, KeyboardModifier::NoModifier));
+            return true;
+
+        case Key_S:
+            qApp->postEvent(this, new QKeyEvent(QEvent::KeyPress, Key_Down, KeyboardModifier::NoModifier));
+            return true;
+
+        case Key_D:
+            qApp->postEvent(this, new QKeyEvent(QEvent::KeyPress, Key_Right, KeyboardModifier::NoModifier));
+            return true;
+
+        case Key_Q:
+            qApp->postEvent(this, new QKeyEvent(QEvent::KeyPress, Key_PageDown, KeyboardModifier::NoModifier));
+            return true;
+
+        case Key_E:
+            qApp->postEvent(this, new QKeyEvent(QEvent::KeyPress, Key_PageUp, KeyboardModifier::NoModifier));
+            return true;
+        }
+    }
+
+    return false;
 }
 

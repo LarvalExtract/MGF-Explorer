@@ -17,7 +17,7 @@ namespace MGF
 
 		void ReadBytes(char* dst, std::size_t count, std::size_t offset = 0)
 		{
-			m_mgfFile.MGFArchive.seekg(m_mgfFile.FileOffset + offset).read(dst, count);
+			m_mgfFile.MGFArchive.seekg(m_mgfFile.FileOffset + offset).read(dst, std::min(count, m_mgfFile.FileLength - offset));
 		}
 
 		std::vector<char> ReadAllBytes() const
@@ -31,7 +31,7 @@ namespace MGF
 		Structure Deserialize(std::size_t offset = 0, std::size_t length = sizeof(Structure))
 		{
 			Structure result{};
-			ReadBytes(reinterpret_cast<char*>(&result), length, offset);
+			ReadBytes(reinterpret_cast<char*>(&result), length, offset ? offset : m_Offset);
 			m_Offset += length;
 			return result;
 		}

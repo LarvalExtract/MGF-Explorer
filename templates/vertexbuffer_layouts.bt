@@ -1,0 +1,17 @@
+
+struct float3a {
+    float x;
+    float y;
+    float z;
+};
+
+struct short2a {
+    short x;
+    short y;
+};
+
+struct VB_00000301 {
+    float3a position<bgcolor=cRed>;
+    uint32 unk1;
+    short2a texcoord<bgcolor=cBlue>;
+};

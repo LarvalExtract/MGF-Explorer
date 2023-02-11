@@ -11,11 +11,17 @@
 //   History: 
 //------------------------------------------------
 
-#include "mgi_header.bth"
+// #include "mgi_header.bth"
 #include "vertexbuffer_layouts.bt"
 
 struct GEOMVERT {
-    MGI_HEADER mgi;
+    struct MGI_HEADER {
+	 uint32  unk1;
+	 byte    MGIc[4];
+	 uint32  length;
+	 uint32  unk2;
+	 byte    padding[16];
+    } mgi;
     if (geomVert.mgi.unk2 == 2) {
         struct XMLB {
             char id[4];
@@ -37,27 +43,32 @@ struct GEOMVERT {
             uint32  vertexCount;
             uint32  bufferLayoutFlags<format=hex>;
             struct EXTENTS {
-                float3 min, max;
+                struct float3 {
+                    float x;
+                    float y;
+                    float z;
+                } min; float3 max;
             } boundingbox;
         } info;
         char    data[4];
         uint32  dataSize;
-        switch (geomVert.vers.info.bufferLayoutFlags) {
-        case 0x00000003: VB_00000003 verts[geomVert.vers.info.vertexCount]; break;
-        case 0x00000101: VB_00000101 verts[geomVert.vers.info.vertexCount]; break;
-        case 0x00000301: VB_00000301 verts[geomVert.vers.info.vertexCount]; break;
-        case 0x00000309: VB_00000309 verts[geomVert.vers.info.vertexCount]; break;
-        case 0x00000501: VB_00000501 verts[geomVert.vers.info.vertexCount]; break;
-        case 0x00000509: VB_00000509 verts[geomVert.vers.info.vertexCount]; break;
-        case 0x00001003: VB_00001003 verts[geomVert.vers.info.vertexCount]; break;
-        case 0x00001101: VB_00001101 verts[geomVert.vers.info.vertexCount]; break;
-        case 0x00002003: VB_00002003 verts[geomVert.vers.info.vertexCount]; break;
-        case 0x00002101: VB_00002101 verts[geomVert.vers.info.vertexCount]; break;
-        case 0x00080101: VB_00080101 verts[geomVert.vers.info.vertexCount]; break;
-        case 0x00080301: VB_00080301 verts[geomVert.vers.info.vertexCount]; break;
-        case 0x00100301: VB_00100301 verts[geomVert.vers.info.vertexCount]; break;
-        case 0x00100501: VB_00100501 verts[geomVert.vers.info.vertexCount]; break;
-        case 0x00180301: VB_00180301 verts[geomVert.vers.info.vertexCount]; break;
-        };
+        VB_00000301 verts[geomVert.vers.info.vertexCount];
+        //switch (geomVert.vers.info.bufferLayoutFlags) {
+        //case 0x00000003: VB_00000003 verts[geomVert.vers.info.vertexCount]; break;
+        //case 0x00000101: VB_00000101 verts[geomVert.vers.info.vertexCount]; break;
+        //case 0x00000301: VB_00000301 verts[geomVert.vers.info.vertexCount]; break;
+        //case 0x00000309: VB_00000309 verts[geomVert.vers.info.vertexCount]; break;
+        //case 0x00000501: VB_00000501 verts[geomVert.vers.info.vertexCount]; break;
+        //case 0x00000509: VB_00000509 verts[geomVert.vers.info.vertexCount]; break;
+        //case 0x00001003: VB_00001003 verts[geomVert.vers.info.vertexCount]; break;
+        //case 0x00001101: VB_00001101 verts[geomVert.vers.info.vertexCount]; break;
+        //case 0x00002003: VB_00002003 verts[geomVert.vers.info.vertexCount]; break;
+        //case 0x00002101: VB_00002101 verts[geomVert.vers.info.vertexCount]; break;
+        //case 0x00080101: VB_00080101 verts[geomVert.vers.info.vertexCount]; break;
+        //case 0x00080301: VB_00080301 verts[geomVert.vers.info.vertexCount]; break;
+        //case 0x00100301: VB_00100301 verts[geomVert.vers.info.vertexCount]; break;
+        //case 0x00100501: VB_00100501 verts[geomVert.vers.info.vertexCount]; break;
+        //case 0x00180301: VB_00180301 verts[geomVert.vers.info.vertexCount]; break;
+        //};
     } vers;
 } geomVert;

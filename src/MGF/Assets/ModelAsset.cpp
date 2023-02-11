@@ -3,6 +3,14 @@
 #include "MGFExplorerApplication.h"
 #include "MGF/AssetManager.h"
 #include "MGF/Deserializer.h"
+#include "Factories/XmlUtils.h"
+
+#include <QEntity>
+#include <Qt3DCore/QTransform>
+#include <Qt3DRender/QGeometryRenderer>
+#include <QMaterial>
+#include <QQuaternion>
+#include <QVector3D>
 
 using namespace MGF::Asset;
 
@@ -33,33 +41,32 @@ void ModelAsset::ParseMgmodelXml()
 	const auto& root = document.root().first_child();
 	auto node = root.first_child();
 
-	std::unordered_map<std::string, void*> materials;
-	std::unordered_map<std::string, void*> meshes;
+	std::unordered_map<std::string, Qt3DRender::QMaterial*> materials;
+	std::unordered_map<std::string, Qt3DRender::QGeometryRenderer*> meshes;
 
 	std::string_view name(node.name());
 
 	// Load materials from XML
-	for (; name.contains("mat"); node = node.next_sibling(), name = node.name())
+	for (; name.starts_with("mat"); node = node.next_sibling(), name = node.name())
 	{
-		if (materials.contains(node.attribute("name").as_string()))
+		if (const std::string materialName = node.attribute("name").as_string(); !materials.contains(materialName))
 		{
-			
+			materials.insert(qApp->mMaterialLibrary.CreateMaterial(node, this->FileRef));
 		}
 	}
 
 	// Load meshes from XML
-	for (; name.contains("mesh"); node = node.next_sibling(), name = node.name())
+	for (; name.starts_with("mesh"); node = node.next_sibling(), name = node.name())
 	{
-		if (meshes.contains(node.attribute("name").as_string()))
+		if (const std::string meshName = node.attribute("name").as_string(); !meshes.contains(meshName))
 		{
-			
+			meshes.insert(std::make_pair(meshName, qApp->mMeshLibrary.CreateMesh(node, this->FileRef)));
 		}
 	}
 
-	Nodes->RootNode = new Model::Node;
-	for (; name.contains("node"); node = node.next_sibling(), name = node.name())
+	for (; name.starts_with("node"); node = node.next_sibling(), name = node.name())
 	{
-		Nodes->RootNode->children.push_back(CreateSceneNode(Nodes->RootNode, node, meshes));
+		CreateSceneNode(mRootNode = new Qt3DCore::QEntity, node, meshes, materials);
 	}
 }
 
@@ -83,11 +90,12 @@ void ModelAsset::ParseNodeTxt()
 		return ConfigSection(chunk);
 	};
 
-	Nodes->RootNode = CreateSceneNode(nullptr, ParseNodeSection);
+	CreateSceneNode(nullptr, ParseNodeSection);
 }
 
-Model::Node* ModelAsset::CreateSceneNode(Model::Node* parent, const std::function<ConfigSection()>& func)
+void ModelAsset::CreateSceneNode(Qt3DCore::QEntity* parent, const std::function<ConfigSection()>& func)
 {
+	/*
 	auto vars = func();
 
 	if (const auto& nodeType = vars["type"]; nodeType == "ANIMNODE")
@@ -125,12 +133,12 @@ Model::Node* ModelAsset::CreateSceneNode(Model::Node* parent, const std::functio
 		node->name = vars.Name();
 		node->type = nodeType;
 		node->parent = parent;
-		/*
+		
 		node->sceneNode = parent ? parent->sceneNode->createChildSceneNode() : SceneManager.createSceneNode();
 		node->sceneNode->setPosition(StrToVector(vars["position"]));
 		node->sceneNode->setOrientation(StrToQuat(vars["rot_axis"], vars["rot_angle"]));
 		node->sceneNode->setScale(StrToVector(vars["scale"]));
-		*/
+		
 		if (nodeType == "3DOBJECT" || nodeType == "SKIN")
 		{
 			const auto meshFile = FileRef.FindRelativeItem(vars["mesh"].data());
@@ -141,46 +149,38 @@ Model::Node* ModelAsset::CreateSceneNode(Model::Node* parent, const std::functio
 		for (int i = 0, num_children = std::stoi(vars["num_children"].data()); i < num_children; i++)
 		{
 			const auto childNode = CreateSceneNode(node, func);
-			if (childNode)
-			{
-				childNode->childIndex = node->children.size();
-				node->children.push_back(childNode);
-			}
 		}
 
 		return node;
 	}
+	*/
 }
 
-Model::Node* ModelAsset::CreateSceneNode(Model::Node* parent, const pugi::xml_node& xmlnode, const std::unordered_map<std::string, void*>& meshes)
+void ModelAsset::CreateSceneNode(Qt3DCore::QEntity* parent, const pugi::xml_node& xmlnode, const std::unordered_map<std::string, Qt3DRender::QGeometryRenderer*>& meshes, const std::unordered_map<std::string, Qt3DRender::QMaterial*>& materials)
 {
 	// only process nodes that include "node" in the name
 	const std::string_view nodeType = xmlnode.name();
-	if (!nodeType.contains("node_"))
+	if (!nodeType.starts_with("node_"))
 	{
-		return nullptr;
+		return;
 	}
 
-	Model::Node* node = new Model::Node;
+	Qt3DCore::QEntity* entity = new Qt3DCore::QEntity(parent);
+	entity->setProperty("name", xmlnode.attribute("name").as_string());
 
-	std::string name = std::format("{0}.{1}", xmlnode.attribute("name").as_string(), xmlnode.name());
-	node->name = xmlnode.attribute("name").as_string();
-	node->type = xmlnode.name();
-	node->parent = parent;
-	/*
-	node->sceneNode = parent ? parent->sceneNode->createChildSceneNode() : SceneManager.createSceneNode();
-	node->sceneNode->setPosition(StrToVector(xmlnode.attribute("position").as_string()));
-	node->sceneNode->setOrientation(StrToQuat(xmlnode.attribute("rot_axis").as_string(), xmlnode.attribute("rot_angle").as_string()));
-	node->sceneNode->setScale(StrToVector(xmlnode.attribute("scale").as_string()));
-	*/
+	auto transform = new Qt3DCore::QTransform;
+	transform->setTranslation(MA::StrToVector(xmlnode.attribute("position").as_string()));
+	transform->setScale3D(MA::StrToVector(xmlnode.attribute("scale").as_string()));
+	transform->setRotation(MA::StrToQuat(xmlnode.attribute("rot_axis").as_string(), xmlnode.attribute("rot_angle").as_string()));
+	entity->addComponent(transform);
 
-	// is this a node_3dobject?
 	if (nodeType.contains("3dobject"))
 	{
 		for (const auto& mesh : xmlnode.children("mesh"))
 		{
-			auto meshPtr = meshes.at(mesh.attribute("name").as_string());
-			
+			auto geom = meshes.at(mesh.attribute("name").as_string());
+			entity->addComponent(geom);
+			entity->addComponent(materials.at(geom->property("material").toString().toStdString()));
 		}
 	}
 	else if (nodeType.contains("skinned"))
@@ -194,31 +194,8 @@ Model::Node* ModelAsset::CreateSceneNode(Model::Node* parent, const pugi::xml_no
 
 	for (const auto& child : xmlnode.child("children").children())
 	{
-		auto childNode = CreateSceneNode(node, child, meshes);
-		if (childNode)
-		{
-			childNode->childIndex = node->children.size();
-			node->children.push_back(childNode);
-		}
+		CreateSceneNode(entity, child, meshes, materials);
 	}
-
-	return node;
-}
-/*
-Ogre::Vector3 StrToVector(const std::string_view str)
-{
-	const auto c1 = str.find(',', 0);
-	const auto c2 = str.find(',', c1 + 1);
-
-	return {
-		std::stof(str.substr(0, c1).data()),
-		std::stof(str.substr(c1 + 1, c2).data()),
-		std::stof(str.substr(c2 + 1, str.size()).data())
-	};
 }
 
-Ogre::Quaternion StrToQuat(const std::string_view axis, const std::string_view angle)
-{
-	return { Ogre::Radian(std::stof(angle.data())), StrToVector(axis) };
-}
-*/
+

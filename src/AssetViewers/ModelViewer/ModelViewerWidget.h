@@ -45,15 +45,7 @@ namespace ModelViewer {
 	protected:
 		void showEvent(QShowEvent* event) override;
 		void hideEvent(QHideEvent* event) override;
-
-	private:
-		static void InitScene();
-
-		static bool sStaticInitialized;
-		static Qt3DCore::QEntity* sRootEntity;
-		static Qt3DRender::QCamera* sCamera;
-		static Qt3DExtras::QFirstPersonCameraController* sCameraController;
-		static Qt3DExtras::QCuboidMesh* sCube;
+		bool eventFilter(QObject* object, QEvent* event) override;
 	};
 
 }

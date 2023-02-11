@@ -41,7 +41,7 @@ struct GEOMVERT_MA2
 		uint32_t	unk1;
 		uint32_t	pad2;
 		char8_t		vertbin[8];
-	};
+	} xmlb;
 	VERS		vers;
 };
 #pragma pack(pop)
