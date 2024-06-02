@@ -238,6 +238,10 @@
     <ClCompile Include="src\mgf\Assets\TextureAsset.cpp" />
     <ClCompile Include="src\mgf\File.cpp" />
     <ClCompile Include="src\MGF\AssetManager.cpp" />
+    <ClCompile Include="src\Render\MaterialFactory.cpp" />
+    <ClCompile Include="src\Render\MaterialLibrary.cpp" />
+    <ClCompile Include="src\Render\MaterialParamReader.cpp" />
+    <ClCompile Include="src\Render\Materials\MABaseMaterial.cpp" />
     <ClCompile Include="src\Utilities\configfile.cpp" />
     <ClCompile Include="src\Utilities\ContextProvider\Context.cpp" />
     <ClCompile Include="src\Utilities\ContextProvider\ServiceProvider.cpp" />
@@ -322,6 +326,10 @@
     <ClInclude Include="src\MGF\Structures\Tif.h" />
     <ClInclude Include="src\mgf\VersionConstants.h" />
     <ClInclude Include="src\MGF\AssetManager.h" />
+    <ClInclude Include="src\Render\MaterialFactory.h" />
+    <ClInclude Include="src\Render\MaterialLibrary.h" />
+    <ClInclude Include="src\Render\MaterialParamReader.h" />
+    <ClInclude Include="src\Render\Materials\MABaseMaterial.h" />
     <ClInclude Include="src\Utilities\configfile.h" />
     <ClInclude Include="src\Utilities\ContextProvider\Context.h" />
     <ClInclude Include="src\Utilities\ContextProvider\ServiceProvider.h" />
@@ -351,6 +359,7 @@
     <None Include="src\AssetViewers\StringTableViewer\StringTableViewerWidget.ui" />
     <None Include="src\FileExtractorWindow\FileExtractorDialog.ui" />
     <None Include="src\MainWindow\MainWindow.ui" />
+    <None Include="src\Render\Shaders\BaseMaterial.frag" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\madcat.ico" />

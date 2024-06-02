@@ -13,6 +13,8 @@
 #include <QBlendEquation>
 #include <QBlendEquationArguments>
 #include <QCullFace>
+#include "MaterialLibrary.h"
+#include "MaterialLibrary.h"
 
 Qt3DRender::QBlendEquationArguments* CreateBlendState(const std::string_view mode)
 {
@@ -85,4 +87,9 @@ std::pair<std::string, Qt3DRender::QMaterial*> MA::MaterialLibrary::CreateMateri
 
 	const std::string name = materialXml.attribute("name").as_string();
 	return std::make_pair(name, material);
+}
+
+Qt3DRender::QMaterial* MA::MaterialLibrary::CreateMaterial(const MGF::File& matFile, const MGF::File& sourceFile)
+{
+	return nullptr;
 }

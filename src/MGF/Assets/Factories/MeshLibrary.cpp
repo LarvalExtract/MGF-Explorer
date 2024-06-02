@@ -3,6 +3,7 @@
 #include "MGF/Structures/geomVert.h"
 #include "MGF/Structures/geomFace.h"
 #include "MGF/VersionConstants.h"
+#include "Utilities/configfile.h"
 
 #include <string_view>
 #include <filesystem>
@@ -18,8 +19,43 @@ Qt3DRender::QGeometryRenderer* MA::MeshLibrary::CreateMesh(const pugi::xml_node&
 	const std::string verticesFilename = sourceFile.Name.toStdString() + '{' + meshxml.attribute("vertices").as_string() + '}';
 	const std::string indicesFilename = sourceFile.Name.toStdString() + '{' + meshxml.attribute("indices").as_string() + '}';
 
-	const MGF::File* verticesFile = sourceFile.FindRelativeItem(verticesFilename);
-	const MGF::File* indicesFile = sourceFile.FindRelativeItem(indicesFilename);
+    return CreateMesh(
+        verticesFilename,
+        indicesFilename,
+        meshxml.attribute("material").as_string(),
+        sourceFile,
+        type == "indexedstrip" || type == "INDEXEDSTRIP"
+            ? Qt3DRender::QGeometryRenderer::PrimitiveType::TriangleStrip
+            : Qt3DRender::QGeometryRenderer::PrimitiveType::Triangles
+    );
+}
+
+Qt3DRender::QGeometryRenderer* MA::MeshLibrary::CreateMesh(const MGF::File& meshFile, const MGF::File& sourceFile)
+{
+    ConfigFile MeshConfig(&meshFile);
+    ConVariables vars = MeshConfig["mesh"];
+
+    const std::string_view type = vars["type"];
+    const std::string_view name = vars["name"];
+    const std::string_view verticesFilename = vars["vertices"];
+    const std::string_view facesFilename = vars["faces"];
+    const std::string_view materialFilename = vars["material"];
+
+    return CreateMesh(
+        verticesFilename, 
+        facesFilename,
+        materialFilename,
+        sourceFile,
+        type == "indexedstrip" || type == "INDEXEDSTRIP" 
+            ? Qt3DRender::QGeometryRenderer::PrimitiveType::TriangleStrip 
+            : Qt3DRender::QGeometryRenderer::PrimitiveType::Triangles
+    );
+}
+
+Qt3DRender::QGeometryRenderer* MA::MeshLibrary::CreateMesh(const std::string_view verticesFilename, const std::string_view indicesFilename, const std::string_view material, const MGF::File& sourceFile, Qt3DRender::QGeometryRenderer::PrimitiveType primitiveType)
+{
+    const MGF::File* verticesFile = sourceFile.FindRelativeItem(verticesFilename);
+    const MGF::File* indicesFile = sourceFile.FindRelativeItem(indicesFilename);
 
     const uint64_t key =
         static_cast<uint64_t>(verticesFile->FilepathHash) << 32 |
@@ -30,15 +66,11 @@ Qt3DRender::QGeometryRenderer* MA::MeshLibrary::CreateMesh(const pugi::xml_node&
         return mGeometryMap.at(key);
     }
 
-    const Qt3DRender::QGeometryRenderer::PrimitiveType primitiveType = type == "indexedstrip" || type == "INDEXEDSTRIP"
-        ? Qt3DRender::QGeometryRenderer::TriangleStrip
-        : Qt3DRender::QGeometryRenderer::Triangles;
-
     QVector3D minExtents, maxExtents;
 
     Qt3DCore::QGeometry* geom = new Qt3DCore::QGeometry;
-	int vertexCount = LoadVertexBuffer(*verticesFile, *geom, minExtents, maxExtents);
-	LoadIndexBuffer(*indicesFile, *geom);
+    /*int vertexCount = */LoadVertexBuffer(*verticesFile, *geom, minExtents, maxExtents);
+    LoadIndexBuffer(*indicesFile, *geom);
 
     Qt3DRender::QGeometryRenderer* geomRenderer = new Qt3DRender::QGeometryRenderer;
     geomRenderer->setGeometry(geom);
@@ -49,7 +81,7 @@ Qt3DRender::QGeometryRenderer* MA::MeshLibrary::CreateMesh(const pugi::xml_node&
 
     mGeometryMap.insert(std::make_pair(key, geomRenderer));
 
-    geomRenderer->setProperty("material", meshxml.attribute("material").as_string());
+    geomRenderer->setProperty("material", material.data());
 
     return geomRenderer;
 }

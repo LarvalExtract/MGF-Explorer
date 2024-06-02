@@ -198,6 +198,18 @@
     <ClCompile Include="src\MGF\Assets\Factories\MaterialLibrary.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Render\Materials\MABaseMaterial.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Render\MaterialParamReader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Render\MaterialFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Render\MaterialLibrary.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\AssetViewers\PlainTextViewer\PlainTextViewerWidget.h">
@@ -449,6 +461,18 @@
     <ClInclude Include="src\MGF\Assets\Factories\XmlUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Render\Materials\MABaseMaterial.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Render\MaterialParamReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Render\MaterialFactory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Render\MaterialLibrary.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\FileExtractorWindow\FileExtractorDialog.ui" />
@@ -460,6 +484,7 @@
     <None Include="src\AssetViewers\ModelViewer\ModelViewerWidget.ui" />
     <None Include="src\AssetViewers\EntityViewer\EntityViewerWidget.ui" />
     <None Include="shaders\Basic.vert.glsl" />
+    <None Include="src\Render\Shaders\BaseMaterial.frag" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\madcat.ico">

@@ -3,6 +3,9 @@
 #include "MGFExplorerApplication.h"
 #include "MGF/AssetManager.h"
 #include "MGF/Deserializer.h"
+
+#include "Render/MaterialLibrary.h"
+
 #include "Factories/XmlUtils.h"
 
 #include <QEntity>
@@ -51,7 +54,7 @@ void ModelAsset::ParseMgmodelXml()
 	{
 		if (const std::string materialName = node.attribute("name").as_string(); !materials.contains(materialName))
 		{
-			materials.insert(qApp->mMaterialLibrary.CreateMaterial(node, this->FileRef));
+			materials.insert(std::make_pair(materialName, MGF::Render::gMaterialLibrary.GetMaterial(node, this->FileRef)));
 		}
 	}
 
@@ -95,7 +98,6 @@ void ModelAsset::ParseNodeTxt()
 
 void ModelAsset::CreateSceneNode(Qt3DCore::QEntity* parent, const std::function<ConfigSection()>& func)
 {
-	/*
 	auto vars = func();
 
 	if (const auto& nodeType = vars["type"]; nodeType == "ANIMNODE")
@@ -129,31 +131,33 @@ void ModelAsset::CreateSceneNode(Qt3DCore::QEntity* parent, const std::function<
 	}
 	else
 	{
-		auto node = new Model::Node;
-		node->name = vars.Name();
-		node->type = nodeType;
-		node->parent = parent;
-		
-		node->sceneNode = parent ? parent->sceneNode->createChildSceneNode() : SceneManager.createSceneNode();
-		node->sceneNode->setPosition(StrToVector(vars["position"]));
-		node->sceneNode->setOrientation(StrToQuat(vars["rot_axis"], vars["rot_angle"]));
-		node->sceneNode->setScale(StrToVector(vars["scale"]));
+		Qt3DCore::QEntity* entity = new Qt3DCore::QEntity(parent);
+		entity->setProperty("name", vars.Name().c_str());
+
+		auto transform = new Qt3DCore::QTransform;
+		transform->setTranslation(MA::StrToVector(vars["position"]));
+		transform->setScale3D(MA::StrToVector(vars["scale"]));
+		transform->setRotation(MA::StrToQuat(vars["rot_axis"], vars["rot_angle"]));
+		entity->addComponent(transform);
 		
 		if (nodeType == "3DOBJECT" || nodeType == "SKIN")
 		{
-			const auto meshFile = FileRef.FindRelativeItem(vars["mesh"].data());
+			const MGF::File& meshFile = *FileRef.FindRelativeItem(vars["mesh"]);
+			ConfigFile meshCfg(&meshFile);
+			const MGF::File& materialFile = *meshFile.FindRelativeItem(meshCfg["mesh"]["material"]);
 
-			
+			Qt3DRender::QGeometryRenderer* geom = qApp->mMeshLibrary.CreateMesh(meshFile, this->FileRef);
+			Qt3DRender::QMaterial* material = MGF::Render::gMaterialLibrary.GetMaterial(materialFile, this->FileRef);
+
+			entity->addComponent(geom);
+			entity->addComponent(material);
 		}
 
 		for (int i = 0, num_children = std::stoi(vars["num_children"].data()); i < num_children; i++)
 		{
-			const auto childNode = CreateSceneNode(node, func);
+			CreateSceneNode(entity, func);
 		}
-
-		return node;
 	}
-	*/
 }
 
 void ModelAsset::CreateSceneNode(Qt3DCore::QEntity* parent, const pugi::xml_node& xmlnode, const std::unordered_map<std::string, Qt3DRender::QGeometryRenderer*>& meshes, const std::unordered_map<std::string, Qt3DRender::QMaterial*>& materials)
@@ -178,9 +182,11 @@ void ModelAsset::CreateSceneNode(Qt3DCore::QEntity* parent, const pugi::xml_node
 	{
 		for (const auto& mesh : xmlnode.children("mesh"))
 		{
-			auto geom = meshes.at(mesh.attribute("name").as_string());
+			Qt3DRender::QGeometryRenderer* geom = meshes.at(mesh.attribute("name").as_string());
+			Qt3DRender::QMaterial* material = materials.at(geom->property("material").toString().toStdString());
+
 			entity->addComponent(geom);
-			entity->addComponent(materials.at(geom->property("material").toString().toStdString()));
+			entity->addComponent(material);
 		}
 	}
 	else if (nodeType.contains("skinned"))

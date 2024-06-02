@@ -16,7 +16,7 @@ namespace MA
 	{
 	public:
 		std::pair<std::string, Qt3DRender::QMaterial*> CreateMaterial(const pugi::xml_node& materialXml, const MGF::File& sourceFile);
-
+		Qt3DRender::QMaterial* CreateMaterial(const MGF::File& matFile, const MGF::File& sourceFile);
 	
 	};
 }

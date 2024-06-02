@@ -24,8 +24,11 @@ namespace MA
 	{
 	public:
 		Qt3DRender::QGeometryRenderer* CreateMesh(const pugi::xml_node& meshxml, const MGF::File& sourceFile);
+		Qt3DRender::QGeometryRenderer* CreateMesh(const MGF::File& meshFile, const MGF::File& sourceFile);
 
 	private:
+		Qt3DRender::QGeometryRenderer* CreateMesh(const std::string_view verticesFilename, const std::string_view indicesFilename, const std::string_view material, const MGF::File& sourceFile, Qt3DRender::QGeometryRenderer::PrimitiveType primitiveType);
+
 		int LoadVertexBuffer(const MGF::File& verticesFile, Qt3DCore::QGeometry& geom, QVector3D& minExtents, QVector3D& maxExtents);
 		void LoadIndexBuffer(const MGF::File& indicesFile, Qt3DCore::QGeometry& geom);
 
