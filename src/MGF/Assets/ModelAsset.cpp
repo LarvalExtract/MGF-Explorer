@@ -4,9 +4,8 @@
 #include "MGF/AssetManager.h"
 #include "MGF/Deserializer.h"
 
+#include "Render/MaterialParamReader.h"
 #include "Render/MaterialLibrary.h"
-
-#include "Factories/XmlUtils.h"
 
 #include <QEntity>
 #include <Qt3DCore/QTransform>
@@ -54,7 +53,7 @@ void ModelAsset::ParseMgmodelXml()
 	{
 		if (const std::string materialName = node.attribute("name").as_string(); !materials.contains(materialName))
 		{
-			materials.insert(std::make_pair(materialName, MGF::Render::gMaterialLibrary.GetMaterial(node, this->FileRef)));
+			materials.insert(std::make_pair(materialName, MGF::Render::MaterialLibrary::Get().GetMaterial(node, this->FileRef)));
 		}
 	}
 
@@ -125,9 +124,6 @@ void ModelAsset::CreateSceneNode(Qt3DCore::QEntity* parent, const std::function<
 
 			Animations->push_back(std::move(animDef));
 		}
-
-		// TODO: Parse animations
-		return Nodes->RootNode; // there won't be anymore nodes, exit the function
 	}
 	else
 	{
@@ -135,9 +131,9 @@ void ModelAsset::CreateSceneNode(Qt3DCore::QEntity* parent, const std::function<
 		entity->setProperty("name", vars.Name().c_str());
 
 		auto transform = new Qt3DCore::QTransform;
-		transform->setTranslation(MA::StrToVector(vars["position"]));
-		transform->setScale3D(MA::StrToVector(vars["scale"]));
-		transform->setRotation(MA::StrToQuat(vars["rot_axis"], vars["rot_angle"]));
+		transform->setTranslation(MGF::Render::IMaterialParamReader::StrToVector(vars["position"]));
+		transform->setScale3D(MGF::Render::IMaterialParamReader::StrToVector(vars["scale"]));
+		transform->setRotation(MGF::Render::IMaterialParamReader::StringToQuat(vars["rot_axis"], vars["rot_angle"]));
 		entity->addComponent(transform);
 		
 		if (nodeType == "3DOBJECT" || nodeType == "SKIN")
@@ -147,7 +143,7 @@ void ModelAsset::CreateSceneNode(Qt3DCore::QEntity* parent, const std::function<
 			const MGF::File& materialFile = *meshFile.FindRelativeItem(meshCfg["mesh"]["material"]);
 
 			Qt3DRender::QGeometryRenderer* geom = qApp->mMeshLibrary.CreateMesh(meshFile, this->FileRef);
-			Qt3DRender::QMaterial* material = MGF::Render::gMaterialLibrary.GetMaterial(materialFile, this->FileRef);
+			Qt3DRender::QMaterial* material = MGF::Render::MaterialLibrary::Get().GetMaterial(materialFile, this->FileRef);
 
 			entity->addComponent(geom);
 			entity->addComponent(material);
@@ -173,9 +169,9 @@ void ModelAsset::CreateSceneNode(Qt3DCore::QEntity* parent, const pugi::xml_node
 	entity->setProperty("name", xmlnode.attribute("name").as_string());
 
 	auto transform = new Qt3DCore::QTransform;
-	transform->setTranslation(MA::StrToVector(xmlnode.attribute("position").as_string()));
-	transform->setScale3D(MA::StrToVector(xmlnode.attribute("scale").as_string()));
-	transform->setRotation(MA::StrToQuat(xmlnode.attribute("rot_axis").as_string(), xmlnode.attribute("rot_angle").as_string()));
+	transform->setTranslation(MGF::Render::IMaterialParamReader::StrToVector(xmlnode.attribute("position").as_string()));
+	transform->setScale3D(MGF::Render::IMaterialParamReader::StrToVector(xmlnode.attribute("scale").as_string()));
+	transform->setRotation(MGF::Render::IMaterialParamReader::StringToQuat(xmlnode.attribute("rot_axis").as_string(), xmlnode.attribute("rot_angle").as_string()));
 	entity->addComponent(transform);
 
 	if (nodeType.contains("3dobject"))

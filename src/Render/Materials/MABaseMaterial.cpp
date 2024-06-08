@@ -29,55 +29,18 @@ namespace MGF::Render {
 		, mRenderPass(new QRenderPass())
 		, mBaseMaterialShader(new QShaderProgram())
 	{
-		DiffuseColour->setValue(params.ReadVector3("diffuse"));
-		SelfIllumColour->setValue(params.ReadVector3("selfillum"));
+		DiffuseColour->setValue(params.ReadVector3("diffuse", "diff_color"));
+		SelfIllumColour->setValue(params.ReadVector3("selfillum", "selfillum_color"));
 		Shininess->setValue(params.ReadFloat("shininess"));
 		ShineStrength->setValue(params.ReadFloat("shin_strength"));
 		SpecularColour->setValue(params.ReadVector3("spec_color"));
-		BaseTexture->setValue(QVariant::fromValue(params.ReadTexture("basetexture")));
+		BaseTexture->setValue(QVariant::fromValue(params.ReadTexture("basetexture", "base")));
 
-		mBaseMaterialShader->setFragmentShaderCode(QShaderProgram::loadSource(QUrl("Shaders/BaseMaterial.frag")));
-		mRenderPass->setShaderProgram(mBaseMaterialShader);
-
-		QCullFace* cullMode = new QCullFace();
-		cullMode->setMode(params.ReadBool("two_sided") ? QCullFace::NoCulling : QCullFace::Back);
-		mRenderPass->addRenderState(cullMode);
-
-		const BlendingType blendType = IMaterialParamReader::BlendingTypeFromString(params.ReadString("blending"));
-		QBlendEquation* blendEquation = new QBlendEquation();
-		QBlendEquationArguments* blendState = new QBlendEquationArguments();
-		if (blendType == BlendingType::Additive)
-		{
-			blendEquation->setBlendFunction(QBlendEquation::Add);
-			blendState->setSourceRgb(QBlendEquationArguments::One);
-			blendState->setDestinationRgb(QBlendEquationArguments::One);
-		}
-		else if (blendType == BlendingType::Normal)
-		{
-			blendEquation->setBlendFunction(QBlendEquation::Add);
-			blendState->setSourceRgb(QBlendEquationArguments::SourceAlpha);
-			blendState->setDestinationRgb(QBlendEquationArguments::OneMinusSourceAlpha);
-		}
-		else if (blendType == BlendingType::Alpha)
-		{
-
-		}
 		
-		mRenderPass->addRenderState(blendEquation);
-		mRenderPass->addRenderState(blendState);
-
-		mTechnique->graphicsApiFilter()->setApi(QGraphicsApiFilter::OpenGL);
-		mTechnique->graphicsApiFilter()->setMajorVersion(3);
-		mTechnique->graphicsApiFilter()->setMinorVersion(3);
-		mTechnique->addRenderPass(mRenderPass);
 		mEffect->addTechnique(mTechnique);
 
 		mEffect->addParameter(DiffuseColour);
-		mEffect->addParameter(SelfIllumColour);
-		mEffect->addParameter(Shininess);
-		mEffect->addParameter(ShineStrength);
-		mEffect->addParameter(SpecularColour);
-		mEffect->addParameter(BaseTexture);
+
 
 		setEffect(mEffect);
 	}

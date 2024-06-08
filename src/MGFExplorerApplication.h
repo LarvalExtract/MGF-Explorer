@@ -2,12 +2,11 @@
 
 #include "MainWindow/MainWindow.h"
 #include "MGF/AssetManager.h"
-#include "MGF/Assets/Factories/TextureLibrary.h"
 #include "MGF/Assets/Factories/MeshLibrary.h"
-#include "MGF/Assets/Factories/MaterialLibrary.h"
 
 #include <QApplication>
 #include <Qt3DWindow>
+#include <Qt3DCore/QTransform>
 
 #include <memory>
 #include <filesystem>
@@ -49,9 +48,7 @@ public:
 	QWidget* GetRenderWindowContainer() const;
 
 	MGF::AssetManager AssetManager;
-	MA::TextureLibrary mTextureLibrary;
 	MA::MeshLibrary mMeshLibrary;
-	MA::MaterialLibrary mMaterialLibrary;
 
 	struct TextureViewerData
 	{
@@ -64,7 +61,9 @@ public:
 		Qt3DExtras::Qt3DWindow* pRenderWindow;
 		Qt3DCore::QEntity* pRootEntity;
 	} GetModelViewerData();
+
 	Qt3DCore::QEntity* mLastEntity = nullptr;
+	Qt3DCore::QTransform* mLightTransform = nullptr;
 
 private:
 	MainWindow MainWindow;

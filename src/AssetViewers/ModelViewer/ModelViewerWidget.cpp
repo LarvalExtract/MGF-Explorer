@@ -16,6 +16,27 @@ ModelViewerWidget::ModelViewerWidget(QWidget *parent) :
 {
     ui->setupUi(this);
     qApp->installEventFilter(this);
+
+    connect(
+        ui->lightPositionXInput,
+        &QSpinBox::valueChanged,
+        this,
+        &ModelViewerWidget::on_lightPositionXInput_changed
+    );
+
+    connect(
+        ui->lightPositionXInput,
+        &QSpinBox::valueChanged,
+        this,
+        &ModelViewerWidget::on_lightPositionYInput_changed
+    );
+
+    connect(
+        ui->lightPositionXInput,
+        &QSpinBox::valueChanged,
+        this,
+        &ModelViewerWidget::on_lightPositionZInput_changed
+    );
 }
 
 ModelViewerWidget::~ModelViewerWidget()
@@ -30,7 +51,7 @@ void ModelViewerWidget::LoadAsset(MGF::Asset::AssetPtr asset)
     auto [wnd, rootEntity] = qApp->GetModelViewerData();
     wnd->defaultFrameGraph()->setClearColor(QColor::fromRgba(0xFFFF00FF));
     wnd->camera()->lens()->setAspectRatio((float)wnd->geometry().width() / (float)wnd->geometry().height());
-    // wnd->defaultFrameGraph()->setShowDebugOverlay(true);
+    wnd->defaultFrameGraph()->setShowDebugOverlay(true);
     model.mRootNode->setParent(rootEntity);
     qApp->mLastEntity = model.mRootNode;
     
@@ -130,5 +151,20 @@ bool ModelViewer::ModelViewerWidget::eventFilter(QObject* object, QEvent* event)
     }
 
     return false;
+}
+
+void ModelViewerWidget::on_lightPositionXInput_changed(int value)
+{
+    qApp->mLightTransform->setTranslation(QVector3D(value, qApp->mLightTransform->translation().y(), qApp->mLightTransform->translation().z()));
+}
+
+void ModelViewerWidget::on_lightPositionYInput_changed(int value)
+{
+    qApp->mLightTransform->setTranslation(QVector3D(qApp->mLightTransform->translation().x(), value, qApp->mLightTransform->translation().z()));
+}
+
+void ModelViewerWidget::on_lightPositionZInput_changed(int value)
+{
+    qApp->mLightTransform->setTranslation(QVector3D(qApp->mLightTransform->translation().x(), qApp->mLightTransform->translation().y(), value));
 }
 

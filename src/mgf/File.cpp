@@ -123,3 +123,9 @@ EFileType File::GetEFileTypeFromExtension(const std::filesystem::path& extension
     for (char& c : ext) { c = std::tolower(c); }
     return MapExtensionFileType.contains(ext) ? MapExtensionFileType.at(ext) : EFileType::Unassigned;
 }
+
+QDebug& MGF::operator<<(QDebug& debug, const MGF::File& mgfFile)
+{
+    debug << '[' << mgfFile.MGFArchive.Path.filename().u8string() << ':' << mgfFile.FilePath().u8string() << ']';
+    return debug;
+}

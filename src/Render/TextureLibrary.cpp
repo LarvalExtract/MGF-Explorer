@@ -6,15 +6,21 @@
 #include <QTextureImageDataGenerator>
 #include <QTextureDataUpdate>
 
-using namespace MA;
+using namespace MGF::Render;
 using namespace Qt3DRender;
 
-MA::TextureLibrary::~TextureLibrary()
+TextureLibrary::~TextureLibrary()
 {
 	for (auto& [key, tex] : mTextureLibrary)
 	{
 	//	tex->setParent((Qt3DCore::QNode*)nullptr);
 	}
+}
+
+TextureLibrary& TextureLibrary::Get()
+{
+	static TextureLibrary instance;
+	return instance;
 }
 
 QAbstractTexture* TextureLibrary::GetTexture(const MGF::File& sourceFile)
@@ -164,13 +170,13 @@ public:
 		image->setTarget(DetermineTarget(mDepth, mFrames));
 
 		uint32_t bpp = PixelSize(image->pixelType());
-		uint32_t faceSize = paddedWidth * mHeight * mDepth * bpp;
+		uint32_t faceSize = paddedWidth * mHeight * 1 * bpp;
 		uint32_t mipSize = faceSize >> mMipLevel;
 
 		uint32_t mipStart = 0;
 		if (int mip = mMipLevel - 1; mip > -1)
 		{
-			mipStart = ((paddedWidth * bpp) >> mip) * ((mHeight * bpp) >> mip) * ((mDepth * bpp) >> mip);
+			mipStart = ((paddedWidth * bpp) >> mip) * ((mHeight * bpp) >> mip) * ((1 * bpp) >> mip);
 		}
 
 		uint32_t offset = mFace * faceSize + mipStart;
@@ -179,7 +185,9 @@ public:
 		if (isCompressed && DetermineFormat(mFlags) == QOpenGLTexture::TextureFormat::RGBA_DXT1)
 			size >>= 1;
 
-		const QByteArray pixelData(mPixels + offset, size);
+		QByteArray pixelData;
+		pixelData.resize(size);
+		memcpy(pixelData.data(), mPixels + offset, size);
 
 		const int blockSize = isCompressed ? GetBlockSize(mFlags) : 0;
 		image->setData(pixelData, blockSize, isCompressed);
@@ -300,11 +308,6 @@ QAbstractTexture* TextureLibrary::CreateTexture(const MGF::File& sourceFile)
 			return QAbstractTexture::TextureFormat::RGBA_DXT5;
 		}
 	}());
-
-	Qt3DRender::QTextureWrapMode wrapMode;
-	wrapMode.setX(QTextureWrapMode::WrapMode::Repeat);
-	wrapMode.setY(QTextureWrapMode::WrapMode::Repeat);
-	texture->setWrapMode(wrapMode);
 
 	return texture;
 }

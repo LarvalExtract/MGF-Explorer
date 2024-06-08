@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'TextureViewerWidget.ui'
 **
-** Created by: Qt User Interface Compiler version 6.0.3
+** Created by: Qt User Interface Compiler version 6.4.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -37,7 +37,7 @@ public:
     void setupUi(QWidget *TextureViewerWidget)
     {
         if (TextureViewerWidget->objectName().isEmpty())
-            TextureViewerWidget->setObjectName(QString::fromUtf8("TextureViewerWidget"));
+            TextureViewerWidget->setObjectName("TextureViewerWidget");
         TextureViewerWidget->resize(1185, 740);
         QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         sizePolicy.setHorizontalStretch(0);
@@ -46,13 +46,13 @@ public:
         TextureViewerWidget->setSizePolicy(sizePolicy);
         verticalLayout = new QVBoxLayout(TextureViewerWidget);
         verticalLayout->setSpacing(6);
-        verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
+        verticalLayout->setObjectName("verticalLayout");
         verticalLayout->setContentsMargins(0, 0, 0, 0);
         horizontalLayout = new QHBoxLayout();
-        horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
+        horizontalLayout->setObjectName("horizontalLayout");
         horizontalLayout->setSizeConstraint(QLayout::SetMaximumSize);
         TextureDetailsTable = new QTableView(TextureViewerWidget);
-        TextureDetailsTable->setObjectName(QString::fromUtf8("TextureDetailsTable"));
+        TextureDetailsTable->setObjectName("TextureDetailsTable");
         QSizePolicy sizePolicy1(QSizePolicy::Fixed, QSizePolicy::Fixed);
         sizePolicy1.setHorizontalStretch(0);
         sizePolicy1.setVerticalStretch(0);
@@ -67,10 +67,10 @@ public:
         horizontalLayout->addWidget(TextureDetailsTable);
 
         verticalLayout_2 = new QVBoxLayout();
-        verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
+        verticalLayout_2->setObjectName("verticalLayout_2");
         verticalLayout_2->setSizeConstraint(QLayout::SetMaximumSize);
         ToggleAlphaCheckBox = new QCheckBox(TextureViewerWidget);
-        ToggleAlphaCheckBox->setObjectName(QString::fromUtf8("ToggleAlphaCheckBox"));
+        ToggleAlphaCheckBox->setObjectName("ToggleAlphaCheckBox");
 
         verticalLayout_2->addWidget(ToggleAlphaCheckBox);
 
@@ -85,13 +85,13 @@ public:
         verticalLayout->addLayout(horizontalLayout);
 
         scrollArea = new QScrollArea(TextureViewerWidget);
-        scrollArea->setObjectName(QString::fromUtf8("scrollArea"));
+        scrollArea->setObjectName("scrollArea");
         scrollArea->setFrameShape(QFrame::NoFrame);
         scrollArea->setFrameShadow(QFrame::Plain);
         scrollArea->setLineWidth(0);
         scrollArea->setWidgetResizable(false);
         scrollAreaWidgetContents = new QWidget();
-        scrollAreaWidgetContents->setObjectName(QString::fromUtf8("scrollAreaWidgetContents"));
+        scrollAreaWidgetContents->setObjectName("scrollAreaWidgetContents");
         scrollAreaWidgetContents->setGeometry(QRect(0, 0, 958, 546));
         scrollArea->setWidget(scrollAreaWidgetContents);
 

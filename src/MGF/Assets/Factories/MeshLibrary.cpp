@@ -181,6 +181,7 @@ void MA::MeshLibrary::SetGeometryAttributesFromFlags(uint32_t flags, uint32_t co
 
     static const QString attrPosition(QAttribute::defaultPositionAttributeName());
     static const QString attrTexCoord(QAttribute::defaultTextureCoordinateAttributeName());
+    static const QString attrPackedNormal("packedNormal");
 
     //int stride = 0;
 
@@ -195,12 +196,14 @@ void MA::MeshLibrary::SetGeometryAttributesFromFlags(uint32_t flags, uint32_t co
     case 0x00000101:    // 16 bytes
         //stride = 16;
         geom.addAttribute(new QAttribute(vertexBuffer, attrTexCoord, QAttribute::VertexBaseType::Float, 3, count, 0, stride));
+        geom.addAttribute(new QAttribute(vertexBuffer, attrPackedNormal, QAttribute::VertexBaseType::UnsignedInt, 1, 16, stride));
         break;
 
     case 0x00000301:    // 20 bytes
         //stride = 20;
         geom.addAttribute(new QAttribute(vertexBuffer, attrPosition, QAttribute::VertexBaseType::Float, 3, count, 0, stride));
         geom.addAttribute(new QAttribute(vertexBuffer, attrTexCoord, QAttribute::VertexBaseType::Short, 2, count, 16, stride));
+        geom.addAttribute(new QAttribute(vertexBuffer, attrPackedNormal, QAttribute::VertexBaseType::UnsignedInt, 1, 16, stride));
         break;
 
     case 0x00000309:    // 24 bytes

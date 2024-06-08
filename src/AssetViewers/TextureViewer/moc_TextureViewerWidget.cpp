@@ -1,49 +1,58 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'TextureViewerWidget.h'
 **
-** Created by: The Qt Meta Object Compiler version 68 (Qt 6.0.3)
+** Created by: The Qt Meta Object Compiler version 68 (Qt 6.4.1)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
 
 #include <memory>
 #include "TextureViewerWidget.h"
-#include <QtCore/qbytearray.h>
 #include <QtCore/qmetatype.h>
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'TextureViewerWidget.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 68
-#error "This file was generated using the moc from 6.0.3. It"
+#error "This file was generated using the moc from 6.4.1. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
+#endif
+
+#ifndef Q_CONSTINIT
+#define Q_CONSTINIT
 #endif
 
 QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
+namespace {
 struct qt_meta_stringdata_TextureViewer__TextureViewerWidget_t {
-    const uint offsetsAndSize[8];
-    char stringdata0[75];
+    uint offsetsAndSizes[8];
+    char stringdata0[35];
+    char stringdata1[31];
+    char stringdata2[1];
+    char stringdata3[8];
 };
 #define QT_MOC_LITERAL(ofs, len) \
-    uint(offsetof(qt_meta_stringdata_TextureViewer__TextureViewerWidget_t, stringdata0) + ofs), len 
-static const qt_meta_stringdata_TextureViewer__TextureViewerWidget_t qt_meta_stringdata_TextureViewer__TextureViewerWidget = {
+    uint(sizeof(qt_meta_stringdata_TextureViewer__TextureViewerWidget_t::offsetsAndSizes) + ofs), len 
+Q_CONSTINIT static const qt_meta_stringdata_TextureViewer__TextureViewerWidget_t qt_meta_stringdata_TextureViewer__TextureViewerWidget = {
     {
-QT_MOC_LITERAL(0, 34), // "TextureViewer::TextureViewerW..."
-QT_MOC_LITERAL(35, 30), // "on_ToggleAlphaCheckBox_toggled"
-QT_MOC_LITERAL(66, 0), // ""
-QT_MOC_LITERAL(67, 7) // "checked"
-
+        QT_MOC_LITERAL(0, 34),  // "TextureViewer::TextureViewerW..."
+        QT_MOC_LITERAL(35, 30),  // "on_ToggleAlphaCheckBox_toggled"
+        QT_MOC_LITERAL(66, 0),  // ""
+        QT_MOC_LITERAL(67, 7)   // "checked"
     },
-    "TextureViewer::TextureViewerWidget\0"
-    "on_ToggleAlphaCheckBox_toggled\0\0checked"
+    "TextureViewer::TextureViewerWidget",
+    "on_ToggleAlphaCheckBox_toggled",
+    "",
+    "checked"
 };
 #undef QT_MOC_LITERAL
+} // unnamed namespace
 
-static const uint qt_meta_data_TextureViewer__TextureViewerWidget[] = {
+Q_CONSTINIT static const uint qt_meta_data_TextureViewer__TextureViewerWidget[] = {
 
  // content:
-       9,       // revision
+      10,       // revision
        0,       // classname
        0,    0, // classinfo
        1,   14, // methods
@@ -54,7 +63,7 @@ static const uint qt_meta_data_TextureViewer__TextureViewerWidget[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    1,   20,    2, 0x08,    0 /* Private */,
+       1,    1,   20,    2, 0x08,    1 /* Private */,
 
  // slots: parameters
     QMetaType::Void, QMetaType::Bool,    3,
@@ -62,33 +71,33 @@ static const uint qt_meta_data_TextureViewer__TextureViewerWidget[] = {
        0        // eod
 };
 
+Q_CONSTINIT const QMetaObject TextureViewer::TextureViewerWidget::staticMetaObject = { {
+    QMetaObject::SuperData::link<IAssetViewerWidget::staticMetaObject>(),
+    qt_meta_stringdata_TextureViewer__TextureViewerWidget.offsetsAndSizes,
+    qt_meta_data_TextureViewer__TextureViewerWidget,
+    qt_static_metacall,
+    nullptr,
+    qt_incomplete_metaTypeArray<qt_meta_stringdata_TextureViewer__TextureViewerWidget_t,
+        // Q_OBJECT / Q_GADGET
+        QtPrivate::TypeAndForceComplete<TextureViewerWidget, std::true_type>,
+        // method 'on_ToggleAlphaCheckBox_toggled'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<bool, std::false_type>
+    >,
+    nullptr
+} };
+
 void TextureViewer::TextureViewerWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
     if (_c == QMetaObject::InvokeMetaMethod) {
         auto *_t = static_cast<TextureViewerWidget *>(_o);
         (void)_t;
         switch (_id) {
-        case 0: _t->on_ToggleAlphaCheckBox_toggled((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 0: _t->on_ToggleAlphaCheckBox_toggled((*reinterpret_cast< std::add_pointer_t<bool>>(_a[1]))); break;
         default: ;
         }
     }
 }
-
-const QMetaObject TextureViewer::TextureViewerWidget::staticMetaObject = { {
-    QMetaObject::SuperData::link<IAssetViewerWidget::staticMetaObject>(),
-    qt_meta_stringdata_TextureViewer__TextureViewerWidget.offsetsAndSize,
-    qt_meta_data_TextureViewer__TextureViewerWidget,
-    qt_static_metacall,
-    nullptr,
-qt_incomplete_metaTypeArray<qt_meta_stringdata_TextureViewer__TextureViewerWidget_t
-
-, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<bool, std::false_type>
-
-
->,
-    nullptr
-} };
-
 
 const QMetaObject *TextureViewer::TextureViewerWidget::metaObject() const
 {

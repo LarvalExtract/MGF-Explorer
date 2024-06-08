@@ -186,16 +186,13 @@
     <ClCompile Include="src\MGFExplorerApplication.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\MGF\Assets\Factories\TextureLibrary.cpp">
+    <ClCompile Include="src\Render\TextureLibrary.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\MGF\Assets\Factories\MeshLibrary.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\MGF\Assets\Factories\ShaderProgramProvider.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\MGF\Assets\Factories\MaterialLibrary.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Render\Materials\MABaseMaterial.cpp">
@@ -446,19 +443,13 @@
     <ClInclude Include="src\MGF\Assets\Factories\EffectLibrary.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\MGF\Assets\Factories\TextureLibrary.h">
+    <ClInclude Include="src\Render\TextureLibrary.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\MGF\Assets\Factories\MeshLibrary.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\MGF\Assets\Factories\ShaderProgramProvider.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\MGF\Assets\Factories\MaterialLibrary.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\MGF\Assets\Factories\XmlUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Render\Materials\MABaseMaterial.h">
@@ -473,6 +464,9 @@
     <ClInclude Include="src\Render\MaterialLibrary.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\MGFExplorerException.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\FileExtractorWindow\FileExtractorDialog.ui" />
@@ -483,8 +477,6 @@
     <None Include="src\MainWindow\MainWindow.ui" />
     <None Include="src\AssetViewers\ModelViewer\ModelViewerWidget.ui" />
     <None Include="src\AssetViewers\EntityViewer\EntityViewerWidget.ui" />
-    <None Include="shaders\Basic.vert.glsl" />
-    <None Include="src\Render\Shaders\BaseMaterial.frag" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\madcat.ico">

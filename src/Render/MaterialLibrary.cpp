@@ -4,7 +4,11 @@
 
 namespace MGF::Render
 {
-	MaterialLibrary gMaterialLibrary;
+	MaterialLibrary& MaterialLibrary::Get()
+	{
+		static MaterialLibrary instance;
+		return instance;
+	}
 
 	Qt3DRender::QMaterial* MGF::Render::MaterialLibrary::GetMaterial(const pugi::xml_node& materialNode, const MGF::File& parentFile)
 	{
@@ -20,13 +24,14 @@ namespace MGF::Render
 
 	Qt3DRender::QMaterial* MaterialLibrary::GetMaterial(IMaterialParamReader& paramReader)
 	{
-		const QString materialName = paramReader.ReadString("name").data();
-		if (!mMaterialCache.contains(materialName))
-		{
-			mMaterialCache.insert(materialName, MaterialFactory::CreateMaterial(paramReader));
-		}
-
-		return mMaterialCache[materialName];
+		return MaterialFactory::CreateMaterial(paramReader);
+		//const QString materialName = paramReader.ReadString("name").data();
+		//if (!mMaterialCache.contains(materialName))
+		//{
+		//	mMaterialCache.insert(materialName, );
+		//}
+		//
+		//return mMaterialCache[materialName];
 	}
 
 }

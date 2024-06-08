@@ -22,6 +22,8 @@ namespace MGF::Render {
 	class MaterialLibrary final
 	{
 	public:
+		static MaterialLibrary& Get();
+
 		Qt3DRender::QMaterial* GetMaterial(const pugi::xml_node& materialNode, const MGF::File& parentFile);
 		Qt3DRender::QMaterial* GetMaterial(const MGF::File& materialFile, const MGF::File& parentFile);
 
@@ -32,7 +34,5 @@ namespace MGF::Render {
 
 		QMap<QString, Qt3DRender::QMaterial*> mMaterialCache;
 	};
-
-	extern MaterialLibrary gMaterialLibrary;
 
 }

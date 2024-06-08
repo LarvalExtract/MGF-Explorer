@@ -3,6 +3,7 @@
 #include "MGF/File.h"
 
 #include <QVector3D>
+#include <QGeometryRenderer>
 
 #include <unordered_map>
 #include <pugixml-1.10/src/pugixml.hpp>

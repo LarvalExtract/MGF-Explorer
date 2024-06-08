@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'StringTableViewerWidget.ui'
 **
-** Created by: Qt User Interface Compiler version 6.0.3
+** Created by: Qt User Interface Compiler version 6.4.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -27,7 +27,7 @@ public:
     void setupUi(QWidget *StringTableViewerWidget)
     {
         if (StringTableViewerWidget->objectName().isEmpty())
-            StringTableViewerWidget->setObjectName(QString::fromUtf8("StringTableViewerWidget"));
+            StringTableViewerWidget->setObjectName("StringTableViewerWidget");
         StringTableViewerWidget->resize(600, 500);
         QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         sizePolicy.setHorizontalStretch(0);
@@ -35,10 +35,10 @@ public:
         sizePolicy.setHeightForWidth(StringTableViewerWidget->sizePolicy().hasHeightForWidth());
         StringTableViewerWidget->setSizePolicy(sizePolicy);
         verticalLayout = new QVBoxLayout(StringTableViewerWidget);
-        verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
+        verticalLayout->setObjectName("verticalLayout");
         verticalLayout->setContentsMargins(0, 0, 0, 0);
         tableView = new QTableView(StringTableViewerWidget);
-        tableView->setObjectName(QString::fromUtf8("tableView"));
+        tableView->setObjectName("tableView");
         tableView->verticalHeader()->setVisible(false);
         tableView->verticalHeader()->setDefaultSectionSize(24);
 

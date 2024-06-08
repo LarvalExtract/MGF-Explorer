@@ -1,11 +1,11 @@
 #include "TextureAsset.h"
-#include "MGFExplorerApplication.h"
+#include "../../Render/TextureLibrary.h"
 
 using namespace MGF::Asset;
 
 TextureAsset::TextureAsset(const File& file) :
 	AssetBase(file, EAssetType::Texture),
-	mTexture(qApp->mTextureLibrary.GetTexture(file))
+	mTexture(MGF::Render::TextureLibrary::Get().GetTexture(file))
 {
 	TextureDetails.Version = file.ArchiveVersion;
 	TextureDetails.Width = mTexture->width();

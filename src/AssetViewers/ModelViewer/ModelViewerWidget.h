@@ -42,6 +42,11 @@ namespace ModelViewer {
 
 		int m_WindowTimerId = 0;
 
+	private slots:
+		void on_lightPositionXInput_changed(int value);
+		void on_lightPositionYInput_changed(int value);
+		void on_lightPositionZInput_changed(int value);
+
 	protected:
 		void showEvent(QShowEvent* event) override;
 		void hideEvent(QHideEvent* event) override;

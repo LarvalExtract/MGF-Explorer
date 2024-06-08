@@ -11,6 +11,7 @@
 #include <QTextureMaterial>
 #include <QTransform>
 #include <QPointLight>
+#include <QSortPolicy>
 
 MGFExplorerApplication::MGFExplorerApplication(int argc, char* argv[], int flags)
 	: QApplication(argc, argv, flags)
@@ -122,10 +123,14 @@ void MGFExplorerApplication::SetupTextureViewerScene()
 void MGFExplorerApplication::SetupModelViewerScene()
 {
 	mModelViewerRootEntity = new Qt3DCore::QEntity();
-	auto trnsfm = new Qt3DCore::QTransform();
-	trnsfm->setTranslation(QVector3D(0.0f, 0.0f, 0.0f));
-	trnsfm->setRotation(QQuaternion::fromEulerAngles(QVector3D(0.0f, 0.0f, 0.0f)));
-	trnsfm->setScale(1.0f);
+
+	auto lightEntity = new Qt3DCore::QEntity(mModelViewerRootEntity);
+
+	mLightTransform = new Qt3DCore::QTransform();
+	mLightTransform->setTranslation(QVector3D(0.0f, -5.0f, 0.0f));
+	mLightTransform->setRotation(QQuaternion::fromEulerAngles(QVector3D(0.0f, 0.0f, 0.0f)));
+	mLightTransform->setScale(1.0f);
+	lightEntity->addComponent(mLightTransform);
 
 	auto cameraController = new Qt3DExtras::QFirstPersonCameraController(mModelViewerRootEntity);
 	cameraController->setCamera(RenderWindow->camera());
@@ -133,7 +138,10 @@ void MGFExplorerApplication::SetupModelViewerScene()
 	auto light = new Qt3DRender::QPointLight;
 	light->setConstantAttenuation(1.0f);
 	light->setColor(QColor::fromRgbF(1.0f, 1.0f, 1.0f));
-	light->setIntensity(100.0f);
+	light->setIntensity(1.0f);
 
-	mModelViewerRootEntity->addComponent(light);
+	lightEntity->addComponent(light);
+
+	auto sortPolicy = new Qt3DRender::QSortPolicy(RenderWindow->activeFrameGraph());
+	sortPolicy->setSortTypes(QList{ Qt3DRender::QSortPolicy::BackToFront });
 }

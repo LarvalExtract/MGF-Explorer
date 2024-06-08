@@ -3,14 +3,13 @@
 #include <QVector3D>
 #include <QColor>
 #include <QQuaternion>
+#include <QMaterial>
 #include <QAbstractTexture>
+#include <QBlendEquation>
+#include <QBlendEquationArguments>
+#include <QCullFace>
 
 #include "Utilities/configfile.h"
-
-namespace Qt3DRender {
-	class QMaterial;
-	class QAbstractTexture;
-}
 
 namespace MGF {
 	class File;
@@ -22,31 +21,31 @@ namespace pugi {
 
 namespace MGF::Render {
 
-	enum class ShadingType : uint8_t
+	struct TextureParams
 	{
-		None,
-		Flat,
-		MaterialOnly,
-		Gouraud,
-		Translucent
-	};
-
-	enum class BlendingType : uint8_t
-	{
-		Additive,
-		Alpha,
-		Normal,
-		Subtractive
+		const std::string_view Filepath;
+		const Qt3DRender::QTextureWrapMode::WrapMode TilingX, TilingY;
+		const bool bMipMapping;
+		const float MipBias;
+		const Qt3DRender::QAbstractTexture::Filter MinificationFilter;
+		const Qt3DRender::QAbstractTexture::Filter MagnificationFilter;
 	};
 
 	class IMaterialParamReader
 	{
 	public:
+		IMaterialParamReader(const MGF::File& parentFile) : ParentFile(parentFile) {}
+
+		virtual Qt3DRender::QAbstractTexture* ReadTexture(const char* name, const char* altName = nullptr);
+		virtual QPair<Qt3DRender::QBlendEquation*, Qt3DRender::QBlendEquationArguments*> ReadBlendingMode(const char* name, const char* altName = nullptr);
+		virtual Qt3DRender::QCullFace* ReadCullingMode(const char* name, const char* altName = nullptr);
+
 		virtual float ReadFloat(const char* name, const char* altName = nullptr) = 0;
 		virtual bool ReadBool(const char* name, const char* altName = nullptr) = 0;
 		virtual QVector3D ReadVector3(const char* name, const char* altName = nullptr) = 0;
+		virtual QColor ReadColour(const char* name, const char* altName = nullptr) = 0;
 		virtual std::string_view ReadString(const char* name, const char* altName = nullptr) = 0;
-		virtual Qt3DRender::QAbstractTexture* ReadTexture(const char* name, const char* altName = nullptr) = 0;
+		virtual std::string_view ReadMaterialType() = 0;
 
 		inline static QVector3D StrToVector(const std::string_view str)
 		{
@@ -70,76 +69,66 @@ namespace MGF::Render {
 		{
 			return QQuaternion::fromAxisAndAngle(StrToVector(axis), std::stof(angle.data()));
 		}
-
-		inline static ShadingType ShadingTypeFromString(const std::string_view str)
-		{
-			if (str == "material_only")
-				return ShadingType::MaterialOnly;
-			else if (str == "gouraud")
-				return ShadingType::Gouraud;
-			else if (str == "flat")
-				return ShadingType::Flat;
-			else if (str == "translucent")
-				return ShadingType::Translucent;
-			else if (str == "none")
-				return ShadingType::None;
-			else
-				throw std::runtime_error("Unsupported shading type");
-		}
-
-		inline static BlendingType BlendingTypeFromString(const std::string_view str)
-		{
-			if (str == "additive")
-				return BlendingType::Additive;
-			else if (str == "alpha")
-				return BlendingType::Alpha;
-			else if (str == "normal")
-				return BlendingType::Normal;
-			else if (str == "subtractive")
-				return BlendingType::Subtractive;
-			else
-				throw std::runtime_error("Unsupported blending type");
-		}
 		
 	protected:
 		virtual const char* SelectParam(const char* a, const char* b) const = 0;
-	};
+		virtual TextureParams ReadTextureParams(const char* name, const char* altName = nullptr) = 0;
 
-	class MGFMaterialFileReader final : public IMaterialParamReader
-	{
-	public:
-		MGFMaterialFileReader(const MGF::File& materialFile, const MGF::File& parentFile);
-
-		virtual float ReadFloat(const char* name, const char* altName = nullptr) override;
-		virtual bool ReadBool(const char* name, const char* altName = nullptr) override;
-		virtual QVector3D ReadVector3(const char* name, const char* altName = nullptr) override;
-		virtual std::string_view ReadString(const char* name, const char* altName = nullptr) override;
-		virtual Qt3DRender::QAbstractTexture* ReadTexture(const char* name, const char* altName = nullptr) override;
-
-	protected:
-		virtual const char* SelectParam(const char* a, const char* b) const override;
-
-	private:
-		ConVariables ConfigVariables;
 		const MGF::File& ParentFile;
 	};
 
-	class MGFMaterialNodeXMLReader final : public IMaterialParamReader
+	/*
+		MGFMaterialFileReader reads parameters from .mat files, which are just config (.ini) files
+	*/
+	class MGFMaterialFileReader final : public IMaterialParamReader
 	{
 	public:
-		MGFMaterialNodeXMLReader(const pugi::xml_node& materialNode, const MGF::File& mgmodelFile) : MaterialNode{ materialNode }, MGModelFile{ mgmodelFile } {}
+		MGFMaterialFileReader(const MGF::File& materialFile, const MGF::File& parentFile)
+			: IMaterialParamReader(parentFile)
+			, ConfigVariables{ ConfigFile(&materialFile)["material"] }
+		{
+
+		}
 
 		virtual float ReadFloat(const char* name, const char* altName = nullptr) override;
 		virtual bool ReadBool(const char* name, const char* altName = nullptr) override;
 		virtual QVector3D ReadVector3(const char* name, const char* altName = nullptr) override;
+		virtual QColor ReadColour(const char* name, const char* altName = nullptr) override;
 		virtual std::string_view ReadString(const char* name, const char* altName = nullptr) override;
-		virtual Qt3DRender::QAbstractTexture* ReadTexture(const char* name, const char* altName = nullptr) override;
+		virtual std::string_view ReadMaterialType() override;
 
 	protected:
 		virtual const char* SelectParam(const char* a, const char* b) const override;
+		virtual TextureParams ReadTextureParams(const char* name, const char* altName = nullptr) override;
+
+	private:
+		ConVariables ConfigVariables;
+	};
+
+	/*
+		MGFMaterialNodeXMLReader reads parameters from the <material> nodes found at the start of .mgmodel files
+	*/
+	class MGFMaterialNodeXMLReader final : public IMaterialParamReader
+	{
+	public:
+		MGFMaterialNodeXMLReader(const pugi::xml_node& materialNode, const MGF::File& mgmodelFile)
+			: IMaterialParamReader(mgmodelFile)
+			, MaterialNode{ materialNode }
+		{
+		}
+
+		virtual float ReadFloat(const char* name, const char* altName = nullptr) override;
+		virtual bool ReadBool(const char* name, const char* altName = nullptr) override;
+		virtual QVector3D ReadVector3(const char* name, const char* altName = nullptr) override;
+		virtual QColor ReadColour(const char* name, const char* altName = nullptr) override;
+		virtual std::string_view ReadString(const char* name, const char* altName = nullptr) override;
+		virtual std::string_view ReadMaterialType() override;
+
+	protected:
+		virtual const char* SelectParam(const char* a, const char* b) const override;
+		virtual TextureParams ReadTextureParams(const char* name, const char* altName = nullptr) override;
 
 	private:
 		const pugi::xml_node& MaterialNode;
-		const MGF::File& MGModelFile;
 	};
 }

@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'ArchiveViewerWidget.ui'
 **
-** Created by: Qt User Interface Compiler version 6.0.3
+** Created by: Qt User Interface Compiler version 6.4.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -37,18 +37,18 @@ public:
     void setupUi(QWidget *ArchiveViewerWidget)
     {
         if (ArchiveViewerWidget->objectName().isEmpty())
-            ArchiveViewerWidget->setObjectName(QString::fromUtf8("ArchiveViewerWidget"));
+            ArchiveViewerWidget->setObjectName("ArchiveViewerWidget");
         ArchiveViewerWidget->resize(1600, 900);
         horizontalLayout = new QHBoxLayout(ArchiveViewerWidget);
         horizontalLayout->setSpacing(5);
-        horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
+        horizontalLayout->setObjectName("horizontalLayout");
         horizontalLayout->setSizeConstraint(QLayout::SetMaximumSize);
         FileTreeLayout = new QVBoxLayout();
         FileTreeLayout->setSpacing(5);
-        FileTreeLayout->setObjectName(QString::fromUtf8("FileTreeLayout"));
+        FileTreeLayout->setObjectName("FileTreeLayout");
         FileTreeLayout->setSizeConstraint(QLayout::SetMinimumSize);
         FileTreeView = new QTreeView(ArchiveViewerWidget);
-        FileTreeView->setObjectName(QString::fromUtf8("FileTreeView"));
+        FileTreeView->setObjectName("FileTreeView");
         QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
@@ -67,7 +67,7 @@ public:
         horizontalLayout->addLayout(FileTreeLayout);
 
         Frame = new QFrame(ArchiveViewerWidget);
-        Frame->setObjectName(QString::fromUtf8("Frame"));
+        Frame->setObjectName("Frame");
         QSizePolicy sizePolicy1(QSizePolicy::Expanding, QSizePolicy::Preferred);
         sizePolicy1.setHorizontalStretch(0);
         sizePolicy1.setVerticalStretch(0);
@@ -77,10 +77,10 @@ public:
         Frame->setFrameShadow(QFrame::Raised);
         AssetViewerLayout = new QVBoxLayout(Frame);
         AssetViewerLayout->setSpacing(3);
-        AssetViewerLayout->setObjectName(QString::fromUtf8("AssetViewerLayout"));
+        AssetViewerLayout->setObjectName("AssetViewerLayout");
         AssetViewerLayout->setContentsMargins(0, 0, 0, 0);
         label = new QLabel(Frame);
-        label->setObjectName(QString::fromUtf8("label"));
+        label->setObjectName("label");
         QSizePolicy sizePolicy2(QSizePolicy::Preferred, QSizePolicy::Fixed);
         sizePolicy2.setHorizontalStretch(0);
         sizePolicy2.setVerticalStretch(0);
@@ -91,11 +91,11 @@ public:
         AssetViewerLayout->addWidget(label);
 
         AssetViewerStack = new QStackedWidget(Frame);
-        AssetViewerStack->setObjectName(QString::fromUtf8("AssetViewerStack"));
+        AssetViewerStack->setObjectName("AssetViewerStack");
         AssetViewerStack->setFrameShape(QFrame::NoFrame);
         AssetViewerStack->setFrameShadow(QFrame::Sunken);
         EmptyPage = new QWidget();
-        EmptyPage->setObjectName(QString::fromUtf8("EmptyPage"));
+        EmptyPage->setObjectName("EmptyPage");
         AssetViewerStack->addWidget(EmptyPage);
 
         AssetViewerLayout->addWidget(AssetViewerStack);
