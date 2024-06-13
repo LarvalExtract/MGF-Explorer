@@ -195,9 +195,6 @@
     <ClCompile Include="src\MGF\Assets\Factories\ShaderProgramProvider.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Render\Materials\MABaseMaterial.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Render\MaterialParamReader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -450,9 +447,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\MGF\Assets\Factories\ShaderProgramProvider.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Render\Materials\MABaseMaterial.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Render\MaterialParamReader.h">

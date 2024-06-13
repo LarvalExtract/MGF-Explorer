@@ -7,6 +7,7 @@
 #include <QApplication>
 #include <Qt3DWindow>
 #include <Qt3DCore/QTransform>
+#include <QLayer>
 
 #include <memory>
 #include <filesystem>
@@ -50,20 +51,8 @@ public:
 	MGF::AssetManager AssetManager;
 	MA::MeshLibrary mMeshLibrary;
 
-	struct TextureViewerData
-	{
-		Qt3DRender::QCamera* pCamera;
-		Qt3DExtras::QTextureMaterial* pMaterial;
-	} GetTextureViewerData();
-
-	struct ModelViewerData
-	{
-		Qt3DExtras::Qt3DWindow* pRenderWindow;
-		Qt3DCore::QEntity* pRootEntity;
-	} GetModelViewerData();
-
-	Qt3DCore::QEntity* mLastEntity = nullptr;
-	Qt3DCore::QTransform* mLightTransform = nullptr;
+	Qt3DRender::QLayer* mOpaqueLayer = nullptr;
+	Qt3DRender::QLayer* mTransparentLayer = nullptr;
 
 private:
 	MainWindow MainWindow;
@@ -71,12 +60,4 @@ private:
 	QWidget* RenderWindowContainer = nullptr;
 
 	std::vector<std::pair<std::filesystem::path, std::filesystem::path>> FileList;
-
-	void SetupTextureViewerScene();
-	void SetupModelViewerScene();
-
-	Qt3DCore::QEntity* mTextureViewerRootEntity = nullptr;
-	Qt3DExtras::QTextureMaterial* mTextureViewerMaterial = nullptr;
-
-	Qt3DCore::QEntity* mModelViewerRootEntity = nullptr;
 };

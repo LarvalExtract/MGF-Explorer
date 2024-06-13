@@ -26,28 +26,53 @@ namespace MGF::Render
 		technique->graphicsApiFilter()->setMinorVersion(3);
 		technique->graphicsApiFilter()->setProfile(QGraphicsApiFilter::CoreProfile);
 
-		const auto AddBasePass = [&technique, &paramReader] (const QString& shader) {
-			QRenderPass* baseRenderPass = new QRenderPass;
-			baseRenderPass->setParent(technique);
-			baseRenderPass->addParameter(new QParameter("diffuse_colour", paramReader.ReadColour("diffuse", "diff_color")));
-			baseRenderPass->addParameter(new QParameter("selfillum_colour", paramReader.ReadColour("selfillum", "selfillum_color")));
-			baseRenderPass->addParameter(new QParameter("shininess", paramReader.ReadFloat("shininess")));
-			baseRenderPass->addParameter(new QParameter("specular_colour", paramReader.ReadColour("spec_color")));
-			baseRenderPass->addParameter(new QParameter("basetexture", paramReader.ReadTexture("basetexture", "base")));
-		
-			const auto [blendFunc, blendState] = paramReader.ReadBlendingMode("blending");
-			baseRenderPass->addRenderState(blendFunc);
-			baseRenderPass->addRenderState(blendState);
-			baseRenderPass->addRenderState(paramReader.ReadCullingMode("two_sided"));
+		QEffect* effect = new QEffect;
+		effect->setParent(material);
+		effect->addTechnique(technique);
+
+		QRenderPass* baseRenderPass = new QRenderPass;
+		baseRenderPass->setParent(technique);
+		const auto [blendFunc, blendState] = paramReader.ReadBlendingMode("blending");
+		baseRenderPass->addRenderState(blendFunc);
+		baseRenderPass->addRenderState(blendState);
+		baseRenderPass->addRenderState(paramReader.ReadCullingMode("two_sided"));
+		technique->addRenderPass(baseRenderPass);
+
+		material->setEffect(effect);
+		material->setProperty("blending", paramReader.ReadString("blending").data());
+
+		const auto ShadingTypeToInt = [](const std::string_view shadingMode) -> unsigned int {
+			if (shadingMode == "gouraud")
+			{
+				return 0;
+			}
+			else if (shadingMode == "material_only")
+			{
+				return 1;
+			}
+			else if (shadingMode == "translucent")
+			{
+				return 2;
+			}
+			else if (shadingMode == "none")
+			{
+				return 3;
+			}
+		};
+
+		const auto AddBasePass = [&material, &baseRenderPass, &paramReader, ShadingTypeToInt] (const QString& shader) {
+			material->addParameter(new QParameter("diffuse_colour", paramReader.ReadColour("diffuse", "diff_color")));
+			material->addParameter(new QParameter("selfillum_colour", paramReader.ReadColour("selfillum", "selfillum_color")));
+			material->addParameter(new QParameter("shininess", paramReader.ReadFloat("shininess")));
+			material->addParameter(new QParameter("specular_colour", paramReader.ReadColour("spec_color")));
+			material->addParameter(new QParameter("basetexture", paramReader.ReadTexture("basetexture", "base")));
+			material->addParameter(new QParameter("shadingTypeEnum", ShadingTypeToInt(paramReader.ReadString("shading"))));
 		
 			QShaderProgram* baseShader = new QShaderProgram;
 			baseShader->setParent(baseRenderPass);
 			baseShader->setFragmentShaderCode(QShaderProgram::loadSource(QUrl::fromLocalFile(QDir::currentPath() + "/Shaders/" + shader)));
 			baseShader->setVertexShaderCode(QShaderProgram::loadSource(QUrl::fromLocalFile(QDir::currentPath() + "/Shaders/Basic.vert")));
-			// baseShader->setGeometryShaderCode(); todo - use shading mode property from material to determine normals, in geom shader
 			baseRenderPass->setShaderProgram(baseShader);
-		
-			technique->addRenderPass(baseRenderPass);
 		};
 
 		if (const std::string_view materialType = paramReader.ReadMaterialType(); 
@@ -65,30 +90,21 @@ namespace MGF::Render
 		}
 		else if (materialType == "complex")
 		{
-			QRenderPass* baseRenderPass = new QRenderPass;
-			baseRenderPass->setParent(technique);
-			baseRenderPass->addParameter(new QParameter("diffuse_colour", paramReader.ReadColour("diffuse", "diff_color")));
-			baseRenderPass->addParameter(new QParameter("selfillum_colour", paramReader.ReadColour("selfillum", "selfillum_color")));
-			baseRenderPass->addParameter(new QParameter("shininess", paramReader.ReadFloat("shininess")));
-			baseRenderPass->addParameter(new QParameter("specular_colour", paramReader.ReadColour("spec_color")));
-			baseRenderPass->addParameter(new QParameter("basetexture", paramReader.ReadTexture("basetexture", "base")));
-			baseRenderPass->addParameter(new QParameter("multitexture", paramReader.ReadTexture("multitexture")));
-			baseRenderPass->addParameter(new QParameter("colorshift0", paramReader.ReadColour("colorshift0_color")));
-			baseRenderPass->addParameter(new QParameter("colorshift1", paramReader.ReadColour("colorshift1_color")));
-
-			const auto [blendFunc, blendState] = paramReader.ReadBlendingMode("blending");
-			baseRenderPass->addRenderState(blendFunc);
-			baseRenderPass->addRenderState(blendState);
-			baseRenderPass->addRenderState(paramReader.ReadCullingMode("two_sided"));
+			material->addParameter(new QParameter("diffuse_colour", paramReader.ReadColour("diffuse", "diff_color")));
+			material->addParameter(new QParameter("selfillum_colour", paramReader.ReadColour("selfillum", "selfillum_color")));
+			material->addParameter(new QParameter("shininess", paramReader.ReadFloat("shininess")));
+			material->addParameter(new QParameter("specular_colour", paramReader.ReadColour("spec_color")));
+			material->addParameter(new QParameter("basetexture", paramReader.ReadTexture("basetexture", "base")));
+			material->addParameter(new QParameter("multitexture", paramReader.ReadTexture("multitexture")));
+			material->addParameter(new QParameter("colorshift0", paramReader.ReadColour("colorshift0_color")));
+			material->addParameter(new QParameter("colorshift1", paramReader.ReadColour("colorshift1_color")));
+			material->addParameter(new QParameter("shadingTypeEnum", ShadingTypeToInt(paramReader.ReadString("shading"))));
 
 			QShaderProgram* baseShader = new QShaderProgram;
 			baseShader->setParent(baseRenderPass);
 			baseShader->setFragmentShaderCode(QShaderProgram::loadSource(QUrl::fromLocalFile(QDir::currentPath() + "/Shaders/ComplexMaterial.frag")));
 			baseShader->setVertexShaderCode(QShaderProgram::loadSource(QUrl::fromLocalFile(QDir::currentPath() + "/Shaders/Basic.vert")));
-			// baseShader->setGeometryShaderCode(); todo - use shading mode property from material to determine normals, in geom shader
 			baseRenderPass->setShaderProgram(baseShader);
-
-			technique->addRenderPass(baseRenderPass);
 		}
 		else if (materialType == "detail")
 		{
@@ -104,7 +120,17 @@ namespace MGF::Render
 		}
 		else if (materialType == "solid")
 		{
-			//AddBasePass();
+			material->addParameter(new QParameter("diffuse_colour", paramReader.ReadColour("diffuse", "diff_color")));
+			material->addParameter(new QParameter("selfillum_colour", paramReader.ReadColour("selfillum", "selfillum_color")));
+			material->addParameter(new QParameter("shininess", paramReader.ReadFloat("shininess")));
+			material->addParameter(new QParameter("specular_colour", paramReader.ReadColour("spec_color")));
+			material->addParameter(new QParameter("shadingTypeEnum", ShadingTypeToInt(paramReader.ReadString("shading"))));
+
+			QShaderProgram* baseShader = new QShaderProgram;
+			baseShader->setParent(baseRenderPass);
+			baseShader->setFragmentShaderCode(QShaderProgram::loadSource(QUrl::fromLocalFile(QDir::currentPath() + "/Shaders/SolidMaterial.frag")));
+			baseShader->setVertexShaderCode(QShaderProgram::loadSource(QUrl::fromLocalFile(QDir::currentPath() + "/Shaders/Basic.vert")));
+			baseRenderPass->setShaderProgram(baseShader);
 		}
 		else if (materialType == "animated")
 		{
@@ -114,18 +140,7 @@ namespace MGF::Render
 		{
 			qDebug() << "MGF::Render::MaterialFactory - Unrecognised material type" << materialType.data();
 		}
-
-		Qt3DRender::QFilterKey* filter = new Qt3DRender::QFilterKey;
-		filter->setParent(material);
-		filter->setName(QStringLiteral("renderingStyle"));
-		filter->setValue(QStringLiteral("forward"));
-		technique->addFilterKey(filter);
 		
-		QEffect* effect = new QEffect;
-		effect->setParent(material);
-		effect->addTechnique(technique);
-		
-		material->setEffect(effect);
 
 		return material;
 	}

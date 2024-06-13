@@ -6,34 +6,53 @@
 
 #include <QMouseEvent>
 #include <QCamera>
+#include <QCameraSelector>
 #include <QForwardRenderer>
-
+#include <QPointLight>
+#include <QDirectionalLight>
+#include <QOrbitCameraController>
+#include <QFirstPersonCameraController>
+#include <QLayerFilter>
+#include <QLayer>
+#include <QSortPolicy>
+#include <QDebugOverlay>
 
 using namespace ModelViewer;
+
+Qt3DExtras::Qt3DWindow* ModelViewerWidget::RenderWindowPtr = nullptr;
+Qt3DRender::QCamera* ModelViewerWidget::Camera = nullptr;
+Qt3DCore::QEntity* ModelViewerWidget::SceneRoot = nullptr;
+Qt3DCore::QEntity* ModelViewerWidget::SceneLightEntity = nullptr;
+Qt3DRender::QPointLight* ModelViewerWidget::Light = nullptr;
+Qt3DCore::QTransform* ModelViewerWidget::LightTransform = nullptr;
+Qt3DRender::QCamera* ModelViewerWidget::ModelViewerCamera = nullptr;
+Qt3DRender::QCameraSelector* ModelViewerWidget::CameraSelector = nullptr;
+Qt3DExtras::QAbstractCameraController* ModelViewerWidget::CameraController = nullptr;
+Qt3DRender::QLayer* ModelViewerWidget::OpaqueLayer;
+Qt3DRender::QLayer* ModelViewerWidget::TransparentLayer;
 
 ModelViewerWidget::ModelViewerWidget(QWidget *parent) :
     ui(new Ui::ModelViewerWidget)
 {
     ui->setupUi(this);
-    qApp->installEventFilter(this);
 
     connect(
-        ui->lightPositionXInput,
-        &QSpinBox::valueChanged,
+        ui->lightPositionSliderXInput,
+        &QSlider::valueChanged,
         this,
         &ModelViewerWidget::on_lightPositionXInput_changed
     );
 
     connect(
-        ui->lightPositionXInput,
-        &QSpinBox::valueChanged,
+        ui->lightPositionSliderYInput,
+        &QSlider::valueChanged,
         this,
         &ModelViewerWidget::on_lightPositionYInput_changed
     );
 
     connect(
-        ui->lightPositionXInput,
-        &QSpinBox::valueChanged,
+        ui->lightPositionSliderZInput,
+        &QSlider::valueChanged,
         this,
         &ModelViewerWidget::on_lightPositionZInput_changed
     );
@@ -48,12 +67,16 @@ void ModelViewerWidget::LoadAsset(MGF::Asset::AssetPtr asset)
 {
 	auto& model = *static_cast<MGF::Asset::ModelAsset*>(asset.get());
 
-    auto [wnd, rootEntity] = qApp->GetModelViewerData();
-    wnd->defaultFrameGraph()->setClearColor(QColor::fromRgba(0xFFFF00FF));
-    wnd->camera()->lens()->setAspectRatio((float)wnd->geometry().width() / (float)wnd->geometry().height());
-    wnd->defaultFrameGraph()->setShowDebugOverlay(true);
-    model.mRootNode->setParent(rootEntity);
-    qApp->mLastEntity = model.mRootNode;
+    if (CurrentModelEntity)
+    {
+        CurrentModelEntity->setParent(static_cast<Qt3DCore::QNode*>(nullptr));
+    }
+
+    const QRect geom = ModelViewerWidget::RenderWindowPtr->geometry();
+    ModelViewerWidget::Camera->lens()->setPerspectiveProjection(55.0f, static_cast<float>(geom.width()) / static_cast<float>(geom.height()), 0.1f, 1000.0f);
+
+    model.mRootNode->setParent(ModelViewerWidget::SceneRoot);
+    CurrentModelEntity = model.mRootNode;
     
 	// ui->animTableView->setModel(model.GetAnimationTableModel());
 	// ui->meshTableView->setModel(model.GetMeshTableModel());
@@ -99,72 +122,89 @@ void ModelViewerWidget::LoadAsset(MGF::Asset::AssetPtr asset)
 
 void ModelViewerWidget::showEvent(QShowEvent* event)
 {
+  //  ModelViewerWidget::CameraSelector->setCamera(ModelViewerWidget::Camera);
+    ModelViewerWidget::RenderWindowPtr->setRootEntity(ModelViewerWidget::SceneRoot);
+
     ui->frameLayout->insertWidget(0, qApp->GetRenderWindowContainer());
 
     qApp->GetRenderWindowContainer()->setMouseTracking(true);
-    qApp->GetRenderWindowContainer()->installEventFilter(this);
     m_WindowTimerId = qApp->GetRenderWindowContainer()->startTimer(16);
 }
 
 void ModelViewerWidget::hideEvent(QHideEvent* event)
 {
+   // ModelViewerWidget::CameraSelector->setCamera(nullptr);
+    ModelViewerWidget::RenderWindowPtr->setRootEntity(nullptr);
+
+    if (CurrentModelEntity)
+    {
+        CurrentModelEntity->setParent(static_cast<Qt3DCore::QNode*>(nullptr));
+        CurrentModelEntity = nullptr;
+    }
+
     ui->frameLayout->removeWidget(qApp->GetRenderWindowContainer());
 
     qApp->GetRenderWindowContainer()->setMouseTracking(false);
-    qApp->GetRenderWindowContainer()->removeEventFilter(this);
     qApp->GetRenderWindowContainer()->killTimer(m_WindowTimerId);
 }
 
-bool ModelViewer::ModelViewerWidget::eventFilter(QObject* object, QEvent* event)
+bool ModelViewer::ModelViewerWidget::InitialiseScene(Qt3DExtras::Qt3DWindow* renderWindow, Qt3DRender::QCameraSelector* cameraSelector)
 {
-    // fucking stupid default camera controls
-    if (event->type() == QEvent::KeyPress)
-    {
-        using namespace Qt;
+    ModelViewerWidget::RenderWindowPtr = renderWindow;
+    ModelViewerWidget::CameraSelector = cameraSelector;
 
-        switch (QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event); keyEvent->key())
-        {
-        case Key_W:
-            qApp->postEvent(this, new QKeyEvent(QEvent::KeyPress, Key_Up, KeyboardModifier::NoModifier));
-            return true;
+    ModelViewerWidget::SceneRoot = new Qt3DCore::QEntity;
+    ModelViewerWidget::RenderWindowPtr->setRootEntity(ModelViewerWidget::SceneRoot);
 
-        case Key_A:
-            qApp->postEvent(this, new QKeyEvent(QEvent::KeyPress, Key_Left, KeyboardModifier::NoModifier));
-            return true;
+    ModelViewerWidget::Camera = new Qt3DRender::QCamera(cameraSelector);
+    cameraSelector->setCamera(ModelViewerWidget::Camera);
 
-        case Key_S:
-            qApp->postEvent(this, new QKeyEvent(QEvent::KeyPress, Key_Down, KeyboardModifier::NoModifier));
-            return true;
+    Qt3DRender::QLayerFilter* opaqueLayerFilter = new Qt3DRender::QLayerFilter(ModelViewerWidget::Camera);
+    OpaqueLayer = new Qt3DRender::QLayer;
+    opaqueLayerFilter->addLayer(OpaqueLayer);
 
-        case Key_D:
-            qApp->postEvent(this, new QKeyEvent(QEvent::KeyPress, Key_Right, KeyboardModifier::NoModifier));
-            return true;
+    Qt3DRender::QLayerFilter* transparentLayerFilter = new Qt3DRender::QLayerFilter(ModelViewerWidget::Camera);
+    TransparentLayer = new Qt3DRender::QLayer;
+    transparentLayerFilter->addLayer(TransparentLayer);
 
-        case Key_Q:
-            qApp->postEvent(this, new QKeyEvent(QEvent::KeyPress, Key_PageDown, KeyboardModifier::NoModifier));
-            return true;
+    ModelViewerWidget::SceneLightEntity = new Qt3DCore::QEntity(ModelViewerWidget::SceneRoot);
+    ModelViewerWidget::Light = new Qt3DRender::QPointLight;
+    ModelViewerWidget::Light->setColor(QColor::fromRgbF(1.0f, 1.0f, 1.0f));
+    ModelViewerWidget::Light->setIntensity(1.0f);
+    ModelViewerWidget::SceneLightEntity->addComponent(ModelViewerWidget::Light);
 
-        case Key_E:
-            qApp->postEvent(this, new QKeyEvent(QEvent::KeyPress, Key_PageUp, KeyboardModifier::NoModifier));
-            return true;
-        }
-    }
+    ModelViewerWidget::LightTransform = new Qt3DCore::QTransform;
+    ModelViewerWidget::SceneLightEntity->addComponent(ModelViewerWidget::LightTransform);
 
-    return false;
+    ModelViewerWidget::CameraController = new Qt3DExtras::QFirstPersonCameraController(ModelViewerWidget::SceneRoot);
+    ModelViewerWidget::CameraController->setCamera(ModelViewerWidget::Camera);
+
+    Qt3DRender::QSortPolicy* opaqueSortPolicy = new Qt3DRender::QSortPolicy(ModelViewer::ModelViewerWidget::SceneRoot);
+    opaqueSortPolicy->setParent(opaqueLayerFilter);
+    opaqueSortPolicy->setSortTypes(QList<Qt3DRender::QSortPolicy::SortType>{ Qt3DRender::QSortPolicy::FrontToBack });
+    
+    Qt3DRender::QSortPolicy* transparentSortPolicy = new Qt3DRender::QSortPolicy(ModelViewer::ModelViewerWidget::SceneRoot);
+    transparentSortPolicy->setParent(transparentLayerFilter);
+    transparentSortPolicy->setSortTypes(QList<Qt3DRender::QSortPolicy::SortType>{ Qt3DRender::QSortPolicy::BackToFront });
+
+    return true;
 }
 
 void ModelViewerWidget::on_lightPositionXInput_changed(int value)
 {
-    qApp->mLightTransform->setTranslation(QVector3D(value, qApp->mLightTransform->translation().y(), qApp->mLightTransform->translation().z()));
+    const QVector3D lightPosition = ModelViewerWidget::LightTransform->translation();
+    ModelViewerWidget::LightTransform->setTranslation(QVector3D(value, lightPosition.y(), lightPosition.z()));
 }
 
 void ModelViewerWidget::on_lightPositionYInput_changed(int value)
 {
-    qApp->mLightTransform->setTranslation(QVector3D(qApp->mLightTransform->translation().x(), value, qApp->mLightTransform->translation().z()));
+    const QVector3D lightPosition = ModelViewerWidget::LightTransform->translation();
+    ModelViewerWidget::LightTransform->setTranslation(QVector3D(lightPosition.x(), value, lightPosition.z()));
 }
 
 void ModelViewerWidget::on_lightPositionZInput_changed(int value)
 {
-    qApp->mLightTransform->setTranslation(QVector3D(qApp->mLightTransform->translation().x(), qApp->mLightTransform->translation().y(), value));
+    const QVector3D lightPosition = ModelViewerWidget::LightTransform->translation();
+    ModelViewerWidget::LightTransform->setTranslation(QVector3D(lightPosition.x(), lightPosition.y(), value));
 }
 

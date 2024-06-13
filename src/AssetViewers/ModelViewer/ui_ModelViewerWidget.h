@@ -15,8 +15,8 @@
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
+#include <QtWidgets/QSlider>
 #include <QtWidgets/QSpacerItem>
-#include <QtWidgets/QSpinBox>
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QTableView>
 #include <QtWidgets/QTreeView>
@@ -34,9 +34,12 @@ public:
     QHBoxLayout *horizontalLayout_3;
     QSpacerItem *horizontalSpacer;
     QLabel *label;
-    QSpinBox *lightPositionXInput;
-    QSpinBox *lightPositionYInput;
-    QSpinBox *lightPositionZInput;
+    QVBoxLayout *verticalLayout_2;
+    QSpacerItem *verticalSpacer_2;
+    QSlider *lightPositionSliderXInput;
+    QSlider *lightPositionSliderYInput;
+    QSlider *lightPositionSliderZInput;
+    QSpacerItem *verticalSpacer;
     QTabWidget *tabWidget;
     QWidget *tabNodes;
     QHBoxLayout *horizontalLayout_5;
@@ -74,41 +77,70 @@ public:
         frameLayout->setContentsMargins(0, 0, 0, 0);
         horizontalLayout_3 = new QHBoxLayout();
         horizontalLayout_3->setObjectName("horizontalLayout_3");
+        horizontalLayout_3->setSizeConstraint(QLayout::SetMinimumSize);
         horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
         horizontalLayout_3->addItem(horizontalSpacer);
 
         label = new QLabel(frame);
         label->setObjectName("label");
+        QSizePolicy sizePolicy1(QSizePolicy::Minimum, QSizePolicy::Minimum);
+        sizePolicy1.setHorizontalStretch(0);
+        sizePolicy1.setVerticalStretch(0);
+        sizePolicy1.setHeightForWidth(label->sizePolicy().hasHeightForWidth());
+        label->setSizePolicy(sizePolicy1);
 
         horizontalLayout_3->addWidget(label);
 
-        lightPositionXInput = new QSpinBox(frame);
-        lightPositionXInput->setObjectName("lightPositionXInput");
-        lightPositionXInput->setMinimumSize(QSize(100, 0));
-        lightPositionXInput->setMinimum(-100);
-        lightPositionXInput->setMaximum(100);
-        lightPositionXInput->setStepType(QAbstractSpinBox::AdaptiveDecimalStepType);
+        verticalLayout_2 = new QVBoxLayout();
+        verticalLayout_2->setObjectName("verticalLayout_2");
+        verticalLayout_2->setSizeConstraint(QLayout::SetMinimumSize);
+        verticalSpacer_2 = new QSpacerItem(20, 0, QSizePolicy::Minimum, QSizePolicy::Minimum);
 
-        horizontalLayout_3->addWidget(lightPositionXInput);
+        verticalLayout_2->addItem(verticalSpacer_2);
 
-        lightPositionYInput = new QSpinBox(frame);
-        lightPositionYInput->setObjectName("lightPositionYInput");
-        lightPositionYInput->setMinimumSize(QSize(100, 0));
-        lightPositionYInput->setMinimum(-100);
-        lightPositionYInput->setMaximum(100);
-        lightPositionYInput->setStepType(QAbstractSpinBox::AdaptiveDecimalStepType);
+        lightPositionSliderXInput = new QSlider(frame);
+        lightPositionSliderXInput->setObjectName("lightPositionSliderXInput");
+        QSizePolicy sizePolicy2(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        sizePolicy2.setHorizontalStretch(0);
+        sizePolicy2.setVerticalStretch(0);
+        sizePolicy2.setHeightForWidth(lightPositionSliderXInput->sizePolicy().hasHeightForWidth());
+        lightPositionSliderXInput->setSizePolicy(sizePolicy2);
+        lightPositionSliderXInput->setMinimumSize(QSize(200, 0));
+        lightPositionSliderXInput->setMinimum(-100);
+        lightPositionSliderXInput->setMaximum(100);
+        lightPositionSliderXInput->setOrientation(Qt::Horizontal);
 
-        horizontalLayout_3->addWidget(lightPositionYInput);
+        verticalLayout_2->addWidget(lightPositionSliderXInput);
 
-        lightPositionZInput = new QSpinBox(frame);
-        lightPositionZInput->setObjectName("lightPositionZInput");
-        lightPositionZInput->setMinimumSize(QSize(100, 0));
-        lightPositionZInput->setMinimum(-100);
-        lightPositionZInput->setMaximum(100);
-        lightPositionZInput->setStepType(QAbstractSpinBox::AdaptiveDecimalStepType);
+        lightPositionSliderYInput = new QSlider(frame);
+        lightPositionSliderYInput->setObjectName("lightPositionSliderYInput");
+        sizePolicy2.setHeightForWidth(lightPositionSliderYInput->sizePolicy().hasHeightForWidth());
+        lightPositionSliderYInput->setSizePolicy(sizePolicy2);
+        lightPositionSliderYInput->setMinimumSize(QSize(200, 0));
+        lightPositionSliderYInput->setMinimum(-100);
+        lightPositionSliderYInput->setMaximum(100);
+        lightPositionSliderYInput->setOrientation(Qt::Horizontal);
 
-        horizontalLayout_3->addWidget(lightPositionZInput);
+        verticalLayout_2->addWidget(lightPositionSliderYInput);
+
+        lightPositionSliderZInput = new QSlider(frame);
+        lightPositionSliderZInput->setObjectName("lightPositionSliderZInput");
+        sizePolicy2.setHeightForWidth(lightPositionSliderZInput->sizePolicy().hasHeightForWidth());
+        lightPositionSliderZInput->setSizePolicy(sizePolicy2);
+        lightPositionSliderZInput->setMinimumSize(QSize(200, 0));
+        lightPositionSliderZInput->setMinimum(-100);
+        lightPositionSliderZInput->setMaximum(100);
+        lightPositionSliderZInput->setOrientation(Qt::Horizontal);
+
+        verticalLayout_2->addWidget(lightPositionSliderZInput);
+
+        verticalSpacer = new QSpacerItem(20, 0, QSizePolicy::Minimum, QSizePolicy::Minimum);
+
+        verticalLayout_2->addItem(verticalSpacer);
+
+
+        horizontalLayout_3->addLayout(verticalLayout_2);
 
 
         frameLayout->addLayout(horizontalLayout_3);
@@ -202,9 +234,6 @@ public:
     {
         ModelViewerWidget->setWindowTitle(QCoreApplication::translate("ModelViewerWidget", "Form", nullptr));
         label->setText(QCoreApplication::translate("ModelViewerWidget", "Light", nullptr));
-        lightPositionXInput->setPrefix(QCoreApplication::translate("ModelViewerWidget", "X: ", nullptr));
-        lightPositionYInput->setPrefix(QCoreApplication::translate("ModelViewerWidget", "Y: ", nullptr));
-        lightPositionZInput->setPrefix(QCoreApplication::translate("ModelViewerWidget", "Z: ", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tabNodes), QCoreApplication::translate("ModelViewerWidget", "Nodes", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tabAnimations), QCoreApplication::translate("ModelViewerWidget", "Animations", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tabMeshes), QCoreApplication::translate("ModelViewerWidget", "Meshes", nullptr));

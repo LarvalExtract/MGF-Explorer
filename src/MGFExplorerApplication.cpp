@@ -1,9 +1,12 @@
 #include "MGFExplorerApplication.h"
+#include "AssetViewers/TextureViewer/TextureViewerWidget.h"
+#include "AssetViewers/ModelViewer/ModelViewerWidget.h"
 
 #include <QMessageBox>
 
 #include <filesystem>
 
+#include <QDebugOverlay>
 #include <Qt3DCore>
 #include <Qt3DRender>
 #include <Qt3DExtras>
@@ -12,6 +15,7 @@
 #include <QTransform>
 #include <QPointLight>
 #include <QSortPolicy>
+#include <QFilterKey>
 
 MGFExplorerApplication::MGFExplorerApplication(int argc, char* argv[], int flags)
 	: QApplication(argc, argv, flags)
@@ -43,9 +47,21 @@ int MGFExplorerApplication::exec()
 
 	RenderWindow = new Qt3DExtras::Qt3DWindow(nullptr, Qt3DRender::API::OpenGL);
 	RenderWindowContainer = QWidget::createWindowContainer(RenderWindow, &MainWindow);
+	RenderWindowContainer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-	SetupTextureViewerScene();
-	SetupModelViewerScene();
+	Qt3DRender::QRenderSurfaceSelector* renderSurfaceSelector = new Qt3DRender::QRenderSurfaceSelector;
+		renderSurfaceSelector->setSurface(RenderWindow);
+		Qt3DRender::QClearBuffers* clearBuffers = new Qt3DRender::QClearBuffers(renderSurfaceSelector);
+			clearBuffers->setBuffers(Qt3DRender::QClearBuffers::AllBuffers);
+			clearBuffers->setClearColor(QColorConstants::DarkCyan);
+		Qt3DRender::QViewport* viewport = new Qt3DRender::QViewport(renderSurfaceSelector);
+			Qt3DRender::QCameraSelector* cameraSelector = new Qt3DRender::QCameraSelector(viewport);
+			//Qt3DRender::QDebugOverlay* debugOverlay = new Qt3DRender::QDebugOverlay(viewport);
+			//debugOverlay->setEnabled(true);
+
+	RenderWindow->setActiveFrameGraph(renderSurfaceSelector);
+
+	ModelViewer::ModelViewerWidget::InitialiseScene(RenderWindow, cameraSelector);
 
 	MainWindow.show();
 
@@ -65,83 +81,4 @@ Qt3DExtras::Qt3DWindow* MGFExplorerApplication::GetRenderWindow() const
 QWidget* MGFExplorerApplication::GetRenderWindowContainer() const
 {
 	return RenderWindowContainer;
-}
-
-MGFExplorerApplication::TextureViewerData MGFExplorerApplication::GetTextureViewerData()
-{
-	RenderWindow->setRootEntity(mTextureViewerRootEntity);
-
-	RenderWindow->camera()->lens()->setOrthographicProjection(-0.5f, 0.5f, -0.5f, 0.5f, 0.1f, 10.0f);
-	RenderWindow->camera()->setPosition(QVector3D(0.0f, 0.0f, 1.0f));
-	RenderWindow->camera()->setUpVector(QVector3D(0.0f, 1.0f, 0.0f));
-	RenderWindow->camera()->setViewCenter(QVector3D(0.0f, 0.0f, 0.0f));
-
-	return TextureViewerData{
-		RenderWindow->camera(),
-		mTextureViewerMaterial
-	};
-}
-
-MGFExplorerApplication::ModelViewerData MGFExplorerApplication::GetModelViewerData()
-{
-	if (mLastEntity)
-	{
-		mLastEntity->setParent((Qt3DCore::QNode*)nullptr);
-	}
-
-	RenderWindow->setRootEntity(mModelViewerRootEntity);
-
-	auto camera = RenderWindow->camera();
-	camera->lens()->setPerspectiveProjection(55.0f, 16.0f / 9.0f, 0.1f, 1000.0f);
-	camera->setPosition(QVector3D(0.0f, 0.0f, 20.0f));
-	camera->setUpVector(QVector3D(0.0f, 1.0f, 0.0f));
-	camera->setViewCenter(QVector3D(0.0f, 0.0f, 0.0f));
-
-	return ModelViewerData{
-		RenderWindow,
-		mModelViewerRootEntity
-	};
-}
-
-void MGFExplorerApplication::SetupTextureViewerScene()
-{
-	mTextureViewerRootEntity = new Qt3DCore::QEntity();
-
-	mTextureViewerMaterial = new Qt3DExtras::QTextureMaterial();
-	auto plane = new Qt3DExtras::QPlaneMesh();
-
-	auto trnsfm = new Qt3DCore::QTransform();
-	trnsfm->setTranslation(QVector3D(0.0f, 0.0f, 0.0f));
-	trnsfm->setRotation(QQuaternion::fromEulerAngles(QVector3D(90.0f, 0.0f, 0.0f)));
-	trnsfm->setScale(1.0f);
-	
-	mTextureViewerRootEntity->addComponent(plane);
-	mTextureViewerRootEntity->addComponent(mTextureViewerMaterial);
-	mTextureViewerRootEntity->addComponent(trnsfm);
-}
-
-void MGFExplorerApplication::SetupModelViewerScene()
-{
-	mModelViewerRootEntity = new Qt3DCore::QEntity();
-
-	auto lightEntity = new Qt3DCore::QEntity(mModelViewerRootEntity);
-
-	mLightTransform = new Qt3DCore::QTransform();
-	mLightTransform->setTranslation(QVector3D(0.0f, -5.0f, 0.0f));
-	mLightTransform->setRotation(QQuaternion::fromEulerAngles(QVector3D(0.0f, 0.0f, 0.0f)));
-	mLightTransform->setScale(1.0f);
-	lightEntity->addComponent(mLightTransform);
-
-	auto cameraController = new Qt3DExtras::QFirstPersonCameraController(mModelViewerRootEntity);
-	cameraController->setCamera(RenderWindow->camera());
-
-	auto light = new Qt3DRender::QPointLight;
-	light->setConstantAttenuation(1.0f);
-	light->setColor(QColor::fromRgbF(1.0f, 1.0f, 1.0f));
-	light->setIntensity(1.0f);
-
-	lightEntity->addComponent(light);
-
-	auto sortPolicy = new Qt3DRender::QSortPolicy(RenderWindow->activeFrameGraph());
-	sortPolicy->setSortTypes(QList{ Qt3DRender::QSortPolicy::BackToFront });
 }

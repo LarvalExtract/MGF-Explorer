@@ -4,6 +4,8 @@
 #include "MGF/AssetManager.h"
 #include "MGF/Deserializer.h"
 
+#include "AssetViewers/ModelViewer/ModelViewerWidget.h"
+
 #include "Render/MaterialParamReader.h"
 #include "Render/MaterialLibrary.h"
 
@@ -166,23 +168,35 @@ void ModelAsset::CreateSceneNode(Qt3DCore::QEntity* parent, const pugi::xml_node
 	}
 
 	Qt3DCore::QEntity* entity = new Qt3DCore::QEntity(parent);
+
+	const QString name = xmlnode.attribute("name").as_string();
 	entity->setProperty("name", xmlnode.attribute("name").as_string());
 
-	auto transform = new Qt3DCore::QTransform;
-	transform->setTranslation(MGF::Render::IMaterialParamReader::StrToVector(xmlnode.attribute("position").as_string()));
-	transform->setScale3D(MGF::Render::IMaterialParamReader::StrToVector(xmlnode.attribute("scale").as_string()));
-	transform->setRotation(MGF::Render::IMaterialParamReader::StringToQuat(xmlnode.attribute("rot_axis").as_string(), xmlnode.attribute("rot_angle").as_string()));
+	Qt3DCore::QTransform* transform = new Qt3DCore::QTransform;
+	const QVector3D position = MGF::Render::IMaterialParamReader::StrToVector(xmlnode.attribute("position").as_string());
+	const QVector3D rotationAxis = MGF::Render::IMaterialParamReader::StrToVector(xmlnode.attribute("rot_axis").as_string());
+	const float rotationAngle = qRadiansToDegrees(xmlnode.attribute("rot_angle").as_float());
+	const QVector3D scale = MGF::Render::IMaterialParamReader::StrToVector(xmlnode.attribute("scale").as_string());
+	const QQuaternion rotationQuat = QQuaternion::fromAxisAndAngle(rotationAxis, rotationAngle);
+
+	transform->setTranslation(position);
+	transform->setScale3D(scale);
+	transform->setRotation(rotationQuat);
+
 	entity->addComponent(transform);
 
 	if (nodeType.contains("3dobject"))
 	{
 		for (const auto& mesh : xmlnode.children("mesh"))
 		{
+			Qt3DCore::QEntity* meshEntity = new Qt3DCore::QEntity(entity);
+
 			Qt3DRender::QGeometryRenderer* geom = meshes.at(mesh.attribute("name").as_string());
 			Qt3DRender::QMaterial* material = materials.at(geom->property("material").toString().toStdString());
 
-			entity->addComponent(geom);
-			entity->addComponent(material);
+			meshEntity->addComponent(geom);
+			meshEntity->addComponent(material);
+			meshEntity->addComponent(material->property("blending").toString() == "normal" ? ModelViewer::ModelViewerWidget::OpaqueLayer : ModelViewer::ModelViewerWidget::TransparentLayer);
 		}
 	}
 	else if (nodeType.contains("skinned"))
@@ -191,9 +205,10 @@ void ModelAsset::CreateSceneNode(Qt3DCore::QEntity* parent, const pugi::xml_node
 	}
 	else if (nodeType.contains("light"))
 	{
-		
+		entity->addComponent(ModelViewer::ModelViewerWidget::OpaqueLayer);
+		entity->addComponent(ModelViewer::ModelViewerWidget::TransparentLayer);
 	}
-
+	
 	for (const auto& child : xmlnode.child("children").children())
 	{
 		CreateSceneNode(entity, child, meshes, materials);
