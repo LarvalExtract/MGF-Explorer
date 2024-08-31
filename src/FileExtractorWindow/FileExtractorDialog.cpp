@@ -57,7 +57,7 @@ void FileExtractorDialog::on_browseButton_clicked()
 	Destination.make_preferred();
 
 	QSettings settings;
-	settings.setValue(s_SavedFileExtractorDestinationKey, Destination.c_str());
+	settings.setValue(s_SavedFileExtractorDestinationKey, Destination.string().c_str());
 	ui->destinationFolderPath->setText(settings.value(s_SavedFileExtractorDestinationKey).toString());
 }
 

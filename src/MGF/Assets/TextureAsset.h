@@ -3,7 +3,7 @@
 #include "AssetBase.h"
 #include "AssetViewers/TextureViewer/Models/TextureDetailsTableModel.h"
 
-#include <OgreTexture.h>
+namespace Qt3DRender { class QAbstractTexture; }
 
 namespace MGF {	namespace Asset {
 
@@ -13,12 +13,7 @@ namespace MGF {	namespace Asset {
 		TextureAsset(const File& file);
 
 		TextureViewer::Models::TextureDetailsTable TextureDetails;
-
-		Ogre::TexturePtr OgreTexture;
-
-	private:
-		Ogre::PixelFormat DeterminePixelFormat();
-		Ogre::TextureType DetermineTextureType();
+		Qt3DRender::QAbstractTexture* mTexture = nullptr;
 	};
 
 } }

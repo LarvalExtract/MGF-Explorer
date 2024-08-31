@@ -1,0 +1,52 @@
+//------------------------------------------------
+//--- 010 Editor v12.0.1 Binary Template
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+
+// #include "mgi_header.bth"
+// #include "vertexbuffer_layouts.bt"
+
+struct GEOMFACE {
+    struct MGI_HEADER {
+	 uint32  unk1;
+	 byte    MGIc[4];
+	 uint32  length;
+	 uint32  unk2;
+	 byte    padding[16];
+    } mgi;
+    if (geomFace.mgi.unk2 == 2) {
+        struct XMLB {
+            char id[4];
+            uint32 pad1;
+            uint32 chunkSize;
+            uint32 pad2;
+            char idxbin[7];
+        } xmlb;
+    }
+    struct INDX {
+        char      id[4];
+        uint32    pad1;
+        uint32    chunk_size;
+        uint32    unk1;
+        struct VIDX {
+            char     id[4];
+            uint32   vidx_size;
+            byte     unk1;
+        } vidx;
+        struct NIDX {
+            char      id[4];
+            uint32    nidx_size;
+            uint32    indexCount;
+        } nidx;
+        char    data[4];
+        uint32  data_size;
+     } indx;
+} geomFace;

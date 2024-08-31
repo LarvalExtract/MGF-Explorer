@@ -4,8 +4,7 @@ static const QVariant HEADERS[] = {
 	"Name",
 	"Vertices",
 	"Flags",
-	"Stride",
-	"Topology"
+	"Stride"
 };
 
 constexpr size_t COLUMNS = sizeof(HEADERS) / sizeof(HEADERS[0]);
@@ -29,17 +28,6 @@ QVariant MeshTable::data(const QModelIndex& index, int role /*= Qt::DisplayRole*
 		return QVariant();
 	}
 
-	const auto renderOperationTypeString = [](Ogre::RenderOperation::OperationType type)
-	{
-		using ot = Ogre::RenderOperation::OperationType;
-		switch (type)
-		{
-		case ot::OT_TRIANGLE_LIST: return "Triangle list";
-		case ot::OT_TRIANGLE_STRIP: return "Triangle strip";
-		default: return "UNKNOWN";
-		}
-	};
-
 	const auto& mesh = this->at(index.row());
 	switch (index.column())
 	{
@@ -47,9 +35,8 @@ QVariant MeshTable::data(const QModelIndex& index, int role /*= Qt::DisplayRole*
 	case 1: return mesh.numVerts;
 	case 2: return QString::number(mesh.flags, 16);
 	case 3: return mesh.stride;
-	case 4: return renderOperationTypeString(mesh.topology);
 	}
-
+	
 	return QVariant();
 }
 

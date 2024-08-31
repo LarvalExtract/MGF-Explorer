@@ -2,14 +2,31 @@
 
 #include "MainWindow/MainWindow.h"
 #include "MGF/AssetManager.h"
-
-#include "OgreWindow/ogrewindow.h"
+#include "MGF/Assets/Factories/MeshLibrary.h"
 
 #include <QApplication>
+#include <Qt3DWindow>
+#include <Qt3DCore/QTransform>
+#include <QLayer>
 
 #include <memory>
 #include <filesystem>
 #include <vector>
+
+namespace Qt3DCore
+{
+	class QEntity;
+}
+
+namespace Qt3DRender
+{
+	class QCamera;
+}
+
+namespace Qt3DExtras
+{
+	class QTextureMaterial;
+}
 
 #undef qApp
 #define qApp (static_cast<MGFExplorerApplication*>(QCoreApplication::instance()))
@@ -28,19 +45,19 @@ public:
 
 	int exec();
 
-	OgreWindow* GetRenderWindow() const;
+	Qt3DExtras::Qt3DWindow* GetRenderWindow() const;
 	QWidget* GetRenderWindowContainer() const;
 
 	MGF::AssetManager AssetManager;
-	Ogre::SceneManager* SceneManager;
+	MA::MeshLibrary mMeshLibrary;
+
+	Qt3DRender::QLayer* mOpaqueLayer = nullptr;
+	Qt3DRender::QLayer* mTransparentLayer = nullptr;
 
 private:
 	MainWindow MainWindow;
+	Qt3DExtras::Qt3DWindow* RenderWindow = nullptr;
 	QWidget* RenderWindowContainer = nullptr;
-	std::unique_ptr<Ogre::Root> OgreRoot;
-	std::unique_ptr<OgreWindow> OgreWindow;
 
 	std::vector<std::pair<std::filesystem::path, std::filesystem::path>> FileList;
-
-	void InitialiseOgre();
 };

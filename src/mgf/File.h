@@ -58,6 +58,10 @@ namespace MGF {
         const File* FindRelativeItem(const std::filesystem::path& relativePath) const;
 
         static EFileType GetEFileTypeFromExtension(const std::filesystem::path& extension);
-    };
 
+        friend QDebug& operator<<(QDebug& debug, const MGF::File& mgfFile);
+        
+    };
 }
+
+

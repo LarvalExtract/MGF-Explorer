@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'EntityViewerWidget.ui'
 **
-** Created by: Qt User Interface Compiler version 6.0.3
+** Created by: Qt User Interface Compiler version 6.4.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -33,7 +33,7 @@ public:
     void setupUi(QWidget *EntityViewerWidget)
     {
         if (EntityViewerWidget->objectName().isEmpty())
-            EntityViewerWidget->setObjectName(QString::fromUtf8("EntityViewerWidget"));
+            EntityViewerWidget->setObjectName("EntityViewerWidget");
         EntityViewerWidget->resize(1089, 825);
         QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         sizePolicy.setHorizontalStretch(0);
@@ -42,22 +42,22 @@ public:
         EntityViewerWidget->setSizePolicy(sizePolicy);
         verticalLayout = new QVBoxLayout(EntityViewerWidget);
         verticalLayout->setSpacing(0);
-        verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
+        verticalLayout->setObjectName("verticalLayout");
         verticalLayout->setContentsMargins(0, 0, 0, 0);
         Frame = new QFrame(EntityViewerWidget);
-        Frame->setObjectName(QString::fromUtf8("Frame"));
+        Frame->setObjectName("Frame");
         Frame->setFrameShape(QFrame::StyledPanel);
         Frame->setFrameShadow(QFrame::Raised);
         horizontalLayout = new QHBoxLayout(Frame);
-        horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
+        horizontalLayout->setObjectName("horizontalLayout");
         horizontalLayout->setContentsMargins(0, 0, 0, 0);
         EntityTreeView = new QTreeView(Frame);
-        EntityTreeView->setObjectName(QString::fromUtf8("EntityTreeView"));
+        EntityTreeView->setObjectName("EntityTreeView");
 
         horizontalLayout->addWidget(EntityTreeView);
 
         AttributeTableView = new QTableView(Frame);
-        AttributeTableView->setObjectName(QString::fromUtf8("AttributeTableView"));
+        AttributeTableView->setObjectName("AttributeTableView");
 
         horizontalLayout->addWidget(AttributeTableView);
 

@@ -96,12 +96,6 @@
     <ClCompile Include="src\MainWindow\MainWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\mgf\Assets\Factories\MeshFactory.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\mgf\Assets\Factories\MaterialFactory.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\MGF\Assets\ModelAsset.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -150,12 +144,6 @@
     <ClCompile Include="src\MGF\Factories\ImageFactory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\OgreWindow\moc_ogrewindow.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\OgreWindow\ogrewindow.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\AssetViewers\EntityViewer\EntityViewerWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -196,6 +184,24 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\MGFExplorerApplication.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Render\TextureLibrary.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MGF\Assets\Factories\MeshLibrary.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MGF\Assets\Factories\ShaderProgramProvider.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Render\MaterialParamReader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Render\MaterialFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Render\MaterialLibrary.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -305,12 +311,6 @@
     <ClInclude Include="src\MainWindow\MainWindow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\mgf\Assets\Factories\MeshFactory.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\mgf\Assets\Factories\MaterialFactory.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\mgf\Assets\Model\Animation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -374,9 +374,6 @@
     <ClInclude Include="src\MGF\Factories\ImageFactory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\OgreWindow\ogrewindow.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\AssetViewers\EntityViewer\EntityViewerWidget.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -438,6 +435,30 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\MGFExplorerApplication.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MGF\Assets\Factories\EffectLibrary.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Render\TextureLibrary.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MGF\Assets\Factories\MeshLibrary.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MGF\Assets\Factories\ShaderProgramProvider.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Render\MaterialParamReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Render\MaterialFactory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Render\MaterialLibrary.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MGFExplorerException.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

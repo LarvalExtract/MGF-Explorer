@@ -16,13 +16,19 @@ QModelIndex NodeTree::index(int row, int column, const QModelIndex& parent /*= Q
 		return QModelIndex();
 	}
 	
-	const auto parentNode = parent.isValid()
-		? static_cast<MGF::Asset::Model::Node*>(parent.internalPointer())
-		: RootNode;
+	const Qt3DCore::QEntity* parentNode = parent.isValid()
+		? static_cast<Qt3DCore::QEntity*>(parent.internalPointer())
+		: mRootNode;
 
-	const auto childNode = parentNode->children[row];
-	
-	return createIndex(row, column, childNode);
+	const Qt3DCore::QEntity* childNode = dynamic_cast<Qt3DCore::QEntity*>(parentNode->childNodes()[row]);
+	if (childNode)
+	{
+		return createIndex(row, column, childNode);
+	}
+	else
+	{
+		return QModelIndex();
+	}
 }
 
 QModelIndex NodeTree::parent(const QModelIndex& child) const
@@ -32,15 +38,30 @@ QModelIndex NodeTree::parent(const QModelIndex& child) const
 		return QModelIndex();
 	}
 
-	const auto childNode = static_cast<const MGF::Asset::Model::Node*>(child.internalPointer());
-	const auto parentNode = childNode->parent;
+	const Qt3DCore::QNode* childNode = static_cast<Qt3DCore::QNode*>(child.internalPointer());
+	const Qt3DCore::QEntity* childEntity = dynamic_cast<const Qt3DCore::QEntity*>(childNode);
+	const Qt3DCore::QEntity* parentNode = static_cast<Qt3DCore::QEntity*>(childEntity->parentEntity());
 
-	if (parentNode == RootNode)
+	if (parentNode == mRootNode || childNode == nullptr)
 	{
 		return {};
 	}
+
+	int n = 0;
+	for (const Qt3DCore::QNodeVector children = parentNode->childNodes(); const Qt3DCore::QNode* child : children)
+	{
+		if (const Qt3DCore::QEntity* entity = dynamic_cast<const Qt3DCore::QEntity*>(child))
+		{
+			if (entity == childNode)
+			{
+				break;
+			}
+
+			n++;
+		}
+	}
 	
-	return createIndex(parentNode->childIndex, 0, parentNode);
+	return createIndex(n, 0, parentNode);
 }
 
 int NodeTree::rowCount(const QModelIndex& parent /*= QModelIndex()*/) const
@@ -50,11 +71,17 @@ int NodeTree::rowCount(const QModelIndex& parent /*= QModelIndex()*/) const
 		return 0;
 	}
 
-	const auto parentNode = parent.isValid()
-		? static_cast<MGF::Asset::Model::Node*>(parent.internalPointer())
-		: RootNode;
+	const Qt3DCore::QNode* parentNode = parent.isValid()
+		? static_cast<Qt3DCore::QNode*>(parent.internalPointer())
+		: mRootNode;
 
-	return parentNode->children.size();
+	int childCount = 0;
+	for (Qt3DCore::QNodeVector children = parentNode->childNodes(); Qt3DCore::QNode * child : children)
+	{
+		if (dynamic_cast<Qt3DCore::QEntity*>(child) != nullptr)
+			childCount++;
+	}
+	return childCount;
 }
 
 int NodeTree::columnCount(const QModelIndex& parent /*= QModelIndex()*/) const
@@ -69,19 +96,19 @@ QVariant NodeTree::data(const QModelIndex& index, int role /*= Qt::DisplayRole*/
 		return QVariant();
 	}
 
-	const auto& node = *static_cast<MGF::Asset::Model::Node*>(index.internalPointer());
+	const const Qt3DCore::QEntity& node = *static_cast<Qt3DCore::QEntity*>(index.internalPointer());
 	if (role == Qt::DisplayRole)
 	{
 		switch (index.column())
 		{
-		case 0: return node.name.c_str();
-		case 1: return node.type.c_str();
+		case 0: return node.property("name").toString();
+		case 1: return node.property("type").toString();
 		}
 	}
 
 	else if (role == Qt::CheckStateRole && index.column() == 0)
 	{
-		return node.bVisible ? Qt::Checked : Qt::Unchecked;
+		return node.isEnabled() ? Qt::Checked : Qt::Unchecked;
 	}
 
 	return QVariant();
@@ -97,16 +124,18 @@ QVariant NodeTree::headerData(int section, Qt::Orientation orientation, int role
 	return HEADERS[section];
 }
 
-int SetVisibility(MGF::Asset::Model::Node* node, bool visible)
+int SetVisibility(Qt3DCore::QEntity* node, bool visible)
 {
 	int result = 1;
 
-	node->bVisible = visible;
-	node->sceneNode->setVisible(visible);
+	node->setEnabled(visible);
 
-	for (auto& child : node->children)
+	for (const Qt3DCore::QNodeVector children = node->childNodes(); Qt3DCore::QNode* child : children)
 	{
-		result += SetVisibility(child, visible);
+		if (Qt3DCore::QEntity* childEntity = dynamic_cast<Qt3DCore::QEntity*>(child))
+		{
+			result += SetVisibility(childEntity, visible);
+		}
 	}
 
 	return result;
@@ -119,8 +148,8 @@ bool NodeTree::setData(const QModelIndex& index, const QVariant& value, int role
 		return false;
 	}
 
-	auto node = static_cast<MGF::Asset::Model::Node*>(index.internalPointer());
-	auto last = SetVisibility(node, value == Qt::Checked);
+	Qt3DCore::QEntity* node = static_cast<Qt3DCore::QEntity*>(index.internalPointer());
+	int last = SetVisibility(node, value == Qt::Checked);
 
 	emit dataChanged(index, index.siblingAtRow(last));
 }

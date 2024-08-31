@@ -1,7 +1,29 @@
 #pragma once
 
 #include "AssetViewers/IAssetViewerWidget.h"
-#include "OgreWindow/ogrewindow.h"
+
+namespace Qt3DCore
+{
+	class QEntity;
+	class QTransform;
+}
+
+namespace Qt3DExtras 
+{
+	class QAbstractCameraController;
+	class QCuboidMesh;
+	class Qt3DWindow;
+}
+
+namespace Qt3DRender
+{
+	class QCamera;
+	class QCameraSelector;
+	class QPointLight;
+	class QDirectionalLight;
+	class QLayer;
+	class QParameter;
+}
 
 namespace Ui {
     class ModelViewerWidget;
@@ -17,48 +39,36 @@ namespace ModelViewer {
 		explicit ModelViewerWidget(QWidget* parent = nullptr);
 		~ModelViewerWidget();
 
+		static bool InitialiseScene(Qt3DExtras::Qt3DWindow* renderWindow, Qt3DRender::QCameraSelector* cameraSelector);
+
 		void LoadAsset(MGF::Asset::AssetPtr asset) override;
 
 	private:
 		Ui::ModelViewerWidget* ui;
+		int m_WindowTimerId = 0;
 
-		Ogre::SceneManager* m_SceneManager = nullptr;
-		Ogre::Camera* m_Camera = nullptr;
-		Ogre::Viewport* m_Viewport = nullptr;
-		Ogre::SceneNode* m_CameraNode = nullptr;
-		Ogre::SceneNode* m_SceneRoot = nullptr;
-		float m_CameraSpeed = 1.0f;
-		float m_ScrollAngle = 0.0f;
-
-		int m_WindowTimerId;
-
-	private:
-		QPoint m_CursorLocation;
-		bool m_bMouseHeld = false;
-		float m_CameraPitch = 0.0f;
-		float m_CameraYaw = 0.0f;
-
-		Ogre::Vector3 m_Forward = Ogre::Vector3::NEGATIVE_UNIT_Z;
-		Ogre::Vector3 m_Right = Ogre::Vector3::NEGATIVE_UNIT_X;
-		Ogre::Vector3 m_Up = Ogre::Vector3::NEGATIVE_UNIT_Y;
-
-		bool m_bIsWPressed = false;
-		bool m_bIsAPressed = false;
-		bool m_bIsSPressed = false;
-		bool m_bIsDPressed = false;
-		bool m_bIsSpacePressed = false;
-		bool m_bIsCtrlPressed = false;
-
-	private:
-		void InitialiseScene();
-		void UpdateFrame(QTimerEvent* timerEvt);
-		void ResetCamera(const Ogre::AxisAlignedBox& modelAABB);
-		void UpdateCamera();
-		void UpdateCameraAxes(float yaw, float pitch);
-		void UpdateKeyState(int key, bool state);
+		static Qt3DExtras::Qt3DWindow* RenderWindowPtr;
+		static Qt3DRender::QCamera* Camera;
 
 	public:
-		bool eventFilter(QObject* watched, QEvent* event) override;
+		static Qt3DCore::QEntity* SceneRoot;
+		static Qt3DCore::QEntity* SceneLightEntity;
+		static Qt3DRender::QPointLight* Light;
+		static Qt3DCore::QTransform* LightTransform;
+		static Qt3DRender::QCamera* ModelViewerCamera;
+		static Qt3DRender::QCameraSelector* CameraSelector;
+		static Qt3DExtras::QAbstractCameraController* CameraController;
+		static Qt3DRender::QLayer* OpaqueLayer;
+		static Qt3DRender::QLayer* TransparentLayer;
+		static Qt3DRender::QParameter* SceneEnableLights;
+
+		Qt3DCore::QEntity* CurrentModelEntity = nullptr;
+
+	private slots:
+		void on_lightPositionXInput_changed(int value);
+		void on_lightPositionYInput_changed(int value);
+		void on_lightPositionZInput_changed(int value);
+		void on_enableSceneLightsCheckBox_stateChanged(int state);
 
 	protected:
 		void showEvent(QShowEvent* event) override;

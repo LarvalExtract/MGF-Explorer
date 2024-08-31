@@ -1,29 +1,25 @@
 #include "ModelAsset.h"
-#include "Factories/MeshFactory.h"
-#include "Factories/MaterialFactory.h"
 
-#include "Utilities/ContextProvider/ServiceProvider.h"
+#include "MGFExplorerApplication.h"
 #include "MGF/AssetManager.h"
 #include "MGF/Deserializer.h"
 
-#include <OgreSceneManager.h>
-#include <OgreEntity.h>
-#include <OgreSubMesh.h>
-#include <OgreMaterialManager.h>
-#include <OgreMeshManager.h>
-#include <OgreTechnique.h>
-#include <OgrePass.h>
+#include "AssetViewers/ModelViewer/ModelViewerWidget.h"
+
+#include "Render/MaterialParamReader.h"
+#include "Render/MaterialLibrary.h"
+
+#include <QEntity>
+#include <Qt3DCore/QTransform>
+#include <Qt3DRender/QGeometryRenderer>
+#include <QMaterial>
+#include <QQuaternion>
+#include <QVector3D>
 
 using namespace MGF::Asset;
-using namespace MGF::Factories;
 
 ModelAsset::ModelAsset(const MGF::File& file) :
-	AssetBase(file, MGF::Asset::EAssetType::Model),
-	SceneManager(*ServiceProvider::Inject<Ogre::SceneManager>()),
-	Nodes{std::make_shared<ModelViewer::Models::NodeTree>()},
-	Animations{std::make_shared<ModelViewer::Models::AnimationTableModel>()},
-	Meshes{std::make_shared<ModelViewer::Models::MeshTable>()},
-	Materials{std::make_shared<ModelViewer::Models::MaterialTable>()}
+	AssetBase(file, MGF::Asset::EAssetType::Model)
 {
 	if (file.FileType == MGF::EFileType::mgmodel)
 	{
@@ -45,54 +41,35 @@ void ModelAsset::ParseMgmodelXml()
 	const auto& root = document.root().first_child();
 	auto node = root.first_child();
 
-	std::unordered_map<std::string, Ogre::MaterialPtr> materials;
-	std::unordered_map<std::string, Ogre::MeshPtr> meshes;
+	std::unordered_map<std::string, Qt3DRender::QMaterial*> materials;
+	std::unordered_map<std::string, Qt3DRender::QGeometryRenderer*> meshes;
 
 	std::string_view name(node.name());
-	// Load materials from XML
-	for (; name.contains("mat"); node = node.next_sibling(), name = node.name())
-	{
-		std::string matName(node.attribute("name").as_string());
 
-		if (materials.find(matName) == materials.end())
+	// Load materials from XML
+	for (; name.starts_with("mat"); node = node.next_sibling(), name = node.name())
+	{
+		if (const std::string materialName = node.attribute("name").as_string(); !materials.contains(materialName))
 		{
-			auto& matDef = Materials->emplace_back(MaterialFactory::CreateMaterialDefinition(node));
-			auto material = MaterialFactory::Create(matDef, FileRef);
-			materials.insert(std::make_pair(matName, material));
+			materials.insert(std::make_pair(materialName, MGF::Render::MaterialLibrary::Get().GetMaterial(node, this->FileRef)));
 		}
 	}
 
 	// Load meshes from XML
-	for (; name.contains("mesh"); node = node.next_sibling(), name = node.name())
+	for (; name.starts_with("mesh"); node = node.next_sibling(), name = node.name())
 	{
-		std::string meshName(node.attribute("name").as_string());
-
-		if (meshes.find(meshName) == meshes.end())
+		if (const std::string meshName = node.attribute("name").as_string(); !meshes.contains(meshName))
 		{
-			Model::Mesh m;
-			auto mesh = MeshFactory::Create(node, FileRef, m);
-			Meshes->push_back(m);
-
-			auto material = materials.at(node.attribute("material").as_string());
-			mesh->getSubMesh(0)->setMaterial(material);
-
-			auto technique = material->getTechnique(0);
-			auto pass = technique->getPass(0);
-			if (pass->getTextureUnitStates().size() > 0)
-			{
-				pass->getTextureUnitState(0)->setTextureScale(m.texCoordScale, m.texCoordScale);
-				pass->getTextureUnitState(0)->setTextureScroll(m.texCoordOffset, m.texCoordOffset);
-			}
-
-			meshes.insert(std::make_pair(meshName, mesh));
+			meshes.insert(std::make_pair(meshName, qApp->mMeshLibrary.CreateMesh(node, this->FileRef)));
 		}
 	}
 
-	Nodes->RootNode = new Model::Node;
-	for (; name.contains("node"); node = node.next_sibling(), name = node.name())
+	for (; name.starts_with("node"); node = node.next_sibling(), name = node.name())
 	{
-		Nodes->RootNode->children.push_back(CreateSceneNode(Nodes->RootNode, node, meshes));
+		CreateSceneNode(mRootNode = new Qt3DCore::QEntity, node, meshes, materials);
 	}
+
+	Nodes.mRootNode = mRootNode;
 }
 
 void ModelAsset::ParseNodeTxt()
@@ -115,25 +92,18 @@ void ModelAsset::ParseNodeTxt()
 		return ConfigSection(chunk);
 	};
 
-	Nodes->RootNode = CreateSceneNode(nullptr, ParseNodeSection);
+	CreateSceneNode(nullptr, ParseNodeSection);
 }
 
-Ogre::Vector3 StrToVector(const std::string_view);
-Ogre::Quaternion StrToQuat(const std::string_view, const std::string_view);
-
-Model::Node* ModelAsset::CreateSceneNode(Model::Node* parent, const std::function<ConfigSection()>& func)
+void ModelAsset::CreateSceneNode(Qt3DCore::QEntity* parent, const std::function<ConfigSection()>& func)
 {
 	auto vars = func();
 
 	if (const auto& nodeType = vars["type"]; nodeType == "ANIMNODE")
 	{
-		auto& rm = *ServiceProvider::Inject<AssetManager>();
+		auto& rm = qApp->AssetManager;
 		auto childNodeFile = FileRef.FindRelativeItem(vars["child"].c_str());
 		auto childNodeAsset = static_cast<ModelAsset*>(rm.Get(*childNodeFile).get());
-
-		Nodes = childNodeAsset->Nodes;
-		Meshes = childNodeAsset->Meshes;
-		Materials = childNodeAsset->Materials;
 
 		int num_animations = std::stoi(vars["num_animations"]);
 		for (int i = 0; i < num_animations; i++)
@@ -147,92 +117,84 @@ Model::Node* ModelAsset::CreateSceneNode(Model::Node* parent, const std::functio
 			animDef.loop_count = std::stoi(anim["loop_count"]);
 			//animDef.blend_out_duration = std::stof(anim["blend_out_duration"]);
 			animDef.primary = (anim["primary"][0] == 't');
-
-			Animations->push_back(std::move(animDef));
 		}
-
-		// TODO: Parse animations
-		return Nodes->RootNode; // there won't be anymore nodes, exit the function
 	}
 	else
 	{
-		auto node = new Model::Node;
-		node->name = vars.Name();
-		node->type = nodeType;
-		node->parent = parent;
-		node->sceneNode = parent ? parent->sceneNode->createChildSceneNode() : SceneManager.createSceneNode();
-		node->sceneNode->setPosition(StrToVector(vars["position"]));
-		node->sceneNode->setOrientation(StrToQuat(vars["rot_axis"], vars["rot_angle"]));
-		node->sceneNode->setScale(StrToVector(vars["scale"]));
+		Qt3DCore::QEntity* entity = new Qt3DCore::QEntity(parent);
+		entity->setProperty("name", vars.Name().c_str());
 
+		auto transform = new Qt3DCore::QTransform;
+		transform->setTranslation(MGF::Render::IMaterialParamReader::StrToVector(vars["position"]));
+		transform->setScale3D(MGF::Render::IMaterialParamReader::StrToVector(vars["scale"]));
+		transform->setRotation(MGF::Render::IMaterialParamReader::StringToQuat(vars["rot_axis"], vars["rot_angle"]));
+		entity->addComponent(transform);
+		
 		if (nodeType == "3DOBJECT" || nodeType == "SKIN")
 		{
-			const auto meshFile = FileRef.FindRelativeItem(vars["mesh"].data());
+			const MGF::File& meshFile = *FileRef.FindRelativeItem(vars["mesh"]);
+			ConfigFile meshCfg(&meshFile);
+			const MGF::File& materialFile = *meshFile.FindRelativeItem(meshCfg["mesh"]["material"]);
+	
+			Qt3DRender::QGeometryRenderer* geom = qApp->mMeshLibrary.CreateMesh(meshFile, this->FileRef);
+			Qt3DRender::QMaterial* material = MGF::Render::MaterialLibrary::Get().GetMaterial(materialFile, this->FileRef);
 
-			Model::Mesh m;
-			const auto mesh = MeshFactory::Create(*meshFile, m);
-
-			const auto materialFile = meshFile->FindRelativeItem(m.materialPath.data());
-			const auto& materialDef = Materials->emplace_back(MGF::Factories::MaterialFactory::CreateMaterialDefinition(*materialFile));
-			const auto material = MGF::Factories::MaterialFactory::Create(materialDef, *materialFile);
-
-			mesh->getSubMesh(0)->setMaterial(material);
-
-			const auto technique = material->getTechnique(0);
-			const auto pass = technique->getPass(0);
-			if (pass->getTextureUnitStates().size() > 0)
-			{
-				pass->getTextureUnitState(0)->setTextureScale(m.texCoordScale, m.texCoordScale);
-				pass->getTextureUnitState(0)->setTextureScroll(m.texCoordOffset, m.texCoordOffset);
-			}
-
-			const auto entity = node->sceneNode->getCreator()->createEntity(mesh);
-			node->sceneNode->attachObject(entity);
+			Qt3DCore::QEntity* meshEntity = new Qt3DCore::QEntity(entity);
+			meshEntity->addComponent(geom);
+			meshEntity->addComponent(material);
 		}
 
 		for (int i = 0, num_children = std::stoi(vars["num_children"].data()); i < num_children; i++)
 		{
-			const auto childNode = CreateSceneNode(node, func);
-			if (childNode)
-			{
-				childNode->childIndex = node->children.size();
-				node->children.push_back(childNode);
-			}
+			CreateSceneNode(entity, func);
 		}
-
-		return node;
 	}
 }
 
-Model::Node* ModelAsset::CreateSceneNode(Model::Node* parent, const pugi::xml_node& xmlnode, const std::unordered_map<std::string, Ogre::MeshPtr>& meshes)
+void ModelAsset::CreateSceneNode(Qt3DCore::QEntity* parent, const pugi::xml_node& xmlnode, const std::unordered_map<std::string, Qt3DRender::QGeometryRenderer*>& meshes, const std::unordered_map<std::string, Qt3DRender::QMaterial*>& materials)
 {
 	// only process nodes that include "node" in the name
 	const std::string_view nodeType = xmlnode.name();
-	if (!nodeType.contains("node_"))
+	if (!nodeType.starts_with("node_"))
 	{
-		return nullptr;
+		return;
 	}
 
-	Model::Node* node = new Model::Node;
+	Qt3DCore::QEntity* entity = new Qt3DCore::QEntity(parent);
 
-	std::string name = std::format("{0}.{1}", xmlnode.attribute("name").as_string(), xmlnode.name());
-	node->name = xmlnode.attribute("name").as_string();
-	node->type = xmlnode.name();
-	node->parent = parent;
-	node->sceneNode = parent ? parent->sceneNode->createChildSceneNode() : SceneManager.createSceneNode();
-	node->sceneNode->setPosition(StrToVector(xmlnode.attribute("position").as_string()));
-	node->sceneNode->setOrientation(StrToQuat(xmlnode.attribute("rot_axis").as_string(), xmlnode.attribute("rot_angle").as_string()));
-	node->sceneNode->setScale(StrToVector(xmlnode.attribute("scale").as_string()));
+	const QString name = xmlnode.attribute("name").as_string();
+	entity->setProperty("name", xmlnode.attribute("name").as_string());
+	entity->setProperty("type", nodeType.data());
 
-	// is this a node_3dobject?
+	Qt3DCore::QTransform* transform = new Qt3DCore::QTransform;
+	const QVector3D position = MGF::Render::IMaterialParamReader::StrToVector(xmlnode.attribute("position").as_string());
+	const QVector3D rotationAxis = MGF::Render::IMaterialParamReader::StrToVector(xmlnode.attribute("rot_axis").as_string());
+	const float rotationAngle = qRadiansToDegrees(xmlnode.attribute("rot_angle").as_float());
+	const QVector3D scale = MGF::Render::IMaterialParamReader::StrToVector(xmlnode.attribute("scale").as_string());
+	const QQuaternion rotationQuat = QQuaternion::fromAxisAndAngle(rotationAxis, rotationAngle);
+
+	transform->setTranslation(position);
+	transform->setScale3D(scale);
+	transform->setRotation(rotationQuat);
+
+	entity->addComponent(transform);
+
 	if (nodeType.contains("3dobject"))
 	{
 		for (const auto& mesh : xmlnode.children("mesh"))
 		{
-			auto meshPtr = meshes.at(mesh.attribute("name").as_string());
+			const std::string meshName = mesh.attribute("name").as_string();
+			Qt3DCore::QEntity* meshEntity = new Qt3DCore::QEntity(entity);
+			meshEntity->setProperty("name", meshName.c_str());
 
-			Ogre::Entity* ent = node->sceneNode->getCreator()->createEntity(meshPtr);
-			node->sceneNode->attachObject(ent);
+			Qt3DRender::QGeometryRenderer* geom = meshes.at(meshName);
+			Qt3DRender::QMaterial* material = materials.at(geom->property("material").toString().toStdString());
+
+			meshEntity->addComponent(geom);
+			meshEntity->addComponent(material);
+			meshEntity->addComponent(material->property("blending").toString() == "normal" 
+				? ModelViewer::ModelViewerWidget::TransparentLayer 
+				: ModelViewer::ModelViewerWidget::OpaqueLayer);
 		}
 	}
 	else if (nodeType.contains("skinned"))
@@ -243,33 +205,11 @@ Model::Node* ModelAsset::CreateSceneNode(Model::Node* parent, const pugi::xml_no
 	{
 		
 	}
-
+	
 	for (const auto& child : xmlnode.child("children").children())
 	{
-		auto childNode = CreateSceneNode(node, child, meshes);
-		if (childNode)
-		{
-			childNode->childIndex = node->children.size();
-			node->children.push_back(childNode);
-		}
+		CreateSceneNode(entity, child, meshes, materials);
 	}
-
-	return node;
 }
 
-Ogre::Vector3 StrToVector(const std::string_view str)
-{
-	const auto c1 = str.find(',', 0);
-	const auto c2 = str.find(',', c1 + 1);
 
-	return {
-		std::stof(str.substr(0, c1).data()),
-		std::stof(str.substr(c1 + 1, c2).data()),
-		std::stof(str.substr(c2 + 1, str.size()).data())
-	};
-}
-
-Ogre::Quaternion StrToQuat(const std::string_view axis, const std::string_view angle)
-{
-	return { Ogre::Radian(std::stof(angle.data())), StrToVector(axis) };
-}

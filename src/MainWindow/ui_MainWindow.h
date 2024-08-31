@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'MainWindow.ui'
 **
-** Created by: Qt User Interface Compiler version 6.0.3
+** Created by: Qt User Interface Compiler version 6.4.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -43,35 +43,35 @@ public:
     void setupUi(QMainWindow *MainWindow)
     {
         if (MainWindow->objectName().isEmpty())
-            MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
+            MainWindow->setObjectName("MainWindow");
         MainWindow->resize(1600, 869);
         QIcon icon;
         icon.addFile(QString::fromUtf8(":/new/prefix1/madcat.ico"), QSize(), QIcon::Normal, QIcon::Off);
         MainWindow->setWindowIcon(icon);
         MainWindow->setTabShape(QTabWidget::Rounded);
         actionOpen_MGF_file = new QAction(MainWindow);
-        actionOpen_MGF_file->setObjectName(QString::fromUtf8("actionOpen_MGF_file"));
+        actionOpen_MGF_file->setObjectName("actionOpen_MGF_file");
         actionClose_all_MGF_files = new QAction(MainWindow);
-        actionClose_all_MGF_files->setObjectName(QString::fromUtf8("actionClose_all_MGF_files"));
+        actionClose_all_MGF_files->setObjectName("actionClose_all_MGF_files");
         actionTextures = new QAction(MainWindow);
-        actionTextures->setObjectName(QString::fromUtf8("actionTextures"));
+        actionTextures->setObjectName("actionTextures");
         actionTextures->setEnabled(false);
         actionAbout = new QAction(MainWindow);
-        actionAbout->setObjectName(QString::fromUtf8("actionAbout"));
+        actionAbout->setObjectName("actionAbout");
         actionFiles = new QAction(MainWindow);
-        actionFiles->setObjectName(QString::fromUtf8("actionFiles"));
+        actionFiles->setObjectName("actionFiles");
         centralWidget = new QWidget(MainWindow);
-        centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
+        centralWidget->setObjectName("centralWidget");
         centralWidget->setMinimumSize(QSize(1600, 847));
         centralWidget->setMaximumSize(QSize(1600, 879));
         verticalLayout = new QVBoxLayout(centralWidget);
         verticalLayout->setSpacing(6);
         verticalLayout->setContentsMargins(11, 11, 11, 11);
-        verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
+        verticalLayout->setObjectName("verticalLayout");
         verticalLayout->setSizeConstraint(QLayout::SetMaximumSize);
         verticalLayout->setContentsMargins(5, 5, 5, 5);
         tabWidget = new QTabWidget(centralWidget);
-        tabWidget->setObjectName(QString::fromUtf8("tabWidget"));
+        tabWidget->setObjectName("tabWidget");
         tabWidget->setEnabled(true);
         tabWidget->setMinimumSize(QSize(127, 6));
         tabWidget->setMaximumSize(QSize(16777215, 16777215));
@@ -84,21 +84,21 @@ public:
         verticalLayout->addWidget(tabWidget);
 
         labelCurrentArchive = new QLabel(centralWidget);
-        labelCurrentArchive->setObjectName(QString::fromUtf8("labelCurrentArchive"));
+        labelCurrentArchive->setObjectName("labelCurrentArchive");
 
         verticalLayout->addWidget(labelCurrentArchive);
 
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
-        menuBar->setObjectName(QString::fromUtf8("menuBar"));
+        menuBar->setObjectName("menuBar");
         menuBar->setGeometry(QRect(0, 0, 1600, 22));
         menuFile = new QMenu(menuBar);
-        menuFile->setObjectName(QString::fromUtf8("menuFile"));
+        menuFile->setObjectName("menuFile");
         menuView = new QMenu(menuBar);
-        menuView->setObjectName(QString::fromUtf8("menuView"));
+        menuView->setObjectName("menuView");
         menuView->setEnabled(false);
         menuAbout = new QMenu(menuBar);
-        menuAbout->setObjectName(QString::fromUtf8("menuAbout"));
+        menuAbout->setObjectName("menuAbout");
         MainWindow->setMenuBar(menuBar);
 
         menuBar->addAction(menuFile->menuAction());

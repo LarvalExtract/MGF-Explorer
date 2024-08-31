@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'FileExtractorDialog.ui'
 **
-** Created by: Qt User Interface Compiler version 6.0.3
+** Created by: Qt User Interface Compiler version 6.4.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -52,27 +52,27 @@ public:
     void setupUi(QDialog *FileExtractorDialog)
     {
         if (FileExtractorDialog->objectName().isEmpty())
-            FileExtractorDialog->setObjectName(QString::fromUtf8("FileExtractorDialog"));
+            FileExtractorDialog->setObjectName("FileExtractorDialog");
         FileExtractorDialog->setWindowModality(Qt::ApplicationModal);
         FileExtractorDialog->resize(810, 585);
         FileExtractorDialog->setModal(true);
         verticalLayout = new QVBoxLayout(FileExtractorDialog);
-        verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
+        verticalLayout->setObjectName("verticalLayout");
         horizontalLayout = new QHBoxLayout();
-        horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
+        horizontalLayout->setObjectName("horizontalLayout");
         labelOutput = new QLabel(FileExtractorDialog);
-        labelOutput->setObjectName(QString::fromUtf8("labelOutput"));
+        labelOutput->setObjectName("labelOutput");
 
         horizontalLayout->addWidget(labelOutput);
 
         destinationFolderPath = new QLineEdit(FileExtractorDialog);
-        destinationFolderPath->setObjectName(QString::fromUtf8("destinationFolderPath"));
+        destinationFolderPath->setObjectName("destinationFolderPath");
         destinationFolderPath->setReadOnly(true);
 
         horizontalLayout->addWidget(destinationFolderPath);
 
         browseButton = new QPushButton(FileExtractorDialog);
-        browseButton->setObjectName(QString::fromUtf8("browseButton"));
+        browseButton->setObjectName("browseButton");
 
         horizontalLayout->addWidget(browseButton);
 
@@ -80,15 +80,15 @@ public:
         verticalLayout->addLayout(horizontalLayout);
 
         labelTask = new QLabel(FileExtractorDialog);
-        labelTask->setObjectName(QString::fromUtf8("labelTask"));
+        labelTask->setObjectName("labelTask");
         labelTask->setFrameShape(QFrame::NoFrame);
 
         verticalLayout->addWidget(labelTask);
 
         horizontalLayout_2 = new QHBoxLayout();
-        horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
+        horizontalLayout_2->setObjectName("horizontalLayout_2");
         tableFileQueue = new QTableView(FileExtractorDialog);
-        tableFileQueue->setObjectName(QString::fromUtf8("tableFileQueue"));
+        tableFileQueue->setObjectName("tableFileQueue");
         tableFileQueue->setEditTriggers(QAbstractItemView::NoEditTriggers);
         tableFileQueue->setGridStyle(Qt::NoPen);
         tableFileQueue->horizontalHeader()->setVisible(true);
@@ -99,18 +99,18 @@ public:
         horizontalLayout_2->addWidget(tableFileQueue);
 
         groupBox = new QGroupBox(FileExtractorDialog);
-        groupBox->setObjectName(QString::fromUtf8("groupBox"));
+        groupBox->setObjectName("groupBox");
         groupBox->setMinimumSize(QSize(170, 0));
         verticalLayout_2 = new QVBoxLayout(groupBox);
-        verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
+        verticalLayout_2->setObjectName("verticalLayout_2");
         checkBoxFilepaths = new QCheckBox(groupBox);
-        checkBoxFilepaths->setObjectName(QString::fromUtf8("checkBoxFilepaths"));
+        checkBoxFilepaths->setObjectName("checkBoxFilepaths");
         checkBoxFilepaths->setChecked(true);
 
         verticalLayout_2->addWidget(checkBoxFilepaths);
 
         checkBoxOverwrite = new QCheckBox(groupBox);
-        checkBoxOverwrite->setObjectName(QString::fromUtf8("checkBoxOverwrite"));
+        checkBoxOverwrite->setObjectName("checkBoxOverwrite");
 
         verticalLayout_2->addWidget(checkBoxOverwrite);
 
@@ -125,21 +125,21 @@ public:
         verticalLayout->addLayout(horizontalLayout_2);
 
         progressBar = new QProgressBar(FileExtractorDialog);
-        progressBar->setObjectName(QString::fromUtf8("progressBar"));
+        progressBar->setObjectName("progressBar");
         progressBar->setValue(0);
         progressBar->setTextVisible(false);
 
         verticalLayout->addWidget(progressBar);
 
         horizontalLayout_3 = new QHBoxLayout();
-        horizontalLayout_3->setObjectName(QString::fromUtf8("horizontalLayout_3"));
+        horizontalLayout_3->setObjectName("horizontalLayout_3");
         labelProgress = new QLabel(FileExtractorDialog);
-        labelProgress->setObjectName(QString::fromUtf8("labelProgress"));
+        labelProgress->setObjectName("labelProgress");
 
         horizontalLayout_3->addWidget(labelProgress);
 
         buttonBox = new QDialogButtonBox(FileExtractorDialog);
-        buttonBox->setObjectName(QString::fromUtf8("buttonBox"));
+        buttonBox->setObjectName("buttonBox");
         buttonBox->setOrientation(Qt::Horizontal);
         buttonBox->setStandardButtons(QDialogButtonBox::Discard|QDialogButtonBox::Ok);
         buttonBox->setCenterButtons(false);

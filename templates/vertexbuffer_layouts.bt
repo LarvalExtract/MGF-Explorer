@@ -1,0 +1,24 @@
+
+struct float3a {
+    float x;
+    float y;
+    float z;
+};
+
+struct short2a {
+    short x;
+    short y;
+};
+
+struct packedNormal {
+    uint32 x:11;
+    uint32 y:11;
+    uint32 z:10;
+};
+
+struct VB_00000301 {
+    float3a position<bgcolor=cRed>;
+    //uint32 unk1<format=binary>;
+    packedNormal norm;
+    short2a texcoord<bgcolor=cBlue>;
+};

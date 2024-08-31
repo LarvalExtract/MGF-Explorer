@@ -11,8 +11,6 @@
 #include <string>
 #include <unordered_map>
 
-#include <Ogre.h>
-
 namespace Ui {
 class MainWindow;
 }
@@ -25,7 +23,7 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    void OpenMGFWorkspace(const QString& mgfFilePath);
+    void OpenMGFWorkspace(const std::filesystem::path& mgfFilePath);
 
 private slots:
     void on_actionOpen_MGF_file_triggered();

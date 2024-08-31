@@ -1,5 +1,7 @@
 #include "TextureDetailsTableModel.h"
 
+#include <QAbstractTexture>
+
 static const QVariant HEADERS[] = {
 	"Width",
 	"Height",
@@ -11,6 +13,31 @@ static const QVariant HEADERS[] = {
 };
 
 using namespace TextureViewer::Models;
+
+QVariant ToString(Qt3DRender::QAbstractTexture::TextureFormat format)
+{
+	using namespace Qt3DRender;
+
+	switch (format)
+	{
+	case QAbstractTexture::TextureFormat::RGBA8_UNorm:
+		return "RGBA8";
+	case QAbstractTexture::TextureFormat::R5G6B5:
+		return "RGB565";
+	case QAbstractTexture::TextureFormat::RGBA4:
+		return "RGBA4";
+	case QAbstractTexture::TextureFormat::R8_UNorm:
+		return "Lum8";
+	case QAbstractTexture::TextureFormat::R16_UNorm:
+		return "Lum16";
+	case QAbstractTexture::TextureFormat::RGBA_DXT1:
+		return "DXT1";
+	case QAbstractTexture::TextureFormat::RGBA_DXT3:
+		return "DXT3";
+	case QAbstractTexture::TextureFormat::RGBA_DXT5:
+		return "DXT5";
+	}
+}
 
 int TextureDetailsTable::rowCount(const QModelIndex& parent /*= QModelIndex()*/) const
 {
@@ -30,7 +57,7 @@ QVariant TextureDetailsTable::data(const QModelIndex& index, int role /*= Qt::Di
 			{
 			case 0: return Width;
 			case 1: return Height;
-			case 2: return QString::number(Flags, 16);
+			case 2: return ToString(Format);
 			case 3: return Mips;
 			case 4: return Size;
 			case 5: return Depth;

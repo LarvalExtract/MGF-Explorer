@@ -1,11 +1,21 @@
 #include "TextureViewerWidget.h"
 #include "ui_TextureViewerWidget.h"
 
+#include "MGFExplorerApplication.h"
 #include "MGF/Assets/TextureAsset.h"
 
-#include "MGFExplorerApplication.h"
+#include <QAbstractTexture>
+#include <QTextureMaterial>
+#include <QPlaneMesh>
+#include <QCamera>
+#include <QForwardRenderer>
 
 using namespace TextureViewer;
+
+Qt3DExtras::Qt3DWindow* TextureViewerWidget::RenderWindowPtr = nullptr;
+Qt3DCore::QEntity* TextureViewerWidget::TextureViewerSceneRoot = nullptr;
+Qt3DExtras::QTextureMaterial* TextureViewerWidget::TextureMaterial = nullptr;
+Qt3DExtras::QPlaneMesh* TextureViewerWidget::TextureSurface = nullptr;
 
 TextureViewerWidget::TextureViewerWidget(QWidget *parent) :
     ui(new Ui::TextureViewerWidget)
@@ -29,67 +39,63 @@ void TextureViewerWidget::LoadAsset(MGF::Asset::AssetPtr asset)
 {
     const auto textureAsset = static_cast<MGF::Asset::TextureAsset*>(asset.get());
 
+    TextureViewerWidget::TextureMaterial->setTexture(textureAsset->mTexture);
+    
     ui->TextureDetailsTable->setModel(&textureAsset->TextureDetails);
 
-	qApp->GetRenderWindowContainer()->resize(textureAsset->OgreTexture->getWidth(), textureAsset->OgreTexture->getHeight());
-	m_TextureUnit->setTexture(textureAsset->OgreTexture);
-	qApp->GetRenderWindow()->render();
+    Qt3DRender::QCamera* camera = TextureViewerWidget::RenderWindowPtr->camera();
+    camera->lens()->setOrthographicProjection(-0.5f, 0.5f, -0.5f, 0.5f, 0.1f, 10.0f);
+    camera->setPosition(QVector3D(0.0f, 0.0f, 1.0f));
+    camera->setUpVector(QVector3D(0.0f, 1.0f, 0.0f));
+    camera->setViewCenter(QVector3D(0.0f, 0.0f, 0.0f));
+
+    QSize size(textureAsset->mTexture->width(), textureAsset->mTexture->height());
+    qApp->GetRenderWindowContainer()->resize(size);
 	qApp->GetRenderWindowContainer()->update();
 }
 
-void TextureViewerWidget::InitialiseScene()
+bool TextureViewerWidget::InitialiseScene(Qt3DExtras::Qt3DWindow* renderWindow)
 {
-    m_SceneManager = Ogre::Root::getSingleton().createSceneManager();
+    TextureViewerWidget::RenderWindowPtr = renderWindow;
 
-    m_OrthoCamera = m_SceneManager->createCamera("TextureViewerCamera");
-    m_OrthoCamera->setProjectionType(Ogre::ProjectionType::PT_ORTHOGRAPHIC);
-    m_OrthoCamera->setNearClipDistance(1.0f);
-    m_OrthoCamera->setFarClipDistance(2.0f);
-    m_OrthoCamera->setOrthoWindow(200.0f, 200.0f);
+    TextureViewerWidget::TextureViewerSceneRoot = new Qt3DCore::QEntity;
 
-    m_TextureViewerViewport = qApp->GetRenderWindow()->GetWindow().addViewport(m_OrthoCamera);
-    constexpr float grey = 160.0f / 255.0f;
-	const auto bgColour = Ogre::ColourValue(grey, grey, grey, 1.0f);
-    m_TextureViewerViewport->setBackgroundColour(bgColour);
+    TextureViewerWidget::TextureMaterial = new Qt3DExtras::QTextureMaterial;
+    TextureViewerWidget::TextureViewerSceneRoot->addComponent(TextureMaterial);
 
-    m_OrthoCameraNode = m_SceneManager->getRootSceneNode()->createChildSceneNode();
-    m_OrthoCameraNode->attachObject(m_OrthoCamera);
-    m_OrthoCameraNode->setPosition(0.0f, 0.0f, 1.0f);
-    
-    auto result = Ogre::MaterialManager::getSingleton().createOrRetrieve("MatUnlit", "General");
-    m_MatUnlitTextured = result.first;
-    auto technique = m_MatUnlitTextured->getTechnique(0);
-    auto pass = technique->getPass(0);
-    pass->setLightingEnabled(false);
-    m_TextureUnit = pass->createTextureUnitState();
-    m_TextureUnit->setTextureFiltering(Ogre::TextureFilterOptions::TFO_NONE);
+    TextureViewerWidget::TextureSurface = new Qt3DExtras::QPlaneMesh;
+    TextureViewerWidget::TextureViewerSceneRoot->addComponent(TextureSurface);
 
-    Ogre::SceneNode* node = m_SceneManager->getRootSceneNode()->createChildSceneNode();
-    m_TexturePlane = m_SceneManager->createEntity(Ogre::SceneManager::PrefabType::PT_PLANE);
-    m_TexturePlane->setMaterial(m_MatUnlitTextured);
-    node->attachObject(m_TexturePlane);
-    node->setPosition(0.5f, -0.5f, 0.0f);
+    Qt3DCore::QTransform* planeTransform = new Qt3DCore::QTransform;
+    planeTransform->setTranslation(QVector3D(0.0f, 0.0f, 0.0f));
+    planeTransform->setRotation(QQuaternion::fromEulerAngles(QVector3D(90.0f, 0.0f, 0.0f)));
+    planeTransform->setScale(1.0f);
+    TextureViewerWidget::TextureViewerSceneRoot->addComponent(planeTransform);
+
+    return true;
 }
 
 void TextureViewerWidget::on_ToggleAlphaCheckBox_toggled(bool checked)
 {
-    auto pass = m_MatUnlitTextured->getTechnique(0)->getPass(0);
-    pass->setSceneBlending(checked
-        ? Ogre::SBT_TRANSPARENT_ALPHA
-        : Ogre::SBT_REPLACE
-    );
-
-    qApp->GetRenderWindow()->render();
+    TextureViewerWidget::TextureMaterial->setAlphaBlendingEnabled(checked);
 }
 
 void TextureViewerWidget::showEvent(QShowEvent* event)
 {
-    qApp->GetRenderWindowContainer()->show();
+    TextureViewerWidget::RenderWindowPtr->setRootEntity(TextureViewerWidget::TextureViewerSceneRoot);
+
+    
+
+    const QColor bgColor = ui->scrollArea->palette().color(ui->scrollArea->backgroundRole());
+
     ui->scrollArea->setWidget(qApp->GetRenderWindowContainer());
+    qApp->GetRenderWindowContainer()->show();
 }
 
 void TextureViewerWidget::hideEvent(QHideEvent* event)
 {
+    TextureViewerWidget::RenderWindowPtr->setRootEntity(nullptr);
+
     qApp->GetRenderWindowContainer()->hide();
     ui->scrollArea->setWidget(nullptr);
 }

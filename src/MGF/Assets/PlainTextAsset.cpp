@@ -4,11 +4,8 @@
 using namespace MGF::Asset;
 
 PlainTextAsset::PlainTextAsset(const File& sourceFile) :
-	AssetBase(sourceFile, EAssetType::PlainText),
-	Text{[this](const File& file){
-		const MGF::Deserializer deserializer(file);
-		return deserializer.ReadAllBytes().data();
-	}(sourceFile)}
+	AssetBase(sourceFile, EAssetType::PlainText)
 {
-	
+	const MGF::Deserializer deserializer(sourceFile);
+	Text = deserializer.ReadAllBytes().data();
 }

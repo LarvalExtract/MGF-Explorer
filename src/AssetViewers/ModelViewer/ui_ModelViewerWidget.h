@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'ModelViewerWidget.ui'
 **
-** Created by: Qt User Interface Compiler version 6.0.3
+** Created by: Qt User Interface Compiler version 6.4.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -11,9 +11,12 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
+#include <QtWidgets/QSlider>
+#include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QTableView>
 #include <QtWidgets/QTreeView>
@@ -28,6 +31,15 @@ public:
     QVBoxLayout *verticalLayout;
     QFrame *frame;
     QVBoxLayout *frameLayout;
+    QHBoxLayout *horizontalLayout_3;
+    QSpacerItem *horizontalSpacer;
+    QCheckBox *enableSceneLightsCheckBox;
+    QVBoxLayout *verticalLayout_2;
+    QSpacerItem *verticalSpacer_2;
+    QSlider *lightPositionSliderXInput;
+    QSlider *lightPositionSliderYInput;
+    QSlider *lightPositionSliderZInput;
+    QSpacerItem *verticalSpacer;
     QTabWidget *tabWidget;
     QWidget *tabNodes;
     QHBoxLayout *horizontalLayout_5;
@@ -45,7 +57,7 @@ public:
     void setupUi(QWidget *ModelViewerWidget)
     {
         if (ModelViewerWidget->objectName().isEmpty())
-            ModelViewerWidget->setObjectName(QString::fromUtf8("ModelViewerWidget"));
+            ModelViewerWidget->setObjectName("ModelViewerWidget");
         ModelViewerWidget->resize(1091, 670);
         QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         sizePolicy.setHorizontalStretch(0);
@@ -53,39 +65,105 @@ public:
         sizePolicy.setHeightForWidth(ModelViewerWidget->sizePolicy().hasHeightForWidth());
         ModelViewerWidget->setSizePolicy(sizePolicy);
         verticalLayout = new QVBoxLayout(ModelViewerWidget);
-        verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
+        verticalLayout->setObjectName("verticalLayout");
         verticalLayout->setSizeConstraint(QLayout::SetMaximumSize);
         verticalLayout->setContentsMargins(0, 0, 0, 0);
         frame = new QFrame(ModelViewerWidget);
-        frame->setObjectName(QString::fromUtf8("frame"));
+        frame->setObjectName("frame");
         frame->setFrameShape(QFrame::StyledPanel);
         frame->setFrameShadow(QFrame::Raised);
         frameLayout = new QVBoxLayout(frame);
-        frameLayout->setObjectName(QString::fromUtf8("frameLayout"));
+        frameLayout->setObjectName("frameLayout");
         frameLayout->setContentsMargins(0, 0, 0, 0);
+        horizontalLayout_3 = new QHBoxLayout();
+        horizontalLayout_3->setObjectName("horizontalLayout_3");
+        horizontalLayout_3->setSizeConstraint(QLayout::SetMinimumSize);
+        horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_3->addItem(horizontalSpacer);
+
+        enableSceneLightsCheckBox = new QCheckBox(frame);
+        enableSceneLightsCheckBox->setObjectName("enableSceneLightsCheckBox");
+        enableSceneLightsCheckBox->setChecked(true);
+
+        horizontalLayout_3->addWidget(enableSceneLightsCheckBox);
+
+        verticalLayout_2 = new QVBoxLayout();
+        verticalLayout_2->setObjectName("verticalLayout_2");
+        verticalLayout_2->setSizeConstraint(QLayout::SetMinimumSize);
+        verticalSpacer_2 = new QSpacerItem(20, 0, QSizePolicy::Minimum, QSizePolicy::Minimum);
+
+        verticalLayout_2->addItem(verticalSpacer_2);
+
+        lightPositionSliderXInput = new QSlider(frame);
+        lightPositionSliderXInput->setObjectName("lightPositionSliderXInput");
+        QSizePolicy sizePolicy1(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        sizePolicy1.setHorizontalStretch(0);
+        sizePolicy1.setVerticalStretch(0);
+        sizePolicy1.setHeightForWidth(lightPositionSliderXInput->sizePolicy().hasHeightForWidth());
+        lightPositionSliderXInput->setSizePolicy(sizePolicy1);
+        lightPositionSliderXInput->setMinimumSize(QSize(200, 0));
+        lightPositionSliderXInput->setMinimum(-100);
+        lightPositionSliderXInput->setMaximum(100);
+        lightPositionSliderXInput->setOrientation(Qt::Horizontal);
+
+        verticalLayout_2->addWidget(lightPositionSliderXInput);
+
+        lightPositionSliderYInput = new QSlider(frame);
+        lightPositionSliderYInput->setObjectName("lightPositionSliderYInput");
+        sizePolicy1.setHeightForWidth(lightPositionSliderYInput->sizePolicy().hasHeightForWidth());
+        lightPositionSliderYInput->setSizePolicy(sizePolicy1);
+        lightPositionSliderYInput->setMinimumSize(QSize(200, 0));
+        lightPositionSliderYInput->setMinimum(-100);
+        lightPositionSliderYInput->setMaximum(100);
+        lightPositionSliderYInput->setOrientation(Qt::Horizontal);
+
+        verticalLayout_2->addWidget(lightPositionSliderYInput);
+
+        lightPositionSliderZInput = new QSlider(frame);
+        lightPositionSliderZInput->setObjectName("lightPositionSliderZInput");
+        sizePolicy1.setHeightForWidth(lightPositionSliderZInput->sizePolicy().hasHeightForWidth());
+        lightPositionSliderZInput->setSizePolicy(sizePolicy1);
+        lightPositionSliderZInput->setMinimumSize(QSize(200, 0));
+        lightPositionSliderZInput->setMinimum(-100);
+        lightPositionSliderZInput->setMaximum(100);
+        lightPositionSliderZInput->setOrientation(Qt::Horizontal);
+
+        verticalLayout_2->addWidget(lightPositionSliderZInput);
+
+        verticalSpacer = new QSpacerItem(20, 0, QSizePolicy::Minimum, QSizePolicy::Minimum);
+
+        verticalLayout_2->addItem(verticalSpacer);
+
+
+        horizontalLayout_3->addLayout(verticalLayout_2);
+
+
+        frameLayout->addLayout(horizontalLayout_3);
+
         tabWidget = new QTabWidget(frame);
-        tabWidget->setObjectName(QString::fromUtf8("tabWidget"));
+        tabWidget->setObjectName("tabWidget");
         tabWidget->setMaximumSize(QSize(16777215, 250));
         tabNodes = new QWidget();
-        tabNodes->setObjectName(QString::fromUtf8("tabNodes"));
+        tabNodes->setObjectName("tabNodes");
         horizontalLayout_5 = new QHBoxLayout(tabNodes);
-        horizontalLayout_5->setObjectName(QString::fromUtf8("horizontalLayout_5"));
+        horizontalLayout_5->setObjectName("horizontalLayout_5");
         horizontalLayout_5->setContentsMargins(2, 2, 2, 2);
         nodeTreeView = new QTreeView(tabNodes);
-        nodeTreeView->setObjectName(QString::fromUtf8("nodeTreeView"));
+        nodeTreeView->setObjectName("nodeTreeView");
         nodeTreeView->setEditTriggers(QAbstractItemView::EditKeyPressed);
 
         horizontalLayout_5->addWidget(nodeTreeView);
 
         tabWidget->addTab(tabNodes, QString());
         tabAnimations = new QWidget();
-        tabAnimations->setObjectName(QString::fromUtf8("tabAnimations"));
+        tabAnimations->setObjectName("tabAnimations");
         tabAnimations->setMinimumSize(QSize(1083, 0));
         horizontalLayout_4 = new QHBoxLayout(tabAnimations);
-        horizontalLayout_4->setObjectName(QString::fromUtf8("horizontalLayout_4"));
+        horizontalLayout_4->setObjectName("horizontalLayout_4");
         horizontalLayout_4->setContentsMargins(2, 2, 2, 2);
         animTableView = new QTableView(tabAnimations);
-        animTableView->setObjectName(QString::fromUtf8("animTableView"));
+        animTableView->setObjectName("animTableView");
         animTableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
         animTableView->setSelectionMode(QAbstractItemView::SingleSelection);
         animTableView->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -98,12 +176,12 @@ public:
 
         tabWidget->addTab(tabAnimations, QString());
         tabMeshes = new QWidget();
-        tabMeshes->setObjectName(QString::fromUtf8("tabMeshes"));
+        tabMeshes->setObjectName("tabMeshes");
         horizontalLayout_2 = new QHBoxLayout(tabMeshes);
-        horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
+        horizontalLayout_2->setObjectName("horizontalLayout_2");
         horizontalLayout_2->setContentsMargins(2, 2, 2, 2);
         meshTableView = new QTableView(tabMeshes);
-        meshTableView->setObjectName(QString::fromUtf8("meshTableView"));
+        meshTableView->setObjectName("meshTableView");
         meshTableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
         meshTableView->setSelectionMode(QAbstractItemView::SingleSelection);
         meshTableView->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -116,12 +194,12 @@ public:
 
         tabWidget->addTab(tabMeshes, QString());
         tabMaterials = new QWidget();
-        tabMaterials->setObjectName(QString::fromUtf8("tabMaterials"));
+        tabMaterials->setObjectName("tabMaterials");
         horizontalLayout = new QHBoxLayout(tabMaterials);
-        horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
+        horizontalLayout->setObjectName("horizontalLayout");
         horizontalLayout->setContentsMargins(2, 2, 2, 2);
         materialTableView = new QTableView(tabMaterials);
-        materialTableView->setObjectName(QString::fromUtf8("materialTableView"));
+        materialTableView->setObjectName("materialTableView");
         materialTableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
         materialTableView->setSelectionMode(QAbstractItemView::SingleSelection);
         materialTableView->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -151,6 +229,7 @@ public:
     void retranslateUi(QWidget *ModelViewerWidget)
     {
         ModelViewerWidget->setWindowTitle(QCoreApplication::translate("ModelViewerWidget", "Form", nullptr));
+        enableSceneLightsCheckBox->setText(QCoreApplication::translate("ModelViewerWidget", "Enable lights", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tabNodes), QCoreApplication::translate("ModelViewerWidget", "Nodes", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tabAnimations), QCoreApplication::translate("ModelViewerWidget", "Animations", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tabMeshes), QCoreApplication::translate("ModelViewerWidget", "Meshes", nullptr));

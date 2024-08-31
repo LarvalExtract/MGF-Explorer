@@ -1,45 +1,49 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'StringTableViewerWidget.h'
 **
-** Created by: The Qt Meta Object Compiler version 68 (Qt 6.0.3)
+** Created by: The Qt Meta Object Compiler version 68 (Qt 6.4.1)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
 
 #include <memory>
 #include "StringTableViewerWidget.h"
-#include <QtCore/qbytearray.h>
 #include <QtCore/qmetatype.h>
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'StringTableViewerWidget.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 68
-#error "This file was generated using the moc from 6.0.3. It"
+#error "This file was generated using the moc from 6.4.1. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
+#endif
+
+#ifndef Q_CONSTINIT
+#define Q_CONSTINIT
 #endif
 
 QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
+namespace {
 struct qt_meta_stringdata_StringTableViewer__StringTableViewerWidget_t {
-    const uint offsetsAndSize[2];
+    uint offsetsAndSizes[2];
     char stringdata0[43];
 };
 #define QT_MOC_LITERAL(ofs, len) \
-    uint(offsetof(qt_meta_stringdata_StringTableViewer__StringTableViewerWidget_t, stringdata0) + ofs), len 
-static const qt_meta_stringdata_StringTableViewer__StringTableViewerWidget_t qt_meta_stringdata_StringTableViewer__StringTableViewerWidget = {
+    uint(sizeof(qt_meta_stringdata_StringTableViewer__StringTableViewerWidget_t::offsetsAndSizes) + ofs), len 
+Q_CONSTINIT static const qt_meta_stringdata_StringTableViewer__StringTableViewerWidget_t qt_meta_stringdata_StringTableViewer__StringTableViewerWidget = {
     {
-QT_MOC_LITERAL(0, 42) // "StringTableViewer::StringTabl..."
-
+        QT_MOC_LITERAL(0, 42)   // "StringTableViewer::StringTabl..."
     },
     "StringTableViewer::StringTableViewerWidget"
 };
 #undef QT_MOC_LITERAL
+} // unnamed namespace
 
-static const uint qt_meta_data_StringTableViewer__StringTableViewerWidget[] = {
+Q_CONSTINIT static const uint qt_meta_data_StringTableViewer__StringTableViewerWidget[] = {
 
  // content:
-       9,       // revision
+      10,       // revision
        0,       // classname
        0,    0, // classinfo
        0,    0, // methods
@@ -52,6 +56,19 @@ static const uint qt_meta_data_StringTableViewer__StringTableViewerWidget[] = {
        0        // eod
 };
 
+Q_CONSTINIT const QMetaObject StringTableViewer::StringTableViewerWidget::staticMetaObject = { {
+    QMetaObject::SuperData::link<IAssetViewerWidget::staticMetaObject>(),
+    qt_meta_stringdata_StringTableViewer__StringTableViewerWidget.offsetsAndSizes,
+    qt_meta_data_StringTableViewer__StringTableViewerWidget,
+    qt_static_metacall,
+    nullptr,
+    qt_incomplete_metaTypeArray<qt_meta_stringdata_StringTableViewer__StringTableViewerWidget_t,
+        // Q_OBJECT / Q_GADGET
+        QtPrivate::TypeAndForceComplete<StringTableViewerWidget, std::true_type>
+    >,
+    nullptr
+} };
+
 void StringTableViewer::StringTableViewerWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
     (void)_o;
@@ -59,17 +76,6 @@ void StringTableViewer::StringTableViewerWidget::qt_static_metacall(QObject *_o,
     (void)_c;
     (void)_a;
 }
-
-const QMetaObject StringTableViewer::StringTableViewerWidget::staticMetaObject = { {
-    QMetaObject::SuperData::link<IAssetViewerWidget::staticMetaObject>(),
-    qt_meta_stringdata_StringTableViewer__StringTableViewerWidget.offsetsAndSize,
-    qt_meta_data_StringTableViewer__StringTableViewerWidget,
-    qt_static_metacall,
-    nullptr,
-    nullptr,
-    nullptr
-} };
-
 
 const QMetaObject *StringTableViewer::StringTableViewerWidget::metaObject() const
 {

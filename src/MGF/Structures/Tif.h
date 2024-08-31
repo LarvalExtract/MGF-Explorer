@@ -77,7 +77,9 @@ struct MA1_TIF_FILE
 		TIF_SIZE    cSize;
 		TIF_BITS    cBits;
 	} header;
-	char* pixels;
+	char* pixels = nullptr;
+
+	~MA1_TIF_FILE() { if (pixels) delete[] pixels; }
 };
 
 struct MA2_TIF_FILE
@@ -96,7 +98,6 @@ struct MA2_TIF_FILE
 		TIF_DEPTH   cDepth;
 		TIF_BITS    cBits;
 	} header;
-	char* pixels;
 };
 
 

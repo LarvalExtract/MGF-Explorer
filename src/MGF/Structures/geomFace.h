@@ -38,7 +38,7 @@ struct GEOMFACE_MA2
         uint32_t    pad1;
         uint32_t    xmlb_size;
         uint32_t    pad2;
-        char        xmlbin[8];
+        char        xmlbin[7];
     } xmlb;
     INDX indx;
 };

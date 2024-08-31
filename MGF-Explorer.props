@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros">
+    <QtInstallDir>D:\SDK\Qt-6</QtInstallDir>
+    <QtVersion>6.1.3</QtVersion>
+  </PropertyGroup>
+  <PropertyGroup />
+  <ItemDefinitionGroup />
+  <ItemGroup>
+    <BuildMacro Include="QtInstallDir">
+      <Value>$(QtInstallDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="QtVersion">
+      <Value>$(QtVersion)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>

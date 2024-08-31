@@ -2,8 +2,9 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
-    <QtDir>D:\SDK\Qt-6</QtDir>
-    <Ogre3dDir>D:\SDK\Ogre3D-1.12.6</Ogre3dDir>
+    <QtDir>D:\SDK\Qt6</QtDir>
+    <QtVersion>6.4.1</QtVersion>
+    <QtRoot>$(QtDir)\$(QtVersion)\msvc2019_64</QtRoot>
   </PropertyGroup>
   <PropertyGroup />
   <ItemDefinitionGroup />
@@ -11,8 +12,11 @@
     <BuildMacro Include="QtDir">
       <Value>$(QtDir)</Value>
     </BuildMacro>
-    <BuildMacro Include="Ogre3dDir">
-      <Value>$(Ogre3dDir)</Value>
+    <BuildMacro Include="QtVersion">
+      <Value>$(QtVersion)</Value>
+    </BuildMacro>
+    <BuildMacro Include="QtRoot">
+      <Value>$(QtRoot)</Value>
     </BuildMacro>
   </ItemGroup>
 </Project>
