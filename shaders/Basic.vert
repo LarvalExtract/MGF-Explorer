@@ -15,22 +15,19 @@ uniform mat4 modelViewProjection;
 
 vec3 unpackNormal(uint inPackedNormal)
 {
-	lowp float x = inPackedNormal >> 21u;
-	lowp float y = inPackedNormal >> 11u & 0x7FFu;
-	lowp float z = inPackedNormal & 0xFFC0u;
+	uint x = inPackedNormal >> 21u;
+	uint y = inPackedNormal >> 11u & 0x7FFu;
+	uint z = inPackedNormal & 0xFFC0u;
 
-	//
-	//float fx = float(x) / float(1u << 11u);
-	//float fy = float(y) / float(1u << 11u);
-	//float fz = float(z) / float(1u << 10u);
+	float fx = float(x) / float(1u << 11u);
+	float fy = float(y) / float(1u << 11u);
+	float fz = float(z) / float(1u << 10u);
 	
-	vec3 v = normalize(vec3(x, y, z));
+	fx = fx * 2.0 - 1.0;
+	fy = fy * 2.0 - 1.0;
+	fz = fz * 2.0 - 1.0;
 	
-	v.x = v.x * 2.0 - 1.0;
-	v.y = v.y * 2.0 - 1.0;
-	v.z = v.z * 2.0 - 1.0;
-	
-	return v;
+	return normalize(vec3(fx, fy, fz));
 }
 
 void main()

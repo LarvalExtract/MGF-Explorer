@@ -11,10 +11,10 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
-#include <QtWidgets/QLabel>
 #include <QtWidgets/QSlider>
 #include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QTabWidget>
@@ -33,7 +33,7 @@ public:
     QVBoxLayout *frameLayout;
     QHBoxLayout *horizontalLayout_3;
     QSpacerItem *horizontalSpacer;
-    QLabel *label;
+    QCheckBox *enableSceneLightsCheckBox;
     QVBoxLayout *verticalLayout_2;
     QSpacerItem *verticalSpacer_2;
     QSlider *lightPositionSliderXInput;
@@ -82,15 +82,11 @@ public:
 
         horizontalLayout_3->addItem(horizontalSpacer);
 
-        label = new QLabel(frame);
-        label->setObjectName("label");
-        QSizePolicy sizePolicy1(QSizePolicy::Minimum, QSizePolicy::Minimum);
-        sizePolicy1.setHorizontalStretch(0);
-        sizePolicy1.setVerticalStretch(0);
-        sizePolicy1.setHeightForWidth(label->sizePolicy().hasHeightForWidth());
-        label->setSizePolicy(sizePolicy1);
+        enableSceneLightsCheckBox = new QCheckBox(frame);
+        enableSceneLightsCheckBox->setObjectName("enableSceneLightsCheckBox");
+        enableSceneLightsCheckBox->setChecked(true);
 
-        horizontalLayout_3->addWidget(label);
+        horizontalLayout_3->addWidget(enableSceneLightsCheckBox);
 
         verticalLayout_2 = new QVBoxLayout();
         verticalLayout_2->setObjectName("verticalLayout_2");
@@ -101,11 +97,11 @@ public:
 
         lightPositionSliderXInput = new QSlider(frame);
         lightPositionSliderXInput->setObjectName("lightPositionSliderXInput");
-        QSizePolicy sizePolicy2(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        sizePolicy2.setHorizontalStretch(0);
-        sizePolicy2.setVerticalStretch(0);
-        sizePolicy2.setHeightForWidth(lightPositionSliderXInput->sizePolicy().hasHeightForWidth());
-        lightPositionSliderXInput->setSizePolicy(sizePolicy2);
+        QSizePolicy sizePolicy1(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        sizePolicy1.setHorizontalStretch(0);
+        sizePolicy1.setVerticalStretch(0);
+        sizePolicy1.setHeightForWidth(lightPositionSliderXInput->sizePolicy().hasHeightForWidth());
+        lightPositionSliderXInput->setSizePolicy(sizePolicy1);
         lightPositionSliderXInput->setMinimumSize(QSize(200, 0));
         lightPositionSliderXInput->setMinimum(-100);
         lightPositionSliderXInput->setMaximum(100);
@@ -115,8 +111,8 @@ public:
 
         lightPositionSliderYInput = new QSlider(frame);
         lightPositionSliderYInput->setObjectName("lightPositionSliderYInput");
-        sizePolicy2.setHeightForWidth(lightPositionSliderYInput->sizePolicy().hasHeightForWidth());
-        lightPositionSliderYInput->setSizePolicy(sizePolicy2);
+        sizePolicy1.setHeightForWidth(lightPositionSliderYInput->sizePolicy().hasHeightForWidth());
+        lightPositionSliderYInput->setSizePolicy(sizePolicy1);
         lightPositionSliderYInput->setMinimumSize(QSize(200, 0));
         lightPositionSliderYInput->setMinimum(-100);
         lightPositionSliderYInput->setMaximum(100);
@@ -126,8 +122,8 @@ public:
 
         lightPositionSliderZInput = new QSlider(frame);
         lightPositionSliderZInput->setObjectName("lightPositionSliderZInput");
-        sizePolicy2.setHeightForWidth(lightPositionSliderZInput->sizePolicy().hasHeightForWidth());
-        lightPositionSliderZInput->setSizePolicy(sizePolicy2);
+        sizePolicy1.setHeightForWidth(lightPositionSliderZInput->sizePolicy().hasHeightForWidth());
+        lightPositionSliderZInput->setSizePolicy(sizePolicy1);
         lightPositionSliderZInput->setMinimumSize(QSize(200, 0));
         lightPositionSliderZInput->setMinimum(-100);
         lightPositionSliderZInput->setMaximum(100);
@@ -233,7 +229,7 @@ public:
     void retranslateUi(QWidget *ModelViewerWidget)
     {
         ModelViewerWidget->setWindowTitle(QCoreApplication::translate("ModelViewerWidget", "Form", nullptr));
-        label->setText(QCoreApplication::translate("ModelViewerWidget", "Light", nullptr));
+        enableSceneLightsCheckBox->setText(QCoreApplication::translate("ModelViewerWidget", "Enable lights", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tabNodes), QCoreApplication::translate("ModelViewerWidget", "Nodes", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tabAnimations), QCoreApplication::translate("ModelViewerWidget", "Animations", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tabMeshes), QCoreApplication::translate("ModelViewerWidget", "Meshes", nullptr));

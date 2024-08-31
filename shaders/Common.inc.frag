@@ -1,7 +1,7 @@
 #pragma include phong.inc.frag
 
 uniform uint shadingTypeEnum;
-
+uniform bool bEnableLights;
 
 // Return some bullshit colour if some functionality isn't implemented
 vec4 unimplemented()
@@ -27,18 +27,25 @@ vec4 computeLighting(const in vec4 ambient,
 {
 	vec4 result = vec4(0.0);
 
-	switch (shadingTypeEnum)
-	{
-	case 0u: // gouraud
-		result = phongFunction(ambient, diffuse, specular, shininess, worldPosition, worldView, worldNormal);
-		break;
-	case 1u: // material_only
+	if (bEnableLights)
+	{	
 		result = diffuse + specular + ambient;
-		break;
-	case 2u: // translucent (very rare)
-	case 3u: // none (what does this mean?)
-		result = unimplemented();
-		break;
+	}
+	else
+	{
+		switch (shadingTypeEnum)
+		{
+		case 0u: // gouraud
+			result = phongFunction(ambient, diffuse, specular, shininess, worldPosition, worldView, worldNormal);
+			break;
+		case 1u: // material_only
+			result = diffuse + specular + ambient;
+			break;
+		case 2u: // translucent (very rare)
+		case 3u: // none (what does this mean?)
+			result = unimplemented();
+			break;
+		}
 	}
 	
 	return result;

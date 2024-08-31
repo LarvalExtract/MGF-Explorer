@@ -27,19 +27,12 @@ namespace MGF { namespace Asset {
 	public:
 		ModelAsset(const MGF::File& file);
 
-		const auto GetRootNode() const { return Nodes->RootNode; }
-		const auto GetNodeTreeModel() { return Nodes.get(); }
-		const auto GetMeshTableModel() { return Meshes.get(); }
-		const auto GetMaterialTableModel() { return Materials.get(); }
-		const auto GetAnimationTableModel() { return Animations.get(); }
-
 		Qt3DCore::QEntity* mRootNode = nullptr;
 
-	private:
-		std::shared_ptr<ModelViewer::Models::NodeTree> Nodes;
-		std::shared_ptr<ModelViewer::Models::MeshTable> Meshes;
-		std::shared_ptr<ModelViewer::Models::MaterialTable> Materials;
-		std::shared_ptr<ModelViewer::Models::AnimationTableModel> Animations;
+		ModelViewer::Models::NodeTree Nodes;
+		ModelViewer::Models::MeshTable Meshes;
+		ModelViewer::Models::MaterialTable Materials;
+		ModelViewer::Models::AnimationTableModel Animations;
 
 		void ParseMgmodelXml();
 		void ParseNodeTxt();

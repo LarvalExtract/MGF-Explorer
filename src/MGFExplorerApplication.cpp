@@ -16,6 +16,7 @@
 #include <QPointLight>
 #include <QSortPolicy>
 #include <QFilterKey>
+#include <QTechniqueFilter>
 
 MGFExplorerApplication::MGFExplorerApplication(int argc, char* argv[], int flags)
 	: QApplication(argc, argv, flags)
@@ -50,15 +51,16 @@ int MGFExplorerApplication::exec()
 	RenderWindowContainer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
 	Qt3DRender::QRenderSurfaceSelector* renderSurfaceSelector = new Qt3DRender::QRenderSurfaceSelector;
-		renderSurfaceSelector->setSurface(RenderWindow);
-		Qt3DRender::QClearBuffers* clearBuffers = new Qt3DRender::QClearBuffers(renderSurfaceSelector);
-			clearBuffers->setBuffers(Qt3DRender::QClearBuffers::AllBuffers);
-			clearBuffers->setClearColor(QColorConstants::DarkCyan);
-		Qt3DRender::QViewport* viewport = new Qt3DRender::QViewport(renderSurfaceSelector);
-			Qt3DRender::QCameraSelector* cameraSelector = new Qt3DRender::QCameraSelector(viewport);
-			//Qt3DRender::QDebugOverlay* debugOverlay = new Qt3DRender::QDebugOverlay(viewport);
-			//debugOverlay->setEnabled(true);
+	renderSurfaceSelector->setSurface(RenderWindow);
 
+	Qt3DRender::QClearBuffers* clearBuffers = new Qt3DRender::QClearBuffers(renderSurfaceSelector);
+	clearBuffers->setBuffers(Qt3DRender::QClearBuffers::AllBuffers);
+	clearBuffers->setClearColor(QColorConstants::DarkCyan);
+		
+	Qt3DRender::QViewport* viewport = new Qt3DRender::QViewport(renderSurfaceSelector);
+			
+	Qt3DRender::QCameraSelector* cameraSelector = new Qt3DRender::QCameraSelector(viewport);
+			
 	RenderWindow->setActiveFrameGraph(renderSurfaceSelector);
 
 	ModelViewer::ModelViewerWidget::InitialiseScene(RenderWindow, cameraSelector);

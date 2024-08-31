@@ -22,6 +22,7 @@ namespace Qt3DRender
 	class QPointLight;
 	class QDirectionalLight;
 	class QLayer;
+	class QParameter;
 }
 
 namespace Ui {
@@ -59,6 +60,7 @@ namespace ModelViewer {
 		static Qt3DExtras::QAbstractCameraController* CameraController;
 		static Qt3DRender::QLayer* OpaqueLayer;
 		static Qt3DRender::QLayer* TransparentLayer;
+		static Qt3DRender::QParameter* SceneEnableLights;
 
 		Qt3DCore::QEntity* CurrentModelEntity = nullptr;
 
@@ -66,6 +68,7 @@ namespace ModelViewer {
 		void on_lightPositionXInput_changed(int value);
 		void on_lightPositionYInput_changed(int value);
 		void on_lightPositionZInput_changed(int value);
+		void on_enableSceneLightsCheckBox_stateChanged(int state);
 
 	protected:
 		void showEvent(QShowEvent* event) override;

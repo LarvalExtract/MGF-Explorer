@@ -1,20 +1,13 @@
 #pragma once
 
-#include "MGF/Assets/Model/Node.h"
-
 #include <QAbstractItemModel>
-
-namespace MGF { namespace Asset { class ModelAsset; } }
+#include <Qt3DCore/QEntity>
 
 namespace ModelViewer {	namespace Models {
 
 	class NodeTree : public QAbstractItemModel
 	{
-		friend class MGF::Asset::ModelAsset;
-
 	public:
-		~NodeTree() { delete RootNode; }
-
 		QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
 		QModelIndex parent(const QModelIndex& child) const override;
 		int rowCount(const QModelIndex& parent = QModelIndex()) const override;
@@ -24,8 +17,7 @@ namespace ModelViewer {	namespace Models {
 		bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
 		Qt::ItemFlags flags(const QModelIndex& index) const override;
 
-	private:
-		MGF::Asset::Model::Node* RootNode = nullptr;
+		Qt3DCore::QEntity* mRootNode = nullptr;
 	};
 
 } }

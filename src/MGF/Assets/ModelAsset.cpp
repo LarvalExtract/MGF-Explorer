@@ -19,11 +19,7 @@
 using namespace MGF::Asset;
 
 ModelAsset::ModelAsset(const MGF::File& file) :
-	AssetBase(file, MGF::Asset::EAssetType::Model),
-	Nodes{std::make_shared<ModelViewer::Models::NodeTree>()},
-	Animations{std::make_shared<ModelViewer::Models::AnimationTableModel>()},
-	Meshes{std::make_shared<ModelViewer::Models::MeshTable>()},
-	Materials{std::make_shared<ModelViewer::Models::MaterialTable>()}
+	AssetBase(file, MGF::Asset::EAssetType::Model)
 {
 	if (file.FileType == MGF::EFileType::mgmodel)
 	{
@@ -72,6 +68,8 @@ void ModelAsset::ParseMgmodelXml()
 	{
 		CreateSceneNode(mRootNode = new Qt3DCore::QEntity, node, meshes, materials);
 	}
+
+	Nodes.mRootNode = mRootNode;
 }
 
 void ModelAsset::ParseNodeTxt()
@@ -107,10 +105,6 @@ void ModelAsset::CreateSceneNode(Qt3DCore::QEntity* parent, const std::function<
 		auto childNodeFile = FileRef.FindRelativeItem(vars["child"].c_str());
 		auto childNodeAsset = static_cast<ModelAsset*>(rm.Get(*childNodeFile).get());
 
-		Nodes = childNodeAsset->Nodes;
-		Meshes = childNodeAsset->Meshes;
-		Materials = childNodeAsset->Materials;
-
 		int num_animations = std::stoi(vars["num_animations"]);
 		for (int i = 0; i < num_animations; i++)
 		{
@@ -123,8 +117,6 @@ void ModelAsset::CreateSceneNode(Qt3DCore::QEntity* parent, const std::function<
 			animDef.loop_count = std::stoi(anim["loop_count"]);
 			//animDef.blend_out_duration = std::stof(anim["blend_out_duration"]);
 			animDef.primary = (anim["primary"][0] == 't');
-
-			Animations->push_back(std::move(animDef));
 		}
 	}
 	else
@@ -143,12 +135,13 @@ void ModelAsset::CreateSceneNode(Qt3DCore::QEntity* parent, const std::function<
 			const MGF::File& meshFile = *FileRef.FindRelativeItem(vars["mesh"]);
 			ConfigFile meshCfg(&meshFile);
 			const MGF::File& materialFile = *meshFile.FindRelativeItem(meshCfg["mesh"]["material"]);
-
+	
 			Qt3DRender::QGeometryRenderer* geom = qApp->mMeshLibrary.CreateMesh(meshFile, this->FileRef);
 			Qt3DRender::QMaterial* material = MGF::Render::MaterialLibrary::Get().GetMaterial(materialFile, this->FileRef);
 
-			entity->addComponent(geom);
-			entity->addComponent(material);
+			Qt3DCore::QEntity* meshEntity = new Qt3DCore::QEntity(entity);
+			meshEntity->addComponent(geom);
+			meshEntity->addComponent(material);
 		}
 
 		for (int i = 0, num_children = std::stoi(vars["num_children"].data()); i < num_children; i++)
@@ -171,6 +164,7 @@ void ModelAsset::CreateSceneNode(Qt3DCore::QEntity* parent, const pugi::xml_node
 
 	const QString name = xmlnode.attribute("name").as_string();
 	entity->setProperty("name", xmlnode.attribute("name").as_string());
+	entity->setProperty("type", nodeType.data());
 
 	Qt3DCore::QTransform* transform = new Qt3DCore::QTransform;
 	const QVector3D position = MGF::Render::IMaterialParamReader::StrToVector(xmlnode.attribute("position").as_string());
@@ -189,14 +183,18 @@ void ModelAsset::CreateSceneNode(Qt3DCore::QEntity* parent, const pugi::xml_node
 	{
 		for (const auto& mesh : xmlnode.children("mesh"))
 		{
+			const std::string meshName = mesh.attribute("name").as_string();
 			Qt3DCore::QEntity* meshEntity = new Qt3DCore::QEntity(entity);
+			meshEntity->setProperty("name", meshName.c_str());
 
-			Qt3DRender::QGeometryRenderer* geom = meshes.at(mesh.attribute("name").as_string());
+			Qt3DRender::QGeometryRenderer* geom = meshes.at(meshName);
 			Qt3DRender::QMaterial* material = materials.at(geom->property("material").toString().toStdString());
 
 			meshEntity->addComponent(geom);
 			meshEntity->addComponent(material);
-			meshEntity->addComponent(material->property("blending").toString() == "normal" ? ModelViewer::ModelViewerWidget::OpaqueLayer : ModelViewer::ModelViewerWidget::TransparentLayer);
+			meshEntity->addComponent(material->property("blending").toString() == "normal" 
+				? ModelViewer::ModelViewerWidget::TransparentLayer 
+				: ModelViewer::ModelViewerWidget::OpaqueLayer);
 		}
 	}
 	else if (nodeType.contains("skinned"))
@@ -205,8 +203,7 @@ void ModelAsset::CreateSceneNode(Qt3DCore::QEntity* parent, const pugi::xml_node
 	}
 	else if (nodeType.contains("light"))
 	{
-		entity->addComponent(ModelViewer::ModelViewerWidget::OpaqueLayer);
-		entity->addComponent(ModelViewer::ModelViewerWidget::TransparentLayer);
+		
 	}
 	
 	for (const auto& child : xmlnode.child("children").children())
