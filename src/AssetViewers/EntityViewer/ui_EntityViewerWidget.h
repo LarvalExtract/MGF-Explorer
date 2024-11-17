@@ -11,7 +11,6 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QFrame>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QTableView>
@@ -24,11 +23,10 @@ QT_BEGIN_NAMESPACE
 class Ui_EntityViewerWidget
 {
 public:
-    QVBoxLayout *verticalLayout;
-    QFrame *Frame;
     QHBoxLayout *horizontalLayout;
-    QTreeView *EntityTreeView;
-    QTableView *AttributeTableView;
+    QVBoxLayout *verticalLayout_2;
+    QTreeView *entityTreeView;
+    QTableView *attributeTableView;
 
     void setupUi(QWidget *EntityViewerWidget)
     {
@@ -40,29 +38,29 @@ public:
         sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(EntityViewerWidget->sizePolicy().hasHeightForWidth());
         EntityViewerWidget->setSizePolicy(sizePolicy);
-        verticalLayout = new QVBoxLayout(EntityViewerWidget);
-        verticalLayout->setSpacing(0);
-        verticalLayout->setObjectName("verticalLayout");
-        verticalLayout->setContentsMargins(0, 0, 0, 0);
-        Frame = new QFrame(EntityViewerWidget);
-        Frame->setObjectName("Frame");
-        Frame->setFrameShape(QFrame::StyledPanel);
-        Frame->setFrameShadow(QFrame::Raised);
-        horizontalLayout = new QHBoxLayout(Frame);
+        horizontalLayout = new QHBoxLayout(EntityViewerWidget);
+        horizontalLayout->setSpacing(0);
         horizontalLayout->setObjectName("horizontalLayout");
         horizontalLayout->setContentsMargins(0, 0, 0, 0);
-        EntityTreeView = new QTreeView(Frame);
-        EntityTreeView->setObjectName("EntityTreeView");
+        verticalLayout_2 = new QVBoxLayout();
+        verticalLayout_2->setObjectName("verticalLayout_2");
+        verticalLayout_2->setSizeConstraint(QLayout::SetMinimumSize);
+        entityTreeView = new QTreeView(EntityViewerWidget);
+        entityTreeView->setObjectName("entityTreeView");
+        entityTreeView->setMinimumSize(QSize(400, 0));
+        entityTreeView->setMaximumSize(QSize(400, 16777215));
 
-        horizontalLayout->addWidget(EntityTreeView);
+        verticalLayout_2->addWidget(entityTreeView);
 
-        AttributeTableView = new QTableView(Frame);
-        AttributeTableView->setObjectName("AttributeTableView");
+        attributeTableView = new QTableView(EntityViewerWidget);
+        attributeTableView->setObjectName("attributeTableView");
+        attributeTableView->setMinimumSize(QSize(400, 0));
+        attributeTableView->setMaximumSize(QSize(400, 16777215));
 
-        horizontalLayout->addWidget(AttributeTableView);
+        verticalLayout_2->addWidget(attributeTableView);
 
 
-        verticalLayout->addWidget(Frame);
+        horizontalLayout->addLayout(verticalLayout_2);
 
 
         retranslateUi(EntityViewerWidget);

@@ -3,7 +3,7 @@
 #include "StringTableAsset.h"
 #include "TextureAsset.h"
 #include "ModelAsset.h"
-#include "EntityAsset.h"
+#include "MapAsset.h"
 
 using namespace MGF::Asset;
 
@@ -21,7 +21,7 @@ AssetPtr AssetBase::Create(const File& soureFile)
 	case EAssetType::StringTable: return std::make_shared<StringTableAsset>(soureFile);
 	case EAssetType::Texture:     return std::make_shared<TextureAsset>(soureFile);
 	case EAssetType::Model:       return std::make_shared<ModelAsset>(soureFile);
-	case EAssetType::Entity:      return std::make_shared<EntityAsset>(soureFile);
+	case EAssetType::Entity:      return std::make_shared<WdfMap>(soureFile);
 	}
 
 	return nullptr;

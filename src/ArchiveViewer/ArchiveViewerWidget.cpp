@@ -10,6 +10,11 @@ using namespace ArchiveViewer;
 ArchiveViewerWidget::ArchiveViewerWidget(const std::filesystem::path& mgfFilePath, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::ArchiveViewerWidget),
+    PlainTextViewer(this),
+    TextureViewer(this),
+    ModelViewer(this),
+    StringTableViewer(this),
+    EntityViewer(this),
     MgfArchive{ mgfFilePath }
 {
     ui->setupUi(this); 
@@ -96,6 +101,9 @@ void ArchiveViewerWidget::on_treeView_selectionChanged(const QModelIndex &sel, c
             ui->AssetViewerStack->setCurrentWidget(ui->EmptyPage);
 
             QMessageBox::critical(this, QString("Failed to load asset %1").arg(selectedItem.Name), e.what());
+#if _DEBUG
+            __debugbreak();
+#endif
         }
     }
     else

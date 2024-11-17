@@ -5,13 +5,11 @@
 #include "MGF/Assets/Factories/MeshLibrary.h"
 
 #include <QApplication>
-#include <Qt3DWindow>
-#include <Qt3DCore/QTransform>
-#include <QLayer>
 
-#include <memory>
 #include <filesystem>
 #include <vector>
+
+class Scene3dWidget;
 
 namespace Qt3DCore
 {
@@ -45,19 +43,13 @@ public:
 
 	int exec();
 
-	Qt3DExtras::Qt3DWindow* GetRenderWindow() const;
-	QWidget* GetRenderWindowContainer() const;
+	Scene3dWidget* SceneWidget = nullptr;
 
 	MGF::AssetManager AssetManager;
 	MA::MeshLibrary mMeshLibrary;
 
-	Qt3DRender::QLayer* mOpaqueLayer = nullptr;
-	Qt3DRender::QLayer* mTransparentLayer = nullptr;
-
 private:
 	MainWindow MainWindow;
-	Qt3DExtras::Qt3DWindow* RenderWindow = nullptr;
-	QWidget* RenderWindowContainer = nullptr;
 
 	std::vector<std::pair<std::filesystem::path, std::filesystem::path>> FileList;
 };

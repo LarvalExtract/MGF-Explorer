@@ -1,6 +1,8 @@
 #pragma once
 
 #include "AssetViewers/IAssetViewerWidget.h"
+#include "AssetViewers/3DSceneWidget.h"
+
 #include "Models/EntityTreeModel.h"
 
 namespace Ui {
@@ -24,8 +26,7 @@ namespace EntityViewer {
 
     private:
         Ui::EntityViewerWidget* ui;
-
-        Models::EntityTree EntityTreeModel;
+        TestWidget* SceneWidget;
     };
 
 }

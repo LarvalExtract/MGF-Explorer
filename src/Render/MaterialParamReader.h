@@ -49,8 +49,8 @@ namespace MGF::Render {
 
 		inline static QVector3D StrToVector(const std::string_view str)
 		{
-			const auto c1 = str.find(',', 0);
-			const auto c2 = str.find(',', c1 + 1);
+			const size_t c1 = str.find(',', 0);
+			const size_t c2 = str.find(',', c1 + 1);
 
 			return QVector3D(
 				std::stof(str.substr(0, c1).data()),

@@ -1,2 +1,2 @@
 cd ..
-python scripts/compile-moc.py -v "MechAssault MGF Explorer.vcxproj"
+python scripts/uic-and-moc.py -v "MechAssault MGF Explorer.vcxproj"

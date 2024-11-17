@@ -9,6 +9,7 @@ namespace MGF { namespace Asset {
 		Texture,
 		Model,
 		Entity,
+		Map,
 
 		None
 	};

@@ -70,6 +70,8 @@ public:
         verticalLayout->setContentsMargins(0, 0, 0, 0);
         frame = new QFrame(ModelViewerWidget);
         frame->setObjectName("frame");
+        sizePolicy.setHeightForWidth(frame->sizePolicy().hasHeightForWidth());
+        frame->setSizePolicy(sizePolicy);
         frame->setFrameShape(QFrame::StyledPanel);
         frame->setFrameShadow(QFrame::Raised);
         frameLayout = new QVBoxLayout(frame);

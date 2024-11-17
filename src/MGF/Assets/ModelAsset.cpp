@@ -15,6 +15,7 @@
 #include <QMaterial>
 #include <QQuaternion>
 #include <QVector3D>
+#include <QLayer>
 
 using namespace MGF::Asset;
 
@@ -193,8 +194,9 @@ void ModelAsset::CreateSceneNode(Qt3DCore::QEntity* parent, const pugi::xml_node
 			meshEntity->addComponent(geom);
 			meshEntity->addComponent(material);
 			meshEntity->addComponent(material->property("blending").toString() == "normal" 
-				? ModelViewer::ModelViewerWidget::TransparentLayer 
-				: ModelViewer::ModelViewerWidget::OpaqueLayer);
+				? qApp->SceneWidget->GetTransparentLayer()
+				: qApp->SceneWidget->GetOpaqueLayer()
+			);
 		}
 	}
 	else if (nodeType.contains("skinned"))
