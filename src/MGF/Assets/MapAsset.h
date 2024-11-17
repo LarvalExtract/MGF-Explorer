@@ -5,12 +5,27 @@
 #include "MGF/Factories/MABinaryObjectParser.h"
 
 #include "AssetViewers/EntityViewer/Models/EntityTreeModel.h"
-#include "AssetViewers/EntityViewer/Models/AttributeTableModel.h"
 
 namespace MGF { namespace Asset {
 
-	struct WdfEntity
+	struct WdfEntity : public QAbstractTableModel
 	{
+		WdfEntity() = default;
+		WdfEntity(const WdfEntity&) {}
+		WdfEntity& operator=(const WdfEntity& other) 
+		{
+			this->Class = other.Class;
+			this->Description = other.Description;
+			this->UID = other.UID;
+			this->ParentUID = other.ParentUID;
+			this->SiblingUID = other.SiblingUID;
+			this->ChildUID = other.ChildUID;
+			this->Attributes = other.Attributes;
+			this->Children = other.Children;
+
+			return *this;
+		}
+
 		std::string Class;
 		std::string Description;
 		int32_t UID = 0;
@@ -25,10 +40,14 @@ namespace MGF { namespace Asset {
 			size_t Offset;
 			size_t Length;
 		};
-		QVector<Attribute> Attributes;
+		std::vector<Attribute> Attributes;
+		std::vector<int32_t> Children;
 
-		WdfEntity* Parent = nullptr;
-		std::vector<WdfEntity*> Children;
+	public:
+		int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+		int columnCount(const QModelIndex& parent = QModelIndex()) const override;
+		QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
+		QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 	};
 
 	class WdfMap : public AssetBase, public IListener
@@ -40,10 +59,11 @@ namespace MGF { namespace Asset {
 
 		void OnHeaderRead(uint32_t EntityCount, uint32_t RootEntityUID) override;
 		void OnObjectRead(const MABinaryObject& MapEntity) override;
+
 		EntityViewer::Models::EntityTreeModel& GetEntityTreeModel();
 
 	private:
-		uint32_t RootEntityUid = 0;
+		int32_t RootEntityUid = 0;
 		std::unordered_map<int32_t, WdfEntity> Objects;
 
 		EntityViewer::Models::EntityTreeModel EntityTreeModel;

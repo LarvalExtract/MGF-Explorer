@@ -39,8 +39,7 @@ void EntityViewerWidget::on_EntityTreeView_selectionChanged(const QModelIndex& s
         return;
     }
 
-    auto& selectedEntity = *static_cast<MGF::Asset::WdfEntity*>(sel.internalPointer());
-    const auto attributes = &selectedEntity.Attributes;
+    MGF::Asset::WdfEntity& selectedEntity = *static_cast<MGF::Asset::WdfEntity*>(sel.internalPointer());
 
-   // ui->AttributeTableView->setModel(attributes);
+    ui->attributeTableView->setModel(&selectedEntity);
 }

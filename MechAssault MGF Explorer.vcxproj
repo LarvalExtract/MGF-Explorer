@@ -207,7 +207,6 @@
     <ClCompile Include="src\AssetExtractors\TextureExtractor\TextureExtractor.cpp" />
     <ClCompile Include="src\AssetViewers\3DSceneWidget.cpp" />
     <ClCompile Include="src\AssetViewers\EntityViewer\EntityViewerWidget.cpp" />
-    <ClCompile Include="src\AssetViewers\EntityViewer\Models\AttributeTableModel.cpp" />
     <ClCompile Include="src\AssetViewers\EntityViewer\Models\EntityTreeModel.cpp" />
     <ClCompile Include="src\AssetViewers\ModelViewer\Models\AnimationTableModel.cpp" />
     <ClCompile Include="src\AssetViewers\ModelViewer\Models\MaterialTableModel.cpp" />
@@ -256,7 +255,16 @@
     <ClCompile Include="src\MainWindow\MainWindow.cpp" />
     <ClCompile Include="vendor\pugixml-1.10\src\pugixml.cpp" />
     <ClCompile Include="vendor\s3tc\s3tc.cpp" />
-    <ClCompile Include="src\AssetViewers\moc_3DSceneWidget.cpp" /><ClCompile Include="src\AssetViewers\EntityViewer\moc_EntityViewerWidget.cpp" /><ClCompile Include="src\AssetViewers\ModelViewer\moc_ModelViewerWidget.cpp" /><ClCompile Include="src\AssetViewers\PlainTextViewer\moc_PlainTextViewerWidget.cpp" /><ClCompile Include="src\AssetViewers\StringTableViewer\moc_StringTableViewerWidget.cpp" /><ClCompile Include="src\FileExtractorWindow\moc_FileExtractorDialog.cpp" /><ClCompile Include="src\AssetViewers\TextureViewer\moc_TextureViewerWidget.cpp" /><ClCompile Include="src\ArchiveViewer\moc_ArchiveViewerWidget.cpp" /><ClCompile Include="src\MainWindow\moc_MainWindow.cpp" /></ItemGroup>
+    <ClCompile Include="src\AssetViewers\moc_3DSceneWidget.cpp" />
+    <ClCompile Include="src\AssetViewers\EntityViewer\moc_EntityViewerWidget.cpp" />
+    <ClCompile Include="src\AssetViewers\ModelViewer\moc_ModelViewerWidget.cpp" />
+    <ClCompile Include="src\AssetViewers\PlainTextViewer\moc_PlainTextViewerWidget.cpp" />
+    <ClCompile Include="src\AssetViewers\StringTableViewer\moc_StringTableViewerWidget.cpp" />
+    <ClCompile Include="src\FileExtractorWindow\moc_FileExtractorDialog.cpp" />
+    <ClCompile Include="src\AssetViewers\TextureViewer\moc_TextureViewerWidget.cpp" />
+    <ClCompile Include="src\ArchiveViewer\moc_ArchiveViewerWidget.cpp" />
+    <ClCompile Include="src\MainWindow\moc_MainWindow.cpp" />
+  </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ArchiveViewer\ContextMenus\FileMenu.h" />
     <ClInclude Include="src\ArchiveViewer\ContextMenus\FolderMenu.h" />
@@ -267,7 +275,6 @@
     <ClInclude Include="src\AssetExtractors\ModelExtractor\ModelExtractor.h" />
     <ClInclude Include="src\AssetExtractors\TextureExtractor\TextureExtractor.h" />
     <ClInclude Include="src\AssetViewers\3DSceneWidget.h" />
-    <ClInclude Include="src\AssetViewers\EntityViewer\Models\AttributeTableModel.h" />
     <ClInclude Include="src\AssetViewers\EntityViewer\Models\EntityTreeModel.h" />
     <ClInclude Include="src\AssetViewers\IAssetViewerWidget.h" />
     <ClInclude Include="src\AssetViewers\EntityViewer\EntityViewerWidget.h" />
@@ -334,7 +341,15 @@
     <ClInclude Include="src\MainWindow\MainWindow.h" />
     <ClInclude Include="vendor\pugixml-1.10\src\pugixml.hpp" />
     <ClInclude Include="vendor\s3tc\s3tc.h" />
-    <ClInclude Include="src\ArchiveViewer\ui_ArchiveViewerWidget.h" /><ClInclude Include="src\AssetViewers\EntityViewer\ui_EntityViewerWidget.h" /><ClInclude Include="src\AssetViewers\ModelViewer\ui_ModelViewerWidget.h" /><ClInclude Include="src\AssetViewers\PlainTextViewer\ui_PlainTextViewerWidget.h" /><ClInclude Include="src\AssetViewers\TextureViewer\ui_TextureViewerWidget.h" /><ClInclude Include="src\AssetViewers\StringTableViewer\ui_StringTableViewerWidget.h" /><ClInclude Include="src\FileExtractorWindow\ui_FileExtractorDialog.h" /><ClInclude Include="src\MainWindow\ui_MainWindow.h" /></ItemGroup>
+    <ClInclude Include="src\ArchiveViewer\ui_ArchiveViewerWidget.h" />
+    <ClInclude Include="src\AssetViewers\EntityViewer\ui_EntityViewerWidget.h" />
+    <ClInclude Include="src\AssetViewers\ModelViewer\ui_ModelViewerWidget.h" />
+    <ClInclude Include="src\AssetViewers\PlainTextViewer\ui_PlainTextViewerWidget.h" />
+    <ClInclude Include="src\AssetViewers\TextureViewer\ui_TextureViewerWidget.h" />
+    <ClInclude Include="src\AssetViewers\StringTableViewer\ui_StringTableViewerWidget.h" />
+    <ClInclude Include="src\FileExtractorWindow\ui_FileExtractorDialog.h" />
+    <ClInclude Include="src\MainWindow\ui_MainWindow.h" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="src\ArchiveViewer\ArchiveViewerWidget.ui" />
     <None Include="src\AssetViewers\EntityViewer\EntityViewerWidget.ui" />

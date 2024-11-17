@@ -21,8 +21,9 @@ QModelIndex EntityTreeModel::index(int row, int column, const QModelIndex& paren
 	}
 
 	const WdfEntity& parentEntity = parent.isValid() ? *static_cast<WdfEntity*>(parent.internalPointer()) : MapAsset.Objects.at(MapAsset.RootEntityUid);
+	const WdfEntity& childEntity = MapAsset.Objects.at(parentEntity.Children[row]);
 
-	return createIndex(row, column, parentEntity.Children[row]);
+	return createIndex(row, column, &childEntity);
 }
 
 QModelIndex EntityTreeModel::parent(const QModelIndex& child) const
@@ -38,7 +39,7 @@ QModelIndex EntityTreeModel::parent(const QModelIndex& child) const
 		const WdfEntity& ParentEntityRef = MapAsset.Objects.at(pThisEntity->ParentUID);
 		const WdfEntity* ParentEntityPtr = &ParentEntityRef;
 
-		const auto it = std::find(ParentEntityRef.Children.begin(), ParentEntityRef.Children.end(), pThisEntity);
+		const auto it = std::find(ParentEntityRef.Children.begin(), ParentEntityRef.Children.end(), pThisEntity->UID);
 
 		return createIndex(it - ParentEntityRef.Children.begin(), 0, ParentEntityPtr);
 	}
