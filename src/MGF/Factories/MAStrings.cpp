@@ -5,7 +5,7 @@ namespace MAStrings
 	/*
 	This is a list of all strings extracted from MechAssault 2's .xbe which have matching 32-bit CRC codes
 	CRCs are used as lookups to these strings in various data files. For example, WDF files are just a list of entities with attributes.
-	The names of those entities and attributes are 32-bit CRC encoded and those cores are used cross reference back to the string 
+	The names of those entities and attributes are 32-bit CRC encoded and those codes are used cross reference back to the string 
 	*/
 
 	const char* GlobalStringCrcLookup(uint32_t Crc)
@@ -1461,7 +1461,7 @@ namespace MAStrings
 		case 682931462: return  "BriefingSound"; break;
 
 		// String not found with given hash code
-		default: return "_UNKNOWN";
+		default: return "???";
 		}
 	}
 }

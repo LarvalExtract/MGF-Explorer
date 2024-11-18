@@ -39,7 +39,7 @@ int MGFExplorerApplication::exec()
 
 	for (const auto& [mgfPath, assetPath] : FileList)
 	{
-		MainWindow.OpenMGFWorkspace(mgfPath);
+		MainWindow.OpenMGFWorkspace(mgfPath, &assetPath);
 	}
 
 	return QApplication::exec();

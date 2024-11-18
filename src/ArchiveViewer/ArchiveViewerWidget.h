@@ -27,7 +27,12 @@ namespace ArchiveViewer {
 		explicit ArchiveViewerWidget(const std::filesystem::path& mgfFilePath, QWidget* parent = nullptr);
 		~ArchiveViewerWidget() override;
 
+		void OpenAsset(const std::filesystem::path& assetPath);
+
 		const auto& MGFArchive() const { return MgfArchive; }
+
+	private:
+		void OpenAssetViewer(const MGF::File& file);
 
 	private slots:
 		void on_treeView_selectionChanged(const QModelIndex& sel, const QModelIndex& desel);

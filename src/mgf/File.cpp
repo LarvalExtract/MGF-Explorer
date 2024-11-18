@@ -91,9 +91,9 @@ auto File::Children() const -> const std::vector<const File*>&
     return m_Children;
 }
 
-const File* File::FindRelativeItem(const std::filesystem::path &relativePath) const
+const File* File::FindRelativeItem(const std::filesystem::path &relativePath, size_t* index) const
 {
-    const File* parent = Parent();
+    const File* parent = Parent() ? Parent() : MGFArchive.Root();
     const File* target = nullptr;
 	
     std::for_each(relativePath.begin(), relativePath.end(), [&parent, &target](const auto& i) 
@@ -113,6 +113,11 @@ const File* File::FindRelativeItem(const std::filesystem::path &relativePath) co
             	
 			}(QString(i.u8string().c_str()));
     });
+
+    if (index)
+    {
+        *index = std::find(MGFArchive.Files.begin(), MGFArchive.Files.end(), *target) - MGFArchive.Files.begin();
+    }
 
     return target;
 }

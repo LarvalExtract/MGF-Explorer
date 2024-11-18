@@ -95,11 +95,6 @@ void MABinaryObjectParser::Parse()
 			MABinaryObjectAttribute Attribute;
 			Attribute.Name = MAStrings::GlobalStringCrcLookup(AttributeHeader.crc);
 
-			if (Attribute.Name == "UID")
-			{
-				//__debugbreak();
-			}
-
 			switch (AttributeHeader.dataType)
 			{
 			case MABinaryAttributeDataTypeId::Boolean:

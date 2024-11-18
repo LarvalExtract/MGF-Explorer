@@ -54,13 +54,17 @@ namespace MGF {
         void AddChild(File* child);
         auto Children() const -> const std::vector<const File*>&;
 
+        friend inline bool operator==(const File& a, const File& b)
+        {
+            return a.FilepathHash == b.FilepathHash;
+        }
+
         // takes a relative file path and traverses the MGF file system to find the desired item
-        const File* FindRelativeItem(const std::filesystem::path& relativePath) const;
+        const File* FindRelativeItem(const std::filesystem::path& relativePath, size_t* index = nullptr) const;
 
         static EFileType GetEFileTypeFromExtension(const std::filesystem::path& extension);
 
         friend QDebug& operator<<(QDebug& debug, const MGF::File& mgfFile);
-        
     };
 }
 

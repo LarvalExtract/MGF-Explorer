@@ -102,12 +102,12 @@ void MGF::Asset::WdfMap::OnObjectRead(const MABinaryObject& MapEntity)
 		else if (std::holds_alternative<QVector2D>(attrib.Value))
 		{
 			const QVector2D vec = std::get<QVector2D>(attrib.Value);
-			Attribute.Value = QString("%1, %2").arg(vec.x(), vec.y());
+			Attribute.Value = QString("%1, %2").arg(QString::number(vec.x()), QString::number(vec.y()));
 		}
 		else if (std::holds_alternative<QVector3D>(attrib.Value))
 		{
 			const QVector3D vec = std::get<QVector3D>(attrib.Value);
-			Attribute.Value = QString("%1, %2, %3").arg(vec.x(), vec.y(), vec.z());
+			Attribute.Value = QString("%1, %2, %3").arg(QString::number(vec.x()), QString::number(vec.y()), QString::number(vec.z()));
 		}
 		else if (std::holds_alternative<std::string>(attrib.Value))
 		{

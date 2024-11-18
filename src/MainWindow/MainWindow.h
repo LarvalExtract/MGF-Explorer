@@ -23,7 +23,7 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    void OpenMGFWorkspace(const std::filesystem::path& mgfFilePath);
+    void OpenMGFWorkspace(const std::filesystem::path& mgfFilePath, const std::filesystem::path* assetPath = nullptr);
 
 private slots:
     void on_actionOpen_MGF_file_triggered();

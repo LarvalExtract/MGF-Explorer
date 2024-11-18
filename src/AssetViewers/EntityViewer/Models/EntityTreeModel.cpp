@@ -43,6 +43,10 @@ QModelIndex EntityTreeModel::parent(const QModelIndex& child) const
 
 		return createIndex(it - ParentEntityRef.Children.begin(), 0, ParentEntityPtr);
 	}
+	//else if (pThisEntity->UID == MapAsset.RootEntityUid)
+	//{
+	//	return createIndex(0, 0, &MapAsset.Objects.at(MapAsset.RootEntityUid));
+	//}
 
 	return QModelIndex();
 }

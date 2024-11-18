@@ -84,7 +84,7 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index)
     }
 }
 
-void MainWindow::OpenMGFWorkspace(const std::filesystem::path& mgfFilePath)
+void MainWindow::OpenMGFWorkspace(const std::filesystem::path& mgfFilePath, const std::filesystem::path* assetPath)
 {
     const auto str = mgfFilePath.string();
     if (ArchiveWidgets.contains(str))
@@ -98,6 +98,11 @@ void MainWindow::OpenMGFWorkspace(const std::filesystem::path& mgfFilePath)
 
         const int newTabIndex = ui->tabWidget->addTab(&ArchiveWidgets.at(str), QString{mgfFilePath.filename().string().c_str()});
         ui->tabWidget->setCurrentIndex(newTabIndex);
+    }
+
+    if (assetPath)
+    {
+        ArchiveWidgets.at(str).OpenAsset(*assetPath);
     }
     
     ui->tabWidget->show();
