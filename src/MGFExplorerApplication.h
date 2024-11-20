@@ -5,6 +5,7 @@
 #include "MGF/Assets/Factories/MeshLibrary.h"
 
 #include <QApplication>
+#include <QSettings>
 
 #include <filesystem>
 #include <vector>
@@ -47,6 +48,9 @@ public:
 
 	MGF::AssetManager AssetManager;
 	MA::MeshLibrary mMeshLibrary;
+
+	std::filesystem::path GetMgfFolderFromAppSettings() const;
+	void SetMgfFolderAppSetting(const std::filesystem::path& MgfFolder);
 
 private:
 	MainWindow MainWindow;

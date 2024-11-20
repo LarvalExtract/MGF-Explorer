@@ -1,6 +1,8 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 
+#include "MGFExplorerApplication.h"
+
 #include <QSettings>
 #include <QFileDialog>
 #include <QMessageBox>
@@ -26,10 +28,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_actionOpen_MGF_file_triggered()
 {
-    QSettings settings;
-    const QString defaultMgfFolderKey = "SavedMgfFolder";
-
-    if (const auto fileNames = QFileDialog::getOpenFileNames(this, "Open MGF file", settings.value(defaultMgfFolderKey).toString(), tr("MechAssault MGF files (*.mgf)")); !fileNames.empty())
+    if (const auto fileNames = QFileDialog::getOpenFileNames(this, "Open MGF file", qApp->GetMgfFolderFromAppSettings().u8string().c_str(), tr("MechAssault MGF files (*.mgf)")); !fileNames.empty())
     {
         std::vector<std::exception> errors;
 
@@ -57,9 +56,8 @@ void MainWindow::on_actionOpen_MGF_file_triggered()
 		}
 
         const std::filesystem::path mgfFolder(fileNames.first().toStdString());
-        const QString folder(mgfFolder.parent_path().string().c_str());
         
-        settings.setValue(defaultMgfFolderKey, folder);
+        qApp->SetMgfFolderAppSetting(mgfFolder.parent_path());
     }
 }
 

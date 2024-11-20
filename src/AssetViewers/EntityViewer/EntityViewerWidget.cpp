@@ -9,7 +9,6 @@ EntityViewerWidget::EntityViewerWidget(QWidget *parent) :
     ui(new Ui::EntityViewerWidget)
 {
     ui->setupUi(this);
-
     SceneWidget = new TestWidget(ui->horizontalLayout, this);
 }
 
@@ -24,12 +23,17 @@ void EntityViewerWidget::LoadAsset(MGF::Asset::AssetPtr asset)
 
     ui->entityTreeView->setModel(&entityAsset->GetEntityTreeModel());
 
-	connect(
-		ui->entityTreeView->selectionModel(),
-		SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)),
-		this,
-		SLOT(on_EntityTreeView_selectionChanged(const QModelIndex&, const QModelIndex&))
-	);
+    if (entityAsset->TerrainEntity)
+    {
+        SceneWidget->SetModelEntity(entityAsset->TerrainEntity);
+    }
+
+    connect(
+        ui->entityTreeView->selectionModel(),
+        SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)),
+        this,
+        SLOT(on_EntityTreeView_selectionChanged(const QModelIndex&, const QModelIndex&))
+    );
 }
 
 void EntityViewerWidget::on_EntityTreeView_selectionChanged(const QModelIndex& sel, const QModelIndex& desel)

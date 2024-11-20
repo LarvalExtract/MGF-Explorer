@@ -294,6 +294,7 @@
     <ClInclude Include="src\MGF\Assets\Factories\MeshLibrary.h" />
     <ClInclude Include="src\MGF\Assets\Factories\ShaderProgramProvider.h" />
     <ClInclude Include="src\MGF\Factories\MABinaryObjectParser.h" />
+    <ClInclude Include="src\MGF\Factories\MAStrings.h" />
     <ClInclude Include="src\Render\TextureLibrary.h" />
     <ClInclude Include="src\mgf\Assets\Model\Animation.h" />
     <ClInclude Include="src\mgf\Assets\Model\Material.h" />

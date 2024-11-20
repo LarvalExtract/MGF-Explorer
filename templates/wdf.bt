@@ -20,13 +20,18 @@ struct Attribute {
     uint32 a_data_length    <name="Length">;
     switch (a_data_type)
     {
-        case 3:  int32  data                <optimize=false,hidden=true>; break;
-        case 5:  int16  data                <optimize=false,hidden=true>; break;
-        case 6:  int32  data                <optimize=false,hidden=true>; break;
-        case 7:  float  data                <optimize=false,hidden=true>; break;
-        case 9:  string data                <optimize=false,hidden=true>; break;
-        case 11: float  data[3]             <optimize=false,hidden=true>; break;
-        case 12: byte   data[4]             <optimize=false,hidden=true>; break;
+        case 1:  byte   data                <optimize=false,hidden=false>; break;
+        case 16: byte   data                <optimize=false,hidden=false>; break;
+        case 4:  byte   data <optimize=false,hidden=false>; break;
+
+        case 3:  int32  data                <optimize=false,hidden=false>; break;
+        case 5:  int16  data                <optimize=false,hidden=false>; break;
+        case 6:  int32  data                <optimize=false,hidden=false>; break;
+        case 7:  float  data                <optimize=false,hidden=false>; break;
+        case 9:  string data                <optimize=false,hidden=false>; break;
+        case 10: float  data[2] <optimize=false,hidden=false>; break;
+        case 11: float  data[3]             <optimize=false,hidden=false>; break;
+        case 12: byte   data[4]             <optimize=false,hidden=false>; break;
         //case 13: TIF    data                <optimize=false>; break;
         default: byte   data[a_data_length]   <optimize=false,hidden=true>; break;
     }

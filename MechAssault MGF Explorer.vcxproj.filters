@@ -467,6 +467,9 @@
     <ClInclude Include="src\MGF\Factories\MABinaryObjectParser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\MGF\Factories\MAStrings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\FileExtractorWindow\FileExtractorDialog.ui" />

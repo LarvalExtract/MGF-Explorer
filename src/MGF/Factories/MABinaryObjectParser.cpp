@@ -1,4 +1,5 @@
 #include "MABinaryObjectParser.h"
+#include "MAStrings.h"
 #include "MGF/Deserializer.h"
 
 using MagicNumber = uint32_t;

@@ -1,5 +1,9 @@
 #include "MapAsset.h"
 
+#include <QEntity>
+#include <QPlaneMesh>
+#include <QDiffuseSpecularMaterial>
+
 using namespace MGF::Asset;
 
 static const QVariant HEADERS[] = {
@@ -120,11 +124,11 @@ void MGF::Asset::WdfMap::OnObjectRead(const MABinaryObject& MapEntity)
 	std::sort(Entity.Attributes.begin(), Entity.Attributes.end(), [](const WdfEntity::Attribute& a, const WdfEntity::Attribute& b) {
 		for (int i = 0, n = std::min(a.Name.size(), b.Name.size()); i < n; ++i)
 		{
-			if (a.Name[i] < b.Name[i])
+			if (std::tolower(a.Name[i]) < std::tolower(b.Name[i]))
 			{
 				return true;
 			}
-			else if (a.Name[i] > b.Name[i])
+			else if (std::tolower(a.Name[i]) > std::tolower(b.Name[i]))
 			{
 				return false;
 			}
@@ -151,9 +155,37 @@ void MGF::Asset::WdfMap::OnObjectRead(const MABinaryObject& MapEntity)
 	}
 
 	Objects[UID] = Entity;
+
+	if (Entity.Class == "MATerrain")
+	{
+		OnReadEntity_MATerrain(MapEntity);
+	}
+	else if (Entity.Class == "MATerrainInfo")
+	{
+		OnReadEntity_MATerrainInfo(MapEntity);
+	}
 }
 
 EntityViewer::Models::EntityTreeModel& MGF::Asset::WdfMap::GetEntityTreeModel() 
 {
 	return EntityTreeModel;
+}
+
+void WdfMap::OnReadEntity_MATerrain(const MABinaryObject& MATerrainEntity)
+{
+	TerrainEntity = new Qt3DCore::QEntity();
+
+	TerrainMesh = new Qt3DExtras::QPlaneMesh(TerrainEntity);
+	TerrainMesh->setWidth(512.0f);
+	TerrainMesh->setHeight(512.0f);
+	TerrainMesh->setMeshResolution(QSize(16, 18));
+	TerrainEntity->addComponent(TerrainMesh);
+
+	Qt3DExtras::QDiffuseSpecularMaterial* mat = new Qt3DExtras::QDiffuseSpecularMaterial;
+	TerrainEntity->addComponent(mat);
+}
+
+void WdfMap::OnReadEntity_MATerrainInfo(const MABinaryObject& MATerrainInfo)
+{
+
 }

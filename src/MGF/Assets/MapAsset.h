@@ -6,6 +6,16 @@
 
 #include "AssetViewers/EntityViewer/Models/EntityTreeModel.h"
 
+namespace Qt3DCore
+{
+	class QEntity;
+}
+
+namespace Qt3DExtras
+{
+	class QPlaneMesh;
+}
+
 namespace MGF { namespace Asset {
 
 	struct WdfEntity : public QAbstractTableModel
@@ -62,10 +72,17 @@ namespace MGF { namespace Asset {
 
 		EntityViewer::Models::EntityTreeModel& GetEntityTreeModel();
 
+		Qt3DCore::QEntity* TerrainEntity = nullptr;
+
 	private:
 		int32_t RootEntityUid = 0;
 		std::unordered_map<int32_t, WdfEntity> Objects;
 
 		EntityViewer::Models::EntityTreeModel EntityTreeModel;
+
+		void OnReadEntity_MATerrain(const MABinaryObject& MATerrainEntity);
+		void OnReadEntity_MATerrainInfo(const MABinaryObject& MATerrainInfo);
+
+		Qt3DExtras::QPlaneMesh* TerrainMesh = nullptr;
 	};
 } }

@@ -3,8 +3,6 @@
 
 #include <QMessageBox>
 
-#include <filesystem>
-
 MGFExplorerApplication::MGFExplorerApplication(int argc, char* argv[], int flags)
 	: QApplication(argc, argv, flags)
 {
@@ -14,6 +12,12 @@ MGFExplorerApplication::MGFExplorerApplication(int argc, char* argv[], int flags
 	for (int i = 1; i < argc; i++)
 	{
 		std::filesystem::path p(argv[i]);
+
+		if (!p.is_absolute())
+		{
+			p = GetMgfFolderFromAppSettings() / p;
+		}
+
 		for (auto iter = p.begin(); iter != p.end(); ++iter)
 		{
 			if (iter->extension() == ".mgf")
@@ -43,4 +47,21 @@ int MGFExplorerApplication::exec()
 	}
 
 	return QApplication::exec();
+}
+
+std::filesystem::path MGFExplorerApplication::GetMgfFolderFromAppSettings() const
+{
+	QSettings settings;
+	const QString defaultMgfFolderKey = "SavedMgfFolder";
+
+	std::string s = settings.value(defaultMgfFolderKey).toString().toStdString();
+	return s;
+}
+
+void MGFExplorerApplication::SetMgfFolderAppSetting(const std::filesystem::path& MgfFolder)
+{
+	QSettings settings;
+	const QString defaultMgfFolderKey = "SavedMgfFolder";
+
+	settings.setValue(defaultMgfFolderKey, QString(MgfFolder.u8string().c_str()));
 }

@@ -1,4 +1,4 @@
-#include <cstdint>
+#include "MAStrings.h"
 
 namespace MAStrings
 {
@@ -1461,7 +1461,7 @@ namespace MAStrings
 		case 682931462: return  "BriefingSound"; break;
 
 		// String not found with given hash code
-		default: return "???";
+		default: return UNKNOWN_STRING;
 		}
 	}
 }
