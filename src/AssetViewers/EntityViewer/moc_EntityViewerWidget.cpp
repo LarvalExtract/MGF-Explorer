@@ -1,18 +1,24 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'EntityViewerWidget.h'
 **
-** Created by: The Qt Meta Object Compiler version 68 (Qt 6.4.1)
+** Created by: The Qt Meta Object Compiler version 68 (Qt 6.7.1)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
 
-#include <memory>
 #include "EntityViewerWidget.h"
 #include <QtCore/qmetatype.h>
+
+#include <QtCore/qtmochelpers.h>
+
+#include <memory>
+
+
+#include <QtCore/qxptype_traits.h>
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'EntityViewerWidget.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 68
-#error "This file was generated using the moc from 6.4.1. It"
+#error "This file was generated using the moc from 6.7.1. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
@@ -21,44 +27,30 @@
 #define Q_CONSTINIT
 #endif
 
-QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
+QT_WARNING_DISABLE_GCC("-Wuseless-cast")
 namespace {
-struct qt_meta_stringdata_EntityViewer__EntityViewerWidget_t {
-    uint offsetsAndSizes[12];
-    char stringdata0[33];
-    char stringdata1[35];
-    char stringdata2[1];
-    char stringdata3[12];
-    char stringdata4[4];
-    char stringdata5[6];
-};
-#define QT_MOC_LITERAL(ofs, len) \
-    uint(sizeof(qt_meta_stringdata_EntityViewer__EntityViewerWidget_t::offsetsAndSizes) + ofs), len 
-Q_CONSTINIT static const qt_meta_stringdata_EntityViewer__EntityViewerWidget_t qt_meta_stringdata_EntityViewer__EntityViewerWidget = {
-    {
-        QT_MOC_LITERAL(0, 32),  // "EntityViewer::EntityViewerWidget"
-        QT_MOC_LITERAL(33, 34),  // "on_EntityTreeView_selectionCh..."
-        QT_MOC_LITERAL(68, 0),  // ""
-        QT_MOC_LITERAL(69, 11),  // "QModelIndex"
-        QT_MOC_LITERAL(81, 3),  // "sel"
-        QT_MOC_LITERAL(85, 5)   // "desel"
-    },
+
+#ifdef QT_MOC_HAS_STRINGDATA
+struct qt_meta_stringdata_CLASSEntityViewerSCOPEEntityViewerWidgetENDCLASS_t {};
+constexpr auto qt_meta_stringdata_CLASSEntityViewerSCOPEEntityViewerWidgetENDCLASS = QtMocHelpers::stringData(
     "EntityViewer::EntityViewerWidget",
     "on_EntityTreeView_selectionChanged",
     "",
     "QModelIndex",
     "sel",
     "desel"
-};
-#undef QT_MOC_LITERAL
+);
+#else  // !QT_MOC_HAS_STRINGDATA
+#error "qtmochelpers.h not found or too old."
+#endif // !QT_MOC_HAS_STRINGDATA
 } // unnamed namespace
 
-Q_CONSTINIT static const uint qt_meta_data_EntityViewer__EntityViewerWidget[] = {
+Q_CONSTINIT static const uint qt_meta_data_CLASSEntityViewerSCOPEEntityViewerWidgetENDCLASS[] = {
 
  // content:
-      10,       // revision
+      12,       // revision
        0,       // classname
        0,    0, // classinfo
        1,   14, // methods
@@ -79,11 +71,11 @@ Q_CONSTINIT static const uint qt_meta_data_EntityViewer__EntityViewerWidget[] = 
 
 Q_CONSTINIT const QMetaObject EntityViewer::EntityViewerWidget::staticMetaObject = { {
     QMetaObject::SuperData::link<IAssetViewerWidget::staticMetaObject>(),
-    qt_meta_stringdata_EntityViewer__EntityViewerWidget.offsetsAndSizes,
-    qt_meta_data_EntityViewer__EntityViewerWidget,
+    qt_meta_stringdata_CLASSEntityViewerSCOPEEntityViewerWidgetENDCLASS.offsetsAndSizes,
+    qt_meta_data_CLASSEntityViewerSCOPEEntityViewerWidgetENDCLASS,
     qt_static_metacall,
     nullptr,
-    qt_incomplete_metaTypeArray<qt_meta_stringdata_EntityViewer__EntityViewerWidget_t,
+    qt_incomplete_metaTypeArray<qt_meta_stringdata_CLASSEntityViewerSCOPEEntityViewerWidgetENDCLASS_t,
         // Q_OBJECT / Q_GADGET
         QtPrivate::TypeAndForceComplete<EntityViewerWidget, std::true_type>,
         // method 'on_EntityTreeView_selectionChanged'
@@ -114,7 +106,7 @@ const QMetaObject *EntityViewer::EntityViewerWidget::metaObject() const
 void *EntityViewer::EntityViewerWidget::qt_metacast(const char *_clname)
 {
     if (!_clname) return nullptr;
-    if (!strcmp(_clname, qt_meta_stringdata_EntityViewer__EntityViewerWidget.stringdata0))
+    if (!strcmp(_clname, qt_meta_stringdata_CLASSEntityViewerSCOPEEntityViewerWidgetENDCLASS.stringdata0))
         return static_cast<void*>(this);
     return IAssetViewerWidget::qt_metacast(_clname);
 }
@@ -136,4 +128,3 @@ int EntityViewer::EntityViewerWidget::qt_metacall(QMetaObject::Call _c, int _id,
     return _id;
 }
 QT_WARNING_POP
-QT_END_MOC_NAMESPACE

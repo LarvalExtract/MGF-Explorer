@@ -1,5 +1,7 @@
 #include "MapAsset.h"
 
+#include "Utilities/configfile.h"
+
 #include <QEntity>
 #include <QPlaneMesh>
 #include <QDiffuseSpecularMaterial>
@@ -49,6 +51,20 @@ MGF::Asset::WdfMap::WdfMap(const MGF::File& entityFile) :
 	AssetBase(entityFile, MGF::Asset::EAssetType::Entity),
 	EntityTreeModel(*this)
 {
+	std::filesystem::path filename = FileRef.FilePath().filename();
+	std::filesystem::path iniExtension("ini");
+	filename.replace_extension(iniExtension);
+
+	if (const MGF::File* iniFile = FileRef.FindRelativeItem(filename))
+	{
+		ConfigFile ini(iniFile);
+		const std::filesystem::path resourceFilename = ini["Mission"]["ResourceFile"];
+
+
+	}
+
+
+
 	MABinaryObjectParser BinaryObjectParser(entityFile, this);
 	BinaryObjectParser.Parse();
 }

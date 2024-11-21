@@ -4,6 +4,8 @@
 #include "MGF/AssetManager.h"
 #include "MGF/Assets/Factories/MeshLibrary.h"
 
+#include "MGF/Archive.h"
+
 #include <QApplication>
 #include <QSettings>
 
@@ -11,21 +13,6 @@
 #include <vector>
 
 class Scene3dWidget;
-
-namespace Qt3DCore
-{
-	class QEntity;
-}
-
-namespace Qt3DRender
-{
-	class QCamera;
-}
-
-namespace Qt3DExtras
-{
-	class QTextureMaterial;
-}
 
 #undef qApp
 #define qApp (static_cast<MGFExplorerApplication*>(QCoreApplication::instance()))
@@ -52,8 +39,12 @@ public:
 	std::filesystem::path GetMgfFolderFromAppSettings() const;
 	void SetMgfFolderAppSetting(const std::filesystem::path& MgfFolder);
 
+	MGF::Archive* GetMgfArchive(const std::filesystem::path& MgfArchivePath);
+
 private:
+	QSettings AppSettings;
 	MainWindow MainWindow;
 
 	std::vector<std::pair<std::filesystem::path, std::filesystem::path>> FileList;
+	std::unordered_map<std::filesystem::path, MGF::Archive> MgfArchiveMap;
 };

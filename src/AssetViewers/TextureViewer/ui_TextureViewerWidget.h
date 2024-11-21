@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'TextureViewerWidget.ui'
 **
-** Created by: Qt User Interface Compiler version 6.4.1
+** Created by: Qt User Interface Compiler version 6.7.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -39,7 +39,7 @@ public:
         if (TextureViewerWidget->objectName().isEmpty())
             TextureViewerWidget->setObjectName("TextureViewerWidget");
         TextureViewerWidget->resize(1185, 740);
-        QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        QSizePolicy sizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Expanding);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(TextureViewerWidget->sizePolicy().hasHeightForWidth());
@@ -53,7 +53,7 @@ public:
         horizontalLayout->setSizeConstraint(QLayout::SetMaximumSize);
         TextureDetailsTable = new QTableView(TextureViewerWidget);
         TextureDetailsTable->setObjectName("TextureDetailsTable");
-        QSizePolicy sizePolicy1(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        QSizePolicy sizePolicy1(QSizePolicy::Policy::Fixed, QSizePolicy::Policy::Fixed);
         sizePolicy1.setHorizontalStretch(0);
         sizePolicy1.setVerticalStretch(0);
         sizePolicy1.setHeightForWidth(TextureDetailsTable->sizePolicy().hasHeightForWidth());
@@ -74,7 +74,7 @@ public:
 
         verticalLayout_2->addWidget(ToggleAlphaCheckBox);
 
-        verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Ignored);
+        verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Ignored);
 
         verticalLayout_2->addItem(verticalSpacer);
 

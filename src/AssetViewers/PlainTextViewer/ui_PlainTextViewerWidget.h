@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'PlainTextViewerWidget.ui'
 **
-** Created by: Qt User Interface Compiler version 6.4.1
+** Created by: Qt User Interface Compiler version 6.7.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -28,7 +28,7 @@ public:
         if (PlainTextViewerWidget->objectName().isEmpty())
             PlainTextViewerWidget->setObjectName("PlainTextViewerWidget");
         PlainTextViewerWidget->resize(518, 518);
-        QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        QSizePolicy sizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Expanding);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(PlainTextViewerWidget->sizePolicy().hasHeightForWidth());

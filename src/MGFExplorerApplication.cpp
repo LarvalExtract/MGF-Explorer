@@ -5,15 +5,13 @@
 
 MGFExplorerApplication::MGFExplorerApplication(int argc, char* argv[], int flags)
 	: QApplication(argc, argv, flags)
+	, AppSettings("LarvalExtract", "MGF Explorer")
 {
-	setOrganizationName("LarvalExtract");
-	setApplicationName("MGF Explorer");
-
 	for (int i = 1; i < argc; i++)
 	{
 		std::filesystem::path p(argv[i]);
 
-		if (!p.is_absolute())
+		if (p.is_relative())
 		{
 			p = GetMgfFolderFromAppSettings() / p;
 		}
@@ -64,4 +62,23 @@ void MGFExplorerApplication::SetMgfFolderAppSetting(const std::filesystem::path&
 	const QString defaultMgfFolderKey = "SavedMgfFolder";
 
 	settings.setValue(defaultMgfFolderKey, QString(MgfFolder.u8string().c_str()));
+}
+
+MGF::Archive* MGFExplorerApplication::GetMgfArchive(const std::filesystem::path& MgfArchivePath)
+{
+	const std::filesystem::path key = MgfArchivePath.is_absolute() 
+		? MgfArchivePath 
+		: GetMgfFolderFromAppSettings() / MgfArchivePath.filename();
+
+	if (std::filesystem::exists(key))
+	{
+		if (!MgfArchiveMap.contains(key))
+		{
+			MgfArchiveMap.emplace(key, key);
+		}
+
+		return &MgfArchiveMap.at(key);
+	}
+
+	return nullptr;
 }

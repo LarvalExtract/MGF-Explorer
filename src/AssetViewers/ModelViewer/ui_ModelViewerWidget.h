@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'ModelViewerWidget.ui'
 **
-** Created by: Qt User Interface Compiler version 6.4.1
+** Created by: Qt User Interface Compiler version 6.7.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -59,7 +59,7 @@ public:
         if (ModelViewerWidget->objectName().isEmpty())
             ModelViewerWidget->setObjectName("ModelViewerWidget");
         ModelViewerWidget->resize(1091, 670);
-        QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        QSizePolicy sizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Expanding);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(ModelViewerWidget->sizePolicy().hasHeightForWidth());
@@ -80,7 +80,7 @@ public:
         horizontalLayout_3 = new QHBoxLayout();
         horizontalLayout_3->setObjectName("horizontalLayout_3");
         horizontalLayout_3->setSizeConstraint(QLayout::SetMinimumSize);
-        horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+        horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Minimum);
 
         horizontalLayout_3->addItem(horizontalSpacer);
 
@@ -93,13 +93,13 @@ public:
         verticalLayout_2 = new QVBoxLayout();
         verticalLayout_2->setObjectName("verticalLayout_2");
         verticalLayout_2->setSizeConstraint(QLayout::SetMinimumSize);
-        verticalSpacer_2 = new QSpacerItem(20, 0, QSizePolicy::Minimum, QSizePolicy::Minimum);
+        verticalSpacer_2 = new QSpacerItem(20, 0, QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Minimum);
 
         verticalLayout_2->addItem(verticalSpacer_2);
 
         lightPositionSliderXInput = new QSlider(frame);
         lightPositionSliderXInput->setObjectName("lightPositionSliderXInput");
-        QSizePolicy sizePolicy1(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        QSizePolicy sizePolicy1(QSizePolicy::Policy::Fixed, QSizePolicy::Policy::Fixed);
         sizePolicy1.setHorizontalStretch(0);
         sizePolicy1.setVerticalStretch(0);
         sizePolicy1.setHeightForWidth(lightPositionSliderXInput->sizePolicy().hasHeightForWidth());
@@ -133,7 +133,7 @@ public:
 
         verticalLayout_2->addWidget(lightPositionSliderZInput);
 
-        verticalSpacer = new QSpacerItem(20, 0, QSizePolicy::Minimum, QSizePolicy::Minimum);
+        verticalSpacer = new QSpacerItem(20, 0, QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Minimum);
 
         verticalLayout_2->addItem(verticalSpacer);
 

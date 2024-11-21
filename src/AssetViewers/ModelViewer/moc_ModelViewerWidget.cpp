@@ -1,18 +1,24 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'ModelViewerWidget.h'
 **
-** Created by: The Qt Meta Object Compiler version 68 (Qt 6.4.1)
+** Created by: The Qt Meta Object Compiler version 68 (Qt 6.7.1)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
 
-#include <memory>
 #include "ModelViewerWidget.h"
 #include <QtCore/qmetatype.h>
+
+#include <QtCore/qtmochelpers.h>
+
+#include <memory>
+
+
+#include <QtCore/qxptype_traits.h>
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'ModelViewerWidget.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 68
-#error "This file was generated using the moc from 6.4.1. It"
+#error "This file was generated using the moc from 6.7.1. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
@@ -21,34 +27,14 @@
 #define Q_CONSTINIT
 #endif
 
-QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
+QT_WARNING_DISABLE_GCC("-Wuseless-cast")
 namespace {
-struct qt_meta_stringdata_ModelViewer__ModelViewerWidget_t {
-    uint offsetsAndSizes[16];
-    char stringdata0[31];
-    char stringdata1[31];
-    char stringdata2[1];
-    char stringdata3[6];
-    char stringdata4[31];
-    char stringdata5[31];
-    char stringdata6[42];
-    char stringdata7[6];
-};
-#define QT_MOC_LITERAL(ofs, len) \
-    uint(sizeof(qt_meta_stringdata_ModelViewer__ModelViewerWidget_t::offsetsAndSizes) + ofs), len 
-Q_CONSTINIT static const qt_meta_stringdata_ModelViewer__ModelViewerWidget_t qt_meta_stringdata_ModelViewer__ModelViewerWidget = {
-    {
-        QT_MOC_LITERAL(0, 30),  // "ModelViewer::ModelViewerWidget"
-        QT_MOC_LITERAL(31, 30),  // "on_lightPositionXInput_changed"
-        QT_MOC_LITERAL(62, 0),  // ""
-        QT_MOC_LITERAL(63, 5),  // "value"
-        QT_MOC_LITERAL(69, 30),  // "on_lightPositionYInput_changed"
-        QT_MOC_LITERAL(100, 30),  // "on_lightPositionZInput_changed"
-        QT_MOC_LITERAL(131, 41),  // "on_enableSceneLightsCheckBox_..."
-        QT_MOC_LITERAL(173, 5)   // "state"
-    },
+
+#ifdef QT_MOC_HAS_STRINGDATA
+struct qt_meta_stringdata_CLASSModelViewerSCOPEModelViewerWidgetENDCLASS_t {};
+constexpr auto qt_meta_stringdata_CLASSModelViewerSCOPEModelViewerWidgetENDCLASS = QtMocHelpers::stringData(
     "ModelViewer::ModelViewerWidget",
     "on_lightPositionXInput_changed",
     "",
@@ -57,14 +43,16 @@ Q_CONSTINIT static const qt_meta_stringdata_ModelViewer__ModelViewerWidget_t qt_
     "on_lightPositionZInput_changed",
     "on_enableSceneLightsCheckBox_stateChanged",
     "state"
-};
-#undef QT_MOC_LITERAL
+);
+#else  // !QT_MOC_HAS_STRINGDATA
+#error "qtmochelpers.h not found or too old."
+#endif // !QT_MOC_HAS_STRINGDATA
 } // unnamed namespace
 
-Q_CONSTINIT static const uint qt_meta_data_ModelViewer__ModelViewerWidget[] = {
+Q_CONSTINIT static const uint qt_meta_data_CLASSModelViewerSCOPEModelViewerWidgetENDCLASS[] = {
 
  // content:
-      10,       // revision
+      12,       // revision
        0,       // classname
        0,    0, // classinfo
        4,   14, // methods
@@ -91,11 +79,11 @@ Q_CONSTINIT static const uint qt_meta_data_ModelViewer__ModelViewerWidget[] = {
 
 Q_CONSTINIT const QMetaObject ModelViewer::ModelViewerWidget::staticMetaObject = { {
     QMetaObject::SuperData::link<IAssetViewerWidget::staticMetaObject>(),
-    qt_meta_stringdata_ModelViewer__ModelViewerWidget.offsetsAndSizes,
-    qt_meta_data_ModelViewer__ModelViewerWidget,
+    qt_meta_stringdata_CLASSModelViewerSCOPEModelViewerWidgetENDCLASS.offsetsAndSizes,
+    qt_meta_data_CLASSModelViewerSCOPEModelViewerWidgetENDCLASS,
     qt_static_metacall,
     nullptr,
-    qt_incomplete_metaTypeArray<qt_meta_stringdata_ModelViewer__ModelViewerWidget_t,
+    qt_incomplete_metaTypeArray<qt_meta_stringdata_CLASSModelViewerSCOPEModelViewerWidgetENDCLASS_t,
         // Q_OBJECT / Q_GADGET
         QtPrivate::TypeAndForceComplete<ModelViewerWidget, std::true_type>,
         // method 'on_lightPositionXInput_changed'
@@ -137,7 +125,7 @@ const QMetaObject *ModelViewer::ModelViewerWidget::metaObject() const
 void *ModelViewer::ModelViewerWidget::qt_metacast(const char *_clname)
 {
     if (!_clname) return nullptr;
-    if (!strcmp(_clname, qt_meta_stringdata_ModelViewer__ModelViewerWidget.stringdata0))
+    if (!strcmp(_clname, qt_meta_stringdata_CLASSModelViewerSCOPEModelViewerWidgetENDCLASS.stringdata0))
         return static_cast<void*>(this);
     return IAssetViewerWidget::qt_metacast(_clname);
 }
@@ -159,4 +147,3 @@ int ModelViewer::ModelViewerWidget::qt_metacall(QMetaObject::Call _c, int _id, v
     return _id;
 }
 QT_WARNING_POP
-QT_END_MOC_NAMESPACE

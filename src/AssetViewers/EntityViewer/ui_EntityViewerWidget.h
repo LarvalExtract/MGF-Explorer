@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'EntityViewerWidget.ui'
 **
-** Created by: Qt User Interface Compiler version 6.4.1
+** Created by: Qt User Interface Compiler version 6.7.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -33,7 +33,7 @@ public:
         if (EntityViewerWidget->objectName().isEmpty())
             EntityViewerWidget->setObjectName("EntityViewerWidget");
         EntityViewerWidget->resize(1089, 825);
-        QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        QSizePolicy sizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Expanding);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(EntityViewerWidget->sizePolicy().hasHeightForWidth());

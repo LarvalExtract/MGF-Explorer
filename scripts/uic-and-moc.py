@@ -4,8 +4,8 @@ import subprocess
 import glob
 import os.path
 
-MOC_PATH = os.path.join(os.path.expandvars('%QT_DIR%'), '6.4.1', 'msvc2019_64', 'bin', 'moc.exe')
-UIC_PATH = os.path.join(os.path.expandvars('%QT_DIR%'), '6.4.1', 'msvc2019_64', 'bin', 'uic.exe')
+MOC_PATH = os.path.join(os.path.expandvars('%QT_DIR%'), '6.7.1', 'msvc2019_64', 'bin', 'moc.exe')
+UIC_PATH = os.path.join(os.path.expandvars('%QT_DIR%'), '6.7.1', 'msvc2019_64', 'bin', 'uic.exe')
 
 
 def clean_files(glob_query):

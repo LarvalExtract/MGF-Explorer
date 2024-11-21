@@ -1,18 +1,24 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'ArchiveViewerWidget.h'
 **
-** Created by: The Qt Meta Object Compiler version 68 (Qt 6.4.1)
+** Created by: The Qt Meta Object Compiler version 68 (Qt 6.7.1)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
 
-#include <memory>
 #include "ArchiveViewerWidget.h"
 #include <QtCore/qmetatype.h>
+
+#include <QtCore/qtmochelpers.h>
+
+#include <memory>
+
+
+#include <QtCore/qxptype_traits.h>
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'ArchiveViewerWidget.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 68
-#error "This file was generated using the moc from 6.4.1. It"
+#error "This file was generated using the moc from 6.7.1. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
@@ -21,34 +27,14 @@
 #define Q_CONSTINIT
 #endif
 
-QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
+QT_WARNING_DISABLE_GCC("-Wuseless-cast")
 namespace {
-struct qt_meta_stringdata_ArchiveViewer__ArchiveViewerWidget_t {
-    uint offsetsAndSizes[16];
-    char stringdata0[35];
-    char stringdata1[29];
-    char stringdata2[1];
-    char stringdata3[12];
-    char stringdata4[4];
-    char stringdata5[6];
-    char stringdata6[39];
-    char stringdata7[4];
-};
-#define QT_MOC_LITERAL(ofs, len) \
-    uint(sizeof(qt_meta_stringdata_ArchiveViewer__ArchiveViewerWidget_t::offsetsAndSizes) + ofs), len 
-Q_CONSTINIT static const qt_meta_stringdata_ArchiveViewer__ArchiveViewerWidget_t qt_meta_stringdata_ArchiveViewer__ArchiveViewerWidget = {
-    {
-        QT_MOC_LITERAL(0, 34),  // "ArchiveViewer::ArchiveViewerW..."
-        QT_MOC_LITERAL(35, 28),  // "on_treeView_selectionChanged"
-        QT_MOC_LITERAL(64, 0),  // ""
-        QT_MOC_LITERAL(65, 11),  // "QModelIndex"
-        QT_MOC_LITERAL(77, 3),  // "sel"
-        QT_MOC_LITERAL(81, 5),  // "desel"
-        QT_MOC_LITERAL(87, 38),  // "on_treeView_customContextMenu..."
-        QT_MOC_LITERAL(126, 3)   // "pos"
-    },
+
+#ifdef QT_MOC_HAS_STRINGDATA
+struct qt_meta_stringdata_CLASSArchiveViewerSCOPEArchiveViewerWidgetENDCLASS_t {};
+constexpr auto qt_meta_stringdata_CLASSArchiveViewerSCOPEArchiveViewerWidgetENDCLASS = QtMocHelpers::stringData(
     "ArchiveViewer::ArchiveViewerWidget",
     "on_treeView_selectionChanged",
     "",
@@ -57,14 +43,16 @@ Q_CONSTINIT static const qt_meta_stringdata_ArchiveViewer__ArchiveViewerWidget_t
     "desel",
     "on_treeView_customContextMenuRequested",
     "pos"
-};
-#undef QT_MOC_LITERAL
+);
+#else  // !QT_MOC_HAS_STRINGDATA
+#error "qtmochelpers.h not found or too old."
+#endif // !QT_MOC_HAS_STRINGDATA
 } // unnamed namespace
 
-Q_CONSTINIT static const uint qt_meta_data_ArchiveViewer__ArchiveViewerWidget[] = {
+Q_CONSTINIT static const uint qt_meta_data_CLASSArchiveViewerSCOPEArchiveViewerWidgetENDCLASS[] = {
 
  // content:
-      10,       // revision
+      12,       // revision
        0,       // classname
        0,    0, // classinfo
        2,   14, // methods
@@ -87,11 +75,11 @@ Q_CONSTINIT static const uint qt_meta_data_ArchiveViewer__ArchiveViewerWidget[] 
 
 Q_CONSTINIT const QMetaObject ArchiveViewer::ArchiveViewerWidget::staticMetaObject = { {
     QMetaObject::SuperData::link<QWidget::staticMetaObject>(),
-    qt_meta_stringdata_ArchiveViewer__ArchiveViewerWidget.offsetsAndSizes,
-    qt_meta_data_ArchiveViewer__ArchiveViewerWidget,
+    qt_meta_stringdata_CLASSArchiveViewerSCOPEArchiveViewerWidgetENDCLASS.offsetsAndSizes,
+    qt_meta_data_CLASSArchiveViewerSCOPEArchiveViewerWidgetENDCLASS,
     qt_static_metacall,
     nullptr,
-    qt_incomplete_metaTypeArray<qt_meta_stringdata_ArchiveViewer__ArchiveViewerWidget_t,
+    qt_incomplete_metaTypeArray<qt_meta_stringdata_CLASSArchiveViewerSCOPEArchiveViewerWidgetENDCLASS_t,
         // Q_OBJECT / Q_GADGET
         QtPrivate::TypeAndForceComplete<ArchiveViewerWidget, std::true_type>,
         // method 'on_treeView_selectionChanged'
@@ -126,7 +114,7 @@ const QMetaObject *ArchiveViewer::ArchiveViewerWidget::metaObject() const
 void *ArchiveViewer::ArchiveViewerWidget::qt_metacast(const char *_clname)
 {
     if (!_clname) return nullptr;
-    if (!strcmp(_clname, qt_meta_stringdata_ArchiveViewer__ArchiveViewerWidget.stringdata0))
+    if (!strcmp(_clname, qt_meta_stringdata_CLASSArchiveViewerSCOPEArchiveViewerWidgetENDCLASS.stringdata0))
         return static_cast<void*>(this);
     return QWidget::qt_metacast(_clname);
 }
@@ -148,4 +136,3 @@ int ArchiveViewer::ArchiveViewerWidget::qt_metacall(QMetaObject::Call _c, int _i
     return _id;
 }
 QT_WARNING_POP
-QT_END_MOC_NAMESPACE

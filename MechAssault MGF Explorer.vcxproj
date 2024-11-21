@@ -352,6 +352,7 @@
     <ClInclude Include="src\MainWindow\ui_MainWindow.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="MechAssault-MGF-Explorer.props" />
     <None Include="src\ArchiveViewer\ArchiveViewerWidget.ui" />
     <None Include="src\AssetViewers\EntityViewer\EntityViewerWidget.ui" />
     <None Include="src\AssetViewers\ModelViewer\ModelViewerWidget.ui" />

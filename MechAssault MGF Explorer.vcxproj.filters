@@ -480,6 +480,7 @@
     <None Include="src\MainWindow\MainWindow.ui" />
     <None Include="src\AssetViewers\ModelViewer\ModelViewerWidget.ui" />
     <None Include="src\AssetViewers\EntityViewer\EntityViewerWidget.ui" />
+    <None Include="MechAssault-MGF-Explorer.props" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\madcat.ico">

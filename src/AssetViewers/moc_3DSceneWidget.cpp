@@ -1,18 +1,24 @@
 /****************************************************************************
 ** Meta object code from reading C++ file '3DSceneWidget.h'
 **
-** Created by: The Qt Meta Object Compiler version 68 (Qt 6.4.1)
+** Created by: The Qt Meta Object Compiler version 68 (Qt 6.7.1)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
 
-#include <memory>
 #include "3DSceneWidget.h"
 #include <QtCore/qmetatype.h>
+
+#include <QtCore/qtmochelpers.h>
+
+#include <memory>
+
+
+#include <QtCore/qxptype_traits.h>
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file '3DSceneWidget.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 68
-#error "This file was generated using the moc from 6.4.1. It"
+#error "This file was generated using the moc from 6.7.1. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
@@ -21,29 +27,25 @@
 #define Q_CONSTINIT
 #endif
 
-QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
+QT_WARNING_DISABLE_GCC("-Wuseless-cast")
 namespace {
-struct qt_meta_stringdata_Scene3dWidget_t {
-    uint offsetsAndSizes[2];
-    char stringdata0[14];
-};
-#define QT_MOC_LITERAL(ofs, len) \
-    uint(sizeof(qt_meta_stringdata_Scene3dWidget_t::offsetsAndSizes) + ofs), len 
-Q_CONSTINIT static const qt_meta_stringdata_Scene3dWidget_t qt_meta_stringdata_Scene3dWidget = {
-    {
-        QT_MOC_LITERAL(0, 13)   // "Scene3dWidget"
-    },
+
+#ifdef QT_MOC_HAS_STRINGDATA
+struct qt_meta_stringdata_CLASSScene3dWidgetENDCLASS_t {};
+constexpr auto qt_meta_stringdata_CLASSScene3dWidgetENDCLASS = QtMocHelpers::stringData(
     "Scene3dWidget"
-};
-#undef QT_MOC_LITERAL
+);
+#else  // !QT_MOC_HAS_STRINGDATA
+#error "qtmochelpers.h not found or too old."
+#endif // !QT_MOC_HAS_STRINGDATA
 } // unnamed namespace
 
-Q_CONSTINIT static const uint qt_meta_data_Scene3dWidget[] = {
+Q_CONSTINIT static const uint qt_meta_data_CLASSScene3dWidgetENDCLASS[] = {
 
  // content:
-      10,       // revision
+      12,       // revision
        0,       // classname
        0,    0, // classinfo
        0,    0, // methods
@@ -58,11 +60,11 @@ Q_CONSTINIT static const uint qt_meta_data_Scene3dWidget[] = {
 
 Q_CONSTINIT const QMetaObject Scene3dWidget::staticMetaObject = { {
     QMetaObject::SuperData::link<QWidget::staticMetaObject>(),
-    qt_meta_stringdata_Scene3dWidget.offsetsAndSizes,
-    qt_meta_data_Scene3dWidget,
+    qt_meta_stringdata_CLASSScene3dWidgetENDCLASS.offsetsAndSizes,
+    qt_meta_data_CLASSScene3dWidgetENDCLASS,
     qt_static_metacall,
     nullptr,
-    qt_incomplete_metaTypeArray<qt_meta_stringdata_Scene3dWidget_t,
+    qt_incomplete_metaTypeArray<qt_meta_stringdata_CLASSScene3dWidgetENDCLASS_t,
         // Q_OBJECT / Q_GADGET
         QtPrivate::TypeAndForceComplete<Scene3dWidget, std::true_type>
     >,
@@ -85,7 +87,7 @@ const QMetaObject *Scene3dWidget::metaObject() const
 void *Scene3dWidget::qt_metacast(const char *_clname)
 {
     if (!_clname) return nullptr;
-    if (!strcmp(_clname, qt_meta_stringdata_Scene3dWidget.stringdata0))
+    if (!strcmp(_clname, qt_meta_stringdata_CLASSScene3dWidgetENDCLASS.stringdata0))
         return static_cast<void*>(this);
     return QWidget::qt_metacast(_clname);
 }
@@ -96,25 +98,21 @@ int Scene3dWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     return _id;
 }
 namespace {
-struct qt_meta_stringdata_TestWidget_t {
-    uint offsetsAndSizes[2];
-    char stringdata0[11];
-};
-#define QT_MOC_LITERAL(ofs, len) \
-    uint(sizeof(qt_meta_stringdata_TestWidget_t::offsetsAndSizes) + ofs), len 
-Q_CONSTINIT static const qt_meta_stringdata_TestWidget_t qt_meta_stringdata_TestWidget = {
-    {
-        QT_MOC_LITERAL(0, 10)   // "TestWidget"
-    },
+
+#ifdef QT_MOC_HAS_STRINGDATA
+struct qt_meta_stringdata_CLASSTestWidgetENDCLASS_t {};
+constexpr auto qt_meta_stringdata_CLASSTestWidgetENDCLASS = QtMocHelpers::stringData(
     "TestWidget"
-};
-#undef QT_MOC_LITERAL
+);
+#else  // !QT_MOC_HAS_STRINGDATA
+#error "qtmochelpers.h not found or too old."
+#endif // !QT_MOC_HAS_STRINGDATA
 } // unnamed namespace
 
-Q_CONSTINIT static const uint qt_meta_data_TestWidget[] = {
+Q_CONSTINIT static const uint qt_meta_data_CLASSTestWidgetENDCLASS[] = {
 
  // content:
-      10,       // revision
+      12,       // revision
        0,       // classname
        0,    0, // classinfo
        0,    0, // methods
@@ -129,11 +127,11 @@ Q_CONSTINIT static const uint qt_meta_data_TestWidget[] = {
 
 Q_CONSTINIT const QMetaObject TestWidget::staticMetaObject = { {
     QMetaObject::SuperData::link<QWidget::staticMetaObject>(),
-    qt_meta_stringdata_TestWidget.offsetsAndSizes,
-    qt_meta_data_TestWidget,
+    qt_meta_stringdata_CLASSTestWidgetENDCLASS.offsetsAndSizes,
+    qt_meta_data_CLASSTestWidgetENDCLASS,
     qt_static_metacall,
     nullptr,
-    qt_incomplete_metaTypeArray<qt_meta_stringdata_TestWidget_t,
+    qt_incomplete_metaTypeArray<qt_meta_stringdata_CLASSTestWidgetENDCLASS_t,
         // Q_OBJECT / Q_GADGET
         QtPrivate::TypeAndForceComplete<TestWidget, std::true_type>
     >,
@@ -156,7 +154,7 @@ const QMetaObject *TestWidget::metaObject() const
 void *TestWidget::qt_metacast(const char *_clname)
 {
     if (!_clname) return nullptr;
-    if (!strcmp(_clname, qt_meta_stringdata_TestWidget.stringdata0))
+    if (!strcmp(_clname, qt_meta_stringdata_CLASSTestWidgetENDCLASS.stringdata0))
         return static_cast<void*>(this);
     return QWidget::qt_metacast(_clname);
 }
@@ -167,4 +165,3 @@ int TestWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     return _id;
 }
 QT_WARNING_POP
-QT_END_MOC_NAMESPACE
