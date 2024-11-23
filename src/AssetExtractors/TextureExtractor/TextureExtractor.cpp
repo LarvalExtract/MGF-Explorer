@@ -1,6 +1,7 @@
 #include "TextureExtractor.h"
 
-#include "MGF/File.h"
+#include "MGF/MGFFile.h"
+#include "MGF/MGFArchive.h"
 #include "MGF/Structures/Tif.h"
 #include "MGF/Factories/ImageFactory.h"
 
@@ -10,14 +11,14 @@
 
 using namespace AssetExtractor;
 
-bool TextureExtractor::Extract(const MGF::File& sourceFile, const std::filesystem::path& destinationPath)
+bool TextureExtractor::Extract(const MGFFile& sourceFile, const std::filesystem::path& destinationPath)
 {
 	ImageWriter.setFileName(destinationPath.u8string().c_str());
 
 	uint32_t width, height, flags, size;
 	char* data = nullptr;
 
-	if (sourceFile.ArchiveVersion == MGF::Version::MechAssault)
+	if (sourceFile.MgfArchive.GetVersion() == MGFArchiveVersion::MechAssault)
 	{
 		MA1_TIF_FILE tif;
 		MGF::Factories::ImageFactory::Deserialize(sourceFile, tif, &data);

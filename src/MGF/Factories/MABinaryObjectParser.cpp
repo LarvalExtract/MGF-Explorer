@@ -50,7 +50,7 @@ struct OBJECT_FILE_HEADER
 };
 #pragma pack(pop)
 
-MABinaryObjectParser::MABinaryObjectParser(const MGF::File& InSourceFile, IListener* InListener)
+MABinaryObjectParser::MABinaryObjectParser(const MGFFile& InSourceFile, IListener* InListener)
 	: SourceFile(InSourceFile)
 	, Listener(InListener)
 {
@@ -58,7 +58,7 @@ MABinaryObjectParser::MABinaryObjectParser(const MGF::File& InSourceFile, IListe
 
 void MABinaryObjectParser::Parse()
 {
-	MGF::Deserializer ObjectFileDeserializer(SourceFile);
+	MGFFileDeserializer ObjectFileDeserializer(SourceFile);
 
 	const OBJECT_FILE_HEADER FileHeader = ObjectFileDeserializer.Deserialize<OBJECT_FILE_HEADER>();
 	if (FileHeader.magicNumber != WDF_MAGIC_NUMBER)

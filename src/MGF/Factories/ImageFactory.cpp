@@ -7,9 +7,9 @@ using namespace MGF::Factories;
 
 void DeswizzlePixelData(uint32_t width, uint32_t height, uint32_t flags, char* &pixels);
 
-void ImageFactory::Deserialize(const MGF::File& tif, MA2_TIF_FILE& image, char** bits)
+void ImageFactory::Deserialize(const MGFFile& tif, MA2_TIF_FILE& image, char** bits)
 {
-	MGF::Deserializer deserializer(tif);
+	MGFFileDeserializer deserializer(tif);
 	image = deserializer.Deserialize<MA2_TIF_FILE>();
 
 	if (!bits)
@@ -31,9 +31,9 @@ void ImageFactory::Deserialize(const MGF::File& tif, MA2_TIF_FILE& image, char**
 	}
 }
 
-void MGF::Factories::ImageFactory::Deserialize(const MGF::File& tif, MA1_TIF_FILE& image, char** bits)
+void MGF::Factories::ImageFactory::Deserialize(const MGFFile& tif, MA1_TIF_FILE& image, char** bits)
 {
-	MGF::Deserializer deserializer(tif);
+	MGFFileDeserializer deserializer(tif);
 	image = deserializer.Deserialize<MA1_TIF_FILE>();
 
 	if (!bits)

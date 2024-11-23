@@ -2,13 +2,13 @@
 
 #include <filesystem>
 
-namespace MGF { class File; }
+class MGFFile;
 
 namespace AssetExtractor {
 
 	class IAssetExtractor
 	{
 	public:
-		virtual bool Extract(const MGF::File& sourceFile, const std::filesystem::path& destinationPath) = 0;
+		virtual bool Extract(const MGFFile& sourceFile, const std::filesystem::path& destinationPath) = 0;
 	};
 }

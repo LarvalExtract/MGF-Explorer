@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MGF/File.h"
+#include "MGF/MGFFile.h"
 
 #include <QVector3D>
 #include <QColor>
@@ -42,11 +42,11 @@ public:
 class MABinaryObjectParser
 {
 public:
-	MABinaryObjectParser(const MGF::File& InSourceFile, IListener* InListener = nullptr);
+	MABinaryObjectParser(const MGFFile& InSourceFile, IListener* InListener = nullptr);
 
 	void Parse();
 
 protected:
-	const MGF::File& SourceFile;
+	const MGFFile& SourceFile;
 	IListener* Listener;
 };

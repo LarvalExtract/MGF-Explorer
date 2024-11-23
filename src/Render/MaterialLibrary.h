@@ -7,9 +7,7 @@ namespace Qt3DRender {
 	class QMaterial;
 }
 
-namespace MGF {
-	class File;
-}
+class MGFFile;
 
 namespace pugi {
 	class xml_node;
@@ -24,8 +22,8 @@ namespace MGF::Render {
 	public:
 		static MaterialLibrary& Get();
 
-		Qt3DRender::QMaterial* GetMaterial(const pugi::xml_node& materialNode, const MGF::File& parentFile);
-		Qt3DRender::QMaterial* GetMaterial(const MGF::File& materialFile, const MGF::File& parentFile);
+		Qt3DRender::QMaterial* GetMaterial(const pugi::xml_node& materialNode, const MGFFile& parentFile);
+		Qt3DRender::QMaterial* GetMaterial(const MGFFile& materialFile, const MGFFile& parentFile);
 
 	private:
 		MaterialLibrary() = default;

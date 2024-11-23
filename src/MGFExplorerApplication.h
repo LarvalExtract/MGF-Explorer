@@ -1,10 +1,9 @@
 #pragma once
 
-#include "MainWindow/MainWindow.h"
-#include "MGF/AssetManager.h"
+#include "Windows/MainWindow/MainWindow.h"
 #include "MGF/Assets/Factories/MeshLibrary.h"
 
-#include "MGF/Archive.h"
+#include "MGF/MGFArchive.h"
 
 #include <QApplication>
 #include <QSettings>
@@ -33,18 +32,21 @@ public:
 
 	Scene3dWidget* SceneWidget = nullptr;
 
-	MGF::AssetManager AssetManager;
 	MA::MeshLibrary mMeshLibrary;
 
 	std::filesystem::path GetMgfFolderFromAppSettings() const;
 	void SetMgfFolderAppSetting(const std::filesystem::path& MgfFolder);
 
-	MGF::Archive* GetMgfArchive(const std::filesystem::path& MgfArchivePath);
+	std::shared_ptr<MGFArchive> GetMgfArchive(const std::filesystem::path& MgfArchivePath);
+	std::shared_ptr<MGFAsset> GetAsset(const MGFFile& mgfFile);
 
 private:
 	QSettings AppSettings;
 	MainWindow MainWindow;
 
 	std::vector<std::pair<std::filesystem::path, std::filesystem::path>> FileList;
-	std::unordered_map<std::filesystem::path, MGF::Archive> MgfArchiveMap;
+
+	std::unordered_map<std::filesystem::path, std::weak_ptr<MGFArchive>> MgfArchiveMap;
+
+	std::unordered_map<uint32_t, std::weak_ptr<MGFAsset>> AssetMap;
 };

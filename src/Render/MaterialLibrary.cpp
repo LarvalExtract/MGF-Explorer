@@ -10,13 +10,13 @@ namespace MGF::Render
 		return instance;
 	}
 
-	Qt3DRender::QMaterial* MGF::Render::MaterialLibrary::GetMaterial(const pugi::xml_node& materialNode, const MGF::File& parentFile)
+	Qt3DRender::QMaterial* MGF::Render::MaterialLibrary::GetMaterial(const pugi::xml_node& materialNode, const MGFFile& parentFile)
 	{
 		MGFMaterialNodeXMLReader paramReader(materialNode, parentFile);
 		return GetMaterial(paramReader);
 	}
 
-	Qt3DRender::QMaterial* MGF::Render::MaterialLibrary::GetMaterial(const MGF::File& materialFile, const MGF::File& parentFile)
+	Qt3DRender::QMaterial* MGF::Render::MaterialLibrary::GetMaterial(const MGFFile& materialFile, const MGFFile& parentFile)
 	{
 		MGFMaterialFileReader paramReader(materialFile, parentFile);
 		return GetMaterial(paramReader);

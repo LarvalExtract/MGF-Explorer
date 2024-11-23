@@ -1,5 +1,7 @@
 #include "MGFExplorerApplication.h"
-#include "AssetViewers/3DSceneWidget.h"
+#include "Widgets/3DSceneWidget.h"
+
+#include "MGF/Assets/MGFAsset.h"
 
 #include <QMessageBox>
 
@@ -41,7 +43,10 @@ int MGFExplorerApplication::exec()
 
 	for (const auto& [mgfPath, assetPath] : FileList)
 	{
-		MainWindow.OpenMGFWorkspace(mgfPath, &assetPath);
+		if (std::shared_ptr<MGFArchive> archive = GetMgfArchive(mgfPath))
+		{
+			MainWindow.OpenMGFWorkspace(archive, &assetPath);
+		}
 	}
 
 	return QApplication::exec();
@@ -49,22 +54,19 @@ int MGFExplorerApplication::exec()
 
 std::filesystem::path MGFExplorerApplication::GetMgfFolderFromAppSettings() const
 {
-	QSettings settings;
 	const QString defaultMgfFolderKey = "SavedMgfFolder";
 
-	std::string s = settings.value(defaultMgfFolderKey).toString().toStdString();
-	return s;
+	return AppSettings.value(defaultMgfFolderKey).toString().toStdString();
 }
 
 void MGFExplorerApplication::SetMgfFolderAppSetting(const std::filesystem::path& MgfFolder)
 {
-	QSettings settings;
 	const QString defaultMgfFolderKey = "SavedMgfFolder";
 
-	settings.setValue(defaultMgfFolderKey, QString(MgfFolder.u8string().c_str()));
+	AppSettings.setValue(defaultMgfFolderKey, QString(MgfFolder.u8string().c_str()));
 }
 
-MGF::Archive* MGFExplorerApplication::GetMgfArchive(const std::filesystem::path& MgfArchivePath)
+std::shared_ptr<MGFArchive> MGFExplorerApplication::GetMgfArchive(const std::filesystem::path& MgfArchivePath)
 {
 	const std::filesystem::path key = MgfArchivePath.is_absolute() 
 		? MgfArchivePath 
@@ -72,13 +74,29 @@ MGF::Archive* MGFExplorerApplication::GetMgfArchive(const std::filesystem::path&
 
 	if (std::filesystem::exists(key))
 	{
-		if (!MgfArchiveMap.contains(key))
+		if (!MgfArchiveMap.contains(key) || MgfArchiveMap.at(key).expired())
 		{
-			MgfArchiveMap.emplace(key, key);
+			std::shared_ptr<MGFArchive> newArchive = std::make_shared<MGFArchive>(key);
+			MgfArchiveMap[key] = newArchive;
+			return newArchive;
 		}
 
-		return &MgfArchiveMap.at(key);
+		return MgfArchiveMap.at(key).lock();
 	}
 
 	return nullptr;
+}
+
+std::shared_ptr<MGFAsset> MGFExplorerApplication::GetAsset(const MGFFile& mgfFile)
+{
+	const uint32_t key = mgfFile.FilepathHash;
+
+	if (!AssetMap.contains(key) || AssetMap.at(key).expired())
+	{
+		std::shared_ptr<MGFAsset> newAsset = MGFAsset::Create(mgfFile);
+		AssetMap[key] = newAsset;
+		return newAsset;
+	}
+
+	return AssetMap.at(key).lock();
 }

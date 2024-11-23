@@ -11,9 +11,7 @@
 
 #include "Utilities/configfile.h"
 
-namespace MGF {
-	class File;
-}
+class MGFFile;
 
 namespace pugi {
 	class xml_node;
@@ -34,7 +32,7 @@ namespace MGF::Render {
 	class IMaterialParamReader
 	{
 	public:
-		IMaterialParamReader(const MGF::File& parentFile) : ParentFile(parentFile) {}
+		IMaterialParamReader(const MGFFile& parentFile) : ParentFile(parentFile) {}
 
 		virtual Qt3DRender::QAbstractTexture* ReadTexture(const char* name, const char* altName = nullptr);
 		virtual QPair<Qt3DRender::QBlendEquation*, Qt3DRender::QBlendEquationArguments*> ReadBlendingMode(const char* name, const char* altName = nullptr);
@@ -74,7 +72,7 @@ namespace MGF::Render {
 		virtual const char* SelectParam(const char* a, const char* b) const = 0;
 		virtual TextureParams ReadTextureParams(const char* name, const char* altName = nullptr) = 0;
 
-		const MGF::File& ParentFile;
+		const MGFFile& ParentFile;
 	};
 
 	/*
@@ -83,7 +81,7 @@ namespace MGF::Render {
 	class MGFMaterialFileReader final : public IMaterialParamReader
 	{
 	public:
-		MGFMaterialFileReader(const MGF::File& materialFile, const MGF::File& parentFile)
+		MGFMaterialFileReader(const MGFFile& materialFile, const MGFFile& parentFile)
 			: IMaterialParamReader(parentFile)
 			, ConfigVariables{ ConfigFile(&materialFile)["material"] }
 		{
@@ -111,7 +109,7 @@ namespace MGF::Render {
 	class MGFMaterialNodeXMLReader final : public IMaterialParamReader
 	{
 	public:
-		MGFMaterialNodeXMLReader(const pugi::xml_node& materialNode, const MGF::File& mgmodelFile)
+		MGFMaterialNodeXMLReader(const pugi::xml_node& materialNode, const MGFFile& mgmodelFile)
 			: IMaterialParamReader(mgmodelFile)
 			, MaterialNode{ materialNode }
 		{
