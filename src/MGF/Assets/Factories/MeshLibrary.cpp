@@ -1,8 +1,8 @@
 #include "MeshLibrary.h"
+#include "MGF/MGFArchive.h"
 #include "MGF/Deserializer.h"
 #include "MGF/Structures/geomVert.h"
 #include "MGF/Structures/geomFace.h"
-#include "MGF/VersionConstants.h"
 #include "Utilities/configfile.h"
 
 #include <string_view>
@@ -13,7 +13,7 @@
 #include <QBuffer>
 #include <QAttribute>
 
-Qt3DRender::QGeometryRenderer* MA::MeshLibrary::CreateMesh(const pugi::xml_node& meshxml, const MGF::File& sourceFile)
+Qt3DRender::QGeometryRenderer* MA::MeshLibrary::CreateMesh(const pugi::xml_node& meshxml, const MGFFile& sourceFile)
 {
 	const std::string_view type = meshxml.attribute("type").as_string();
 	const std::string verticesFilename = sourceFile.Name.toStdString() + '{' + meshxml.attribute("vertices").as_string() + '}';
@@ -30,7 +30,7 @@ Qt3DRender::QGeometryRenderer* MA::MeshLibrary::CreateMesh(const pugi::xml_node&
     );
 }
 
-Qt3DRender::QGeometryRenderer* MA::MeshLibrary::CreateMesh(const MGF::File& meshFile, const MGF::File& sourceFile)
+Qt3DRender::QGeometryRenderer* MA::MeshLibrary::CreateMesh(const MGFFile& meshFile, const MGFFile& sourceFile)
 {
     ConfigFile MeshConfig(&meshFile);
     ConVariables vars = MeshConfig["mesh"];
@@ -52,10 +52,10 @@ Qt3DRender::QGeometryRenderer* MA::MeshLibrary::CreateMesh(const MGF::File& mesh
     );
 }
 
-Qt3DRender::QGeometryRenderer* MA::MeshLibrary::CreateMesh(const std::string_view verticesFilename, const std::string_view indicesFilename, const std::string_view material, const MGF::File& sourceFile, Qt3DRender::QGeometryRenderer::PrimitiveType primitiveType)
+Qt3DRender::QGeometryRenderer* MA::MeshLibrary::CreateMesh(const std::string_view verticesFilename, const std::string_view indicesFilename, const std::string_view material, const MGFFile& sourceFile, Qt3DRender::QGeometryRenderer::PrimitiveType primitiveType)
 {
-    const MGF::File* verticesFile = sourceFile.FindRelativeItem(verticesFilename);
-    const MGF::File* indicesFile = sourceFile.FindRelativeItem(indicesFilename);
+    const MGFFile* verticesFile = sourceFile.FindRelativeItem(verticesFilename);
+    const MGFFile* indicesFile = sourceFile.FindRelativeItem(indicesFilename);
 
     const uint64_t key =
         static_cast<uint64_t>(verticesFile->FilepathHash) << 32 |
@@ -86,7 +86,7 @@ Qt3DRender::QGeometryRenderer* MA::MeshLibrary::CreateMesh(const std::string_vie
     return geomRenderer;
 }
 
-int MA::MeshLibrary::LoadVertexBuffer(const MGF::File& verticesFile, Qt3DCore::QGeometry& geom, QVector3D& minExtents, QVector3D& maxExtents)
+int MA::MeshLibrary::LoadVertexBuffer(const MGFFile& verticesFile, Qt3DCore::QGeometry& geom, QVector3D& minExtents, QVector3D& maxExtents)
 {
 	Qt3DCore::QBuffer* vertexBuffer = new Qt3DCore::QBuffer;
     vertexBuffer->setAccessType(Qt3DCore::QBuffer::Read);
@@ -95,7 +95,7 @@ int MA::MeshLibrary::LoadVertexBuffer(const MGF::File& verticesFile, Qt3DCore::Q
     uint32_t vtxFlags, vtxCount, vtxSize;
     QByteArray vtxData;
 
-	if (MGF::Deserializer deserializer(verticesFile); verticesFile.ArchiveVersion == MGF::Version::MechAssault2LW)
+	if (MGFFileDeserializer deserializer(verticesFile); verticesFile.MgfArchive.GetVersion() == MGFArchiveVersion::MechAssault2LW)
 	{
 		const GEOMVERT_MA2 header = deserializer.Deserialize<GEOMVERT_MA2>();
         vtxFlags = header.vers.info.vertexBufferLayoutFlags;
@@ -137,7 +137,7 @@ int MA::MeshLibrary::LoadVertexBuffer(const MGF::File& verticesFile, Qt3DCore::Q
     return vtxCount;
 }
 
-void MA::MeshLibrary::LoadIndexBuffer(const MGF::File& indicesFile, Qt3DCore::QGeometry& geom)
+void MA::MeshLibrary::LoadIndexBuffer(const MGFFile& indicesFile, Qt3DCore::QGeometry& geom)
 {
     Qt3DCore::QBuffer* indexBuffer = new Qt3DCore::QBuffer;
     indexBuffer->setAccessType(Qt3DCore::QBuffer::Read);
@@ -146,7 +146,7 @@ void MA::MeshLibrary::LoadIndexBuffer(const MGF::File& indicesFile, Qt3DCore::QG
     uint32_t idxCount, idxSize;
     QByteArray idxData;
 
-    if (MGF::Deserializer deserializer(indicesFile); indicesFile.ArchiveVersion == MGF::Version::MechAssault2LW)
+    if (MGFFileDeserializer deserializer(indicesFile); indicesFile.MgfArchive.GetVersion() == MGFArchiveVersion::MechAssault2LW)
     {
         const GEOMFACE_MA2 header = deserializer.Deserialize<GEOMFACE_MA2>();
         idxCount = header.indx.nidx.indexCount;

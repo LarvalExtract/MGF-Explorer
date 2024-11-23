@@ -1,5 +1,5 @@
 #include "configfile.h"
-#include "MGF/File.h"
+#include "MGF/MGFFile.h"
 #include "MGF/Deserializer.h"
 
 #include <fstream>
@@ -28,9 +28,9 @@ ConfigFile::ConfigFile(const std::filesystem::path& filepath) :
     LoadFromBuffer(buffer);
 }
 
-ConfigFile::ConfigFile(const MGF::File* pFile)
+ConfigFile::ConfigFile(const MGFFile* pFile)
 {
-    MGF::Deserializer ds(*pFile);
+    MGFFileDeserializer ds(*pFile);
     const auto buf = ds.ReadAllBytes();
     const auto str = std::string(buf.begin(), buf.end());
     LoadFromBuffer(str);

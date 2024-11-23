@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MGF/File.h"
+#include "MGF/MGFFile.h"
 
 #include <QVector3D>
 #include <QGeometryRenderer>
@@ -24,14 +24,14 @@ namespace MA
 	class MeshLibrary final
 	{
 	public:
-		Qt3DRender::QGeometryRenderer* CreateMesh(const pugi::xml_node& meshxml, const MGF::File& sourceFile);
-		Qt3DRender::QGeometryRenderer* CreateMesh(const MGF::File& meshFile, const MGF::File& sourceFile);
+		Qt3DRender::QGeometryRenderer* CreateMesh(const pugi::xml_node& meshxml, const MGFFile& sourceFile);
+		Qt3DRender::QGeometryRenderer* CreateMesh(const MGFFile& meshFile, const MGFFile& sourceFile);
 
 	private:
-		Qt3DRender::QGeometryRenderer* CreateMesh(const std::string_view verticesFilename, const std::string_view indicesFilename, const std::string_view material, const MGF::File& sourceFile, Qt3DRender::QGeometryRenderer::PrimitiveType primitiveType);
+		Qt3DRender::QGeometryRenderer* CreateMesh(const std::string_view verticesFilename, const std::string_view indicesFilename, const std::string_view material, const MGFFile& sourceFile, Qt3DRender::QGeometryRenderer::PrimitiveType primitiveType);
 
-		int LoadVertexBuffer(const MGF::File& verticesFile, Qt3DCore::QGeometry& geom, QVector3D& minExtents, QVector3D& maxExtents);
-		void LoadIndexBuffer(const MGF::File& indicesFile, Qt3DCore::QGeometry& geom);
+		int LoadVertexBuffer(const MGFFile& verticesFile, Qt3DCore::QGeometry& geom, QVector3D& minExtents, QVector3D& maxExtents);
+		void LoadIndexBuffer(const MGFFile& indicesFile, Qt3DCore::QGeometry& geom);
 
 		void SetGeometryAttributesFromFlags(uint32_t flags, uint32_t count, uint32_t stride, Qt3DCore::QGeometry& geom, Qt3DCore::QBuffer* vertexBuffer);
 

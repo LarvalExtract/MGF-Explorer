@@ -1,7 +1,7 @@
 #include "MaterialParamReader.h"
 #include "TextureLibrary.h"
-#include "MGF/File.h"
-#include "MGF/Archive.h"
+#include "MGF/MGFFile.h"
+#include "MGF/MGFArchive.h"
 
 #include <pugixml-1.10/src/pugixml.hpp>
 
@@ -14,7 +14,7 @@ namespace MGF::Render {
 		TextureParams textureParams = ReadTextureParams(name, altName);
 
 		Qt3DRender::QAbstractTexture* texture = nullptr;
-		if (const MGF::File* textureFile = ParentFile.FindRelativeItem(textureParams.Filepath))
+		if (const MGFFile* textureFile = ParentFile.FindRelativeItem(textureParams.Filepath))
 		{
 			texture = MGF::Render::TextureLibrary::Get().GetTexture(*textureFile);
 

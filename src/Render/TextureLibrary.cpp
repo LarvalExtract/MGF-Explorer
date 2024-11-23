@@ -1,5 +1,7 @@
 #include "TextureLibrary.h"
-#include "MGF/File.h"
+#include "MGF/MGFFile.h"
+#include "MGF/MGFArchive.h"
+
 #include "MGF/Factories/ImageFactory.h"
 
 #include <QTexture>
@@ -23,7 +25,7 @@ TextureLibrary& TextureLibrary::Get()
 	return instance;
 }
 
-QAbstractTexture* TextureLibrary::GetTexture(const MGF::File& sourceFile)
+QAbstractTexture* TextureLibrary::GetTexture(const MGFFile& sourceFile)
 {
 	const uint32_t key = sourceFile.FilepathHash;
 
@@ -224,13 +226,13 @@ protected:
 	QTextureImageDataGeneratorPtr mGenerator;
 };
 
-QAbstractTexture* TextureLibrary::CreateTexture(const MGF::File& sourceFile)
+QAbstractTexture* TextureLibrary::CreateTexture(const MGFFile& sourceFile)
 {
 	QAbstractTexture* texture = nullptr;
 
 	uint32_t width, height, flags, mips, depth, frames;
 	char* pixels = nullptr;
-	if (sourceFile.ArchiveVersion == MGF::Version::MechAssault2LW)
+	if (sourceFile.MgfArchive.GetVersion() == MGFArchiveVersion::MechAssault2LW)
 	{
 		MA2_TIF_FILE description;
 		MGF::Factories::ImageFactory::Deserialize(sourceFile, description, &pixels);

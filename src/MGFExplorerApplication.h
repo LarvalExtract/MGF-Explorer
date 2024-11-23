@@ -1,32 +1,17 @@
 #pragma once
 
-#include "MainWindow/MainWindow.h"
-#include "MGF/AssetManager.h"
+#include "Windows/MainWindow/MainWindow.h"
 #include "MGF/Assets/Factories/MeshLibrary.h"
 
-#include <QApplication>
-#include <Qt3DWindow>
-#include <Qt3DCore/QTransform>
-#include <QLayer>
+#include "MGF/MGFArchive.h"
 
-#include <memory>
+#include <QApplication>
+#include <QSettings>
+
 #include <filesystem>
 #include <vector>
 
-namespace Qt3DCore
-{
-	class QEntity;
-}
-
-namespace Qt3DRender
-{
-	class QCamera;
-}
-
-namespace Qt3DExtras
-{
-	class QTextureMaterial;
-}
+class Scene3dWidget;
 
 #undef qApp
 #define qApp (static_cast<MGFExplorerApplication*>(QCoreApplication::instance()))
@@ -45,19 +30,23 @@ public:
 
 	int exec();
 
-	Qt3DExtras::Qt3DWindow* GetRenderWindow() const;
-	QWidget* GetRenderWindowContainer() const;
+	Scene3dWidget* SceneWidget = nullptr;
 
-	MGF::AssetManager AssetManager;
 	MA::MeshLibrary mMeshLibrary;
 
-	Qt3DRender::QLayer* mOpaqueLayer = nullptr;
-	Qt3DRender::QLayer* mTransparentLayer = nullptr;
+	std::filesystem::path GetMgfFolderFromAppSettings() const;
+	void SetMgfFolderAppSetting(const std::filesystem::path& MgfFolder);
+
+	std::shared_ptr<MGFArchive> GetMgfArchive(const std::filesystem::path& MgfArchivePath);
+	std::shared_ptr<MGFAsset> GetAsset(const MGFFile& mgfFile);
 
 private:
+	QSettings AppSettings;
 	MainWindow MainWindow;
-	Qt3DExtras::Qt3DWindow* RenderWindow = nullptr;
-	QWidget* RenderWindowContainer = nullptr;
 
 	std::vector<std::pair<std::filesystem::path, std::filesystem::path>> FileList;
+
+	std::unordered_map<std::filesystem::path, std::weak_ptr<MGFArchive>> MgfArchiveMap;
+
+	std::unordered_map<uint32_t, std::weak_ptr<MGFAsset>> AssetMap;
 };

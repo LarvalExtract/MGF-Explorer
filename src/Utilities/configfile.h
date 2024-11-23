@@ -7,7 +7,7 @@
 
 using ConVariables = std::unordered_map<std::string, std::string>;
 
-namespace MGF { class File; }
+class MGFFile;
 
 class ConfigSection
 {
@@ -33,7 +33,7 @@ public:
     ConfigFile() = default;
     explicit ConfigFile(const std::string& buffer);
     explicit ConfigFile(const std::filesystem::path& filepath);
-    explicit ConfigFile(const MGF::File* pFile);
+    explicit ConfigFile(const MGFFile* pFile);
 
     ConVariables& operator[](const std::string& index) { return m_Categories[index].m_Variables; }
 
