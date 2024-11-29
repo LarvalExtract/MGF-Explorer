@@ -86,12 +86,14 @@ void MainWindow::OpenMGFWorkspace(std::shared_ptr<MGFArchive> mgfArchive, const 
 {
     const std::string mgfArchiveName = mgfArchive->Path.filename().string();
 
+    MGFArchiveViewerWidget* archiveViewerWidget = nullptr;
+
     int index = -1;
     for (int i = 0; i < ui->tabWidget->count(); ++i)
     {
-        if (MGFArchiveViewerWidget* archiveViewer = static_cast<MGFArchiveViewerWidget*>(ui->tabWidget->widget(i)))
+        if (archiveViewerWidget = static_cast<MGFArchiveViewerWidget*>(ui->tabWidget->widget(i)))
         {
-            if (archiveViewer->GetMgfArchive().Path == mgfArchive->Path)
+            if (archiveViewerWidget->GetMgfArchive().Path == mgfArchive->Path)
             {
                 index = i;
                 break;
@@ -101,8 +103,13 @@ void MainWindow::OpenMGFWorkspace(std::shared_ptr<MGFArchive> mgfArchive, const 
 
     if (index == -1)
     {
-        MGFArchiveViewerWidget* archiveViewerWidget = new MGFArchiveViewerWidget(mgfArchive, this);
+        archiveViewerWidget = new MGFArchiveViewerWidget(mgfArchive, this);
         index = ui->tabWidget->addTab(archiveViewerWidget, QString{ mgfArchiveName.c_str() });
+    }
+
+    if (assetPath)
+    {
+        archiveViewerWidget->OpenAsset(*assetPath);
     }
 
     ui->tabWidget->setCurrentIndex(index);

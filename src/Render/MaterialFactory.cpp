@@ -7,8 +7,9 @@
 #include <QGraphicsApiFilter>
 #include <QRenderPass>
 #include <QUrl>
-#include <format>
 #include <QDir>
+
+#include <format>
 
 using namespace Qt3DRender;
 using namespace Qt3DExtras;

@@ -95,6 +95,8 @@ void MABinaryObjectParser::Parse()
 
 			MABinaryObjectAttribute Attribute;
 			Attribute.Name = MAStrings::GlobalStringCrcLookup(AttributeHeader.crc);
+			Attribute.Length = AttributeHeader.dataLength;
+			Attribute.Offset = ObjectFileDeserializer.CurrentOffset();
 
 			switch (AttributeHeader.dataType)
 			{
@@ -154,10 +156,14 @@ void MABinaryObjectParser::Parse()
 				break;
 			};
 
-			Attribute.Offset = ObjectFileDeserializer.CurrentOffset();
-			Attribute.Length = AttributeHeader.dataLength;
-
-			NewObject.Attributes.emplace(Attribute.Name, Attribute);
+			if (Attribute.Name == UNKNOWN_STRING)
+			{
+				NewObject.UnknownAttributes.push_back(Attribute);
+			}
+			else
+			{
+				NewObject.Attributes.emplace(Attribute.Name, Attribute);
+			}
 		}
 
 		if (Listener)

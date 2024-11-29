@@ -25,13 +25,13 @@ TextureLibrary& TextureLibrary::Get()
 	return instance;
 }
 
-QAbstractTexture* TextureLibrary::GetTexture(const MGFFile& sourceFile)
+QAbstractTexture* TextureLibrary::GetTexture(const MGFFile& sourceFile, size_t offset)
 {
 	const uint32_t key = sourceFile.FilepathHash;
 
 	if (!mTextureLibrary.contains(key))
 	{
-		mTextureLibrary.insert(std::make_pair(sourceFile.FilepathHash, CreateTexture(sourceFile)));
+		mTextureLibrary.insert(std::make_pair(sourceFile.FilepathHash, CreateTexture(sourceFile, offset)));
 	}
 
 	return mTextureLibrary.at(key);
@@ -66,6 +66,7 @@ QOpenGLTexture::TextureFormat DetermineFormat(uint32_t flags)
 	case 0: return QOpenGLTexture::TextureFormat::RGBA8_UNorm;
 	case 1: return QOpenGLTexture::TextureFormat::R5G6B5;
 	case 3: return QOpenGLTexture::TextureFormat::RGBA4;
+	case 4:
 	case 5: return QOpenGLTexture::TextureFormat::R8_UNorm;
 	case 7: return QOpenGLTexture::TextureFormat::R16U;
 	}
@@ -84,6 +85,7 @@ QOpenGLTexture::PixelFormat DeterminePixelFormat(uint32_t flags)
 	case 0: return QOpenGLTexture::PixelFormat::BGRA;
 	case 1: return QOpenGLTexture::PixelFormat::RGB;
 	case 3: return QOpenGLTexture::PixelFormat::BGRA;
+	case 4:
 	case 5: return QOpenGLTexture::PixelFormat::Luminance;
 	case 7: return QOpenGLTexture::PixelFormat::Luminance;
 	}
@@ -102,6 +104,7 @@ QOpenGLTexture::PixelType DeterminePixelType(uint32_t flags)
 	case 0: return QOpenGLTexture::UInt32_RGBA8_Rev;
 	case 1: return QOpenGLTexture::UInt16_R5G6B5;
 	case 3: return QOpenGLTexture::UInt16_RGBA4_Rev;
+	case 4:
 	case 5: return QOpenGLTexture::UInt8;
 	case 7: return QOpenGLTexture::UInt16;
 	}
@@ -160,10 +163,8 @@ public:
 		mDepth = std::max(mDepth >> mMipLevel, 1U);
 
 		const bool isCompressed = (uint8_t)((mFlags >> 8) & 0x0F) > 0;
-		const uint32_t paddedWidth = mWidth % 16 == 0 ? mWidth : mWidth + (16 - mWidth % 16);
 
 		QTextureImageDataPtr image(new QTextureImageData);
-		image->setWidth(paddedWidth); // Can't set GL_UNPACK_ROW_LENGTH with Qt, need to pad width to multiple of 16
 		image->setHeight(mHeight);
 		image->setMipLevels(mMips);
 		image->setDepth(mDepth);
@@ -172,13 +173,13 @@ public:
 		image->setTarget(DetermineTarget(mDepth, mFrames));
 
 		uint32_t bpp = PixelSize(image->pixelType());
-		uint32_t faceSize = paddedWidth * mHeight * 1 * bpp;
+		uint32_t faceSize = mWidth * mHeight * 1 * bpp;
 		uint32_t mipSize = faceSize >> mMipLevel;
 
 		uint32_t mipStart = 0;
 		if (int mip = mMipLevel - 1; mip > -1)
 		{
-			mipStart = ((paddedWidth * bpp) >> mip) * ((mHeight * bpp) >> mip) * ((1 * bpp) >> mip);
+			mipStart = ((mWidth * bpp) >> mip) * ((mHeight * bpp) >> mip) * ((1 * bpp) >> mip);
 		}
 
 		uint32_t offset = mFace * faceSize + mipStart;
@@ -189,7 +190,19 @@ public:
 
 		QByteArray pixelData;
 		pixelData.resize(size);
-		memcpy(pixelData.data(), mPixels + offset, size);
+
+		if ((mWidth & (mWidth - 1)) == 0)
+		{
+			std::memcpy(pixelData.data(), mPixels + offset, size);
+		}
+		else
+		{
+			const uint32_t paddedWidth = mWidth % 64 == 0 ? mWidth : mWidth + (64 - mWidth % 64);
+			for (int i = 0; i < mHeight; ++i)
+			{
+				std::memcpy(&pixelData[i * mWidth * bpp], &mPixels[offset + i * paddedWidth * bpp], mWidth * 1 * bpp);
+			}
+		}
 
 		const int blockSize = isCompressed ? GetBlockSize(mFlags) : 0;
 		image->setData(pixelData, blockSize, isCompressed);
@@ -226,7 +239,7 @@ protected:
 	QTextureImageDataGeneratorPtr mGenerator;
 };
 
-QAbstractTexture* TextureLibrary::CreateTexture(const MGFFile& sourceFile)
+QAbstractTexture* TextureLibrary::CreateTexture(const MGFFile& sourceFile, size_t offset)
 {
 	QAbstractTexture* texture = nullptr;
 
@@ -235,7 +248,7 @@ QAbstractTexture* TextureLibrary::CreateTexture(const MGFFile& sourceFile)
 	if (sourceFile.MgfArchive.GetVersion() == MGFArchiveVersion::MechAssault2LW)
 	{
 		MA2_TIF_FILE description;
-		MGF::Factories::ImageFactory::Deserialize(sourceFile, description, &pixels);
+		MGF::Factories::ImageFactory::Deserialize(sourceFile, description, &pixels, offset);
 
 		width = description.header.cWidth.imageWidth;
 		height = description.header.cHeight.imageHeight;
@@ -247,7 +260,7 @@ QAbstractTexture* TextureLibrary::CreateTexture(const MGFFile& sourceFile)
 	else
 	{
 		MA1_TIF_FILE description;
-		MGF::Factories::ImageFactory::Deserialize(sourceFile, description, &pixels);
+		MGF::Factories::ImageFactory::Deserialize(sourceFile, description, &pixels, offset);
 
 		width = description.header.cWidth.imageWidth;
 		height = description.header.cHeight.imageHeight;

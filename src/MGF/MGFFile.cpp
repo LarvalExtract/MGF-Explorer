@@ -68,10 +68,12 @@ auto MGFFile::Children() const -> const std::vector<const MGFFile*>&
 
 const MGFFile* MGFFile::FindRelativeItem(const std::filesystem::path &relativePath) const
 {
+    const std::filesystem::path p = relativePath.relative_path();
+
     const MGFFile* parent = Parent() ? Parent() : MgfArchive.Root();
     const MGFFile* target = nullptr;
 	
-    std::for_each(relativePath.begin(), relativePath.end(), [&parent, &target](const auto& i) 
+    std::for_each(p.begin(), p.end(), [&parent, &target](const auto& i) 
     {
         parent = i == ".."
             ? parent->Parent()

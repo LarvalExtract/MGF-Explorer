@@ -1,11 +1,23 @@
 #include "MGFMap.h"
 #include "MGFExplorerApplication.h"
+#include "MGF/Deserializer.h"
+#include "MGFTexture.h"
+#include "Render/TextureLibrary.h"
 
 #include "Utilities/configfile.h"
 
 #include <QEntity>
 #include <QPlaneMesh>
-#include <QDiffuseSpecularMaterial>
+#include <QShaderProgram>
+#include <QMaterial>
+#include <QTechnique>
+#include <QGraphicsApiFilter>
+#include <QRenderPass>
+#include <QUrl>
+#include <QDir>
+#include <QParameter>
+#include <QBlendEquation>
+#include <QBlendEquationArguments>
 
 static const QVariant AttributeTableViewHeaders[] = {
 	"Name", "Value", "Offset"
@@ -52,21 +64,10 @@ MGFMap::MGFMap(const MGFFile& entityFile) :
 
 	// Look in user's MGF folder for MGF archive 
 	MapResourceArchive = qApp->GetMgfArchive(filename);
-
-
-	// If that didn't work, look for the ini file which identifies the MGF archive
-
-	// If that didn't work, open a file dialog and allow the user to find the MGF file
-
-	//if (const MGF::MGFFile* iniFile = FileRef.FindRelativeItem(filename))
-	//{
-	//	ConfigFile ini(iniFile);
-	//	const std::filesystem::path resourceFilename = ini["Mission"]["ResourceFile"];
-	//
-	//
-	//}
-
-
+	if (MapResourceArchive)
+	{
+		SetupTerrainMesh();
+	}
 
 	MABinaryObjectParser BinaryObjectParser(entityFile, this);
 	BinaryObjectParser.Parse();
@@ -90,54 +91,64 @@ void MGFMap::OnObjectRead(const MABinaryObject& MapEntity)
 	Entity.SiblingUID = std::get<int32_t>(MapEntity.Attributes.at("sibling").Value);
 	Entity.ChildUID = std::get<int32_t>(MapEntity.Attributes.at("child").Value);
 
+	const auto ToWdfEntity = [](const MABinaryObjectAttribute& attrib) -> WdfEntity::Attribute
+		{
+			WdfEntity::Attribute Attribute;
+			Attribute.Name = attrib.Name;
+			Attribute.Offset = attrib.Offset;
+			Attribute.Length = attrib.Length;
+
+			if (std::holds_alternative<bool>(attrib.Value))
+			{
+				Attribute.Value = std::get<bool>(attrib.Value) ? "true" : "false";
+			}
+			else if (std::holds_alternative<uint8_t>(attrib.Value))
+			{
+				Attribute.Value = QString::number(std::get<uint8_t>(attrib.Value));
+			}
+			else if (std::holds_alternative<uint16_t>(attrib.Value))
+			{
+				Attribute.Value = QString::number(std::get<uint16_t>(attrib.Value));
+			}
+			else if (std::holds_alternative<int32_t>(attrib.Value))
+			{
+				Attribute.Value = QString::number(std::get<int32_t>(attrib.Value));
+			}
+			else if (std::holds_alternative<QColor>(attrib.Value))
+			{
+				Attribute.Value = std::get<QColor>(attrib.Value).name(QColor::NameFormat::HexArgb);
+			}
+			else if (std::holds_alternative<float>(attrib.Value))
+			{
+				Attribute.Value = QString::number(std::get<float>(attrib.Value));
+			}
+			else if (std::holds_alternative<QVector2D>(attrib.Value))
+			{
+				const QVector2D vec = std::get<QVector2D>(attrib.Value);
+				Attribute.Value = QString("%1, %2").arg(QString::number(vec.x()), QString::number(vec.y()));
+			}
+			else if (std::holds_alternative<QVector3D>(attrib.Value))
+			{
+				const QVector3D vec = std::get<QVector3D>(attrib.Value);
+				Attribute.Value = QString("%1, %2, %3").arg(QString::number(vec.x()), QString::number(vec.y()), QString::number(vec.z()));
+			}
+			else if (std::holds_alternative<std::string>(attrib.Value))
+			{
+				Attribute.Value = QString::fromStdString(std::get<std::string>(attrib.Value));
+			}
+
+			return Attribute;
+		};
+
 	Entity.Attributes.reserve(MapEntity.Attributes.size());
 	for (const auto& [name, attrib] : MapEntity.Attributes)
 	{
-		WdfEntity::Attribute Attribute;
-		Attribute.Name = name;
-		Attribute.Offset = attrib.Offset;
-		Attribute.Length = attrib.Length;
+		Entity.Attributes.emplace_back(ToWdfEntity(attrib));
+	}
 
-		if (std::holds_alternative<bool>(attrib.Value))
-		{
-			Attribute.Value = std::get<bool>(attrib.Value) ? "true" : "false";
-		}
-		else if (std::holds_alternative<uint8_t>(attrib.Value))
-		{
-			Attribute.Value = QString::number(std::get<uint8_t>(attrib.Value));
-		}
-		else if (std::holds_alternative<uint16_t>(attrib.Value))
-		{
-			Attribute.Value = QString::number(std::get<uint16_t>(attrib.Value));
-		}
-		else if (std::holds_alternative<int32_t>(attrib.Value))
-		{
-			Attribute.Value = QString::number(std::get<int32_t>(attrib.Value));
-		}
-		else if (std::holds_alternative<QColor>(attrib.Value))
-		{
-			Attribute.Value = std::get<QColor>(attrib.Value).name(QColor::NameFormat::HexArgb);
-		}
-		else if (std::holds_alternative<float>(attrib.Value))
-		{
-			Attribute.Value = QString::number(std::get<float>(attrib.Value));
-		}
-		else if (std::holds_alternative<QVector2D>(attrib.Value))
-		{
-			const QVector2D vec = std::get<QVector2D>(attrib.Value);
-			Attribute.Value = QString("%1, %2").arg(QString::number(vec.x()), QString::number(vec.y()));
-		}
-		else if (std::holds_alternative<QVector3D>(attrib.Value))
-		{
-			const QVector3D vec = std::get<QVector3D>(attrib.Value);
-			Attribute.Value = QString("%1, %2, %3").arg(QString::number(vec.x()), QString::number(vec.y()), QString::number(vec.z()));
-		}
-		else if (std::holds_alternative<std::string>(attrib.Value))
-		{
-			Attribute.Value = QString::fromStdString(std::get<std::string>(attrib.Value));
-		}
-
-		Entity.Attributes.emplace_back(Attribute);
+	for (const MABinaryObjectAttribute& unknownAttrib : MapEntity.UnknownAttributes)
+	{
+		Entity.Attributes.emplace_back(ToWdfEntity(unknownAttrib));
 	}
 
 	std::sort(Entity.Attributes.begin(), Entity.Attributes.end(), [](const WdfEntity::Attribute& a, const WdfEntity::Attribute& b) {
@@ -279,19 +290,75 @@ QVariant MGFMap::headerData(int section, Qt::Orientation orientation, int role /
 
 void MGFMap::OnReadEntity_MATerrain(const MABinaryObject& MATerrainEntity)
 {
-	TerrainEntity = new Qt3DCore::QEntity();
+	using namespace Qt3DCore;
+	using namespace Qt3DRender;
+	using namespace Qt3DExtras;
 
-	TerrainMesh = new Qt3DExtras::QPlaneMesh(TerrainEntity);
-	TerrainMesh->setWidth(512.0f);
-	TerrainMesh->setHeight(512.0f);
-	TerrainMesh->setMeshResolution(QSize(16, 18));
-	TerrainEntity->addComponent(TerrainMesh);
+	SetupTerrainMesh();
 
-	Qt3DExtras::QDiffuseSpecularMaterial* mat = new Qt3DExtras::QDiffuseSpecularMaterial;
-	TerrainEntity->addComponent(mat);
+	std::shared_ptr<MGFTexture> baseMapTextureAsset = MapResourceArchive->LoadAsset<MGFTexture>(std::get<std::string>(MATerrainEntity.Attributes.at("TerrainBaseMap").Value));
+	
+	TerrainMaterial->addParameter(new QParameter("TerrainBaseMap", baseMapTextureAsset->mTexture));
+	TerrainMaterial->addParameter(new QParameter("minHeight", std::get<float>(MATerrainEntity.Attributes.at("TerrainMinHeight").Value)));
+	TerrainMaterial->addParameter(new QParameter("maxHeight", std::get<float>(MATerrainEntity.Attributes.at("TerrainMaxHeight").Value)));
+
+	const MABinaryObjectAttribute terrainHeightMapAttribute = MATerrainEntity.Attributes.at("TerrainHeight Field");
+	QAbstractTexture* terrainHeightMapTexture = MGF::Render::TextureLibrary::Get().GetTexture(FileRef, terrainHeightMapAttribute.Offset);
+	terrainHeightMapTexture->setMagnificationFilter(QAbstractTexture::Filter::Linear);
+	terrainHeightMapTexture->setMagnificationFilter(QAbstractTexture::Filter::Linear);
+	terrainHeightMapTexture->setMipLevels(1);
+
+	TerrainMaterial->addParameter(new QParameter("TerrainHeightMap", terrainHeightMapTexture));
+
+	TerrainEntity->addComponent(TerrainMaterial);
 }
 
 void MGFMap::OnReadEntity_MATerrainInfo(const MABinaryObject& MATerrainInfo)
 {
 
+}
+
+void MGFMap::SetupTerrainMesh()
+{
+	using namespace Qt3DCore;
+	using namespace Qt3DRender;
+	using namespace Qt3DExtras;
+
+	TerrainEntity = new QEntity();
+
+	TerrainMesh = new QPlaneMesh(TerrainEntity);
+	TerrainMesh->setMeshResolution(QSize(16, 16));
+	TerrainMesh->setWidth(128.0f);
+	TerrainMesh->setHeight(128.0f);
+	TerrainEntity->addComponent(TerrainMesh);
+
+	TerrainMaterial = new QMaterial(TerrainEntity);
+	QTechnique* technique = new QTechnique;
+	technique->setParent(TerrainMaterial);
+	technique->graphicsApiFilter()->setApi(QGraphicsApiFilter::OpenGL);
+	technique->graphicsApiFilter()->setMajorVersion(3);
+	technique->graphicsApiFilter()->setMinorVersion(3);
+	technique->graphicsApiFilter()->setProfile(QGraphicsApiFilter::CoreProfile);
+
+	QEffect* effect = new QEffect;
+	effect->setParent(TerrainMaterial);
+	effect->addTechnique(technique);
+	TerrainMaterial->setEffect(effect);
+
+	QRenderPass* baseRenderPass = new QRenderPass;
+	baseRenderPass->setParent(technique);
+	QBlendEquation* blendEquation = new QBlendEquation();
+	QBlendEquationArguments* blendState = new QBlendEquationArguments();
+	blendEquation->setBlendFunction(QBlendEquation::Add);
+	blendState->setSourceRgb(QBlendEquationArguments::One);
+	blendState->setDestinationRgb(QBlendEquationArguments::Zero);
+	baseRenderPass->addRenderState(blendEquation);
+	baseRenderPass->addRenderState(blendState);
+	technique->addRenderPass(baseRenderPass);
+
+	QShaderProgram* terrainShader = new QShaderProgram;
+	terrainShader->setParent(baseRenderPass);
+	terrainShader->setFragmentShaderCode(QShaderProgram::loadSource(QUrl::fromLocalFile(QDir::currentPath() + "/Shaders/MATerrain.frag")));
+	terrainShader->setVertexShaderCode(QShaderProgram::loadSource(QUrl::fromLocalFile(QDir::currentPath() + "/Shaders/MATerrain.vert")));
+	baseRenderPass->setShaderProgram(terrainShader);
 }

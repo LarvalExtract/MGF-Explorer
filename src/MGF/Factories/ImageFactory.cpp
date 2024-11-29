@@ -7,9 +7,10 @@ using namespace MGF::Factories;
 
 void DeswizzlePixelData(uint32_t width, uint32_t height, uint32_t flags, char* &pixels);
 
-void ImageFactory::Deserialize(const MGFFile& tif, MA2_TIF_FILE& image, char** bits)
+void ImageFactory::Deserialize(const MGFFile& tif, MA2_TIF_FILE& image, char** bits, size_t offset)
 {
 	MGFFileDeserializer deserializer(tif);
+	deserializer.CurrentOffset() += offset;
 	image = deserializer.Deserialize<MA2_TIF_FILE>();
 
 	if (!bits)
@@ -18,7 +19,7 @@ void ImageFactory::Deserialize(const MGFFile& tif, MA2_TIF_FILE& image, char** b
 	const size_t length = image.header.cBits.length - 8;
 	*bits = new char[length];
 
-	deserializer.ReadBytes(*bits, length, sizeof(image.header));
+	deserializer.ReadBytes(*bits, length, offset + sizeof(image.header));
 
 	if (image.header.cFlags.flags & 0x00000010)
 	{
@@ -31,9 +32,10 @@ void ImageFactory::Deserialize(const MGFFile& tif, MA2_TIF_FILE& image, char** b
 	}
 }
 
-void MGF::Factories::ImageFactory::Deserialize(const MGFFile& tif, MA1_TIF_FILE& image, char** bits)
+void MGF::Factories::ImageFactory::Deserialize(const MGFFile& tif, MA1_TIF_FILE& image, char** bits, size_t offset)
 {
 	MGFFileDeserializer deserializer(tif);
+	deserializer.CurrentOffset() += offset;
 	image = deserializer.Deserialize<MA1_TIF_FILE>();
 
 	if (!bits)

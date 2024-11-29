@@ -18,6 +18,11 @@ namespace Qt3DRender
 	class QLayerFilter;
 	class QLayer;
 	class QSortPolicy;
+	class QMaterial;
+	class QShaderProgram;
+	class QParameter;
+	class QBlendEquation;
+	class QBlendEquationArguments;
 }
 
 namespace Qt3DExtras

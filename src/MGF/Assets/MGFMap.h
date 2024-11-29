@@ -80,4 +80,7 @@ private:
 	void OnReadEntity_MATerrainInfo(const MABinaryObject& MATerrainInfo);
 
 	Qt3DExtras::QPlaneMesh* TerrainMesh = nullptr;
+	Qt3DRender::QMaterial* TerrainMaterial = nullptr;
+
+	void SetupTerrainMesh();
 };

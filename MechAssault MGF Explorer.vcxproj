@@ -251,7 +251,16 @@
     <ClCompile Include="src\Windows\MainWindow\MainWindow.cpp" />
     <ClCompile Include="vendor\pugixml-1.10\src\pugixml.cpp" />
     <ClCompile Include="vendor\s3tc\s3tc.cpp" />
-  <ClCompile Include="src\Widgets\moc_3DSceneWidget.cpp" /><ClCompile Include="src\Widgets\MapViewer\moc_MapViewerWidget.cpp" /><ClCompile Include="src\Widgets\ModelViewer\moc_ModelViewerWidget.cpp" /><ClCompile Include="src\Widgets\PlainTextViewer\moc_PlainTextViewerWidget.cpp" /><ClCompile Include="src\Widgets\StringTableViewer\moc_StringTableViewerWidget.cpp" /><ClCompile Include="src\Windows\FileExtractorWindow\moc_FileExtractorDialog.cpp" /><ClCompile Include="src\Widgets\TextureViewer\moc_TextureViewerWidget.cpp" /><ClCompile Include="src\Widgets\ArchiveViewer\moc_ArchiveViewerWidget.cpp" /><ClCompile Include="src\Windows\MainWindow\moc_MainWindow.cpp" /></ItemGroup>
+    <ClCompile Include="src\Widgets\moc_3DSceneWidget.cpp" />
+    <ClCompile Include="src\Widgets\MapViewer\moc_MapViewerWidget.cpp" />
+    <ClCompile Include="src\Widgets\ModelViewer\moc_ModelViewerWidget.cpp" />
+    <ClCompile Include="src\Widgets\PlainTextViewer\moc_PlainTextViewerWidget.cpp" />
+    <ClCompile Include="src\Widgets\StringTableViewer\moc_StringTableViewerWidget.cpp" />
+    <ClCompile Include="src\Windows\FileExtractorWindow\moc_FileExtractorDialog.cpp" />
+    <ClCompile Include="src\Widgets\TextureViewer\moc_TextureViewerWidget.cpp" />
+    <ClCompile Include="src\Widgets\ArchiveViewer\moc_ArchiveViewerWidget.cpp" />
+    <ClCompile Include="src\Windows\MainWindow\moc_MainWindow.cpp" />
+  </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Qt3DForwardDeclarations.h" />
     <ClInclude Include="src\Widgets\ArchiveViewer\ContextMenus\FileMenu.h" />
@@ -322,7 +331,15 @@
     <ClInclude Include="src\Windows\MainWindow\MainWindow.h" />
     <ClInclude Include="vendor\pugixml-1.10\src\pugixml.hpp" />
     <ClInclude Include="vendor\s3tc\s3tc.h" />
-  <ClInclude Include="src\Widgets\ArchiveViewer\ui_ArchiveViewerWidget.h" /><ClInclude Include="src\Widgets\MapViewer\ui_MapViewerWidget.h" /><ClInclude Include="src\Widgets\ModelViewer\ui_ModelViewerWidget.h" /><ClInclude Include="src\Widgets\PlainTextViewer\ui_PlainTextViewerWidget.h" /><ClInclude Include="src\Widgets\TextureViewer\ui_TextureViewerWidget.h" /><ClInclude Include="src\Widgets\StringTableViewer\ui_StringTableViewerWidget.h" /><ClInclude Include="src\Windows\FileExtractorWindow\ui_FileExtractorDialog.h" /><ClInclude Include="src\Windows\MainWindow\ui_MainWindow.h" /></ItemGroup>
+    <ClInclude Include="src\Widgets\ArchiveViewer\ui_ArchiveViewerWidget.h" />
+    <ClInclude Include="src\Widgets\MapViewer\ui_MapViewerWidget.h" />
+    <ClInclude Include="src\Widgets\ModelViewer\ui_ModelViewerWidget.h" />
+    <ClInclude Include="src\Widgets\PlainTextViewer\ui_PlainTextViewerWidget.h" />
+    <ClInclude Include="src\Widgets\TextureViewer\ui_TextureViewerWidget.h" />
+    <ClInclude Include="src\Widgets\StringTableViewer\ui_StringTableViewerWidget.h" />
+    <ClInclude Include="src\Windows\FileExtractorWindow\ui_FileExtractorDialog.h" />
+    <ClInclude Include="src\Windows\MainWindow\ui_MainWindow.h" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="MechAssault-MGF-Explorer.props" />
     <None Include="src\Widgets\ArchiveViewer\ArchiveViewerWidget.ui" />

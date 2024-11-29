@@ -27,6 +27,7 @@ struct MABinaryObject
 {
 	std::string_view Name;
 	std::unordered_map<std::string_view, MABinaryObjectAttribute> Attributes;
+	std::vector<MABinaryObjectAttribute> UnknownAttributes;
 };
 
 class IListener
