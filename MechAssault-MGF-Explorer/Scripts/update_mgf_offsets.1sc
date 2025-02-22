@@ -1,0 +1,20 @@
+//------------------------------------------------
+//--- 010 Editor v11.0.1h Script File
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+//   History: 
+//------------------------------------------------
+
+#include "../templates/mgf.bt"
+
+local MGF_FILE file;
+
+local int i = 0;
+for (i = 0; i < file.header.fileRecordCount; i++)
+{
+    file.records[i].fileOffset += 48;
+}

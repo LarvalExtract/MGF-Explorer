@@ -1,9 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29806.167
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35209.166
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MechAssault MGF Explorer", "MechAssault MGF Explorer.vcxproj", "{EF83A288-3846-4F16-829E-258FA57F48D5}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MechAssault MGF Explorer", "MechAssault-MGF-Explorer\MechAssault MGF Explorer.vcxproj", "{EF83A288-3846-4F16-829E-258FA57F48D5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Qt 6.8.1", "Qt 6.8.1", "{CD5D9FE0-2CEB-4F5D-ACB3-4D02DA327989}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{70F04A9F-90AA-4651-B5B4-E2CD66275DBB}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "openglrenderer", "Qt\6.8.1\qt3d\src\plugins\renderers\opengl\openglrenderer.vcxproj", "{C5B756F7-09BC-3139-9769-A4E96D8925E0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,9 +27,21 @@ Global
 		{EF83A288-3846-4F16-829E-258FA57F48D5}.Release|x64.Build.0 = Release|x64
 		{EF83A288-3846-4F16-829E-258FA57F48D5}.Release|x86.ActiveCfg = Release|Win32
 		{EF83A288-3846-4F16-829E-258FA57F48D5}.Release|x86.Build.0 = Release|Win32
+		{C5B756F7-09BC-3139-9769-A4E96D8925E0}.Debug|x64.ActiveCfg = Debug|x64
+		{C5B756F7-09BC-3139-9769-A4E96D8925E0}.Debug|x64.Build.0 = Debug|x64
+		{C5B756F7-09BC-3139-9769-A4E96D8925E0}.Debug|x86.ActiveCfg = Debug|x64
+		{C5B756F7-09BC-3139-9769-A4E96D8925E0}.Debug|x86.Build.0 = Debug|x64
+		{C5B756F7-09BC-3139-9769-A4E96D8925E0}.Release|x64.ActiveCfg = Release|x64
+		{C5B756F7-09BC-3139-9769-A4E96D8925E0}.Release|x64.Build.0 = Release|x64
+		{C5B756F7-09BC-3139-9769-A4E96D8925E0}.Release|x86.ActiveCfg = Release|x64
+		{C5B756F7-09BC-3139-9769-A4E96D8925E0}.Release|x86.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{EF83A288-3846-4F16-829E-258FA57F48D5} = {70F04A9F-90AA-4651-B5B4-E2CD66275DBB}
+		{C5B756F7-09BC-3139-9769-A4E96D8925E0} = {CD5D9FE0-2CEB-4F5D-ACB3-4D02DA327989}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3C7EDF14-E74D-4D79-BB54-38F45CAA8764}

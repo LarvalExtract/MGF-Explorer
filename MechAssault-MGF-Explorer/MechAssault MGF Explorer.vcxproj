@@ -1,0 +1,365 @@
+<Project DefaultTargets="Build">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{ef83a288-3846-4f16-829e-258fa57f48d5}</ProjectGuid>
+    <RootNamespace>Fixed</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>MechAssault MGF Explorer</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="MechAssault-MGF-Explorer.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="MechAssault-MGF-Explorer.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="MechAssault-MGF-Explorer.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="MechAssault-MGF-Explorer.props" />
+  </ImportGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(ProjectDir)bin\$(PlatformShortName)\$(Configuration)</OutDir>
+    <IntDir>$(ProjectDir)obj\$(PlatformShortName)\$(Configuration)</IntDir>
+    <PreBuildEventUseInBuild>false</PreBuildEventUseInBuild>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(ProjectDir)bin\$(PlatformShortName)\$(Configuration)</OutDir>
+    <IntDir>$(ProjectDir)obj\$(PlatformShortName)\$(Configuration)</IntDir>
+    <PreBuildEventUseInBuild>false</PreBuildEventUseInBuild>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(ProjectDir)Build\Binaries\$(PlatformShortName)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)Build\Objects\$(PlatformShortName)\$(Configuration)\</IntDir>
+    <PreBuildEventUseInBuild>false</PreBuildEventUseInBuild>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(ProjectDir)Build\Binaries\$(PlatformShortName)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)Build\Objects\$(PlatformShortName)\$(Configuration)\</IntDir>
+    <PreBuildEventUseInBuild>false</PreBuildEventUseInBuild>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <PreBuildEvent>
+      <Command>python scripts/compile-moc.py -v "$(MSBuildProjectFile)"</Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Message>Running compile-moc.py...</Message>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <PreBuildEvent>
+      <Command>python scripts/compile-moc.py -v "$(MSBuildProjectFile)"</Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Message>Running compile-moc.py...</Message>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)Source;$(ProjectDir)Vendor;$(QtRoot)\include;$(QtRoot)\include\QtCore;$(QtRoot)\include\QtGui;$(QtRoot)\include\QtWidgets;$(QtRoot)\include\Qt3DCore;$(QtRoot)\include\Qt3DExtras;$(QtRoot)\include\Qt3DRender;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <DisableSpecificWarnings>4996;</DisableSpecificWarnings>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>Qt6Cored.lib;Qt6Guid.lib;Qt6Widgetsd.lib;Qt63DCored.lib;Qt63DExtrasd.lib;Qt63DRenderd.lib;Qt6OpenGLd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(QtRoot)\lib</AdditionalLibraryDirectories>
+      <EntryPointSymbol>
+      </EntryPointSymbol>
+    </Link>
+    <PreBuildEvent>
+      <Command>python scripts/compile-moc.py -v "$(MSBuildProjectFile)"</Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Message>Running compile-moc.py...</Message>
+    </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>xcopy "$(ProjectDir)shaders\*.*" "$(LocalDebuggerWorkingDirectory)\shaders\" /S /Y &amp;&amp; echo Copied shaders</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)Source;$(ProjectDir)Vendor;$(QtRoot)\include;$(QtRoot)\include\QtCore;$(QtRoot)\include\QtGui;$(QtRoot)\include\QtWidgets;$(QtRoot)\include\Qt3DCore;$(QtRoot)\include\Qt3DExtras;$(QtRoot)\include\Qt3DRender;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <DisableSpecificWarnings>4996;</DisableSpecificWarnings>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(QtRoot)\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Qt6Core.lib;Qt6Gui.lib;Qt6Widgets.lib;Qt63DCore.lib;Qt63DExtras.lib;Qt63DRender.lib;Qt6OpenGL.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
+    </Link>
+    <PreBuildEvent>
+      <Command>python scripts/compile-moc.py -v "$(MSBuildProjectFile)"</Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Message>Running compile-moc.py...</Message>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\MGF\Entities\MATerrain.cpp" />
+    <ClCompile Include="Source\Render\TessellatedQuad.cpp" />
+    <ClCompile Include="Source\Widgets\ArchiveViewer\ContextMenus\FileMenu.cpp" />
+    <ClCompile Include="Source\Widgets\ArchiveViewer\ContextMenus\FolderMenu.cpp" />
+    <ClCompile Include="Source\Widgets\ArchiveViewer\ContextMenus\FolderRootMenu.cpp" />
+    <ClCompile Include="Source\Widgets\ArchiveViewer\ContextMenus\IContextMenu.cpp" />
+    <ClCompile Include="Source\Widgets\ArchiveViewer\ContextMenus\TextureFileMenu.cpp" />
+    <ClCompile Include="Source\AssetExtractors\ModelExtractor\ModelExtractor.cpp" />
+    <ClCompile Include="Source\AssetExtractors\TextureExtractor\TextureExtractor.cpp" />
+    <ClCompile Include="Source\Widgets\3DSceneWidget.cpp" />
+    <ClCompile Include="Source\Widgets\MapViewer\MapViewerWidget.cpp" />
+    <ClCompile Include="Source\Widgets\ModelViewer\Models\AnimationTableModel.cpp" />
+    <ClCompile Include="Source\Widgets\ModelViewer\Models\MaterialTableModel.cpp" />
+    <ClCompile Include="Source\Widgets\ModelViewer\Models\MeshTableModel.cpp" />
+    <ClCompile Include="Source\Widgets\ModelViewer\Models\NodeTreeModel.cpp" />
+    <ClCompile Include="Source\Widgets\ModelViewer\ModelViewerWidget.cpp" />
+    <ClCompile Include="Source\Widgets\PlainTextViewer\PlainTextViewerWidget.cpp" />
+    <ClCompile Include="Source\Widgets\StringTableViewer\Models\StringTableModel.cpp" />
+    <ClCompile Include="Source\Widgets\StringTableViewer\StringTableViewerWidget.cpp" />
+    <ClCompile Include="Source\Widgets\TextureViewer\Models\TextureDetailsTableModel.cpp" />
+    <ClCompile Include="Source\Windows\MainWindow\qrc_icon.cpp" />
+    <ClCompile Include="Source\MGFExplorerApplication.cpp" />
+    <ClCompile Include="Source\MGF\Assets\MGFAsset.cpp" />
+    <ClCompile Include="Source\MGF\Assets\MGFMap.cpp" />
+    <ClCompile Include="Source\MGF\Assets\Factories\MeshLibrary.cpp" />
+    <ClCompile Include="Source\MGF\Assets\Factories\ShaderProgramProvider.cpp" />
+    <ClCompile Include="Source\MGF\Factories\MABinaryObjectParser.cpp" />
+    <ClCompile Include="Source\MGF\Factories\MAStrings.cpp" />
+    <ClCompile Include="Source\Render\TextureLibrary.cpp" />
+    <ClCompile Include="Source\MGF\Factories\ImageFactory.cpp" />
+    <ClCompile Include="Source\Windows\FileExtractorWindow\Extractor.cpp" />
+    <ClCompile Include="Source\Windows\FileExtractorWindow\FileExtractorDialog.cpp" />
+    <ClCompile Include="Source\Windows\FileExtractorWindow\Models\FileExtractListModel.cpp" />
+    <ClCompile Include="Source\Windows\FileExtractorWindow\States\FileExtractorStateGroup.cpp" />
+    <ClCompile Include="Source\Windows\FileExtractorWindow\States\FinishedState.cpp" />
+    <ClCompile Include="Source\Windows\FileExtractorWindow\States\IdleState.cpp" />
+    <ClCompile Include="Source\Windows\FileExtractorWindow\States\ProgressState.cpp" />
+    <ClCompile Include="Source\Main.cpp" />
+    <ClCompile Include="Source\mgf\MGFArchive.cpp" />
+    <ClCompile Include="Source\MGF\Assets\MGFModel.cpp" />
+    <ClCompile Include="Source\mgf\Assets\MGFPlainText.cpp" />
+    <ClCompile Include="Source\mgf\Assets\MGFStringTable.cpp" />
+    <ClCompile Include="Source\mgf\Assets\MGFTexture.cpp" />
+    <ClCompile Include="Source\mgf\MGFFile.cpp" />
+    <ClCompile Include="Source\Render\MaterialFactory.cpp" />
+    <ClCompile Include="Source\Render\MaterialLibrary.cpp" />
+    <ClCompile Include="Source\Render\MaterialParamReader.cpp" />
+    <ClCompile Include="Source\Utilities\configfile.cpp" />
+    <ClCompile Include="Source\Windows\StateMachine\State.cpp" />
+    <ClCompile Include="Source\Windows\StateMachine\StateGroup.cpp" />
+    <ClCompile Include="Source\Widgets\TextureViewer\TextureViewerWidget.cpp" />
+    <ClCompile Include="Source\Widgets\ArchiveViewer\ArchiveViewerWidget.cpp" />
+    <ClCompile Include="Source\Windows\MainWindow\MainWindow.cpp" />
+    <ClCompile Include="Vendor\pugixml-1.10\src\pugixml.cpp" />
+    <ClCompile Include="Vendor\s3tc\s3tc.cpp" />
+    <ClCompile Include="Source\Widgets\moc_3DSceneWidget.cpp" />
+    <ClCompile Include="Source\Widgets\MapViewer\moc_MapViewerWidget.cpp" />
+    <ClCompile Include="Source\Widgets\ModelViewer\moc_ModelViewerWidget.cpp" />
+    <ClCompile Include="Source\Widgets\PlainTextViewer\moc_PlainTextViewerWidget.cpp" />
+    <ClCompile Include="Source\Widgets\StringTableViewer\moc_StringTableViewerWidget.cpp" />
+    <ClCompile Include="Source\Windows\FileExtractorWindow\moc_FileExtractorDialog.cpp" />
+    <ClCompile Include="Source\Widgets\TextureViewer\moc_TextureViewerWidget.cpp" />
+    <ClCompile Include="Source\Widgets\ArchiveViewer\moc_ArchiveViewerWidget.cpp" />
+    <ClCompile Include="Source\Windows\MainWindow\moc_MainWindow.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\MGF\Entities\MATerrain.h" />
+    <ClInclude Include="Source\Qt3DForwardDeclarations.h" />
+    <ClInclude Include="Source\Render\TessellatedQuad.h" />
+    <ClInclude Include="Source\Widgets\ArchiveViewer\ContextMenus\FileMenu.h" />
+    <ClInclude Include="Source\Widgets\ArchiveViewer\ContextMenus\FolderMenu.h" />
+    <ClInclude Include="Source\Widgets\ArchiveViewer\ContextMenus\FolderRootMenu.h" />
+    <ClInclude Include="Source\Widgets\ArchiveViewer\ContextMenus\IContextMenu.h" />
+    <ClInclude Include="Source\Widgets\ArchiveViewer\ContextMenus\TextureFileMenu.h" />
+    <ClInclude Include="Source\AssetExtractors\IAssetExtractor.h" />
+    <ClInclude Include="Source\AssetExtractors\ModelExtractor\ModelExtractor.h" />
+    <ClInclude Include="Source\AssetExtractors\TextureExtractor\TextureExtractor.h" />
+    <ClInclude Include="Source\Widgets\3DSceneWidget.h" />
+    <ClInclude Include="Source\Widgets\IAssetViewerWidget.h" />
+    <ClInclude Include="Source\Widgets\MapViewer\MapViewerWidget.h" />
+    <ClInclude Include="Source\Widgets\ModelViewer\Models\AnimationTableModel.h" />
+    <ClInclude Include="Source\Widgets\ModelViewer\Models\MaterialTableModel.h" />
+    <ClInclude Include="Source\Widgets\ModelViewer\Models\MeshTableModel.h" />
+    <ClInclude Include="Source\Widgets\ModelViewer\Models\NodeTreeModel.h" />
+    <ClInclude Include="Source\Widgets\ModelViewer\ModelViewerWidget.h" />
+    <ClInclude Include="Source\Widgets\PlainTextViewer\PlainTextViewerWidget.h" />
+    <ClInclude Include="Source\Widgets\StringTableViewer\Models\StringTableModel.h" />
+    <ClInclude Include="Source\Widgets\StringTableViewer\StringTableViewerWidget.h" />
+    <ClInclude Include="Source\Widgets\TextureViewer\Models\TextureDetailsTableModel.h" />
+    <ClInclude Include="Source\MGFExplorerApplication.h" />
+    <ClInclude Include="Source\MGF\Assets\MGFMap.h" />
+    <ClInclude Include="Source\MGF\Assets\Factories\EffectLibrary.h" />
+    <ClInclude Include="Source\MGF\Assets\Factories\MeshLibrary.h" />
+    <ClInclude Include="Source\MGF\Assets\Factories\ShaderProgramProvider.h" />
+    <ClInclude Include="Source\MGF\Factories\MABinaryObjectParser.h" />
+    <ClInclude Include="Source\MGF\Factories\MAStrings.h" />
+    <ClInclude Include="Source\Render\TextureLibrary.h" />
+    <ClInclude Include="Source\mgf\Assets\Model\Animation.h" />
+    <ClInclude Include="Source\mgf\Assets\Model\Material.h" />
+    <ClInclude Include="Source\mgf\Assets\Model\Mesh.h" />
+    <ClInclude Include="Source\mgf\Assets\Model\Node.h" />
+    <ClInclude Include="Source\MGF\Deserializer.h" />
+    <ClInclude Include="Source\MGF\Factories\ImageFactory.h" />
+    <ClInclude Include="Source\MGF\Structures\geomFace.h" />
+    <ClInclude Include="Source\MGF\Structures\geomVert.h" />
+    <ClInclude Include="Source\MGF\Structures\wdf.h" />
+    <ClInclude Include="Source\Windows\FileExtractorWindow\Extractor.h" />
+    <ClInclude Include="Source\Windows\FileExtractorWindow\FileExtractorDialog.h" />
+    <ClInclude Include="Source\Windows\FileExtractorWindow\Models\FileExtractItem.h" />
+    <ClInclude Include="Source\Windows\FileExtractorWindow\Models\FileExtractListModel.h" />
+    <ClInclude Include="Source\Windows\FileExtractorWindow\States\FileExtractorStateBase.h" />
+    <ClInclude Include="Source\Windows\FileExtractorWindow\States\FileExtractorStateGroup.h" />
+    <ClInclude Include="Source\Windows\FileExtractorWindow\States\FinishedState.h" />
+    <ClInclude Include="Source\Windows\FileExtractorWindow\States\IdleState.h" />
+    <ClInclude Include="Source\Windows\FileExtractorWindow\States\ProgressState.h" />
+    <ClInclude Include="Source\mgf\MGFArchive.h" />
+    <ClInclude Include="Source\mgf\Assets\MGFAsset.h" />
+    <ClInclude Include="Source\MGF\Assets\MGFModel.h" />
+    <ClInclude Include="Source\mgf\Assets\MGFPlainText.h" />
+    <ClInclude Include="Source\mgf\Assets\MGFStringTable.h" />
+    <ClInclude Include="Source\mgf\Assets\MGFTexture.h" />
+    <ClInclude Include="Source\mgf\MGFFile.h" />
+    <ClInclude Include="Source\MGF\Structures\Common.h" />
+    <ClInclude Include="Source\MGF\Structures\mgf.h" />
+    <ClInclude Include="Source\MGF\Structures\MgText.h" />
+    <ClInclude Include="Source\MGF\Structures\Tif.h" />
+    <ClInclude Include="Source\Render\MaterialFactory.h" />
+    <ClInclude Include="Source\Render\MaterialLibrary.h" />
+    <ClInclude Include="Source\Render\MaterialParamReader.h" />
+    <ClInclude Include="Source\Utilities\configfile.h" />
+    <ClInclude Include="Source\Windows\StateMachine\State.h" />
+    <ClInclude Include="Source\Windows\StateMachine\StateGroup.h" />
+    <ClInclude Include="Source\Widgets\TextureViewer\TextureViewerWidget.h" />
+    <ClInclude Include="Source\Widgets\ArchiveViewer\ArchiveViewerWidget.h" />
+    <ClInclude Include="Source\Windows\MainWindow\MainWindow.h" />
+    <ClInclude Include="Vendor\pugixml-1.10\src\pugixml.hpp" />
+    <ClInclude Include="Vendor\s3tc\s3tc.h" />
+    <ClInclude Include="Source\Widgets\ArchiveViewer\ui_ArchiveViewerWidget.h" />
+    <ClInclude Include="Source\Widgets\MapViewer\ui_MapViewerWidget.h" />
+    <ClInclude Include="Source\Widgets\ModelViewer\ui_ModelViewerWidget.h" />
+    <ClInclude Include="Source\Widgets\PlainTextViewer\ui_PlainTextViewerWidget.h" />
+    <ClInclude Include="Source\Widgets\TextureViewer\ui_TextureViewerWidget.h" />
+    <ClInclude Include="Source\Widgets\StringTableViewer\ui_StringTableViewerWidget.h" />
+    <ClInclude Include="Source\Windows\FileExtractorWindow\ui_FileExtractorDialog.h" />
+    <ClInclude Include="Source\Windows\MainWindow\ui_MainWindow.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="MechAssault-MGF-Explorer.props" />
+    <None Include="Source\Widgets\ArchiveViewer\ArchiveViewerWidget.ui" />
+    <None Include="Source\Widgets\MapViewer\MapViewerWidget.ui" />
+    <None Include="Source\Widgets\ModelViewer\ModelViewerWidget.ui" />
+    <None Include="Source\Widgets\PlainTextViewer\PlainTextViewerWidget.ui" />
+    <None Include="Source\Widgets\TextureViewer\TextureViewerWidget.ui" />
+    <None Include="Source\Widgets\StringTableViewer\StringTableViewerWidget.ui" />
+    <None Include="Source\Windows\FileExtractorWindow\FileExtractorDialog.ui" />
+    <None Include="Source\Windows\MainWindow\MainWindow.ui" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Source\madcat.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Source\MechAssault-MGF-Explorer_resource.rc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+</Project>

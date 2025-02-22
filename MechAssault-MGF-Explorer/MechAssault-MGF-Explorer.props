@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros">
+    <QtVersion>6.8.1</QtVersion>
+    <QtRoot>$(SolutionDir)Qt\$(QtVersion)\qtbase</QtRoot>
+  </PropertyGroup>
+  <PropertyGroup />
+  <ItemDefinitionGroup />
+  <ItemGroup>
+    <BuildMacro Include="QtVersion">
+      <Value>$(QtVersion)</Value>
+    </BuildMacro>
+    <BuildMacro Include="QtRoot">
+      <Value>$(QtRoot)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>
