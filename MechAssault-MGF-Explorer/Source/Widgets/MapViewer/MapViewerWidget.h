@@ -19,11 +19,6 @@ public:
 
 private slots:
     void on_EntityTreeView_selectionChanged(const QModelIndex& sel, const QModelIndex& desel);
-    void terrainPositionXInputSpinboxValueChanged(double value);
-    void terrainPositionYInputSpinboxValueChanged(double value);
-    void terrainPositionZInputSpinboxValueChanged(double value);
-    void terrainRotationInputSpinboxValueChanged(double value);
-    void terrainScaleInputSpinboxValueChanged(double value);
 
 private:
     Ui::MGFMapViewerWidget* ui;

@@ -67,6 +67,16 @@ auto MGFFile::Children() const -> const std::vector<const MGFFile*>&
     return m_Children;
 }
 
+bool MGFFile::IsMechAssault1() const
+{
+    return MgfArchive.IsMechAssault1();
+}
+
+bool MGFFile::IsMechAssault2() const
+{
+    return MgfArchive.IsMechAssault2();
+}
+
 const MGFFile* MGFFile::FindRelativeItem(const std::filesystem::path &relativePath) const
 {
     const std::filesystem::path p = relativePath.relative_path();

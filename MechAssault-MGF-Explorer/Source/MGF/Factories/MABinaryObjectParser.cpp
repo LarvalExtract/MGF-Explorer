@@ -98,6 +98,11 @@ void MABinaryObjectParser::Parse()
 			Attribute.Length = AttributeHeader.dataLength;
 			Attribute.Offset = ObjectFileDeserializer.CurrentOffset();
 
+			if (Attribute.Name == "TerrainCurve")
+			{
+				__debugbreak();
+			}
+
 			switch (AttributeHeader.dataType)
 			{
 			case MABinaryAttributeDataTypeId::Boolean:

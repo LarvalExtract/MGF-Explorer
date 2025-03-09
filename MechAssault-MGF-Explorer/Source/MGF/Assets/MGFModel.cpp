@@ -98,7 +98,12 @@ void MGFModel::CreateSceneNode(Qt3DCore::QEntity* parent, const std::function<Co
 
 	if (const auto& nodeType = vars["type"]; nodeType == "ANIMNODE")
 	{
-		auto childNodeAsset = FileRef.MgfArchive.LoadAsset<MGFModel>(vars["child"].c_str());
+		const std::string modelPath = vars["child"];
+		if (const MGFFile* modelFile = FileRef.FindRelativeItem(modelPath))
+		{
+			auto childNodeAsset = std::static_pointer_cast<MGFModel>(FileRef.MgfArchive.LoadAsset(*modelFile));
+			childNodeAsset->mRootNode->setParent(parent);
+		}
 
 		int num_animations = std::stoi(vars["num_animations"]);
 		for (int i = 0; i < num_animations; i++)

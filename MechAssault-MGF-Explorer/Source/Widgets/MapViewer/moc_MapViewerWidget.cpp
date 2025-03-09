@@ -26,19 +26,13 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 namespace {
 struct qt_meta_stringdata_MGFMapViewerWidget_t {
-    uint offsetsAndSizes[24];
+    uint offsetsAndSizes[12];
     char stringdata0[19];
     char stringdata1[35];
     char stringdata2[1];
     char stringdata3[12];
     char stringdata4[4];
     char stringdata5[6];
-    char stringdata6[41];
-    char stringdata7[6];
-    char stringdata8[41];
-    char stringdata9[41];
-    char stringdata10[40];
-    char stringdata11[37];
 };
 #define QT_MOC_LITERAL(ofs, len) \
     uint(sizeof(qt_meta_stringdata_MGFMapViewerWidget_t::offsetsAndSizes) + ofs), len 
@@ -49,26 +43,14 @@ Q_CONSTINIT static const qt_meta_stringdata_MGFMapViewerWidget_t qt_meta_stringd
         QT_MOC_LITERAL(54, 0),  // ""
         QT_MOC_LITERAL(55, 11),  // "QModelIndex"
         QT_MOC_LITERAL(67, 3),  // "sel"
-        QT_MOC_LITERAL(71, 5),  // "desel"
-        QT_MOC_LITERAL(77, 40),  // "terrainPositionXInputSpinboxV..."
-        QT_MOC_LITERAL(118, 5),  // "value"
-        QT_MOC_LITERAL(124, 40),  // "terrainPositionYInputSpinboxV..."
-        QT_MOC_LITERAL(165, 40),  // "terrainPositionZInputSpinboxV..."
-        QT_MOC_LITERAL(206, 39),  // "terrainRotationInputSpinboxVa..."
-        QT_MOC_LITERAL(246, 36)   // "terrainScaleInputSpinboxValue..."
+        QT_MOC_LITERAL(71, 5)   // "desel"
     },
     "MGFMapViewerWidget",
     "on_EntityTreeView_selectionChanged",
     "",
     "QModelIndex",
     "sel",
-    "desel",
-    "terrainPositionXInputSpinboxValueChanged",
-    "value",
-    "terrainPositionYInputSpinboxValueChanged",
-    "terrainPositionZInputSpinboxValueChanged",
-    "terrainRotationInputSpinboxValueChanged",
-    "terrainScaleInputSpinboxValueChanged"
+    "desel"
 };
 #undef QT_MOC_LITERAL
 } // unnamed namespace
@@ -79,7 +61,7 @@ Q_CONSTINIT static const uint qt_meta_data_MGFMapViewerWidget[] = {
       10,       // revision
        0,       // classname
        0,    0, // classinfo
-       6,   14, // methods
+       1,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -87,20 +69,10 @@ Q_CONSTINIT static const uint qt_meta_data_MGFMapViewerWidget[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    2,   50,    2, 0x08,    1 /* Private */,
-       6,    1,   55,    2, 0x08,    4 /* Private */,
-       8,    1,   58,    2, 0x08,    6 /* Private */,
-       9,    1,   61,    2, 0x08,    8 /* Private */,
-      10,    1,   64,    2, 0x08,   10 /* Private */,
-      11,    1,   67,    2, 0x08,   12 /* Private */,
+       1,    2,   20,    2, 0x08,    1 /* Private */,
 
  // slots: parameters
     QMetaType::Void, 0x80000000 | 3, 0x80000000 | 3,    4,    5,
-    QMetaType::Void, QMetaType::Double,    7,
-    QMetaType::Void, QMetaType::Double,    7,
-    QMetaType::Void, QMetaType::Double,    7,
-    QMetaType::Void, QMetaType::Double,    7,
-    QMetaType::Void, QMetaType::Double,    7,
 
        0        // eod
 };
@@ -117,22 +89,7 @@ Q_CONSTINIT const QMetaObject MGFMapViewerWidget::staticMetaObject = { {
         // method 'on_EntityTreeView_selectionChanged'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         QtPrivate::TypeAndForceComplete<const QModelIndex &, std::false_type>,
-        QtPrivate::TypeAndForceComplete<const QModelIndex &, std::false_type>,
-        // method 'terrainPositionXInputSpinboxValueChanged'
-        QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        QtPrivate::TypeAndForceComplete<double, std::false_type>,
-        // method 'terrainPositionYInputSpinboxValueChanged'
-        QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        QtPrivate::TypeAndForceComplete<double, std::false_type>,
-        // method 'terrainPositionZInputSpinboxValueChanged'
-        QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        QtPrivate::TypeAndForceComplete<double, std::false_type>,
-        // method 'terrainRotationInputSpinboxValueChanged'
-        QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        QtPrivate::TypeAndForceComplete<double, std::false_type>,
-        // method 'terrainScaleInputSpinboxValueChanged'
-        QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        QtPrivate::TypeAndForceComplete<double, std::false_type>
+        QtPrivate::TypeAndForceComplete<const QModelIndex &, std::false_type>
     >,
     nullptr
 } };
@@ -144,11 +101,6 @@ void MGFMapViewerWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, i
         (void)_t;
         switch (_id) {
         case 0: _t->on_EntityTreeView_selectionChanged((*reinterpret_cast< std::add_pointer_t<QModelIndex>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<QModelIndex>>(_a[2]))); break;
-        case 1: _t->terrainPositionXInputSpinboxValueChanged((*reinterpret_cast< std::add_pointer_t<double>>(_a[1]))); break;
-        case 2: _t->terrainPositionYInputSpinboxValueChanged((*reinterpret_cast< std::add_pointer_t<double>>(_a[1]))); break;
-        case 3: _t->terrainPositionZInputSpinboxValueChanged((*reinterpret_cast< std::add_pointer_t<double>>(_a[1]))); break;
-        case 4: _t->terrainRotationInputSpinboxValueChanged((*reinterpret_cast< std::add_pointer_t<double>>(_a[1]))); break;
-        case 5: _t->terrainScaleInputSpinboxValueChanged((*reinterpret_cast< std::add_pointer_t<double>>(_a[1]))); break;
         default: ;
         }
     }
@@ -173,13 +125,13 @@ int MGFMapViewerWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 6)
+        if (_id < 1)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 6;
+        _id -= 1;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 6)
+        if (_id < 1)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 6;
+        _id -= 1;
     }
     return _id;
 }

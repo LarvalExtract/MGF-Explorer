@@ -14,12 +14,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LocalDebuggerWorkingDirectory>$(OutDir)</LocalDebuggerWorkingDirectory>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerCommandArguments>common.mgf\multiplay\boggeddown.wdf</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>common.mgf\multiplay\gri_rivercity.wdf</LocalDebuggerCommandArguments>
     <RemoteDebuggerCommandArguments />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LocalDebuggerWorkingDirectory>$(OutDir)</LocalDebuggerWorkingDirectory>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerCommandArguments>common.mgf\multiplay\boggeddown.wdf</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>common.mgf\multiplay\gri_rivercity.wdf</LocalDebuggerCommandArguments>
   </PropertyGroup>
 </Project>

@@ -20,7 +20,7 @@ public:
 
 	std::vector<char> ReadAllBytes() const
 	{
-		std::vector<char> bytes(m_mgfFile.FileLength);
+		std::vector<char> bytes(m_mgfFile.FileLength, 0);
 		m_mgfFile.MgfArchive.seekg(m_mgfFile.FileOffset).read(bytes.data(), bytes.size());
 		return bytes;
 	}

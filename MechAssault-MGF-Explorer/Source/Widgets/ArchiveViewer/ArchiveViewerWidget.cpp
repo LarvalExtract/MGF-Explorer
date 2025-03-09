@@ -55,9 +55,14 @@ MGFArchiveViewerWidget::~MGFArchiveViewerWidget()
 
 void MGFArchiveViewerWidget::OpenAsset(const std::filesystem::path& assetPath)
 {
-    const MGFFile* assetFile = MgfArchive->Root()->FindRelativeItem(assetPath);
-
-    OpenAssetViewer(*assetFile);
+    if (const MGFFile* assetFile = MgfArchive->Root()->FindRelativeItem(assetPath))
+    {
+        OpenAssetViewer(*assetFile);
+    }
+    else
+    {
+        qDebug() << "Asset '" << assetPath.c_str() << "' not found in " << MgfArchive->Path.c_str();
+    }
 }
 
 void MGFArchiveViewerWidget::on_treeView_selectionChanged(const QModelIndex &sel, const QModelIndex &desel)

@@ -48,7 +48,8 @@ MGFAssetType MGFAsset::MgfFileExtensionToAssetType(const std::filesystem::path& 
 
 	if (ext == ".ini" ||
 		ext == ".cfg" ||
-		ext == ".txt")
+		ext == ".txt" ||
+		ext == ".road")
 	{
 		return MGFAssetType::PlainText;
 	}

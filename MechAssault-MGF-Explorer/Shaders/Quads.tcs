@@ -2,20 +2,18 @@
 
 layout( vertices = 4 ) out;
 
-uniform float inner[2] = float[]( 10.0, 10.0 );
-uniform float outer[4] = float[]( 1.0, 1.0, 1.0, 1.0 );
-
 void main()
 {
+    const float divs = 256.0;
+
     // Pass along the vertex position unmodified
     gl_out[gl_InvocationID].gl_Position = gl_in[gl_InvocationID].gl_Position;
 
-    // Set the tessellation levels from the uniforms
-    gl_TessLevelOuter[0] = outer[0];
-    gl_TessLevelOuter[1] = outer[1];
-    gl_TessLevelOuter[2] = outer[2];
-    gl_TessLevelOuter[3] = outer[3];
+    gl_TessLevelOuter[0] = divs;
+    gl_TessLevelOuter[1] = divs;
+    gl_TessLevelOuter[2] = divs;
+    gl_TessLevelOuter[3] = divs;
 
-    gl_TessLevelInner[0] = inner[0];
-    gl_TessLevelInner[1] = inner[1];
+    gl_TessLevelInner[0] = divs;
+    gl_TessLevelInner[1] = divs;
 }

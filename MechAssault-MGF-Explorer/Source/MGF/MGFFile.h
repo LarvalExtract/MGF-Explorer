@@ -48,8 +48,10 @@ public:
     size_t GetChildCount() const;
     void AddChild(MGFFile* child);
     const std::vector<const MGFFile*>& Children() const;
+    bool IsMechAssault1() const;
+    bool IsMechAssault2() const;
 
-    friend inline bool operator==(const MGFFile& a, const MGFFile& b)
+    friend bool operator==(const MGFFile& a, const MGFFile& b)
     {
         return a.FilepathHash == b.FilepathHash;
     }

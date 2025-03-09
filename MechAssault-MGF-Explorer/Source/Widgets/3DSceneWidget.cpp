@@ -57,7 +57,7 @@ Scene3dWidget::Scene3dWidget(QWidget* parent)
 
                             OpaqueSortPolicy = new Qt3DRender::QSortPolicy(SceneRoot);
                             OpaqueSortPolicy->setParent(OpaqueLayerFilter);
-                            OpaqueSortPolicy->setSortTypes(QList<Qt3DRender::QSortPolicy::SortType>{ Qt3DRender::QSortPolicy::FrontToBack });
+                            OpaqueSortPolicy->setSortTypes(QList{ Qt3DRender::QSortPolicy::FrontToBack });
                         }
                         {
                             TransparentLayerFilter = new Qt3DRender::QLayerFilter(Camera);
@@ -68,7 +68,7 @@ Scene3dWidget::Scene3dWidget(QWidget* parent)
 
                             TransparentSortPolicy = new Qt3DRender::QSortPolicy(SceneRoot);
                             TransparentSortPolicy->setParent(TransparentLayerFilter);
-                            TransparentSortPolicy->setSortTypes(QList<Qt3DRender::QSortPolicy::SortType>{ Qt3DRender::QSortPolicy::BackToFront });
+                            TransparentSortPolicy->setSortTypes(QList{ Qt3DRender::QSortPolicy::BackToFront });
                         }
                     }
                 }
@@ -216,8 +216,8 @@ void TestWidget::hideEvent(QHideEvent* event)
 
 void TestWidget::resizeEvent(QResizeEvent* event)
 {
-    const float aspectRatio = float(event->size().width()) / float(event->size().height());
-    GetCamera()->lens()->setPerspectiveProjection(55.0f, aspectRatio, 0.1f, 10000.0f);
+	const float aspectRatio = float(event->size().width()) / float(event->size().height());
+	GetCamera()->lens()->setPerspectiveProjection(55.0f, aspectRatio, 0.1f, 10000.0f);
 }
 
 void TestWidget::wheelEvent(QWheelEvent* e)

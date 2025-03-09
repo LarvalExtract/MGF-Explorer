@@ -41,6 +41,9 @@ public:
     size_t GetFileSize() const { return Size; }
     uint32_t GetFileCount() const { return FileCount; }
     const MGFFile* Root() const { return &Files[0]; }
+    bool IsMechAssault1() const { return GetVersion() == MGFArchiveVersion::MechAssault; }
+    bool IsMechAssault2() const { return GetVersion() == MGFArchiveVersion::MechAssault2LW; }
+
 
     template<typename AssetType>
     std::shared_ptr<AssetType> LoadAsset(const std::filesystem::path& path, bool bCache = true)

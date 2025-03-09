@@ -21,12 +21,15 @@ namespace TessellatedQuadRendererPrivate
 			reinterpret_cast<QVector3D&>(vertexPositionData.data()[3 * sizeof(QVector3D)]) = p3;
 
 			VertexBuffer->setData(vertexPositionData);
+			VertexBuffer->setUsage(Qt3DCore::QBuffer::UsageType::StaticDraw);
+			VertexBuffer->setAccessType(Qt3DCore::QBuffer::Read);
 
 			PositionAttribute->setName(Qt3DCore::QAttribute::defaultPositionAttributeName());
 			PositionAttribute->setVertexBaseType(Qt3DCore::QAttribute::VertexBaseType::Float);
 			PositionAttribute->setVertexSize(3);
 			PositionAttribute->setCount(4);
 			PositionAttribute->setByteStride(3 * sizeof(float));
+			PositionAttribute->setBuffer(VertexBuffer);
 
 			addAttribute(PositionAttribute);
 		}
@@ -40,7 +43,7 @@ namespace TessellatedQuadRendererPrivate
 TessellatedQuadRenderer::TessellatedQuadRenderer(QVector3D p0, QVector3D p1, QVector3D p2, QVector3D p3, Qt3DCore::QNode* parent) :
 	Qt3DRender::QGeometryRenderer(parent)
 {
-	setPrimitiveType(Qt3DRender::QGeometryRenderer::Patches);
+	setPrimitiveType(Patches);
 	setGeometry(new TessellatedQuadRendererPrivate::TessellatedQuadGeometry(p0, p1, p2, p3, this));
 	setVerticesPerPatch(4);
 }

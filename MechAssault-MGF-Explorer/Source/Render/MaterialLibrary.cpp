@@ -18,7 +18,7 @@ namespace MGF::Render
 
 	Qt3DRender::QMaterial* MGF::Render::MaterialLibrary::GetMaterial(const MGFFile& materialFile, const MGFFile& parentFile)
 	{
-		MGFMaterialFileReader paramReader(materialFile, parentFile);
+		MGFMaterialFileReader paramReader(materialFile, materialFile);
 		return GetMaterial(paramReader);
 	}
 

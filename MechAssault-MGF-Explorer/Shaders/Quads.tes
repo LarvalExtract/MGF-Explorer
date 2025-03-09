@@ -1,6 +1,6 @@
 #version 400 core
 
-layout( quads, fractional_even_spacing, ccw ) in;
+layout( quads, equal_spacing, cw ) in;
 
 out vec2 texCoord;
 
@@ -34,19 +34,11 @@ void main()
              + p01 * v * ( 1.0 - u )
              + p11 * u * v;
 
+    texCoord = fract(vec2(pos.z, 1.0 - pos.x) / TerrainFullSize);
+
     // Set vertex height from height map
-    pos.y = (textureLod(TerrainHeightMap, vertexTexCoord, 0).x)
-          * ((TerrainMaxHeight - TerrainMinHeight) + TerrainMinHeight)
-          * TerrainWorldScale;
+    pos.y += (textureLod(TerrainHeightMap, texCoord, 0).x) 
+          * (TerrainMaxHeight - TerrainMinHeight) + TerrainMinHeight;
 
-    // Transform to eye space (for lighting calcs)
-    //te_out.position = vec3( modelView * pos );
-
-    // Assume normal points along z
-    //te_out.normal = normalize( modelViewNormal * vec3( 0.0, 0.0, 1.0 ) );
-
-    // Transform to clip-space
     gl_Position = mvp * pos;
-
-    texCoord = pos.xz / TerrainFullSize;
 }

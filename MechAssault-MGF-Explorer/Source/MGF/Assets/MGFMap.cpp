@@ -84,7 +84,7 @@ void MGFMap::OnObjectRead(const MABinaryObject& MapEntity) noexcept
 
 	WdfEntity Entity;
 	Entity.Class = MapEntity.Name.data();
-	Entity.Description = std::get<std::string>(MapEntity.Attributes.at("Description").Value).c_str();
+	Entity.Description = std::get<std::string>(MapEntity.Attributes.at("Description").Value);
 	Entity.UID = UID;
 	Entity.ParentUID = std::get<int32_t>(MapEntity.Attributes.at("parent").Value);
 	Entity.SiblingUID = std::get<int32_t>(MapEntity.Attributes.at("sibling").Value);
@@ -195,7 +195,7 @@ void MGFMap::OnObjectRead(const MABinaryObject& MapEntity) noexcept
 		{
 			OnReadEntity_MATerrainInfo(MapEntity);
 		}
-		else if (Entity.Class == "MACorporeal" || Entity.Class == "MABuilding")
+		else if (Entity.Class == "MACorporeal" || Entity.Class == "MABuilding" || Entity.Class == "MAMech")
 		{
 			OnReadEntity_MACorporeal(MapEntity);
 		}
@@ -299,22 +299,76 @@ void MGFMap::OnReadEntity_MATerrain(const MABinaryObject& MATerrainEntity)
 	using namespace Qt3DRender;
 	using namespace Qt3DExtras;
 
-	std::shared_ptr<MGFTexture> baseMapTextureAsset = MapResourceArchive->LoadAsset<MGFTexture>(std::get<std::string>(MATerrainEntity.Attributes.at("TerrainBaseMap").Value));
+	if (MapResourceArchive->IsMechAssault2() && static_cast<int32_t>(MATerrainEntity["TerrainVisible"]) == 0)
+	{
+		return;
+	}
 
-	const MABinaryObjectAttribute terrainHeightMapAttribute = MATerrainEntity.Attributes.at("TerrainHeight Field");
+	TerrainEntity = new MATerrain(MapRoot);
+	TerrainEntity->SetDetailBlend(MATerrainEntity["TerrainDetailBlend"]);
+	TerrainEntity->SetDetailMultiplier0(MATerrainEntity["TerrainDetailMult"]);
+	TerrainEntity->SetDetailMultiplier1(MATerrainEntity["TerrainDetailMult1"]);
+	TerrainEntity->SetMinHeight(MATerrainEntity["TerrainMinHeight"]);
+	TerrainEntity->SetMaxHeight(MATerrainEntity["TerrainMaxHeight"]);
+	TerrainEntity->SetTerrainCellSize(MATerrainEntity["TerrainCellSize"]);
+	TerrainEntity->SetTerrainWorldScale(MATerrainEntity["TerrainWorldScale"]);
+	TerrainEntity->SetTerrainPosition(QVector3D(0.0f, 0.0f, 0.0f));
+
+	const std::string baseMapTexturePath = MATerrainEntity["TerrainBaseMap"];
+	const std::string detailMapTexture0Path = MATerrainEntity["TerrainDetailMap"];
+	const std::string detailMapTexture1Path = MATerrainEntity["TerrainDetailMap 1"];
+
+	std::shared_ptr<MGFTexture> baseMapTextureAsset = MapResourceArchive->LoadAsset<MGFTexture>(baseMapTexturePath);
+	std::shared_ptr<MGFTexture> detailMap0TextureAsset = MapResourceArchive->LoadAsset<MGFTexture>(detailMapTexture0Path);
+	std::shared_ptr<MGFTexture> detailMap1TextureAsset = MapResourceArchive->LoadAsset<MGFTexture>(detailMapTexture1Path);
+
+	const MABinaryObjectAttribute terrainHeightMapAttribute = MATerrainEntity["TerrainHeight Field"];
 	QAbstractTexture* terrainHeightMapTexture = MGF::Render::TextureLibrary::Get().GetTexture(FileRef, terrainHeightMapAttribute.Offset);
 	terrainHeightMapTexture->setMagnificationFilter(QAbstractTexture::Filter::Linear);
 	terrainHeightMapTexture->setMagnificationFilter(QAbstractTexture::Filter::Linear);
 	terrainHeightMapTexture->setMipLevels(1);
+	terrainHeightMapTexture->setWrapMode(QTextureWrapMode(QTextureWrapMode::Repeat));
 
-	TerrainEntity = new MATerrain(MapRoot);
-	TerrainEntity->SetBaseMap(baseMapTextureAsset->mTexture);
+	if (baseMapTextureAsset)
+	{
+		TerrainEntity->SetBaseMap(baseMapTextureAsset->mTexture);
+	}
+	if (detailMap0TextureAsset)
+	{
+		detailMap0TextureAsset->mTexture->setWrapMode(QTextureWrapMode(QTextureWrapMode::Repeat));
+		TerrainEntity->SetDetailMap0(detailMap0TextureAsset->mTexture);
+	}
+	if (detailMap1TextureAsset)
+	{
+		detailMap1TextureAsset->mTexture->setWrapMode(QTextureWrapMode(QTextureWrapMode::Repeat));
+		TerrainEntity->SetDetailMap1(detailMap1TextureAsset->mTexture);
+	}
+
 	TerrainEntity->SetHeightMap(terrainHeightMapTexture);
-	TerrainEntity->SetMinHeight(std::get<float>(MATerrainEntity.Attributes.at("TerrainMinHeight").Value));
-	TerrainEntity->SetMaxHeight(std::get<float>(MATerrainEntity.Attributes.at("TerrainMaxHeight").Value));
-	TerrainEntity->SetTerrainCellSize(16.0f);
-	TerrainEntity->SetTerrainWorldScale(8.0f);
-	TerrainEntity->SetTerrainPosition(QVector3D(0.0f, 0.0f, 0.0f));
+
+	if (MapResourceArchive->IsMechAssault2())
+	{
+		const std::string microDetailMapTexture0Path = MATerrainEntity["TerrainMicroDetailMap0"];
+		const std::string microDetailMapTexture1Path = MATerrainEntity["TerrainMicroDetailMap1"];
+
+		std::shared_ptr<MGFTexture> microDetailMap0TextureAsset = MapResourceArchive->LoadAsset<MGFTexture>(microDetailMapTexture0Path);
+		std::shared_ptr<MGFTexture> microDetailMap1TextureAsset = MapResourceArchive->LoadAsset<MGFTexture>(microDetailMapTexture1Path);
+
+		if (microDetailMap0TextureAsset)
+		{
+			microDetailMap0TextureAsset->mTexture->setWrapMode(QTextureWrapMode(QTextureWrapMode::Repeat));
+			TerrainEntity->SetMicroDetailMap0(microDetailMap0TextureAsset->mTexture);
+		}
+		if (microDetailMap1TextureAsset)
+		{
+			microDetailMap1TextureAsset->mTexture->setWrapMode(QTextureWrapMode(QTextureWrapMode::Repeat));
+			TerrainEntity->SetMicroDetailMap1(microDetailMap1TextureAsset->mTexture);
+		}
+
+		TerrainEntity->SetMicroDetailTiling0(MATerrainEntity["TerrainMicroDetailTiling0"]);
+		TerrainEntity->SetMicroDetailTiling1(MATerrainEntity["TerrainMicroDetailTiling1"]);
+	}
+	
 	TerrainEntity->BuildTerrain();
 }
 
@@ -333,22 +387,25 @@ void MGFMap::OnReadEntity_MACorporeal(const MABinaryObject& CorporealEntity)
 
 	std::shared_ptr<MGFModel> model = MapResourceArchive->LoadAsset<MGFModel>(std::get<std::string>(CorporealEntity.Attributes.at("Corporal3DObj").Value), false);
 	
-	if (model->mRootNode)
+	if (model.get() && model->mRootNode)
 	{
 		AssetRefs.push_back(model);
 
 		model->mRootNode->setParent(corporealEntity);
 
-		QVector3D position = CorporealEntity.Attributes.contains("CorporalPos") ? std::get<QVector3D>(CorporealEntity.Attributes.at("CorporalPos").Value) : QVector3D();
-		float pitch = CorporealEntity.Attributes.contains("CorporalPitch") ? std::get<float>(CorporealEntity.Attributes.at("CorporalPitch").Value) : 0.0f;
-		float yaw = CorporealEntity.Attributes.contains("CorporalHeading") ? std::get<float>(CorporealEntity.Attributes.at("CorporalHeading").Value) : 0.0f;
-		float roll = CorporealEntity.Attributes.contains("CorporalRoll") ? std::get<float>(CorporealEntity.Attributes.at("CorporalRoll").Value) : 0.0f;
+		QVector3D position = CorporealEntity["CorporalPos"];
+		float pitch = CorporealEntity["CorporalPitch"];
+		float yaw = CorporealEntity["CorporalHeading"];
+		float roll = CorporealEntity["CorporalRoll"];
+
+		const auto Wrap360 = [](float in){
+			//return (int)in % 360 + (in - (int)in);
+			return in < 0.0f ? in + 360.0f : in;
+		};
 
 		Qt3DCore::QTransform* transform = new Qt3DCore::QTransform;
 		transform->setTranslation(position);
-		transform->setRotationX(pitch);
-		transform->setRotationY(yaw);
-		transform->setRotationZ(roll);
+		transform->setRotation(QQuaternion::fromEulerAngles(pitch, yaw, roll));
 
 		corporealEntity->addComponent(transform);
 	}
